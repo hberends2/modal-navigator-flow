@@ -10,12 +10,14 @@ interface NonOperatingExpensesModalProps {
 
 const NonOperatingExpensesModal: React.FC<NonOperatingExpensesModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
-    groundRent: "",
-    buildingInsurance: "",
-    propertyInsurance: "",
-    lesseeImprovements: "",
-    leasehold: "",
-    propertyTaxes: "",
+    groundRentPercentage: "",
+    groundRentAmount: "",
+    insuranceExpensePercentage: "",
+    insuranceExpenseAmount: "",
+    leasesOtherAmount: "",
+    leasesOtherPAR: "",
+    propertyTaxesAmount: "",
+    propertyTaxesPAR: "",
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -34,51 +36,67 @@ const NonOperatingExpensesModal: React.FC<NonOperatingExpensesModalProps> = ({ o
     <ModalWrapper title="Non-Operating Expenses" onClose={onClose} onSave={handleSave} onNext={onNext}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
-          id="groundRent"
+          id="groundRentPercentage"
           label="Ground Rent - % of Total Revenue"
           type="percentage"
-          value={formData.groundRent}
-          onChange={(value) => handleInputChange("groundRent", value)}
+          value={formData.groundRentPercentage}
+          onChange={(value) => handleInputChange("groundRentPercentage", value)}
         />
         
         <FormField
-          id="buildingInsurance"
-          label="Building Insurance (Amount)"
+          id="groundRentAmount"
+          label="Ground Rent (Amount)"
           type="currency"
-          value={formData.buildingInsurance}
-          onChange={(value) => handleInputChange("buildingInsurance", value)}
+          value={formData.groundRentAmount}
+          onChange={(value) => handleInputChange("groundRentAmount", value)}
         />
         
         <FormField
-          id="propertyInsurance"
-          label="Property Insurance (Amount)"
-          type="currency"
-          value={formData.propertyInsurance}
-          onChange={(value) => handleInputChange("propertyInsurance", value)}
-        />
-        
-        <FormField
-          id="lesseeImprovements"
-          label="Lessee Improvements (Amount)"
-          type="currency"
-          value={formData.lesseeImprovements}
-          onChange={(value) => handleInputChange("lesseeImprovements", value)}
-        />
-        
-        <FormField
-          id="leasehold"
-          label="Leasehold Improvement - % of Total Revenue"
+          id="insuranceExpensePercentage"
+          label="Insurance Expense - % of Total Revenue"
           type="percentage"
-          value={formData.leasehold}
-          onChange={(value) => handleInputChange("leasehold", value)}
+          value={formData.insuranceExpensePercentage}
+          onChange={(value) => handleInputChange("insuranceExpensePercentage", value)}
         />
         
         <FormField
-          id="propertyTaxes"
+          id="insuranceExpenseAmount"
+          label="Insurance Expense (Amount)"
+          type="currency"
+          value={formData.insuranceExpenseAmount}
+          onChange={(value) => handleInputChange("insuranceExpenseAmount", value)}
+        />
+        
+        <FormField
+          id="leasesOtherAmount"
+          label="Leases & Other (Amount)"
+          type="currency"
+          value={formData.leasesOtherAmount}
+          onChange={(value) => handleInputChange("leasesOtherAmount", value)}
+        />
+        
+        <FormField
+          id="leasesOtherPAR"
+          label="Leases & Other PAR"
+          type="currency"
+          value={formData.leasesOtherPAR}
+          onChange={(value) => handleInputChange("leasesOtherPAR", value)}
+        />
+        
+        <FormField
+          id="propertyTaxesAmount"
           label="Property Taxes (Amount)"
           type="currency"
-          value={formData.propertyTaxes}
-          onChange={(value) => handleInputChange("propertyTaxes", value)}
+          value={formData.propertyTaxesAmount}
+          onChange={(value) => handleInputChange("propertyTaxesAmount", value)}
+        />
+        
+        <FormField
+          id="propertyTaxesPAR"
+          label="Property Taxes PAR"
+          type="currency"
+          value={formData.propertyTaxesPAR}
+          onChange={(value) => handleInputChange("propertyTaxesPAR", value)}
         />
       </div>
     </ModalWrapper>
