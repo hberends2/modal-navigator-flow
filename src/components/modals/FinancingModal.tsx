@@ -17,13 +17,13 @@ interface FinancingModalProps {
 
 const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
-    amortizationPeriod: "",
-    discountRate: "",
+    ltvRatio: "",
     interestRate: "",
+    loanTerm: "",
+    amortizationPeriod: "",
     interestOnlyPeriod: "",
     loanFees: "",
-    loanTerm: "",
-    ltvRatio: "",
+    discountRate: "",
     majorCapExReserve: "",
   });
 
@@ -51,27 +51,27 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
         />
         
         <FormField
-          id="amortizationPeriod"
-          label="Amortization Period (Years)"
-          type="integer"
-          value={formData.amortizationPeriod}
-          onChange={(value) => handleInputChange("amortizationPeriod", value)}
-        />
-        
-        <FormField
-          id="discountRate"
-          label="Discount Rate"
-          type="percentage"
-          value={formData.discountRate}
-          onChange={(value) => handleInputChange("discountRate", value)}
-        />
-        
-        <FormField
           id="interestRate"
           label="Interest Rate"
           type="percentage"
           value={formData.interestRate}
           onChange={(value) => handleInputChange("interestRate", value)}
+        />
+        
+        <FormField
+          id="loanTerm"
+          label="Loan Term"
+          type="integer"
+          value={formData.loanTerm}
+          onChange={(value) => handleInputChange("loanTerm", value)}
+        />
+        
+        <FormField
+          id="amortizationPeriod"
+          label="Amortization Period (Years)"
+          type="integer"
+          value={formData.amortizationPeriod}
+          onChange={(value) => handleInputChange("amortizationPeriod", value)}
         />
         
         <FormField
@@ -91,11 +91,11 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
         />
         
         <FormField
-          id="loanTerm"
-          label="Loan Term"
-          type="integer"
-          value={formData.loanTerm}
-          onChange={(value) => handleInputChange("loanTerm", value)}
+          id="discountRate"
+          label="Discount Rate"
+          type="percentage"
+          value={formData.discountRate}
+          onChange={(value) => handleInputChange("discountRate", value)}
         />
         
         <FormField
