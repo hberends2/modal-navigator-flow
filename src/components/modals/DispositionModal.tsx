@@ -39,7 +39,7 @@ const DispositionModal: React.FC<DispositionModalProps> = ({ onClose, onNext }) 
         
         <FormField
           id="exitCosts"
-          label="Exit Costs (%)"
+          label="Sales Expense %"
           type="percentage"
           value={formData.exitCosts}
           onChange={(value) => handleInputChange("exitCosts", value)}
