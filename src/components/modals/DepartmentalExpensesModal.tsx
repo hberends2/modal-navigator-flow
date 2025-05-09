@@ -10,12 +10,15 @@ interface DepartmentalExpensesModalProps {
 
 const DepartmentalExpensesModal: React.FC<DepartmentalExpensesModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
-    fabExpense: "",
-    otherOperatedExpense: "",
-    telecoms: "",
-    administrative: "",
-    sales: "",
-    property: "",
+    fbExpensePercentage: "",
+    fbExpenseAmount: "",
+    fbExpensePOR: "",
+    otherOperatedExpensePercentage: "",
+    otherOperatedExpenseAmount: "",
+    otherOperatedExpensePOR: "",
+    roomsExpensePercentage: "",
+    roomsExpenseAmount: "",
+    roomsExpensePOR: "",
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -34,51 +37,75 @@ const DepartmentalExpensesModal: React.FC<DepartmentalExpensesModalProps> = ({ o
     <ModalWrapper title="Departmental Expenses" onClose={onClose} onSave={handleSave} onNext={onNext}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
-          id="fabExpense"
-          label="F&B Expense (POR)"
-          type="currency"
-          value={formData.fabExpense}
-          onChange={(value) => handleInputChange("fabExpense", value)}
+          id="fbExpensePercentage"
+          label="F&B Expense - % of F&B Revenue"
+          type="percentage"
+          value={formData.fbExpensePercentage}
+          onChange={(value) => handleInputChange("fbExpensePercentage", value)}
         />
         
         <FormField
-          id="otherOperatedExpense"
+          id="fbExpenseAmount"
+          label="F&B Expense (Amount)"
+          type="currency"
+          value={formData.fbExpenseAmount}
+          onChange={(value) => handleInputChange("fbExpenseAmount", value)}
+        />
+        
+        <FormField
+          id="fbExpensePOR"
+          label="F&B Expense POR"
+          type="currency"
+          value={formData.fbExpensePOR}
+          onChange={(value) => handleInputChange("fbExpensePOR", value)}
+        />
+        
+        <FormField
+          id="otherOperatedExpensePercentage"
           label="Other Operated Expense - % of Other Operated Revenue"
           type="percentage"
-          value={formData.otherOperatedExpense}
-          onChange={(value) => handleInputChange("otherOperatedExpense", value)}
+          value={formData.otherOperatedExpensePercentage}
+          onChange={(value) => handleInputChange("otherOperatedExpensePercentage", value)}
         />
         
         <FormField
-          id="telecoms"
-          label="Telecoms - % of F&B Revenue"
-          type="percentage"
-          value={formData.telecoms}
-          onChange={(value) => handleInputChange("telecoms", value)}
-        />
-        
-        <FormField
-          id="administrative"
-          label="Administrative - % of Room Revenue"
-          type="percentage"
-          value={formData.administrative}
-          onChange={(value) => handleInputChange("administrative", value)}
-        />
-        
-        <FormField
-          id="sales"
-          label="Sales - % of Room Revenue"
-          type="percentage"
-          value={formData.sales}
-          onChange={(value) => handleInputChange("sales", value)}
-        />
-        
-        <FormField
-          id="property"
-          label="Property Ops & Maintenance (POR)"
+          id="otherOperatedExpenseAmount"
+          label="Other Operated Expense (Amount)"
           type="currency"
-          value={formData.property}
-          onChange={(value) => handleInputChange("property", value)}
+          value={formData.otherOperatedExpenseAmount}
+          onChange={(value) => handleInputChange("otherOperatedExpenseAmount", value)}
+        />
+        
+        <FormField
+          id="otherOperatedExpensePOR"
+          label="Other Operated Expense POR"
+          type="currency"
+          value={formData.otherOperatedExpensePOR}
+          onChange={(value) => handleInputChange("otherOperatedExpensePOR", value)}
+        />
+        
+        <FormField
+          id="roomsExpensePercentage"
+          label="Rooms Expense - % of Rooms Revenue"
+          type="percentage"
+          value={formData.roomsExpensePercentage}
+          onChange={(value) => handleInputChange("roomsExpensePercentage", value)}
+        />
+        
+        <FormField
+          id="roomsExpenseAmount"
+          label="Rooms Expense (Amount)"
+          type="currency"
+          value={formData.roomsExpenseAmount}
+          onChange={(value) => handleInputChange("roomsExpenseAmount", value)}
+        />
+        
+        <FormField
+          id="roomsExpensePOR"
+          label="Rooms Expense POR"
+          type="currency"
+          value={formData.roomsExpensePOR}
+          onChange={(value) => handleInputChange("roomsExpensePOR", value)}
         />
       </div>
     </ModalWrapper>
