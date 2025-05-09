@@ -49,9 +49,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
     },
     {
       id: "caps",
-      name: "Caps",
+      name: "Capital Expense",
       subCategories: [
-        { id: "caps", name: "Caps" }
+        { id: "caps", name: "Capital Expense" }
       ]
     },
     {
