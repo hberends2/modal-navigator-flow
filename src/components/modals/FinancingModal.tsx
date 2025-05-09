@@ -17,13 +17,13 @@ interface FinancingModalProps {
 
 const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
-    ltvRatio: "",
-    interestRate: "",
-    loanTerm: "",
     amortizationPeriod: "",
+    discountRate: "",
+    interestRate: "",
     interestOnlyPeriod: "",
     loanFees: "",
-    discountRate: "",
+    loanTerm: "",
+    ltvRatio: "",
     majorCapExReserve: "",
   });
 
@@ -43,11 +43,19 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
     <ModalWrapper title="Financing" onClose={onClose} onSave={handleSave} onNext={onNext}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
-          id="ltvRatio"
-          label="LTV Ratio"
+          id="amortizationPeriod"
+          label="Amortization Period (Years)"
+          type="integer"
+          value={formData.amortizationPeriod}
+          onChange={(value) => handleInputChange("amortizationPeriod", value)}
+        />
+        
+        <FormField
+          id="discountRate"
+          label="Discount Rate"
           type="percentage"
-          value={formData.ltvRatio}
-          onChange={(value) => handleInputChange("ltvRatio", value)}
+          value={formData.discountRate}
+          onChange={(value) => handleInputChange("discountRate", value)}
         />
         
         <FormField
@@ -56,22 +64,6 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
           type="percentage"
           value={formData.interestRate}
           onChange={(value) => handleInputChange("interestRate", value)}
-        />
-        
-        <FormField
-          id="loanTerm"
-          label="Loan Term"
-          type="integer"
-          value={formData.loanTerm}
-          onChange={(value) => handleInputChange("loanTerm", value)}
-        />
-        
-        <FormField
-          id="amortizationPeriod"
-          label="Amortization Period (Years)"
-          type="integer"
-          value={formData.amortizationPeriod}
-          onChange={(value) => handleInputChange("amortizationPeriod", value)}
         />
         
         <FormField
@@ -91,11 +83,19 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
         />
         
         <FormField
-          id="discountRate"
-          label="Discount Rate"
+          id="loanTerm"
+          label="Loan Term"
+          type="integer"
+          value={formData.loanTerm}
+          onChange={(value) => handleInputChange("loanTerm", value)}
+        />
+        
+        <FormField
+          id="ltvRatio"
+          label="LTV Ratio"
           type="percentage"
-          value={formData.discountRate}
-          onChange={(value) => handleInputChange("discountRate", value)}
+          value={formData.ltvRatio}
+          onChange={(value) => handleInputChange("ltvRatio", value)}
         />
         
         <FormField
