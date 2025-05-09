@@ -11,17 +11,14 @@ interface PenetrationAnalysisModalProps {
 
 const PenetrationAnalysisModal: React.FC<PenetrationAnalysisModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
-    compRevenuePerRoom: "",
-    compOccupancy: "",
-    numRooms: "",
-    revenueChange: "",
+    compName: "",
+    compNbrOfRooms: "",
+    marketAdrPctChange: "",
     marketOccupancyPct: "",
-    marketRevParGrowthPct: "",
+    occupiedRoomGrowthPct: "",
+    propertyAdrPctChange: "",
     sampleHotelOccupancy: "",
-    avgRoomRev: "",
   });
-
-  const [compRevenueOption, setCompRevenueOption] = useState("");
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({
@@ -31,46 +28,35 @@ const PenetrationAnalysisModal: React.FC<PenetrationAnalysisModalProps> = ({ onC
   };
 
   const handleSave = () => {
-    console.log("Saving Penetration Analysis Data:", {
-      ...formData,
-      compRevenuePerRoom: compRevenueOption,
-    });
-    
+    console.log("Saving Penetration Analysis Data:", formData);
     onClose();
   };
 
   return (
     <ModalWrapper title="Penetration Analysis" onClose={onClose} onSave={handleSave} onNext={onNext}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Dropdown
-          id="compRevenuePerRoom"
-          label="Comp Revenue Per Room"
-          value={compRevenueOption}
-          onChange={setCompRevenueOption}
+        <FormField
+          id="compName"
+          label="Comp Name"
+          type="text"
+          value={formData.compName}
+          onChange={(value) => handleInputChange("compName", value)}
         />
         
         <FormField
-          id="compOccupancy"
-          label="Comp Occupancy"
-          type="percentage"
-          value={formData.compOccupancy}
-          onChange={(value) => handleInputChange("compOccupancy", value)}
-        />
-        
-        <FormField
-          id="numRooms"
-          label="Going Rate of Rooms"
+          id="compNbrOfRooms"
+          label="Comp Nbr of Rooms"
           type="integer"
-          value={formData.numRooms}
-          onChange={(value) => handleInputChange("numRooms", value)}
+          value={formData.compNbrOfRooms}
+          onChange={(value) => handleInputChange("compNbrOfRooms", value)}
         />
         
         <FormField
-          id="revenueChange"
-          label="Revenue Change"
+          id="marketAdrPctChange"
+          label="Market ADR % Change"
           type="percentage"
-          value={formData.revenueChange}
-          onChange={(value) => handleInputChange("revenueChange", value)}
+          value={formData.marketAdrPctChange}
+          onChange={(value) => handleInputChange("marketAdrPctChange", value)}
         />
         
         <FormField
@@ -82,11 +68,19 @@ const PenetrationAnalysisModal: React.FC<PenetrationAnalysisModalProps> = ({ onC
         />
         
         <FormField
-          id="marketRevParGrowthPct"
-          label="Market RevPAR Growth Pct"
+          id="occupiedRoomGrowthPct"
+          label="Occupied Room Growth Pct"
           type="percentage"
-          value={formData.marketRevParGrowthPct}
-          onChange={(value) => handleInputChange("marketRevParGrowthPct", value)}
+          value={formData.occupiedRoomGrowthPct}
+          onChange={(value) => handleInputChange("occupiedRoomGrowthPct", value)}
+        />
+        
+        <FormField
+          id="propertyAdrPctChange"
+          label="Property ADR % Change"
+          type="percentage"
+          value={formData.propertyAdrPctChange}
+          onChange={(value) => handleInputChange("propertyAdrPctChange", value)}
         />
         
         <FormField
@@ -95,14 +89,6 @@ const PenetrationAnalysisModal: React.FC<PenetrationAnalysisModalProps> = ({ onC
           type="percentage"
           value={formData.sampleHotelOccupancy}
           onChange={(value) => handleInputChange("sampleHotelOccupancy", value)}
-        />
-        
-        <FormField
-          id="avgRoomRev"
-          label="Ave Room Revenue"
-          type="percentage"
-          value={formData.avgRoomRev}
-          onChange={(value) => handleInputChange("avgRoomRev", value)}
         />
       </div>
     </ModalWrapper>
