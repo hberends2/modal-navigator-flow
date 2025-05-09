@@ -21,15 +21,19 @@ const AcquisitionModal: React.FC<AcquisitionModalProps> = ({ onClose, onNext }) 
     acquisitionMonth: "",
     acquisitionYear: "",
     hold: "",
-    stabilized: "",
-    purchasePrice: "",
     capRate: "",
+    purchasePrice: "",
+    purchasePriceMethod: "",
   });
 
   const months = [
     "January", "February", "March", "April", 
     "May", "June", "July", "August",
     "September", "October", "November", "December"
+  ];
+
+  const purchaseMethods = [
+    "Direct Cap", "Discounted Cash Flow", "Sales Comparison"
   ];
 
   const handleInputChange = (field: string, value: string) => {
@@ -46,6 +50,13 @@ const AcquisitionModal: React.FC<AcquisitionModalProps> = ({ onClose, onNext }) 
     });
   };
 
+  const handlePurchaseMethodChange = (value: string) => {
+    setFormData({
+      ...formData,
+      purchasePriceMethod: value,
+    });
+  };
+
   const handleSave = () => {
     console.log("Saving Acquisition Data:", formData);
     
@@ -57,7 +68,7 @@ const AcquisitionModal: React.FC<AcquisitionModalProps> = ({ onClose, onNext }) 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           id="acquisitionCostsPerc"
-          label="Acquisition Costs (Inc. Under Fees)"
+          label="Acquisition Costs (exc. Lender Fees)"
           type="percentage"
           value={formData.acquisitionCostsPerc}
           onChange={(value) => handleInputChange("acquisitionCostsPerc", value)}
@@ -90,19 +101,19 @@ const AcquisitionModal: React.FC<AcquisitionModalProps> = ({ onClose, onNext }) 
         />
         
         <FormField
-          id="hold"
-          label="Hold Period (Years)"
-          type="integer"
-          value={formData.hold}
-          onChange={(value) => handleInputChange("hold", value)}
+          id="capRate"
+          label="Cap Rate (Going In)"
+          type="percentage"
+          value={formData.capRate}
+          onChange={(value) => handleInputChange("capRate", value)}
         />
         
         <FormField
-          id="stabilized"
-          label="Stabilized Period (Years)"
+          id="hold"
+          label="Hold Period"
           type="integer"
-          value={formData.stabilized}
-          onChange={(value) => handleInputChange("stabilized", value)}
+          value={formData.hold}
+          onChange={(value) => handleInputChange("hold", value)}
         />
         
         <FormField
@@ -113,13 +124,23 @@ const AcquisitionModal: React.FC<AcquisitionModalProps> = ({ onClose, onNext }) 
           onChange={(value) => handleInputChange("purchasePrice", value)}
         />
         
-        <FormField
-          id="capRate"
-          label="Cap Rate"
-          type="percentage"
-          value={formData.capRate}
-          onChange={(value) => handleInputChange("capRate", value)}
-        />
+        <div className="mb-4">
+          <label htmlFor="purchasePriceMethod" className="block mb-1 font-medium">
+            Purchase Price Method
+          </label>
+          <Select value={formData.purchasePriceMethod} onValueChange={handlePurchaseMethodChange}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select method" />
+            </SelectTrigger>
+            <SelectContent>
+              {purchaseMethods.map((method) => (
+                <SelectItem key={method} value={method}>
+                  {method}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </ModalWrapper>
   );
