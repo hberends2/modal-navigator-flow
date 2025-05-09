@@ -10,8 +10,9 @@ interface InflationAssumptionsModalProps {
 
 const InflationAssumptionsModal: React.FC<InflationAssumptionsModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
+    generalInflationRate: "",
     insuranceInflationRate: "",
-    propertyInflationRate: "",
+    propertyTaxInflationRate: "",
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -30,6 +31,14 @@ const InflationAssumptionsModal: React.FC<InflationAssumptionsModalProps> = ({ o
     <ModalWrapper title="Inflation Assumptions" onClose={onClose} onSave={handleSave} onNext={onNext}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
+          id="generalInflationRate"
+          label="Inflation Rate (General)"
+          type="percentage"
+          value={formData.generalInflationRate}
+          onChange={(value) => handleInputChange("generalInflationRate", value)}
+        />
+        
+        <FormField
           id="insuranceInflationRate"
           label="Insurance Inflation Rate"
           type="percentage"
@@ -38,11 +47,11 @@ const InflationAssumptionsModal: React.FC<InflationAssumptionsModalProps> = ({ o
         />
         
         <FormField
-          id="propertyInflationRate"
-          label="Property Inflation Rate"
+          id="propertyTaxInflationRate"
+          label="Property Tax Inflation Rate"
           type="percentage"
-          value={formData.propertyInflationRate}
-          onChange={(value) => handleInputChange("propertyInflationRate", value)}
+          value={formData.propertyTaxInflationRate}
+          onChange={(value) => handleInputChange("propertyTaxInflationRate", value)}
         />
       </div>
     </ModalWrapper>
