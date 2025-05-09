@@ -31,7 +31,7 @@ const CapsModal: React.FC<CapsModalProps> = ({ onClose, onNext }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           id="capExType"
-          label="Cap-Ex Type"
+          label="CapEx Type"
           type="text"
           value={formData.capExType}
           onChange={(value) => handleInputChange("capExType", value)}
@@ -39,7 +39,7 @@ const CapsModal: React.FC<CapsModalProps> = ({ onClose, onNext }) => {
         
         <FormField
           id="overtFranchiseCaps"
-          label="Overt Franchise Caps"
+          label="Owner Funded CapEx"
           type="percentage"
           value={formData.overtFranchiseCaps}
           onChange={(value) => handleInputChange("overtFranchiseCaps", value)}
