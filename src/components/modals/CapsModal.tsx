@@ -27,7 +27,7 @@ const CapsModal: React.FC<CapsModalProps> = ({ onClose, onNext }) => {
   };
 
   return (
-    <ModalWrapper title="Caps" onClose={onClose} onSave={handleSave} onNext={onNext}>
+    <ModalWrapper title="Capital Expense" onClose={onClose} onSave={handleSave} onNext={onNext}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           id="capExType"
