@@ -2,7 +2,13 @@
 import React, { useState } from "react";
 import ModalWrapper from "../ui/ModalWrapper";
 import FormField from "../ui/FormField";
-import Dropdown from "../ui/Dropdown";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
 interface FinancingModalProps {
   onClose: () => void;
@@ -11,16 +17,15 @@ interface FinancingModalProps {
 
 const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
-    loanToValue: "",
     amortizationPeriod: "",
+    discountRate: "",
     interestRate: "",
     interestOnlyPeriod: "",
-    refinanceDate: "",
+    loanFees: "",
     loanTerm: "",
-    upfrontFee: "",
+    ltvRatio: "",
+    majorCapExReserve: "",
   });
-
-  const [interestRateOption, setInterestRateOption] = useState("");
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({
@@ -30,11 +35,7 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
   };
 
   const handleSave = () => {
-    console.log("Saving Financing Data:", {
-      ...formData,
-      interestRate: interestRateOption,
-    });
-    
+    console.log("Saving Financing Data:", formData);
     onClose();
   };
 
@@ -42,11 +43,11 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
     <ModalWrapper title="Financing" onClose={onClose} onSave={handleSave} onNext={onNext}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
-          id="loanToValue"
-          label="Loan To Value"
+          id="ltvRatio"
+          label="LTV Ratio"
           type="percentage"
-          value={formData.loanToValue}
-          onChange={(value) => handleInputChange("loanToValue", value)}
+          value={formData.ltvRatio}
+          onChange={(value) => handleInputChange("ltvRatio", value)}
         />
         
         <FormField
@@ -57,27 +58,36 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
           onChange={(value) => handleInputChange("amortizationPeriod", value)}
         />
         
-        <Dropdown
+        <FormField
+          id="discountRate"
+          label="Discount Rate"
+          type="percentage"
+          value={formData.discountRate}
+          onChange={(value) => handleInputChange("discountRate", value)}
+        />
+        
+        <FormField
           id="interestRate"
           label="Interest Rate"
-          value={interestRateOption}
-          onChange={setInterestRateOption}
+          type="percentage"
+          value={formData.interestRate}
+          onChange={(value) => handleInputChange("interestRate", value)}
         />
         
         <FormField
           id="interestOnlyPeriod"
-          label="Interest Only Period (Years)"
+          label="Interest-Only Period (Years)"
           type="integer"
           value={formData.interestOnlyPeriod}
           onChange={(value) => handleInputChange("interestOnlyPeriod", value)}
         />
         
         <FormField
-          id="refinanceDate"
-          label="Refinance Date (percent/Amount)"
+          id="loanFees"
+          label="Loan Fees %"
           type="percentage"
-          value={formData.refinanceDate}
-          onChange={(value) => handleInputChange("refinanceDate", value)}
+          value={formData.loanFees}
+          onChange={(value) => handleInputChange("loanFees", value)}
         />
         
         <FormField
@@ -89,11 +99,11 @@ const FinancingModal: React.FC<FinancingModalProps> = ({ onClose, onNext }) => {
         />
         
         <FormField
-          id="upfrontFee"
-          label="Upfront Fee (percent/Amount)"
-          type="percentage"
-          value={formData.upfrontFee}
-          onChange={(value) => handleInputChange("upfrontFee", value)}
+          id="majorCapExReserve"
+          label="Major CapEx Reserve (Amount)"
+          type="currency"
+          value={formData.majorCapExReserve}
+          onChange={(value) => handleInputChange("majorCapExReserve", value)}
         />
       </div>
     </ModalWrapper>
