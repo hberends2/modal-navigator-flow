@@ -10,11 +10,11 @@ interface OperatingRevenueModalProps {
 
 const OperatingRevenueModal: React.FC<OperatingRevenueModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
-    foodBeverageRevenue: "",
-    alFoodAndBeverage: "",
-    otherOperatedRevenue: "",
-    telecomRevenue: "",
-    rentalsAndOtherIncome: "",
+    fbRevenuePercentage: "",
+    fbRevenuePOR: "",
+    otherOperatedRevenuePOR: "",
+    rentalsOtherIncomeAmount: "",
+    rentalsOtherIncomePOR: "",
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -33,43 +33,43 @@ const OperatingRevenueModal: React.FC<OperatingRevenueModalProps> = ({ onClose, 
     <ModalWrapper title="Operating Revenue" onClose={onClose} onSave={handleSave} onNext={onNext}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
-          id="foodBeverageRevenue"
-          label="Food & Beverage Revenue"
-          type="currency"
-          value={formData.foodBeverageRevenue}
-          onChange={(value) => handleInputChange("foodBeverageRevenue", value)}
+          id="fbRevenuePercentage"
+          label="F&B Revenue - % of Rooms Revenue"
+          type="percentage"
+          value={formData.fbRevenuePercentage}
+          onChange={(value) => handleInputChange("fbRevenuePercentage", value)}
         />
         
         <FormField
-          id="alFoodAndBeverage"
-          label="A&L Food & Beverage"
+          id="fbRevenuePOR"
+          label="F&B Revenue POR"
           type="currency"
-          value={formData.alFoodAndBeverage}
-          onChange={(value) => handleInputChange("alFoodAndBeverage", value)}
+          value={formData.fbRevenuePOR}
+          onChange={(value) => handleInputChange("fbRevenuePOR", value)}
         />
         
         <FormField
-          id="otherOperatedRevenue"
-          label="Other Operated Revenue (POR)"
+          id="otherOperatedRevenuePOR"
+          label="Other Operated Revenue POR"
           type="currency"
-          value={formData.otherOperatedRevenue}
-          onChange={(value) => handleInputChange("otherOperatedRevenue", value)}
+          value={formData.otherOperatedRevenuePOR}
+          onChange={(value) => handleInputChange("otherOperatedRevenuePOR", value)}
         />
         
         <FormField
-          id="telecomRevenue"
-          label="Telecom Revenue"
+          id="rentalsOtherIncomeAmount"
+          label="Rentals & Other Income (Net) Amount"
           type="currency"
-          value={formData.telecomRevenue}
-          onChange={(value) => handleInputChange("telecomRevenue", value)}
+          value={formData.rentalsOtherIncomeAmount}
+          onChange={(value) => handleInputChange("rentalsOtherIncomeAmount", value)}
         />
         
         <FormField
-          id="rentalsAndOtherIncome"
-          label="Rentals & Other Income (Net) (POR)"
+          id="rentalsOtherIncomePOR"
+          label="Rentals & Other Income (Net) POR"
           type="currency"
-          value={formData.rentalsAndOtherIncome}
-          onChange={(value) => handleInputChange("rentalsAndOtherIncome", value)}
+          value={formData.rentalsOtherIncomePOR}
+          onChange={(value) => handleInputChange("rentalsOtherIncomePOR", value)}
         />
       </div>
     </ModalWrapper>
