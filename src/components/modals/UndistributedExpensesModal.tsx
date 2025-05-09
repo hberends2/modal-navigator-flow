@@ -10,13 +10,12 @@ interface UndistributedExpensesModalProps {
 
 const UndistributedExpensesModal: React.FC<UndistributedExpensesModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
-    generalAdmin: "",
-    itSystems: "",
-    security: "",
-    marketing: "",
-    propertyTax: "",
-    propertyInsurance: "",
-    utilities: "",
+    generalAdminPercentage: "",
+    generalAdminAmount: "",
+    generalAdminPOR: "",
+    infoTelecomPercentage: "",
+    infoTelecomAmount: "",
+    infoTelecomPAR: "",
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -27,67 +26,72 @@ const UndistributedExpensesModal: React.FC<UndistributedExpensesModalProps> = ({
   };
 
   const handleSave = () => {
-    console.log("Saving Undistributed Expenses Data:", formData);
+    console.log("Saving Undistributed Expenses Data (Page 1):", formData);
+    // Here you could combine both forms' data and save
     onClose();
   };
 
+  const handleNext = () => {
+    console.log("Moving to next page with data:", formData);
+    // Here you might want to store the data temporarily or pass it to the next page
+    onNext();
+  };
+
   return (
-    <ModalWrapper title="Undistributed Expenses" onClose={onClose} onSave={handleSave} onNext={onNext}>
+    <ModalWrapper 
+      title="Undistributed Expenses - Page 1" 
+      onClose={onClose} 
+      onSave={handleSave}
+      onNext={handleNext}
+      showSave={false}
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
-          id="generalAdmin"
+          id="generalAdminPercentage"
+          label="General & Admin Expense - % of Rooms Revenue"
+          type="percentage"
+          value={formData.generalAdminPercentage}
+          onChange={(value) => handleInputChange("generalAdminPercentage", value)}
+        />
+        
+        <FormField
+          id="generalAdminAmount"
           label="General & Admin Expense (Amount)"
           type="currency"
-          value={formData.generalAdmin}
-          onChange={(value) => handleInputChange("generalAdmin", value)}
+          value={formData.generalAdminAmount}
+          onChange={(value) => handleInputChange("generalAdminAmount", value)}
         />
         
         <FormField
-          id="itSystems"
-          label="IT & Systems Expense POR"
+          id="generalAdminPOR"
+          label="General & Admin Expense POR"
           type="currency"
-          value={formData.itSystems}
-          onChange={(value) => handleInputChange("itSystems", value)}
+          value={formData.generalAdminPOR}
+          onChange={(value) => handleInputChange("generalAdminPOR", value)}
         />
         
         <FormField
-          id="security"
-          label="Security - % of Total Revenue"
+          id="infoTelecomPercentage"
+          label="Info & Telecom - % of Total Revenue"
           type="percentage"
-          value={formData.security}
-          onChange={(value) => handleInputChange("security", value)}
+          value={formData.infoTelecomPercentage}
+          onChange={(value) => handleInputChange("infoTelecomPercentage", value)}
         />
         
         <FormField
-          id="marketing"
+          id="infoTelecomAmount"
           label="Info & Telecom (Amount)"
           type="currency"
-          value={formData.marketing}
-          onChange={(value) => handleInputChange("marketing", value)}
+          value={formData.infoTelecomAmount}
+          onChange={(value) => handleInputChange("infoTelecomAmount", value)}
         />
         
         <FormField
-          id="propertyTax"
-          label="Property Operations & Maintenance POR"
+          id="infoTelecomPAR"
+          label="Info & Telecom PAR"
           type="currency"
-          value={formData.propertyTax}
-          onChange={(value) => handleInputChange("propertyTax", value)}
-        />
-        
-        <FormField
-          id="propertyInsurance"
-          label="Property Operations & Maintenance - % of Total Revenue"
-          type="percentage"
-          value={formData.propertyInsurance}
-          onChange={(value) => handleInputChange("propertyInsurance", value)}
-        />
-        
-        <FormField
-          id="utilities"
-          label="Sales & Marketing Expense - % of Total Revenue"
-          type="percentage"
-          value={formData.utilities}
-          onChange={(value) => handleInputChange("utilities", value)}
+          value={formData.infoTelecomPAR}
+          onChange={(value) => handleInputChange("infoTelecomPAR", value)}
         />
       </div>
     </ModalWrapper>

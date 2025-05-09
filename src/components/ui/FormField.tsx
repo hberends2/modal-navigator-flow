@@ -8,6 +8,7 @@ interface FormFieldProps {
   value: string;
   onChange: (value: string) => void;
   required?: boolean;
+  placeholder?: string;
 }
 
 const FormField: React.FC<FormFieldProps> = ({
@@ -17,6 +18,7 @@ const FormField: React.FC<FormFieldProps> = ({
   value,
   onChange,
   required = false,
+  placeholder,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;
@@ -49,13 +51,14 @@ const FormField: React.FC<FormFieldProps> = ({
         className="w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         required={required}
         placeholder={
-          type === "percentage" 
+          placeholder || 
+          (type === "percentage" 
             ? "Enter percentage" 
             : type === "currency" 
               ? "Enter amount" 
               : type === "integer" 
                 ? "Enter number" 
-                : "Enter text"
+                : "Enter text")
         }
       />
     </div>
