@@ -2,7 +2,13 @@
 import React, { useState } from "react";
 import ModalWrapper from "../ui/ModalWrapper";
 import FormField from "../ui/FormField";
-import Dropdown from "../ui/Dropdown";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
 interface AcquisitionModalProps {
   onClose: () => void;
@@ -20,7 +26,11 @@ const AcquisitionModal: React.FC<AcquisitionModalProps> = ({ onClose, onNext }) 
     capRate: "",
   });
 
-  const [acquisitionMonthOption, setAcquisitionMonthOption] = useState("");
+  const months = [
+    "January", "February", "March", "April", 
+    "May", "June", "July", "August",
+    "September", "October", "November", "December"
+  ];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({
@@ -29,11 +39,15 @@ const AcquisitionModal: React.FC<AcquisitionModalProps> = ({ onClose, onNext }) 
     });
   };
 
-  const handleSave = () => {
-    console.log("Saving Acquisition Data:", {
+  const handleMonthChange = (value: string) => {
+    setFormData({
       ...formData,
-      acquisitionMonth: acquisitionMonthOption,
+      acquisitionMonth: value,
     });
+  };
+
+  const handleSave = () => {
+    console.log("Saving Acquisition Data:", formData);
     
     onClose();
   };
@@ -49,12 +63,23 @@ const AcquisitionModal: React.FC<AcquisitionModalProps> = ({ onClose, onNext }) 
           onChange={(value) => handleInputChange("acquisitionCostsPerc", value)}
         />
         
-        <Dropdown
-          id="acquisitionMonth"
-          label="Acquisition Month"
-          value={acquisitionMonthOption}
-          onChange={setAcquisitionMonthOption}
-        />
+        <div className="mb-4">
+          <label htmlFor="acquisitionMonth" className="block mb-1 font-medium">
+            Acquisition Month
+          </label>
+          <Select value={formData.acquisitionMonth} onValueChange={handleMonthChange}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select month" />
+            </SelectTrigger>
+            <SelectContent>
+              {months.map((month) => (
+                <SelectItem key={month} value={month}>
+                  {month}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         
         <FormField
           id="acquisitionYear"
