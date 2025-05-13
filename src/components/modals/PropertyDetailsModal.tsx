@@ -12,6 +12,7 @@ interface PropertyDetailsModalProps {
 const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, onNext }) => {
   const [formData, setFormData] = useState({
     propertyName: "",
+    censusId: "",
     propertyAddress: "",
     city: "",
     state: "",
@@ -72,6 +73,14 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           value={formData.propertyName}
           onChange={(value) => handleInputChange("propertyName", value)}
           required
+        />
+        
+        <FormField
+          id="censusId"
+          label="Census ID"
+          type="integer"
+          value={formData.censusId}
+          onChange={(value) => handleInputChange("censusId", value)}
         />
         
         <FormField
