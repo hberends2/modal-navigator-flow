@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, LogOut } from "lucide-react";
 
 interface SidebarProps {
   onItemClick: (modalName: string) => void;
@@ -80,11 +80,26 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
         { id: "nonOperatingExpenses", name: "Non-Operating Expenses" },
         { id: "ffeReserve", name: "FF&E Reserve" }
       ]
+    },
+    {
+      id: "waterfall",
+      name: "Waterfall"
+      // No subCategories for Waterfall
+    },
+    {
+      id: "summary",
+      name: "Summary"
+      // No subCategories for Summary
+    },
+    {
+      id: "reports",
+      name: "Reports"
+      // No subCategories for Reports
     }
   ];
 
   return (
-    <div className="w-64 min-h-full bg-gray-100 shadow-md overflow-y-auto">
+    <div className="w-64 min-h-full bg-gray-100 shadow-md overflow-y-auto flex flex-col">
       <div className="p-4 bg-gray-100 text-gray-800">
         <img 
           src="/lovable-uploads/c5f7ad47-17a3-439d-96a4-ee6584dacdcc.png" 
@@ -92,7 +107,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
           className="h-20 w-auto"
         />
       </div>
-      <nav className="mt-2">
+      <nav className="mt-2 flex-grow">
         <ul>
           {categories.map((category) => (
             <li key={category.id} className="mb-1">
@@ -130,6 +145,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
           ))}
         </ul>
       </nav>
+      <div className="p-4 border-t border-gray-200">
+        <button 
+          className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-200 rounded transition-colors"
+          onClick={() => console.log("Logout clicked")}
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          <span>Logout</span>
+        </button>
+      </div>
     </div>
   );
 };
