@@ -76,6 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
         { id: "departmentalExpenses", name: "Departmental Expenses" },
         { id: "managementAndFranchiseFees", name: "Management & Franchise Fees" },
         { id: "undistributedExpenses", name: "Undistributed Expenses" },
+        { id: "undistributedExpensesSecond", name: "Undistributed Expenses - p2" },
         { id: "nonOperatingExpenses", name: "Non-Operating Expenses" },
         { id: "ffeReserve", name: "FF&E Reserve" }
       ]
@@ -85,7 +86,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   return (
     <div className="w-64 min-h-full bg-gray-100 shadow-md overflow-y-auto">
       <div className="p-4 bg-gray-800 text-white">
-        <h2 className="text-xl font-bold">Investment Model</h2>
+        <img 
+          src="/lovable-uploads/c5f7ad47-17a3-439d-96a4-ee6584dacdcc.png" 
+          alt="InnVestAI Logo" 
+          className="h-8 w-auto"
+        />
       </div>
       <nav className="mt-2">
         <ul>
