@@ -89,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
         <img 
           src="/lovable-uploads/c5f7ad47-17a3-439d-96a4-ee6584dacdcc.png" 
           alt="InnVestAI Logo" 
-          className="h-12 w-auto"
+          className="h-20 w-auto"
         />
       </div>
       <nav className="mt-2">
