@@ -20,10 +20,12 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
     propertyType: "",
     keyMoney: "",
     versionName: "",
+    status: "",
   });
 
   const [propertyTypeOption, setPropertyTypeOption] = useState("");
   const [keyMoneyOption, setKeyMoneyOption] = useState("");
+  const [statusOption, setStatusOption] = useState("");
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({
@@ -58,6 +60,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
       ...formData,
       propertyType: propertyTypeOption,
       keyMoney: keyMoneyOption,
+      status: statusOption,
     });
     
     onClose();
@@ -125,6 +128,13 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           value={propertyTypeOption}
           onChange={setPropertyTypeOption}
           required
+        />
+        
+        <Dropdown
+          id="status"
+          label="Status"
+          value={statusOption}
+          onChange={setStatusOption}
         />
         
         <Dropdown
