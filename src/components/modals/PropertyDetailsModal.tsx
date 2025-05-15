@@ -43,12 +43,15 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
       "state",
       "numberOfRooms",
       "propertyType",
+      "status", // Added status as a required field
     ];
 
     const isFormValid = requiredFields.every(
       (field) => field === "propertyType" 
         ? propertyTypeOption !== "" 
-        : formData[field as keyof typeof formData] !== ""
+        : field === "status"
+          ? statusOption !== ""
+          : formData[field as keyof typeof formData] !== ""
     );
 
     if (!isFormValid) {
@@ -135,6 +138,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           label="Status"
           value={statusOption}
           onChange={setStatusOption}
+          required
         />
         
         <Dropdown
