@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import { ChevronDown, ChevronRight, LogOut, Separator } from "lucide-react";
+import { ChevronDown, ChevronRight, LogOut } from "lucide-react";
 
 interface SidebarProps {
   onItemClick: (modalName: string) => void;
