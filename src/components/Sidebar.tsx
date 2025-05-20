@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { ChevronDown, ChevronRight, LogOut } from "lucide-react";
+import { ChevronDown, ChevronRight, LogOut, Separator } from "lucide-react";
 
 interface SidebarProps {
   onItemClick: (modalName: string) => void;
@@ -32,7 +32,22 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
     }
   };
 
-  const categories: CategoryItem[] = [
+  // Moved Summary and Reports to the top
+  const topCategories: CategoryItem[] = [
+    {
+      id: "summary",
+      name: "Summary"
+      // No subCategories for Summary
+    },
+    {
+      id: "reports",
+      name: "Reports"
+      // No subCategories for Reports
+    }
+  ];
+
+  // Remaining categories under "Proforma Development"
+  const proformaCategories: CategoryItem[] = [
     {
       id: "propertyDetails",
       name: "Property Details"
@@ -85,16 +100,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
       id: "waterfall",
       name: "Waterfall"
       // No subCategories for Waterfall
-    },
-    {
-      id: "summary",
-      name: "Summary"
-      // No subCategories for Summary
-    },
-    {
-      id: "reports",
-      name: "Reports"
-      // No subCategories for Reports
     }
   ];
 
@@ -109,7 +114,29 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
       </div>
       <nav className="mt-2 flex-grow">
         <ul>
-          {categories.map((category) => (
+          {/* Top-level categories (Summary and Reports) */}
+          {topCategories.map((category) => (
+            <li key={category.id} className="mb-1">
+              <div
+                className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-200 transition-colors cursor-pointer"
+                onClick={() => handleCategoryClick(category)}
+              >
+                <span className="w-4 mr-2"></span>
+                <span className="font-medium">{category.name}</span>
+              </div>
+            </li>
+          ))}
+          
+          {/* Section divider with heading */}
+          <li className="py-3">
+            <div className="px-4">
+              <p className="font-bold text-sm text-gray-600 mb-1">Proforma Development:</p>
+              <div className="border-b border-gray-300"></div>
+            </div>
+          </li>
+
+          {/* Proforma development categories */}
+          {proformaCategories.map((category) => (
             <li key={category.id} className="mb-1">
               <div
                 className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-200 transition-colors cursor-pointer"
