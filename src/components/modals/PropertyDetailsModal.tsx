@@ -28,8 +28,6 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
   const [propertyTypeOption, setPropertyTypeOption] = useState("");
   const [keyMoneyOption, setKeyMoneyOption] = useState("");
   const [statusOption, setStatusOption] = useState("");
-  const [brandOption, setBrandOption] = useState("");
-  const [managementOption, setManagementOption] = useState("");
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({
@@ -68,8 +66,6 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
       propertyType: propertyTypeOption,
       keyMoney: keyMoneyOption,
       status: statusOption,
-      brand: brandOption,
-      management: managementOption,
     });
     
     onClose();
@@ -147,18 +143,20 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           required
         />
 
-        <Dropdown
+        <FormField
           id="brand"
           label="Brand"
-          value={brandOption}
-          onChange={setBrandOption}
+          type="text"
+          value={formData.brand}
+          onChange={(value) => handleInputChange("brand", value)}
         />
         
-        <Dropdown
+        <FormField
           id="management"
           label="Management"
-          value={managementOption}
-          onChange={setManagementOption}
+          type="text"
+          value={formData.management}
+          onChange={(value) => handleInputChange("management", value)}
         />
         
         <Dropdown
