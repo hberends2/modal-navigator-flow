@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight, LogOut } from "lucide-react";
 
@@ -126,11 +127,17 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
             </li>
           ))}
           
-          {/* Section divider with heading */}
-          <li className="py-3">
+          {/* Section divider */}
+          <li className="py-2">
             <div className="px-4">
-              <p className="font-bold text-sm text-gray-600 mb-1">Proforma Development:</p>
               <div className="border-b border-gray-300"></div>
+            </div>
+          </li>
+          
+          {/* Proforma Development heading */}
+          <li className="py-2">
+            <div className="px-4">
+              <p className="font-medium text-gray-800">Proforma Development</p>
             </div>
           </li>
 
@@ -185,3 +192,4 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
 };
 
 export default Sidebar;
+
