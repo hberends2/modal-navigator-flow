@@ -95,6 +95,15 @@ CREATE TABLE Penetration (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Occupancy Forecast table
+CREATE TABLE Occupancy_Forecast (
+    id SERIAL PRIMARY KEY,
+    property_id INTEGER NOT NULL REFERENCES Property_Details(id),
+    forecast_data JSONB NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Operating Revenue table
 CREATE TABLE Operating_Revenue (
     id SERIAL PRIMARY KEY,
@@ -193,6 +202,7 @@ CREATE INDEX idx_disposition_property ON Disposition(property_id);
 CREATE INDEX idx_capex_property ON CapEx(property_id);
 CREATE INDEX idx_inflation_property ON Inflation_Assumptions(property_id);
 CREATE INDEX idx_penetration_property ON Penetration(property_id);
+CREATE INDEX idx_occupancy_property ON Occupancy_Forecast(property_id);
 CREATE INDEX idx_oprevenue_property ON Operating_Revenue(property_id);
 CREATE INDEX idx_deptexp_property ON Dept_Expense(property_id);
 CREATE INDEX idx_fees_property ON Fees(property_id);

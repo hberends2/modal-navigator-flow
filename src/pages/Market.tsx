@@ -7,13 +7,13 @@ import PropertyFormModal from "../components/modals/PropertyFormModal";
 import PropertyTable from "../components/market/PropertyTable";
 import { usePropertyData } from "../hooks/usePropertyData";
 import { Property } from "../types/PropertyTypes";
-import { toast } from "../components/ui/use-toast";
+import { toast } from "../hooks/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Market: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
-  const { properties, addProperty, updateProperty, deleteProperty } = usePropertyData();
+  const { properties, addProperty, updateProperty, deleteProperty, isLoading } = usePropertyData();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -42,15 +42,15 @@ const Market: React.FC = () => {
   };
   
   // Handle adding or updating properties
-  const handleSaveProperty = (property: Property) => {
+  const handleSaveProperty = async (property: Property) => {
     if (editingProperty) {
       // Update existing property
       console.log("Updating property:", property.id);
-      updateProperty(property);
+      await updateProperty(property);
     } else {
       // Add new property
       console.log("Adding new property");
-      addProperty(property);
+      await addProperty(property);
     }
     setIsModalOpen(false);
   };
@@ -75,6 +75,19 @@ const Market: React.FC = () => {
       });
     }
   };
+  
+  // Start property analysis workflow
+  const handleAnalyzeProperty = (property: Property) => {
+    console.log("Analyzing property:", property.id);
+    // Navigate to Index page and open subject occupancy modal with this property
+    navigate('/', { 
+      state: { 
+        openModal: "subjectOccupancy",
+        propertyId: property.id,
+        timestamp: Date.now()
+      } 
+    });
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -89,11 +102,18 @@ const Market: React.FC = () => {
           </Button>
         </div>
 
-        <PropertyTable 
-          properties={properties}
-          onEdit={handleEditProperty}
-          onDelete={deleteProperty}
-        />
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <p className="text-gray-500">Loading properties...</p>
+          </div>
+        ) : (
+          <PropertyTable 
+            properties={properties}
+            onEdit={handleEditProperty}
+            onDelete={deleteProperty}
+            onAnalyze={handleAnalyzeProperty}
+          />
+        )}
       </div>
 
       {isModalOpen && (

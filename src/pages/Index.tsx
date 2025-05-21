@@ -16,10 +16,14 @@ import UndistributedExpensesModal from "../components/modals/UndistributedExpens
 import UndistributedExpensesSecondModal from "../components/modals/UndistributedExpensesSecondModal";
 import NonOperatingExpensesModal from "../components/modals/NonOperatingExpensesModal";
 import FFEReserveModal from "../components/modals/FFEReserveModal";
+import { usePropertyData } from "../hooks/usePropertyData";
+import { Property } from "../types/PropertyTypes";
 import { useLocation } from "react-router-dom";
 
 const Index = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [activeProperty, setActiveProperty] = useState<Property | null>(null);
+  const { properties } = usePropertyData();
   const location = useLocation();
   // Flag to track if we've already processed the location state
   const processedLocationState = useRef(false);
@@ -37,6 +41,13 @@ const Index = () => {
       console.log("Opening modal from navigation state:", location.state.openModal);
       setActiveModal(location.state.openModal);
       
+      // Check if a property ID was passed
+      if (location.state.propertyId && properties.length > 0) {
+        const property = properties.find(p => p.id === location.state.propertyId) || null;
+        setActiveProperty(property);
+        console.log("Setting active property:", property);
+      }
+      
       // Mark that we've processed this state
       processedLocationState.current = true;
       
@@ -49,7 +60,7 @@ const Index = () => {
     return () => {
       console.log("Index component will unmount");
     };
-  }, [location, activeModal]);
+  }, [location, activeModal, properties]);
 
   // Reset the processed flag when location actually changes
   useEffect(() => {
@@ -60,11 +71,17 @@ const Index = () => {
     }
   }, [location.key]);
 
-  const openModal = (modalName: string) => {
+  const openModal = (modalName: string, propertyId?: string) => {
     console.log("Opening modal:", modalName);
     
     // Clear any existing navigation state before setting new modal
     window.history.replaceState({}, document.title);
+    
+    // If a property ID is provided, set the active property
+    if (propertyId && properties.length > 0) {
+      const property = properties.find(p => p.id === propertyId) || null;
+      setActiveProperty(property);
+    }
     
     setActiveModal(modalName);
   };
@@ -76,6 +93,7 @@ const Index = () => {
     window.history.replaceState({}, document.title);
     
     setActiveModal(null);
+    setActiveProperty(null);
   };
 
   const handleNext = (currentModal: string) => {
@@ -115,6 +133,7 @@ const Index = () => {
       
       console.log("Reached end of modal sequence, closing");
       setActiveModal(null);
+      setActiveProperty(null);
     }
   };
 
@@ -141,7 +160,7 @@ const Index = () => {
       {activeModal === "disposition" && <DispositionModal onClose={closeModal} onNext={() => handleNext("disposition")} />}
       {activeModal === "caps" && <CapsModal onClose={closeModal} onNext={() => handleNext("caps")} />}
       {activeModal === "inflationAssumptions" && <InflationAssumptionsModal onClose={closeModal} onNext={() => handleNext("inflationAssumptions")} />}
-      {activeModal === "subjectOccupancy" && <OccupancyForecastModal onClose={closeModal} onNext={() => handleNext("subjectOccupancy")} />}
+      {activeModal === "subjectOccupancy" && <OccupancyForecastModal onClose={closeModal} onNext={() => handleNext("subjectOccupancy")} property={activeProperty} />}
       {activeModal === "penetrationAnalysis" && <PenetrationAnalysisModal onClose={closeModal} onNext={() => handleNext("penetrationAnalysis")} />}
       {activeModal === "operatingRevenue" && <OperatingRevenueModal onClose={closeModal} onNext={() => handleNext("operatingRevenue")} />}
       {activeModal === "departmentalExpenses" && <DepartmentalExpensesModal onClose={closeModal} onNext={() => handleNext("departmentalExpenses")} />}

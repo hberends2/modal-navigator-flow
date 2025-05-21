@@ -6,6 +6,7 @@ import { toast } from "../ui/use-toast";
 import HistoricalOccupancyTable from "../occupancy-forecast/HistoricalOccupancyTable";
 import ForecastMethodSelector from "../occupancy-forecast/ForecastMethodSelector";
 import ForecastTable from "../occupancy-forecast/ForecastTable";
+import { useDatabase } from "../../hooks/useDatabase";
 import { 
   OccupancyData,
   HistoricalData
@@ -30,6 +31,7 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
   property
 }) => {
   console.log("OccupancyForecastModal - Rendering");
+  const { saveOccupancyData, loading } = useDatabase();
   
   // Sample historical data - in a real app, this might come from an API or context
   const historicalData: HistoricalData[] = [
@@ -114,16 +116,36 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
   }, [forecastMethod]);
 
   // Handle saving the data
-  const handleSave = () => {
-    // In the future, this would save to Supabase
+  const handleSave = async () => {
     console.log("Saving occupancy forecast data:", occupancyValues);
     
-    toast({
-      title: "Data saved",
-      description: "Subject occupancy forecast data has been saved"
-    });
+    // Check if we have a property ID
+    if (!property || !property.id) {
+      toast({
+        title: "Error",
+        description: "No property selected for saving forecast data",
+        variant: "destructive"
+      });
+      return;
+    }
     
-    onClose();
+    // Save to database
+    const dataToSave = {
+      historicalData,
+      occupancyForecast: occupancyValues,
+      forecastMethod,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    const success = await saveOccupancyData(property.id, dataToSave);
+    
+    if (success) {
+      toast({
+        title: "Data saved",
+        description: "Subject occupancy forecast data has been saved"
+      });
+      onClose();
+    }
   };
 
   return (
@@ -134,6 +156,7 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
       onNext={onNext}
       showNext={false}
       showSave={true}
+      saveDisabled={loading}
     >
       {/* Historical Occupancy Table Component */}
       <HistoricalOccupancyTable 
@@ -157,6 +180,12 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
         handleOccupancyChange={handleOccupancyChange}
         handleGrowthRateChange={handleGrowthRateChange}
       />
+      
+      {loading && (
+        <div className="text-center py-2">
+          <p className="text-blue-500">Saving data...</p>
+        </div>
+      )}
     </ModalWrapper>
   );
 };
