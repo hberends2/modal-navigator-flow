@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +10,7 @@ interface CategoryItem {
   id: string;
   name: string;
   path?: string;
-  subCategories?: { id: string; name: string }[];
+  subCategories?: { id: string; name: string; path?: string }[];
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
