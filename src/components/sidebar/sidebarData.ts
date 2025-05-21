@@ -43,8 +43,8 @@ export const proformaCategories: CategoryItem[] = [
     name: "Market",
     subCategories: [
       { id: "inflationAssumptions", name: "Inflation Assumptions" },
-      { id: "penetrationAnalysis", name: "Penetration Analysis" },
       { id: "subjectOccupancy", name: "Subject Occupancy" },
+      { id: "penetrationAnalysis", name: "Penetration Analysis" },
       { id: "marketAnalysis", name: "Market Analysis", path: "/market" }
     ]
   },

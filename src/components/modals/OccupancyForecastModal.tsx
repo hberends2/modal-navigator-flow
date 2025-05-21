@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ModalWrapper from "../ui/ModalWrapper";
 import { Property } from "../../types/PropertyTypes";
+import { toast } from "../ui/use-toast";
 
 interface OccupancyForecastModalProps {
   onClose: () => void;
@@ -22,6 +23,7 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
   property
 }) => {
   console.log("OccupancyForecastModal - Rendering");
+  
   // Sample historical data - in a real app, this might come from an API or context
   const historicalData = [
     { year: 2022, occupancy: 0.617, rooms: property?.rooms || 108 },
@@ -125,7 +127,21 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
   // Update occupancy value for a specific year
   function handleOccupancyChange(index: number, value: string) {
     const newValues = [...occupancyValues];
-    newValues[index].occupancy = parseFloat(value) / 100; // Convert from percentage to decimal
+    const numValue = parseFloat(value);
+    
+    if (isNaN(numValue)) return;
+    
+    newValues[index].occupancy = numValue / 100; // Convert from percentage to decimal
+    
+    // Calculate implied growth rates
+    if (index === 0) {
+      // For first forecast year, compare to last historical year
+      newValues[index].growthRate = ((newValues[index].occupancy - lastHistoricalOccupancy) / lastHistoricalOccupancy) * 100;
+    } else {
+      // For other years, compare to previous forecast year
+      newValues[index].growthRate = ((newValues[index].occupancy - newValues[index - 1].occupancy) / newValues[index - 1].occupancy) * 100;
+    }
+    
     setOccupancyValues(newValues);
   }
   
@@ -136,28 +152,26 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
     }
   }, [forecastMethod]);
 
-  // Handle closing the modal - ensure we clear navigation state
-  const handleClose = () => {
-    console.log("OccupancyForecastModal - Closing modal");
-    window.history.replaceState({}, document.title); // Clear any stored state
-    onClose();
-  };
-
-  // Save the occupancy forecast data - FIXED: now calls onClose instead of onNext
+  // Handle saving the data
   const handleSave = () => {
-    // Placeholder for future save functionality
+    // In the future, this would save to Supabase
     console.log("Saving occupancy forecast data:", occupancyValues);
-    window.history.replaceState({}, document.title); // Clear any stored state
-    onClose(); // Changed from onNext() to onClose()
+    
+    toast({
+      title: "Data saved",
+      description: "Subject occupancy forecast data has been saved"
+    });
+    
+    onClose();
   };
 
   return (
     <ModalWrapper 
       title="Subject Occupancy Forecast" 
-      onClose={handleClose} 
+      onClose={onClose} 
       onSave={handleSave}
       onNext={onNext}
-      showNext={false} // Changed to false to hide the Next button
+      showNext={false}
       showSave={true}
     >
       {/* Historical Reference Section */}
@@ -253,67 +267,54 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {occupancyValues.map((data, index) => {
-                  // Calculate the implied growth rate for the current year
-                  let impliedGrowthRate = 0;
-                  if (index === 0) {
-                    // First forecast year compares to last historical year
-                    impliedGrowthRate = ((data.occupancy - lastHistoricalOccupancy) / lastHistoricalOccupancy) * 100;
-                  } else {
-                    // Other years compare to previous forecast year
-                    const prevOccupancy = occupancyValues[index - 1].occupancy;
-                    impliedGrowthRate = ((data.occupancy - prevOccupancy) / prevOccupancy) * 100;
-                  }
-                  
-                  return (
-                    <tr key={data.year} className="border-b">
-                      <td className="px-4 py-2">{data.year}</td>
-                      <td className="px-4 py-2">
-                        <div className="flex items-center">
-                          {forecastMethod === 'direct' ? (
-                            <>
-                              <input
-                                type="number"
-                                min="0"
-                                max="100"
-                                step="0.1"
-                                value={(data.occupancy * 100).toFixed(1)}
-                                onChange={(e) => handleOccupancyChange(index, e.target.value)}
-                                className="w-16 p-1 border rounded text-right mr-1"
-                              />
-                              <span>%</span>
-                            </>
-                          ) : (
-                            <span className="text-gray-800 font-medium">
-                              {formatPercent(data.occupancy)}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-4 py-2">
-                        <div className="flex items-center">
-                          {forecastMethod === 'growth' ? (
-                            <>
-                              <input
-                                type="number"
-                                step="0.1"
-                                value={data.growthRate.toFixed(1)}
-                                onChange={(e) => handleGrowthRateChange(index, e.target.value)}
-                                className="w-16 p-1 border rounded text-right mr-1"
-                              />
-                              <span>%</span>
-                            </>
-                          ) : (
-                            <span className="text-gray-800 font-medium">
-                              {impliedGrowthRate.toFixed(1)}%
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-4 py-2">{calculateOccupiedRooms(data.occupancy)}</td>
-                    </tr>
-                  );
-                })}
+                {occupancyValues.map((data, index) => (
+                  <tr key={data.year} className="border-b">
+                    <td className="px-4 py-2">{data.year}</td>
+                    <td className="px-4 py-2">
+                      <div className="flex items-center">
+                        {forecastMethod === 'direct' ? (
+                          <>
+                            <input
+                              type="number"
+                              min="0"
+                              max="100"
+                              step="0.1"
+                              value={(data.occupancy * 100).toFixed(1)}
+                              onChange={(e) => handleOccupancyChange(index, e.target.value)}
+                              className="w-16 p-1 border rounded text-right mr-1"
+                            />
+                            <span>%</span>
+                          </>
+                        ) : (
+                          <span className="text-gray-800 font-medium">
+                            {formatPercent(data.occupancy)}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex items-center">
+                        {forecastMethod === 'growth' ? (
+                          <>
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={data.growthRate.toFixed(1)}
+                              onChange={(e) => handleGrowthRateChange(index, e.target.value)}
+                              className="w-16 p-1 border rounded text-right mr-1"
+                            />
+                            <span>%</span>
+                          </>
+                        ) : (
+                          <span className="text-gray-800 font-medium">
+                            {data.growthRate.toFixed(1)}%
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 py-2">{calculateOccupiedRooms(data.occupancy)}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
