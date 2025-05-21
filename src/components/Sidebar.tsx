@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   onItemClick: (modalName: string) => void;
@@ -9,11 +10,13 @@ interface SidebarProps {
 interface CategoryItem {
   id: string;
   name: string;
+  path?: string;
   subCategories?: { id: string; name: string }[];
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
-  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(["market"]);
+  const navigate = useNavigate();
 
   const toggleCategory = (categoryId: string) => {
     if (expandedCategories.includes(categoryId)) {
@@ -24,12 +27,26 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   };
 
   const handleCategoryClick = (category: CategoryItem) => {
+    if (category.path) {
+      // If the category has a direct path, navigate to it
+      navigate(category.path);
+      return;
+    }
+    
     if (!category.subCategories) {
-      // If no subcategories, open the modal directly
+      // If no subcategories and no path, open the modal
       onItemClick(category.id);
     } else {
       toggleCategory(category.id);
     }
+  };
+
+  const handleSubCategoryClick = (subCategoryId: string, path?: string) => {
+    if (path) {
+      navigate(path);
+      return;
+    }
+    onItemClick(subCategoryId);
   };
 
   // Moved Summary and Reports to the top
@@ -74,7 +91,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
       name: "Market",
       subCategories: [
         { id: "inflationAssumptions", name: "Inflation Assumptions" },
-        { id: "penetrationAnalysis", name: "Penetration Analysis" }
+        { id: "penetrationAnalysis", name: "Penetration Analysis" },
+        { id: "marketAnalysis", name: "Market Analysis", path: "/market" }
       ]
     },
     {
@@ -166,7 +184,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
                     <li key={subCategory.id}>
                       <div
                         className="px-4 py-2 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
-                        onClick={() => onItemClick(subCategory.id)}
+                        onClick={() => handleSubCategoryClick(subCategory.id, (subCategory as any).path)}
                       >
                         {subCategory.name}
                       </div>
@@ -192,4 +210,3 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
 };
 
 export default Sidebar;
-
