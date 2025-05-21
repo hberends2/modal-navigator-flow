@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { Button } from "../components/ui/button";
 import { PlusSquare } from "lucide-react";
@@ -8,20 +8,35 @@ import PropertyTable from "../components/market/PropertyTable";
 import { usePropertyData } from "../hooks/usePropertyData";
 import { Property } from "../types/PropertyTypes";
 import { toast } from "../components/ui/use-toast";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Market: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const { properties, addProperty, updateProperty, deleteProperty } = usePropertyData();
+  const navigate = useNavigate();
+  const location = useLocation();
   
+  // Log when this component is mounted
+  useEffect(() => {
+    console.log("Market component mounted or updated");
+    console.log("Current route:", location.pathname);
+    
+    return () => {
+      console.log("Market component will unmount");
+    };
+  }, [location.pathname]);
+
   // Open modal for adding new property
   const handleAddProperty = () => {
+    console.log("Opening add property modal");
     setEditingProperty(null);
     setIsModalOpen(true);
   };
   
   // Open modal for editing existing property
   const handleEditProperty = (property: Property) => {
+    console.log("Opening edit property modal for:", property.id);
     setEditingProperty(property);
     setIsModalOpen(true);
   };
@@ -30,19 +45,29 @@ const Market: React.FC = () => {
   const handleSaveProperty = (property: Property) => {
     if (editingProperty) {
       // Update existing property
+      console.log("Updating property:", property.id);
       updateProperty(property);
     } else {
       // Add new property
+      console.log("Adding new property");
       addProperty(property);
     }
     setIsModalOpen(false);
   };
 
   const handleSidebarItemClick = (modalName: string) => {
-    toast({
-      title: "Navigation",
-      description: `Navigating to ${modalName}`
-    });
+    console.log("Sidebar item clicked in Market page:", modalName);
+    
+    // If the modal needs to be opened on the index page, navigate there first
+    if (modalName !== "marketAnalysis") {
+      console.log("Navigating to Index page to open modal:", modalName);
+      navigate('/', { state: { openModal: modalName } });
+    } else {
+      toast({
+        title: "Navigation",
+        description: `Already on ${modalName} page`
+      });
+    }
   };
 
   return (

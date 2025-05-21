@@ -1,6 +1,6 @@
 
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import SidebarSection from "./sidebar/SidebarSection";
 import SidebarFooter from "./sidebar/SidebarFooter";
 import { CategoryItem } from "./sidebar/SidebarCategory";
@@ -14,8 +14,16 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["market"]);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Log the current path and state on mount or route change
+    console.log("Sidebar - current path:", location.pathname);
+    console.log("Sidebar - expanded categories:", expandedCategories);
+  }, [location.pathname, expandedCategories]);
 
   const toggleCategory = (categoryId: string) => {
+    console.log("Toggling category:", categoryId);
     if (expandedCategories.includes(categoryId)) {
       setExpandedCategories(expandedCategories.filter(id => id !== categoryId));
     } else {
@@ -24,29 +32,37 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   };
 
   const handleCategoryClick = (category: CategoryItem) => {
+    console.log("Category clicked:", category);
+    
     if (category.path) {
       // If the category has a direct path, navigate to it
+      console.log("Navigating to path:", category.path);
       navigate(category.path);
       return;
     }
     
     if (!category.subCategories) {
       // If no subcategories and no path, open the modal
+      console.log("Opening modal for category:", category.id);
       onItemClick(category.id);
       toast({
         title: "Opening modal",
         description: `Opening ${category.name} modal`
       });
     } else {
+      console.log("Category has subcategories, toggling:", category.id);
       toggleCategory(category.id);
     }
   };
 
   const handleSubCategoryClick = (subCategoryId: string, path?: string) => {
+    console.log("Subcategory clicked:", subCategoryId, "with path:", path);
     if (path) {
+      console.log("Navigating to subcategory path:", path);
       navigate(path);
       return;
     }
+    console.log("Opening modal for subcategory:", subCategoryId);
     onItemClick(subCategoryId);
     toast({
       title: "Opening modal",

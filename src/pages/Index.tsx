@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import PropertyDetailsModal from "../components/modals/PropertyDetailsModal";
 import AcquisitionModal from "../components/modals/AcquisitionModal";
@@ -16,19 +16,40 @@ import UndistributedExpensesModal from "../components/modals/UndistributedExpens
 import UndistributedExpensesSecondModal from "../components/modals/UndistributedExpensesSecondModal";
 import NonOperatingExpensesModal from "../components/modals/NonOperatingExpensesModal";
 import FFEReserveModal from "../components/modals/FFEReserveModal";
+import { useLocation } from "react-router-dom";
 
 const Index = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const location = useLocation();
+
+  // Add debug logging for component lifecycle
+  useEffect(() => {
+    console.log("Index component mounted or updated");
+    console.log("Current route:", location.pathname);
+    console.log("Active modal:", activeModal);
+
+    // Reset active modal if we navigate to this route from somewhere else
+    if (location.pathname === "/" && activeModal === null) {
+      console.log("Index page loaded without active modal");
+    }
+    
+    return () => {
+      console.log("Index component will unmount");
+    };
+  }, [location.pathname, activeModal]);
 
   const openModal = (modalName: string) => {
+    console.log("Opening modal:", modalName);
     setActiveModal(modalName);
   };
 
   const closeModal = () => {
+    console.log("Closing modal, was:", activeModal);
     setActiveModal(null);
   };
 
   const handleNext = (currentModal: string) => {
+    console.log("Handle next from modal:", currentModal);
     // Logic to determine the next modal to open
     const modalOrder = [
       "propertyDetails", 
@@ -49,13 +70,21 @@ const Index = () => {
     ];
     
     const currentIndex = modalOrder.indexOf(currentModal);
+    console.log("Current index in modal order:", currentIndex);
+    
     if (currentIndex < modalOrder.length - 1) {
-      setActiveModal(modalOrder[currentIndex + 1]);
+      const nextModal = modalOrder[currentIndex + 1];
+      console.log("Next modal will be:", nextModal);
+      setActiveModal(nextModal);
     } else {
       // If we're at the last modal, we can close it or loop back
+      console.log("Reached end of modal sequence, closing");
       setActiveModal(null);
     }
   };
+
+  // Debug render
+  console.log("Rendering Index with activeModal:", activeModal);
 
   return (
     <div className="flex h-screen bg-gray-50">

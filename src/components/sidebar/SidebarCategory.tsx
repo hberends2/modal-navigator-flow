@@ -32,11 +32,14 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
 
   const handleCategoryClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    console.log("SidebarCategory - category clicked:", category.id);
     onCategoryClick(category);
   };
 
   const handleSubCategoryClick = (subCategoryId: string, path?: string) => (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    console.log("SidebarCategory - subcategory clicked:", subCategoryId, "with path:", path);
     onSubCategoryClick(subCategoryId, path);
   };
 
@@ -45,6 +48,8 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
       <div
         className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-200 transition-colors cursor-pointer"
         onClick={handleCategoryClick}
+        role="button"
+        aria-expanded={isExpanded}
       >
         {category.subCategories ? (
           isExpanded ? (
@@ -65,6 +70,7 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
               <div
                 className="px-4 py-2 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
                 onClick={handleSubCategoryClick(subCategory.id, subCategory.path)}
+                role="button"
               >
                 {subCategory.name}
               </div>
