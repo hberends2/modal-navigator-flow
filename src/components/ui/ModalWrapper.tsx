@@ -8,6 +8,7 @@ interface ModalWrapperProps {
   onNext: () => void;
   showNext?: boolean;
   showSave?: boolean;
+  saveDisabled?: boolean;
   children: ReactNode;
 }
 
@@ -18,6 +19,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
   onNext, 
   showNext = true,
   showSave = true,
+  saveDisabled = false,
   children 
 }) => {
   return (
@@ -47,7 +49,10 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
           {showSave && (
             <button
               onClick={onSave}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+              disabled={saveDisabled}
+              className={`px-4 py-2 bg-blue-500 text-white rounded transition-colors ${
+                saveDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+              }`}
             >
               Save
             </button>

@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, BarChart2 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -17,12 +17,14 @@ interface PropertyTableProps {
   properties: Property[];
   onEdit: (property: Property) => void;
   onDelete: (propertyId: string) => void;
+  onAnalyze?: (property: Property) => void;
 }
 
 const PropertyTable: React.FC<PropertyTableProps> = ({
   properties,
   onEdit,
   onDelete,
+  onAnalyze,
 }) => {
   // Calculate total rooms
   const totalRooms = properties.reduce((sum, property) => sum + property.rooms, 0);
@@ -84,6 +86,16 @@ const PropertyTable: React.FC<PropertyTableProps> = ({
                       <Trash2 className="h-4 w-4 text-red-500" />
                       <span className="sr-only">Delete</span>
                     </Button>
+                    {onAnalyze && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onAnalyze(property)}
+                      >
+                        <BarChart2 className="h-4 w-4 text-blue-500" />
+                        <span className="sr-only">Analyze</span>
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
