@@ -2,110 +2,16 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { Button } from "../components/ui/button";
-import { PlusSquare, Edit, Trash2 } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../components/ui/table";
+import { PlusSquare } from "lucide-react";
 import PropertyFormModal from "../components/modals/PropertyFormModal";
-import { useToast } from "../hooks/use-toast";
-
-// Define property data type
-interface Property {
-  id: string;
-  strCode: string;
-  name: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  class: string;
-  affDate: string;
-  openDate: string;
-  rooms: number;
-  chgInRms: string;
-  chgInRms1: string;
-  chgInRms2: string;
-  chgInRms3: string;
-}
+import PropertyTable from "../components/market/PropertyTable";
+import { usePropertyData } from "../hooks/usePropertyData";
+import { Property } from "../types/PropertyTypes";
 
 const Market: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
-  const { toast } = useToast();
-  const [properties, setProperties] = useState<Property[]>([
-    {
-      id: "1",
-      strCode: "2983",
-      name: "Holiday Inn Express North Palm Beach Oceanview",
-      city: "Juno Beach",
-      state: "FL",
-      zipCode: "33408",
-      class: "Upper Midscale Class",
-      affDate: "Jan 1994",
-      openDate: "Jun 1981",
-      rooms: 108,
-      chgInRms: "",
-      chgInRms1: "",
-      chgInRms2: "",
-      chgInRms3: "",
-    },
-    {
-      id: "2",
-      strCode: "24667",
-      name: "Hampton Inn Jupiter Juno Beach",
-      city: "Juno Beach",
-      state: "FL",
-      zipCode: "33408",
-      class: "Upper Midscale Class",
-      affDate: "Feb 1995",
-      openDate: "Feb 1995",
-      rooms: 89,
-      chgInRms: "",
-      chgInRms1: "",
-      chgInRms2: "",
-      chgInRms3: "",
-    },
-    {
-      id: "3",
-      strCode: "58387",
-      name: "Hilton Garden Inn Palm Beach Gardens",
-      city: "Palm Beach Gardens",
-      state: "FL",
-      zipCode: "33410",
-      class: "Upscale Class",
-      affDate: "Dec 2020",
-      openDate: "Dec 2008",
-      rooms: 180,
-      chgInRms: "Y",
-      chgInRms1: "+128 (Jun'14)",
-      chgInRms2: "",
-      chgInRms3: "",
-    },
-    {
-      id: "4",
-      strCode: "62976",
-      name: "Courtyard Palm Beach Jupiter",
-      city: "Jupiter",
-      state: "FL",
-      zipCode: "33458",
-      class: "Upscale Class",
-      affDate: "Jun 2014",
-      openDate: "Jun 2014",
-      rooms: 128,
-      chgInRms: "",
-      chgInRms1: "",
-      chgInRms2: "",
-      chgInRms3: "",
-    },
-  ]);
-
-  // Calculate total rooms
-  const totalRooms = properties.reduce((sum, property) => sum + property.rooms, 0);
+  const { properties, addProperty, updateProperty, deleteProperty } = usePropertyData();
   
   // Open modal for adding new property
   const handleAddProperty = () => {
@@ -123,21 +29,12 @@ const Market: React.FC = () => {
   const handleSaveProperty = (property: Property) => {
     if (editingProperty) {
       // Update existing property
-      setProperties(properties.map(p => p.id === property.id ? property : p));
+      updateProperty(property);
     } else {
       // Add new property
-      setProperties([...properties, { ...property, id: Date.now().toString() }]);
+      addProperty(property);
     }
     setIsModalOpen(false);
-  };
-
-  // Handle deleting a property
-  const handleDeleteProperty = (propertyId: string) => {
-    setProperties(properties.filter(property => property.id !== propertyId));
-    toast({
-      title: "Property deleted",
-      description: "The property has been removed from the list.",
-    });
   };
 
   return (
@@ -153,75 +50,11 @@ const Market: React.FC = () => {
           </Button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableCaption>Market Property Listing</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[80px]">STR Code</TableHead>
-                  <TableHead className="min-w-[200px]">Name of Establishment</TableHead>
-                  <TableHead>City</TableHead>
-                  <TableHead>State</TableHead>
-                  <TableHead>Zip Code</TableHead>
-                  <TableHead>Class</TableHead>
-                  <TableHead>Aff Date</TableHead>
-                  <TableHead>Open Date</TableHead>
-                  <TableHead className="text-right">Rooms</TableHead>
-                  <TableHead>Chg in Rms</TableHead>
-                  <TableHead>Chg in Rms 1</TableHead>
-                  <TableHead>Chg in Rms 2</TableHead>
-                  <TableHead>Chg in Rms 3</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {properties.map((property) => (
-                  <TableRow key={property.id}>
-                    <TableCell>{property.strCode}</TableCell>
-                    <TableCell>{property.name}</TableCell>
-                    <TableCell>{property.city}</TableCell>
-                    <TableCell>{property.state}</TableCell>
-                    <TableCell>{property.zipCode}</TableCell>
-                    <TableCell>{property.class}</TableCell>
-                    <TableCell>{property.affDate}</TableCell>
-                    <TableCell>{property.openDate}</TableCell>
-                    <TableCell className="text-right">{property.rooms}</TableCell>
-                    <TableCell>{property.chgInRms}</TableCell>
-                    <TableCell>{property.chgInRms1}</TableCell>
-                    <TableCell>{property.chgInRms2}</TableCell>
-                    <TableCell>{property.chgInRms3}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEditProperty(property)}
-                        >
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">Edit</span>
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteProperty(property.id)}
-                        >
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                          <span className="sr-only">Delete</span>
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <TableRow className="font-medium">
-                  <TableCell colSpan={8} className="text-right">Total Properties: {properties.length}</TableCell>
-                  <TableCell className="text-right">{totalRooms}</TableCell>
-                  <TableCell colSpan={5}></TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
-        </div>
+        <PropertyTable 
+          properties={properties}
+          onEdit={handleEditProperty}
+          onDelete={deleteProperty}
+        />
       </div>
 
       {isModalOpen && (
