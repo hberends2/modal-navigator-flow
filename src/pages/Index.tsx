@@ -22,21 +22,28 @@ const Index = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const location = useLocation();
 
-  // Add debug logging for component lifecycle
+  // Add debug logging for component lifecycle and route state
   useEffect(() => {
     console.log("Index component mounted or updated");
     console.log("Current route:", location.pathname);
     console.log("Active modal:", activeModal);
+    console.log("Location state:", location.state);
 
-    // Reset active modal if we navigate to this route from somewhere else
-    if (location.pathname === "/" && activeModal === null) {
+    // Check if we have a modal to open from navigation state
+    if (location.state && location.state.openModal && activeModal === null) {
+      console.log("Opening modal from navigation state:", location.state.openModal);
+      setActiveModal(location.state.openModal);
+      
+      // Clear the location state to prevent reopening on further updates
+      window.history.replaceState({}, document.title);
+    } else if (location.pathname === "/" && activeModal === null) {
       console.log("Index page loaded without active modal");
     }
     
     return () => {
       console.log("Index component will unmount");
     };
-  }, [location.pathname, activeModal]);
+  }, [location, activeModal]);
 
   const openModal = (modalName: string) => {
     console.log("Opening modal:", modalName);

@@ -61,7 +61,13 @@ const Market: React.FC = () => {
     // If the modal needs to be opened on the index page, navigate there first
     if (modalName !== "marketAnalysis") {
       console.log("Navigating to Index page to open modal:", modalName);
-      navigate('/', { state: { openModal: modalName } });
+      // Make sure we pass the modal name in the state to trigger opening on the Index page
+      navigate('/', { 
+        state: { 
+          openModal: modalName,
+          timestamp: Date.now() // Add timestamp to ensure state is seen as "new"
+        } 
+      });
     } else {
       toast({
         title: "Navigation",

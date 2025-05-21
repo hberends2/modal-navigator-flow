@@ -39,6 +39,7 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
   const handleSubCategoryClick = (subCategoryId: string, path?: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    // Log the path value to debug
     console.log("SidebarCategory - subcategory clicked:", subCategoryId, "with path:", path);
     onSubCategoryClick(subCategoryId, path);
   };
