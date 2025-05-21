@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import ModalWrapper from "../ui/ModalWrapper";
 import { Property } from "../../types/PropertyTypes";
@@ -20,6 +21,7 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
   onNext,
   property
 }) => {
+  console.log("OccupancyForecastModal - Rendering");
   // Sample historical data - in a real app, this might come from an API or context
   const historicalData = [
     { year: 2022, occupancy: 0.617, rooms: property?.rooms || 108 },
@@ -134,20 +136,28 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
     }
   }, [forecastMethod]);
 
+  // Handle closing the modal - ensure we clear navigation state
+  const handleClose = () => {
+    console.log("OccupancyForecastModal - Closing modal");
+    window.history.replaceState({}, document.title); // Clear any stored state
+    onClose();
+  };
+
   // Save the occupancy forecast data
   const handleSave = () => {
     // Placeholder for future save functionality
     console.log("Saving occupancy forecast data:", occupancyValues);
+    window.history.replaceState({}, document.title); // Clear any stored state
     onNext();
   };
 
   return (
     <ModalWrapper 
       title="Subject Occupancy Forecast" 
-      onClose={onClose} 
+      onClose={handleClose} 
       onSave={handleSave}
       onNext={onNext}
-      showNext={false}
+      showNext={true}
       showSave={true}
     >
       {/* Historical Reference Section */}

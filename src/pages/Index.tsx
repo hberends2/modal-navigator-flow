@@ -53,6 +53,8 @@ const Index = () => {
   const closeModal = () => {
     console.log("Closing modal, was:", activeModal);
     setActiveModal(null);
+    // Ensure navigation state is cleared when closing a modal
+    window.history.replaceState({}, document.title);
   };
 
   const handleNext = (currentModal: string) => {
@@ -82,10 +84,18 @@ const Index = () => {
     if (currentIndex < modalOrder.length - 1) {
       const nextModal = modalOrder[currentIndex + 1];
       console.log("Next modal will be:", nextModal);
+      
+      // Clear navigation state when changing modals
+      window.history.replaceState({}, document.title);
+      
       setActiveModal(nextModal);
     } else {
       // If we're at the last modal, we can close it or loop back
       console.log("Reached end of modal sequence, closing");
+      
+      // Clear navigation state when closing a modal
+      window.history.replaceState({}, document.title);
+      
       setActiveModal(null);
     }
   };

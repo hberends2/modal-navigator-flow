@@ -10,6 +10,8 @@ interface PenetrationAnalysisModalProps {
 }
 
 const PenetrationAnalysisModal: React.FC<PenetrationAnalysisModalProps> = ({ onClose, onNext }) => {
+  console.log("PenetrationAnalysisModal - Rendering");
+  
   const [formData, setFormData] = useState({
     compName: "",
     compNbrOfRooms: "",
@@ -27,13 +29,36 @@ const PenetrationAnalysisModal: React.FC<PenetrationAnalysisModalProps> = ({ onC
     });
   };
 
-  const handleSave = () => {
-    console.log("Saving Penetration Analysis Data:", formData);
+  // Handle closing the modal - ensure we clear navigation state
+  const handleClose = () => {
+    console.log("PenetrationAnalysisModal - Closing modal");
+    window.history.replaceState({}, document.title); // Clear any stored state
     onClose();
   };
 
+  // Save functionality - ensure we clear navigation state
+  const handleSave = () => {
+    console.log("Saving Penetration Analysis Data:", formData);
+    window.history.replaceState({}, document.title); // Clear any stored state
+    onClose();
+  };
+
+  // Next button handler - ensures we clear any lingering state
+  const handleNext = () => {
+    console.log("PenetrationAnalysisModal - Next button clicked");
+    window.history.replaceState({}, document.title); // Clear any stored state
+    onNext();
+  };
+
   return (
-    <ModalWrapper title="Penetration Analysis" onClose={onClose} onSave={handleSave} onNext={onNext}>
+    <ModalWrapper 
+      title="Penetration Analysis" 
+      onClose={handleClose} 
+      onSave={handleSave} 
+      onNext={handleNext}
+      showNext={true}
+      showSave={true}
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           id="compName"
