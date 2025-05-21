@@ -8,6 +8,7 @@ import DispositionModal from "../components/modals/DispositionModal";
 import CapsModal from "../components/modals/CapsModal";
 import InflationAssumptionsModal from "../components/modals/InflationAssumptionsModal";
 import PenetrationAnalysisModal from "../components/modals/PenetrationAnalysisModal";
+import OccupancyForecastModal from "../components/modals/OccupancyForecastModal";
 import OperatingRevenueModal from "../components/modals/OperatingRevenueModal";
 import DepartmentalExpensesModal from "../components/modals/DepartmentalExpensesModal";
 import ManagementAndFranchiseFeesModal from "../components/modals/ManagementAndFranchiseFeesModal";
@@ -36,6 +37,7 @@ const Index = () => {
       "disposition", 
       "caps", 
       "inflationAssumptions", 
+      "subjectOccupancy",
       "penetrationAnalysis", 
       "operatingRevenue", 
       "departmentalExpenses", 
@@ -70,6 +72,7 @@ const Index = () => {
       {activeModal === "disposition" && <DispositionModal onClose={closeModal} onNext={() => handleNext("disposition")} />}
       {activeModal === "caps" && <CapsModal onClose={closeModal} onNext={() => handleNext("caps")} />}
       {activeModal === "inflationAssumptions" && <InflationAssumptionsModal onClose={closeModal} onNext={() => handleNext("inflationAssumptions")} />}
+      {activeModal === "subjectOccupancy" && <OccupancyForecastModal onClose={closeModal} onNext={() => handleNext("subjectOccupancy")} />}
       {activeModal === "penetrationAnalysis" && <PenetrationAnalysisModal onClose={closeModal} onNext={() => handleNext("penetrationAnalysis")} />}
       {activeModal === "operatingRevenue" && <OperatingRevenueModal onClose={closeModal} onNext={() => handleNext("operatingRevenue")} />}
       {activeModal === "departmentalExpenses" && <DepartmentalExpensesModal onClose={closeModal} onNext={() => handleNext("departmentalExpenses")} />}
