@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { Button } from "../components/ui/button";
-import { PlusSquare, Edit } from "lucide-react";
+import { PlusSquare, Edit, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "../components/ui/table";
 import PropertyFormModal from "../components/modals/PropertyFormModal";
+import { useToast } from "../hooks/use-toast";
 
 // Define property data type
 interface Property {
@@ -35,6 +36,7 @@ interface Property {
 const Market: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const { toast } = useToast();
   const [properties, setProperties] = useState<Property[]>([
     {
       id: "1",
@@ -129,6 +131,15 @@ const Market: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  // Handle deleting a property
+  const handleDeleteProperty = (propertyId: string) => {
+    setProperties(properties.filter(property => property.id !== propertyId));
+    toast({
+      title: "Property deleted",
+      description: "The property has been removed from the list.",
+    });
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar onItemClick={() => {}} />
@@ -161,7 +172,7 @@ const Market: React.FC = () => {
                   <TableHead>Chg in Rms 1</TableHead>
                   <TableHead>Chg in Rms 2</TableHead>
                   <TableHead>Chg in Rms 3</TableHead>
-                  <TableHead className="w-[70px]">Actions</TableHead>
+                  <TableHead className="w-[100px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -181,14 +192,24 @@ const Market: React.FC = () => {
                     <TableCell>{property.chgInRms2}</TableCell>
                     <TableCell>{property.chgInRms3}</TableCell>
                     <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditProperty(property)}
-                      >
-                        <Edit className="h-4 w-4" />
-                        <span className="sr-only">Edit</span>
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEditProperty(property)}
+                        >
+                          <Edit className="h-4 w-4" />
+                          <span className="sr-only">Edit</span>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteProperty(property.id)}
+                        >
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                          <span className="sr-only">Delete</span>
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
