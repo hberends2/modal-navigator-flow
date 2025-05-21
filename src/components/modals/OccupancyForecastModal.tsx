@@ -143,12 +143,12 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
     onClose();
   };
 
-  // Save the occupancy forecast data
+  // Save the occupancy forecast data - FIXED: now calls onClose instead of onNext
   const handleSave = () => {
     // Placeholder for future save functionality
     console.log("Saving occupancy forecast data:", occupancyValues);
     window.history.replaceState({}, document.title); // Clear any stored state
-    onNext();
+    onClose(); // Changed from onNext() to onClose()
   };
 
   return (
@@ -157,7 +157,7 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
       onClose={handleClose} 
       onSave={handleSave}
       onNext={onNext}
-      showNext={true}
+      showNext={false} // Changed to false to hide the Next button
       showSave={true}
     >
       {/* Historical Reference Section */}

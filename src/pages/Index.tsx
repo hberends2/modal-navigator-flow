@@ -34,7 +34,7 @@ const Index = () => {
       console.log("Opening modal from navigation state:", location.state.openModal);
       setActiveModal(location.state.openModal);
       
-      // Clear the location state to prevent reopening on further updates
+      // Immediately clear the location state after using it to prevent reopening on further updates
       window.history.replaceState({}, document.title);
     } else if (location.pathname === "/" && activeModal === null) {
       console.log("Index page loaded without active modal");
@@ -47,14 +47,20 @@ const Index = () => {
 
   const openModal = (modalName: string) => {
     console.log("Opening modal:", modalName);
+    
+    // Clear any existing navigation state before setting new modal
+    window.history.replaceState({}, document.title);
+    
     setActiveModal(modalName);
   };
 
   const closeModal = () => {
     console.log("Closing modal, was:", activeModal);
-    setActiveModal(null);
-    // Ensure navigation state is cleared when closing a modal
+    
+    // Clear navigation state before closing modal
     window.history.replaceState({}, document.title);
+    
+    setActiveModal(null);
   };
 
   const handleNext = (currentModal: string) => {
@@ -82,20 +88,17 @@ const Index = () => {
     console.log("Current index in modal order:", currentIndex);
     
     if (currentIndex < modalOrder.length - 1) {
+      // Clear navigation state before changing modal
+      window.history.replaceState({}, document.title);
+      
       const nextModal = modalOrder[currentIndex + 1];
       console.log("Next modal will be:", nextModal);
-      
-      // Clear navigation state when changing modals
-      window.history.replaceState({}, document.title);
-      
       setActiveModal(nextModal);
     } else {
-      // If we're at the last modal, we can close it or loop back
-      console.log("Reached end of modal sequence, closing");
-      
-      // Clear navigation state when closing a modal
+      // Clear navigation state before closing modal
       window.history.replaceState({}, document.title);
       
+      console.log("Reached end of modal sequence, closing");
       setActiveModal(null);
     }
   };
