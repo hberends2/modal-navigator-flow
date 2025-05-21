@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import PropertyDetailsModal from "../components/modals/PropertyDetailsModal";
 import AcquisitionModal from "../components/modals/AcquisitionModal";
@@ -21,6 +21,8 @@ import { useLocation } from "react-router-dom";
 const Index = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const location = useLocation();
+  // Flag to track if we've already processed the location state
+  const processedLocationState = useRef(false);
 
   // Add debug logging for component lifecycle and route state
   useEffect(() => {
@@ -28,15 +30,19 @@ const Index = () => {
     console.log("Current route:", location.pathname);
     console.log("Active modal:", activeModal);
     console.log("Location state:", location.state);
+    console.log("Processed location state:", processedLocationState.current);
 
-    // Check if we have a modal to open from navigation state
-    if (location.state && location.state.openModal && activeModal === null) {
+    // Only process location state if we haven't already and we have state to process
+    if (location.state && location.state.openModal && !processedLocationState.current) {
       console.log("Opening modal from navigation state:", location.state.openModal);
       setActiveModal(location.state.openModal);
       
-      // Immediately clear the location state after using it to prevent reopening on further updates
+      // Mark that we've processed this state
+      processedLocationState.current = true;
+      
+      // Clear location state to prevent reopening on updates
       window.history.replaceState({}, document.title);
-    } else if (location.pathname === "/" && activeModal === null) {
+    } else if (location.pathname === "/" && activeModal === null && !processedLocationState.current) {
       console.log("Index page loaded without active modal");
     }
     
@@ -44,6 +50,15 @@ const Index = () => {
       console.log("Index component will unmount");
     };
   }, [location, activeModal]);
+
+  // Reset the processed flag when location actually changes
+  useEffect(() => {
+    // Only reset when we get a genuine new navigation with state
+    if (location.state && location.state.timestamp) {
+      console.log("New navigation detected, resetting processed flag");
+      processedLocationState.current = false;
+    }
+  }, [location.key]);
 
   const openModal = (modalName: string) => {
     console.log("Opening modal:", modalName);
