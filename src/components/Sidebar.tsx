@@ -5,6 +5,7 @@ import SidebarSection from "./sidebar/SidebarSection";
 import SidebarFooter from "./sidebar/SidebarFooter";
 import { CategoryItem } from "./sidebar/SidebarCategory";
 import { topCategories, proformaCategories } from "./sidebar/sidebarData";
+import { toast } from "./ui/use-toast";
 
 interface SidebarProps {
   onItemClick: (modalName: string) => void;
@@ -32,6 +33,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
     if (!category.subCategories) {
       // If no subcategories and no path, open the modal
       onItemClick(category.id);
+      toast({
+        title: "Opening modal",
+        description: `Opening ${category.name} modal`
+      });
     } else {
       toggleCategory(category.id);
     }
@@ -43,6 +48,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
       return;
     }
     onItemClick(subCategoryId);
+    toast({
+      title: "Opening modal",
+      description: `Opening ${subCategoryId} modal`
+    });
   };
 
   return (

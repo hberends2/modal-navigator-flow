@@ -7,6 +7,7 @@ import PropertyFormModal from "../components/modals/PropertyFormModal";
 import PropertyTable from "../components/market/PropertyTable";
 import { usePropertyData } from "../hooks/usePropertyData";
 import { Property } from "../types/PropertyTypes";
+import { toast } from "../components/ui/use-toast";
 
 const Market: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,9 +38,16 @@ const Market: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const handleSidebarItemClick = (modalName: string) => {
+    toast({
+      title: "Navigation",
+      description: `Navigating to ${modalName}`
+    });
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar onItemClick={() => {}} />
+      <Sidebar onItemClick={handleSidebarItemClick} />
       
       <div className="flex-1 p-6 overflow-auto">
         <div className="mb-6 flex justify-between items-center">

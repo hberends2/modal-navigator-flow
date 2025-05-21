@@ -30,11 +30,21 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
 }) => {
   const isExpanded = expandedCategories.includes(category.id);
 
+  const handleCategoryClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onCategoryClick(category);
+  };
+
+  const handleSubCategoryClick = (subCategoryId: string, path?: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    onSubCategoryClick(subCategoryId, path);
+  };
+
   return (
     <li className="mb-1">
       <div
         className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-200 transition-colors cursor-pointer"
-        onClick={() => onCategoryClick(category)}
+        onClick={handleCategoryClick}
       >
         {category.subCategories ? (
           isExpanded ? (
@@ -54,7 +64,7 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
             <li key={subCategory.id}>
               <div
                 className="px-4 py-2 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
-                onClick={() => onSubCategoryClick(subCategory.id, subCategory.path)}
+                onClick={handleSubCategoryClick(subCategory.id, subCategory.path)}
               >
                 {subCategory.name}
               </div>
