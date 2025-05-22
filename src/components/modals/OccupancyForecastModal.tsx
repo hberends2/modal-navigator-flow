@@ -183,6 +183,7 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
       showNext={false}
       showSave={true}
       saveDisabled={loading}
+      maxWidth="max-w-5xl" // Updated to a wider max-width to fit the table
     >
       {/* Historical Occupancy Table Component */}
       <HistoricalOccupancyTable 

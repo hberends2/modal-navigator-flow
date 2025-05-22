@@ -35,7 +35,7 @@ const HistoricalOccupancyTable: React.FC<HistoricalOccupancyTableProps> = ({
     <div className="mb-6">
       <h3 className="text-lg font-semibold mb-2 text-gray-700">Historical Occupancy Reference</h3>
       <div className="bg-gray-50 p-4 rounded-lg">
-        <div className="overflow-x-auto">
+        <div className="w-full"> {/* Removed overflow-x-auto to prevent horizontal scrollbar */}
           <Table>
             <TableHeader>
               <TableRow>
