@@ -25,10 +25,10 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="text-base font-bold bg-gray-200">Year</TableHead>
-                <TableHead className="text-base font-bold bg-gray-200">Occupancy</TableHead>
-                <TableHead className="text-base font-bold bg-gray-200">YoY</TableHead>
-                <TableHead className="text-base font-bold bg-gray-200">Occupied Rooms</TableHead>
+                <TableHead className="text-base font-bold bg-gray-200 w-[12.5%]">Year</TableHead>
+                <TableHead className="text-base font-bold bg-gray-200 w-[12.5%]">Occupancy</TableHead>
+                <TableHead className="text-base font-bold bg-gray-200 w-[12.5%]">YoY</TableHead>
+                <TableHead className="text-base font-bold bg-gray-200 w-[12.5%]">Occupied Rooms</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
