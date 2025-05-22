@@ -11,8 +11,12 @@ import {
   calculateAvgHistoricalOccupancy,
   calculateAvgHistoricalGrowthRate,
   calculateAvgHistoricalOccupiedRooms,
+  calculateAvgMarketOccupancy,
+  calculateAvgMarketGrowthRate,
+  calculateAvgCompSetOccupancy,
+  calculateAvgCompSetGrowthRate,
   applyGrowthRates
-} from "../components/occupancy-forecast/utils";
+} from "./occupancy-forecast/occupancyForecastUtils";
 import { useDatabase } from "./useDatabase";
 import { Property } from "../types/PropertyTypes";
 import { toast } from "../components/ui/use-toast";
@@ -50,12 +54,12 @@ export const useOccupancyForecast = (property?: Property | null) => {
   const avgHistoricalOccupiedRooms = calculateAvgHistoricalOccupiedRooms(historicalData);
   
   // Calculate market statistics
-  const avgMarketOccupancy = marketData.reduce((sum, item) => sum + item.occupancy, 0) / marketData.length;
-  const avgMarketGrowthRate = marketData.slice(1).reduce((sum, item) => sum + item.growthRate, 0) / (marketData.length - 1);
+  const avgMarketOccupancy = calculateAvgMarketOccupancy(marketData);
+  const avgMarketGrowthRate = calculateAvgMarketGrowthRate(marketData);
   
   // Calculate comp set statistics
-  const avgCompSetOccupancy = compSetData.reduce((sum, item) => sum + item.occupancy, 0) / compSetData.length;
-  const avgCompSetGrowthRate = compSetData.slice(1).reduce((sum, item) => sum + item.growthRate, 0) / (compSetData.length - 1);
+  const avgCompSetOccupancy = calculateAvgCompSetOccupancy(compSetData);
+  const avgCompSetGrowthRate = calculateAvgCompSetGrowthRate(compSetData);
   
   // Forecast years
   const forecastYears = [2025, 2026, 2027, 2028, 2029];
