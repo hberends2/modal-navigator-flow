@@ -1,26 +1,29 @@
 
-# Supabase Integration
+# Local Storage Data Management
 
-This folder contains all the necessary files for Supabase database integration.
+This folder contains all the necessary files for data storage and management using browser's localStorage.
 
-## Setup
+## Overview
 
-To enable database functionality in this application, you need to set up Supabase credentials:
+Since this is a proof of concept, data is stored locally in the browser's localStorage. This allows for:
 
-1. Create a Supabase account and project at [supabase.com](https://supabase.com)
-2. Obtain your Supabase URL and anon key from the API settings page
-3. Add these credentials to your environment by setting:
-   - `VITE_SUPABASE_URL`: Your Supabase project URL
-   - `VITE_SUPABASE_ANON_KEY`: Your Supabase anon/public key
+- Persistence between page refreshes
+- No need for backend database setup
+- Easy development and testing
 
-## Development Mode
+## How It Works
 
-When running without valid Supabase credentials, the application will use placeholder values and display a warning toast. This allows development of the UI without a connected database.
-
-For full functionality including saving and loading data, valid credentials must be provided.
+Data is saved and retrieved using the browser's localStorage API. The application uses helper functions to:
+- Serialize and deserialize JSON data
+- Handle storage errors gracefully
+- Provide type safety with TypeScript
 
 ## File Structure
 
-- `supabaseClient.ts` - Initializes the Supabase client and provides helper functions
-- `usePropertyOperations.ts` - Manages property-related database operations
+- `supabaseClient.ts` - Provides localStorage utilities (despite the filename, this no longer uses Supabase)
+- `usePropertyOperations.ts` - Manages property-related data operations
 - `useOccupancyOperations.ts` - Manages occupancy data operations
+
+## Development Notes
+
+This implementation is intended for POC purposes only. For a production application, you would want to replace the localStorage implementation with a proper backend database.

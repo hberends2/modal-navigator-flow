@@ -1,8 +1,8 @@
 
 import { useState } from "react";
-import { supabase } from "./supabaseClient";
 import { useToast } from "../use-toast";
 import { Property } from "../../types/PropertyTypes";
+import { getLocalData, setLocalData, STORAGE_KEYS } from "./supabaseClient";
 
 export const usePropertyOperations = () => {
   const [loading, setLoading] = useState(false);
@@ -12,56 +12,39 @@ export const usePropertyOperations = () => {
     try {
       setLoading(true);
       
-      // Check if property already exists
+      // Get current properties from localStorage
+      const properties = getLocalData<Property[]>(STORAGE_KEYS.PROPERTIES, []);
+      
       if (property.id) {
         // Update existing property
-        const { error } = await supabase
-          .from('Property_Details')
-          .update({
-            propName: property.name,
-            propAddress: property.strCode,
-            city: property.city,
-            state: property.state,
-            zipCode: property.zipCode,
-            propType: property.class,
-            roomsKeys: property.rooms,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', property.id);
-          
-        if (error) throw error;
+        const updatedProperties = properties.map(p => 
+          p.id === property.id ? { ...property, updated_at: new Date().toISOString() } : p
+        );
+        
+        setLocalData(STORAGE_KEYS.PROPERTIES, updatedProperties);
         
         toast({
           title: "Property updated",
-          description: "Property details have been saved to the database"
+          description: "Property details have been saved locally"
         });
       } else {
-        // Insert new property
-        const { data, error } = await supabase
-          .from('Property_Details')
-          .insert({
-            propName: property.name,
-            propAddress: property.strCode,
-            city: property.city,
-            state: property.state,
-            zipCode: property.zipCode || '',
-            propType: property.class,
-            roomsKeys: property.rooms,
-            status: 'active',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          })
-          .select('id')
-          .single();
-          
-        if (error) throw error;
+        // Insert new property with a generated ID
+        const newId = `local-${Date.now()}`;
+        const newProperty = { 
+          ...property, 
+          id: newId,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        
+        setLocalData(STORAGE_KEYS.PROPERTIES, [...properties, newProperty]);
         
         toast({
           title: "Property created",
-          description: "New property has been added to the database"
+          description: "New property has been added locally"
         });
         
-        return { ...property, id: data.id };
+        return newProperty;
       }
       
       return property;
@@ -83,16 +66,16 @@ export const usePropertyOperations = () => {
     try {
       setLoading(true);
       
-      const { error } = await supabase
-        .from('Property_Details')
-        .delete()
-        .eq('id', propertyId);
-        
-      if (error) throw error;
+      // Get current properties and filter out the one to delete
+      const properties = getLocalData<Property[]>(STORAGE_KEYS.PROPERTIES, []);
+      const updatedProperties = properties.filter(p => p.id !== propertyId);
+      
+      // Update localStorage
+      setLocalData(STORAGE_KEYS.PROPERTIES, updatedProperties);
       
       toast({
         title: "Property deleted",
-        description: "Property has been removed from the database"
+        description: "Property has been removed locally"
       });
       
       return true;
@@ -113,29 +96,8 @@ export const usePropertyOperations = () => {
     try {
       setLoading(true);
       
-      const { data, error } = await supabase
-        .from('Property_Details')
-        .select('*');
-        
-      if (error) throw error;
-      
-      // Transform database records to Property type
-      const properties: Property[] = data.map(record => ({
-        id: record.id,
-        name: record.propName,
-        strCode: record.propAddress,
-        city: record.city,
-        state: record.state,
-        zipCode: record.zipCode || '',
-        class: record.propType,
-        rooms: record.roomsKeys,
-        affDate: '',  // These fields may not be in the database schema
-        openDate: '',
-        chgInRms: '',
-        chgInRms1: '',
-        chgInRms2: '',
-        chgInRms3: ''
-      }));
+      // Get properties from localStorage
+      const properties = getLocalData<Property[]>(STORAGE_KEYS.PROPERTIES, []);
       
       return properties;
     } catch (error: any) {

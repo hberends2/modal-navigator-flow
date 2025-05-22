@@ -1,26 +1,34 @@
 
-import { createClient } from '@supabase/supabase-js';
+// This file now provides mock database functionality using localStorage
+// instead of connecting to Supabase
 
-// Initialize Supabase client with proper error handling
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Helper to get data from localStorage with type safety
+export const getLocalData = <T>(key: string, defaultValue: T): T => {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : defaultValue;
+  } catch (e) {
+    console.error(`Error retrieving data for key ${key}:`, e);
+    return defaultValue;
+  }
+};
 
-// Check if required environment variables are available
-if (!supabaseUrl || !supabaseKey) {
-  console.warn(
-    'Supabase environment variables are not set. Using mock client. ' +
-    'For full functionality, please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY ' +
-    'environment variables.'
-  );
-}
+// Helper to save data to localStorage
+export const setLocalData = (key: string, data: any): void => {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    console.error(`Error saving data for key ${key}:`, e);
+  }
+};
 
-// Create Supabase client with proper fallbacks for development
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder-supabase-url.supabase.co', 
-  supabaseKey || 'placeholder-anon-key'
-);
+// Constants for storage keys
+export const STORAGE_KEYS = {
+  PROPERTIES: 'app_properties',
+  OCCUPANCY_DATA: 'app_occupancy_data'
+};
 
-// Export a helper to check if we have real credentials
+// No longer need Supabase credentials
 export const hasValidSupabaseCredentials = () => {
-  return Boolean(supabaseUrl && supabaseKey && !supabaseUrl.includes('placeholder'));
+  return true; // Always return true since we're not using Supabase
 };

@@ -1,7 +1,7 @@
 
 import { useState } from "react";
-import { supabase } from "./supabaseClient";
 import { useToast } from "../use-toast";
+import { getLocalData, setLocalData, STORAGE_KEYS } from "./supabaseClient";
 
 export const useOccupancyOperations = () => {
   const [loading, setLoading] = useState(false);
@@ -11,42 +11,24 @@ export const useOccupancyOperations = () => {
     try {
       setLoading(true);
       
-      // First check if data already exists for this property
-      const { data: existingData, error: fetchError } = await supabase
-        .from('Occupancy_Forecast')
-        .select('id')
-        .eq('property_id', propertyId);
-        
-      if (fetchError) throw fetchError;
+      // Get current occupancy data from localStorage
+      const allOccupancyData = getLocalData<Record<string, any>>(STORAGE_KEYS.OCCUPANCY_DATA, {});
       
-      if (existingData && existingData.length > 0) {
-        // Update existing occupancy data
-        const { error } = await supabase
-          .from('Occupancy_Forecast')
-          .update({ 
-            forecast_data: occupancyData,
-            updated_at: new Date().toISOString() 
-          })
-          .eq('property_id', propertyId);
-          
-        if (error) throw error;
-      } else {
-        // Insert new occupancy data
-        const { error } = await supabase
-          .from('Occupancy_Forecast')
-          .insert({
-            property_id: propertyId,
-            forecast_data: occupancyData,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          });
-          
-        if (error) throw error;
-      }
+      // Update the data for this property
+      const updatedData = {
+        ...allOccupancyData,
+        [propertyId]: {
+          ...occupancyData,
+          updated_at: new Date().toISOString()
+        }
+      };
+      
+      // Save to localStorage
+      setLocalData(STORAGE_KEYS.OCCUPANCY_DATA, updatedData);
       
       toast({
         title: "Data saved",
-        description: "Occupancy forecast data has been saved"
+        description: "Occupancy forecast data has been saved locally"
       });
       
       return true;
