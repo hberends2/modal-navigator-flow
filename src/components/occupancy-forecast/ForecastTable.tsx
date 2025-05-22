@@ -22,15 +22,17 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
       <h3 className="text-lg font-semibold mb-2 text-gray-700">Forecast Occupancy</h3>
       <div className="bg-gray-50 p-4 rounded-lg">
         <div className="w-full">
-          <div className="relative" style={{ maxWidth: '75%' }}> {/* Added container with maxWidth to match mockup */}
+          {/* Set the container to be approximately 50% of the parent table width */}
+          <div className="relative" style={{ maxWidth: '50%' }}>
             <Table>
               <TableHeader>
                 <TableRow>
-                  {/* Updated widths to match historical table column placement */}
                   <TableHead className="text-base font-bold bg-gray-200" style={{ width: '125px' }}>Year</TableHead>
                   <TableHead className="text-base font-bold bg-gray-200" style={{ width: '200px' }}>Occupancy</TableHead>
                   <TableHead className="text-base font-bold bg-gray-200" style={{ width: '200px' }}>YoY</TableHead>
-                  <TableHead className="text-base font-bold bg-gray-200">Occupied Rooms</TableHead>
+                  <TableHead className="text-base font-bold bg-gray-200" style={{ width: '200px' }}>
+                    <span className="inline-block w-full">Occupied Rooms</span>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -79,7 +81,11 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                         )}
                       </div>
                     </TableCell>
-                    <TableCell>{formatNumber(calculateOccupiedRooms(data.occupancy))}</TableCell>
+                    <TableCell>
+                      <div className="break-words">
+                        {formatNumber(calculateOccupiedRooms(data.occupancy))}
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
