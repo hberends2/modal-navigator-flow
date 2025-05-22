@@ -16,3 +16,16 @@ export interface HistoricalGrowthRate {
   year: number;
   growthRate: number;
 }
+
+// New types for market and comp set data
+export interface MarketData {
+  year: number;
+  occupancy: number;
+  growthRate: number;
+}
+
+export interface CompSetData {
+  year: number;
+  occupancy: number;
+  growthRate: number;
+}

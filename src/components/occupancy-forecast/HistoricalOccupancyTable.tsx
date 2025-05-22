@@ -1,7 +1,8 @@
 
 import React from "react";
-import { HistoricalData, HistoricalGrowthRate } from "./types";
+import { HistoricalData, HistoricalGrowthRate, MarketData, CompSetData } from "./types";
 import { calculateOccupiedRooms, formatPercent } from "./utils";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../ui/table";
 
 interface HistoricalOccupancyTableProps {
   historicalData: HistoricalData[];
@@ -9,6 +10,12 @@ interface HistoricalOccupancyTableProps {
   avgHistoricalOccupancy: number;
   avgHistoricalGrowthRate: number;
   avgHistoricalOccupiedRooms: number;
+  marketData: MarketData[];
+  avgMarketOccupancy: number;
+  avgMarketGrowthRate: number;
+  compSetData: CompSetData[];
+  avgCompSetOccupancy: number;
+  avgCompSetGrowthRate: number;
 }
 
 const HistoricalOccupancyTable: React.FC<HistoricalOccupancyTableProps> = ({
@@ -16,49 +23,98 @@ const HistoricalOccupancyTable: React.FC<HistoricalOccupancyTableProps> = ({
   historicalGrowthRates,
   avgHistoricalOccupancy,
   avgHistoricalGrowthRate,
-  avgHistoricalOccupiedRooms
+  avgHistoricalOccupiedRooms,
+  marketData,
+  avgMarketOccupancy,
+  avgMarketGrowthRate,
+  compSetData,
+  avgCompSetOccupancy,
+  avgCompSetGrowthRate
 }) => {
   return (
     <div className="mb-6">
       <h3 className="text-lg font-semibold mb-2 text-gray-700">Historical Occupancy Reference</h3>
       <div className="bg-gray-50 p-4 rounded-lg">
         <div className="overflow-x-auto">
-          <table className="w-full text-left table-auto">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="px-4 py-2">Year</th>
-                <th className="px-4 py-2">Occupancy</th>
-                <th className="px-4 py-2">Growth Rate</th>
-                <th className="px-4 py-2">Occupied Rooms</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead rowSpan={2} className="bg-gray-200">Year</TableHead>
+                <TableHead colSpan={3} className="text-center bg-gray-200">Subject Property</TableHead>
+                <TableHead colSpan={2} className="text-center bg-gray-200">Market</TableHead>
+                <TableHead colSpan={2} className="text-center bg-gray-200">Comp Set</TableHead>
+              </TableRow>
+              <TableRow>
+                <TableHead className="bg-gray-200">Occupancy</TableHead>
+                <TableHead className="bg-gray-200">YoY</TableHead>
+                <TableHead className="bg-gray-200">Occupied Rooms</TableHead>
+                <TableHead className="bg-gray-200">Occupancy</TableHead>
+                <TableHead className="bg-gray-200">YoY</TableHead>
+                <TableHead className="bg-gray-200">Occupancy</TableHead>
+                <TableHead className="bg-gray-200">YoY</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {historicalData.map((data, index) => (
-                <tr key={data.year} className="border-b">
-                  <td className="px-4 py-2">{data.year}</td>
-                  <td className="px-4 py-2">{formatPercent(data.occupancy)}</td>
-                  <td className="px-4 py-2">
+                <TableRow key={data.year}>
+                  <TableCell>{data.year}</TableCell>
+                  {/* Subject Property */}
+                  <TableCell>{formatPercent(data.occupancy)}</TableCell>
+                  <TableCell>
                     {index > 0 
                       ? formatPercent(historicalGrowthRates[index - 1].growthRate / 100) 
                       : "-"}
-                  </td>
-                  <td className="px-4 py-2">{calculateOccupiedRooms(data.occupancy, data.rooms)}</td>
-                </tr>
+                  </TableCell>
+                  <TableCell>{calculateOccupiedRooms(data.occupancy, data.rooms)}</TableCell>
+                  
+                  {/* Market Data */}
+                  <TableCell>
+                    {marketData[index] ? formatPercent(marketData[index].occupancy) : "-"}
+                  </TableCell>
+                  <TableCell>
+                    {index > 0 && marketData[index] ? formatPercent(marketData[index].growthRate / 100) : "-"}
+                  </TableCell>
+                  
+                  {/* Comp Set Data */}
+                  <TableCell>
+                    {compSetData[index] ? formatPercent(compSetData[index].occupancy) : "-"}
+                  </TableCell>
+                  <TableCell>
+                    {index > 0 && compSetData[index] ? formatPercent(compSetData[index].growthRate / 100) : "-"}
+                  </TableCell>
+                </TableRow>
               ))}
-              <tr className="bg-gray-100">
-                <td className="px-4 py-2 font-medium">Average</td>
-                <td className="px-4 py-2 font-medium">
+              <TableRow className="bg-gray-100">
+                <TableCell className="font-medium">Average</TableCell>
+                {/* Subject Property Averages */}
+                <TableCell className="font-medium">
                   {formatPercent(avgHistoricalOccupancy)}
-                </td>
-                <td className="px-4 py-2 font-medium">
+                </TableCell>
+                <TableCell className="font-medium">
                   {formatPercent(avgHistoricalGrowthRate / 100)}
-                </td>
-                <td className="px-4 py-2 font-medium">
+                </TableCell>
+                <TableCell className="font-medium">
                   {avgHistoricalOccupiedRooms}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </TableCell>
+                
+                {/* Market Averages */}
+                <TableCell className="font-medium">
+                  {formatPercent(avgMarketOccupancy)}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {formatPercent(avgMarketGrowthRate / 100)}
+                </TableCell>
+                
+                {/* Comp Set Averages */}
+                <TableCell className="font-medium">
+                  {formatPercent(avgCompSetOccupancy)}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {formatPercent(avgCompSetGrowthRate / 100)}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>

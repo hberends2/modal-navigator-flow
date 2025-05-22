@@ -9,7 +9,9 @@ import ForecastTable from "../occupancy-forecast/ForecastTable";
 import { useDatabase } from "../../hooks/useDatabase";
 import { 
   OccupancyData,
-  HistoricalData
+  HistoricalData,
+  MarketData,
+  CompSetData
 } from "../occupancy-forecast/types";
 import {
   calculateHistoricalGrowthRates,
@@ -40,6 +42,20 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
     { year: 2024, occupancy: 0.703, rooms: property?.rooms || 108 },
   ];
   
+  // Sample market data
+  const marketData: MarketData[] = [
+    { year: 2022, occupancy: 0.700, growthRate: 0 },
+    { year: 2023, occupancy: 0.714, growthRate: 2.0 },
+    { year: 2024, occupancy: 0.723, growthRate: 1.3 },
+  ];
+  
+  // Sample comp set data
+  const compSetData: CompSetData[] = [
+    { year: 2022, occupancy: 0.700, growthRate: 0 },
+    { year: 2023, occupancy: 0.714, growthRate: 2.0 },
+    { year: 2024, occupancy: 0.723, growthRate: 1.3 },
+  ];
+  
   // Calculate historical growth rates
   const historicalGrowthRates = calculateHistoricalGrowthRates(historicalData);
   
@@ -47,6 +63,14 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
   const avgHistoricalOccupancy = calculateAvgHistoricalOccupancy(historicalData);
   const avgHistoricalGrowthRate = calculateAvgHistoricalGrowthRate(historicalGrowthRates);
   const avgHistoricalOccupiedRooms = calculateAvgHistoricalOccupiedRooms(historicalData);
+  
+  // Calculate market statistics
+  const avgMarketOccupancy = marketData.reduce((sum, item) => sum + item.occupancy, 0) / marketData.length;
+  const avgMarketGrowthRate = marketData.slice(1).reduce((sum, item) => sum + item.growthRate, 0) / (marketData.length - 1);
+  
+  // Calculate comp set statistics
+  const avgCompSetOccupancy = compSetData.reduce((sum, item) => sum + item.occupancy, 0) / compSetData.length;
+  const avgCompSetGrowthRate = compSetData.slice(1).reduce((sum, item) => sum + item.growthRate, 0) / (compSetData.length - 1);
   
   // Forecast years
   const forecastYears = [2025, 2026, 2027, 2028, 2029];
@@ -132,6 +156,8 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
     // Save to database
     const dataToSave = {
       historicalData,
+      marketData,
+      compSetData,
       occupancyForecast: occupancyValues,
       forecastMethod,
       lastUpdated: new Date().toISOString()
@@ -165,6 +191,12 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
         avgHistoricalOccupancy={avgHistoricalOccupancy}
         avgHistoricalGrowthRate={avgHistoricalGrowthRate}
         avgHistoricalOccupiedRooms={avgHistoricalOccupiedRooms}
+        marketData={marketData}
+        avgMarketOccupancy={avgMarketOccupancy}
+        avgMarketGrowthRate={avgMarketGrowthRate}
+        compSetData={compSetData}
+        avgCompSetOccupancy={avgCompSetOccupancy}
+        avgCompSetGrowthRate={avgCompSetGrowthRate}
       />
       
       {/* Forecast Method Selector Component */}

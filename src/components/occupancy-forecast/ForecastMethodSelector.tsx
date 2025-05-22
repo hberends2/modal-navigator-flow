@@ -37,7 +37,7 @@ const ForecastMethodSelector: React.FC<ForecastMethodSelectorProps> = ({
             onChange={() => setForecastMethod('growth')}
           />
           <label htmlFor="growth-rate" className="ml-2 text-gray-700">
-            Growth Rate Based
+            Growth Rate (YoY) Based
           </label>
         </div>
       </div>

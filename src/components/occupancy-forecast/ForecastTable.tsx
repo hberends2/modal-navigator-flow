@@ -2,6 +2,7 @@
 import React from "react";
 import { OccupancyData } from "./types";
 import { calculateOccupiedRooms, formatPercent } from "./utils";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../ui/table";
 
 interface ForecastTableProps {
   forecastMethod: string;
@@ -21,20 +22,20 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
       <h3 className="text-lg font-semibold mb-2 text-gray-700">Forecast Occupancy</h3>
       <div className="bg-gray-50 p-4 rounded-lg">
         <div className="overflow-x-auto">
-          <table className="w-full text-left table-auto">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="px-4 py-2">Year</th>
-                <th className="px-4 py-2">Occupancy</th>
-                <th className="px-4 py-2">Growth Rate</th>
-                <th className="px-4 py-2">Occupied Rooms</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Year</TableHead>
+                <TableHead>Occupancy</TableHead>
+                <TableHead>YoY</TableHead>
+                <TableHead>Occupied Rooms</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {occupancyValues.map((data, index) => (
-                <tr key={data.year} className="border-b">
-                  <td className="px-4 py-2">{data.year}</td>
-                  <td className="px-4 py-2">
+                <TableRow key={data.year}>
+                  <TableCell>{data.year}</TableCell>
+                  <TableCell>
                     <div className="flex items-center">
                       {forecastMethod === 'direct' ? (
                         <>
@@ -55,8 +56,8 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                         </span>
                       )}
                     </div>
-                  </td>
-                  <td className="px-4 py-2">
+                  </TableCell>
+                  <TableCell>
                     <div className="flex items-center">
                       {forecastMethod === 'growth' ? (
                         <>
@@ -75,12 +76,12 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                         </span>
                       )}
                     </div>
-                  </td>
-                  <td className="px-4 py-2">{calculateOccupiedRooms(data.occupancy)}</td>
-                </tr>
+                  </TableCell>
+                  <TableCell>{calculateOccupiedRooms(data.occupancy)}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>
