@@ -20,23 +20,23 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
   return (
     <div className="w-full">
       <h3 className="text-lg font-semibold mb-2 text-gray-700">Forecast Occupancy</h3>
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-gray-50 p-2 rounded-lg">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-base font-bold bg-gray-200">Year</TableHead>
-              <TableHead className="text-base font-bold bg-gray-200">Occupancy</TableHead>
-              <TableHead className="text-base font-bold bg-gray-200">YoY</TableHead>
-              <TableHead className="text-base font-bold bg-gray-200">
-                <span>Occupied Rooms</span>
+              <TableHead className="bg-gray-200 text-xs font-bold p-1">Year</TableHead>
+              <TableHead className="bg-gray-200 text-xs font-bold p-1">Occupancy</TableHead>
+              <TableHead className="bg-gray-200 text-xs font-bold p-1">YoY</TableHead>
+              <TableHead className="bg-gray-200 text-xs font-bold p-1">
+                <span>Occupied</span>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {occupancyValues.map((data, index) => (
               <TableRow key={data.year}>
-                <TableCell>{data.year}</TableCell>
-                <TableCell>
+                <TableCell className="p-1 text-xs">{data.year}</TableCell>
+                <TableCell className="p-1 text-xs">
                   <div className="flex items-center">
                     {forecastMethod === 'direct' ? (
                       <>
@@ -47,7 +47,7 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                           step="0.1"
                           value={(data.occupancy * 100).toFixed(1)}
                           onChange={(e) => handleOccupancyChange(index, e.target.value)}
-                          className="w-16 p-1 border rounded text-right mr-1 text-blue-600 font-medium"
+                          className="w-12 p-0.5 border rounded text-right mr-1 text-blue-600 text-xs"
                         />
                         <span>%</span>
                       </>
@@ -58,7 +58,7 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                     )}
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell className="p-1 text-xs">
                   <div className="flex items-center">
                     {forecastMethod === 'growth' ? (
                       <>
@@ -67,7 +67,7 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                           step="0.1"
                           value={data.growthRate.toFixed(1)}
                           onChange={(e) => handleGrowthRateChange(index, e.target.value)}
-                          className="w-16 p-1 border rounded text-right mr-1 text-blue-600 font-medium"
+                          className="w-12 p-0.5 border rounded text-right mr-1 text-blue-600 text-xs"
                         />
                         <span>%</span>
                       </>
@@ -78,7 +78,7 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                     )}
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell className="p-1 text-xs">
                   {formatNumber(calculateOccupiedRooms(data.occupancy))}
                 </TableCell>
               </TableRow>

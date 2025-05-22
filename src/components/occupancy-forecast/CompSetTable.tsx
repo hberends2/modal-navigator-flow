@@ -17,30 +17,30 @@ const CompSetTable: React.FC<CompSetTableProps> = ({
 }) => {
   return (
     <div className="w-full">
-      <h3 className="text-lg font-semibold mb-2 text-gray-700">Comp Set</h3>
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <h3 className="text-lg font-semibold mb-2 text-gray-700 text-center">Comp Set</h3>
+      <div className="bg-gray-50 p-2 rounded-lg">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="bg-gray-200 text-base font-bold">Year</TableHead>
-              <TableHead className="bg-gray-200 text-base font-bold">Occupancy</TableHead>
-              <TableHead className="bg-gray-200 text-base font-bold">YoY</TableHead>
+              <TableHead className="bg-gray-200 text-xs font-bold p-1">Year</TableHead>
+              <TableHead className="bg-gray-200 text-xs font-bold p-1">Occupancy</TableHead>
+              <TableHead className="bg-gray-200 text-xs font-bold p-1">YoY</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {compSetData.map((data, index) => (
               <TableRow key={data.year}>
-                <TableCell>{data.year}</TableCell>
-                <TableCell>{formatPercent(data.occupancy)}</TableCell>
-                <TableCell>
+                <TableCell className="p-1 text-xs">{data.year}</TableCell>
+                <TableCell className="p-1 text-xs">{formatPercent(data.occupancy)}</TableCell>
+                <TableCell className="p-1 text-xs">
                   {index > 0 ? formatPercent(data.growthRate / 100) : "-"}
                 </TableCell>
               </TableRow>
             ))}
             <TableRow className="bg-gray-100">
-              <TableCell className="font-medium">Average</TableCell>
-              <TableCell className="font-medium">{formatPercent(avgCompSetOccupancy)}</TableCell>
-              <TableCell className="font-medium">{formatPercent(avgCompSetGrowthRate / 100)}</TableCell>
+              <TableCell className="p-1 text-xs font-medium">Avg</TableCell>
+              <TableCell className="p-1 text-xs font-medium">{formatPercent(avgCompSetOccupancy)}</TableCell>
+              <TableCell className="p-1 text-xs font-medium">{formatPercent(avgCompSetGrowthRate / 100)}</TableCell>
             </TableRow>
           </TableBody>
         </Table>

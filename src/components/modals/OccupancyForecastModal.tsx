@@ -37,9 +37,11 @@ const OccupancyForecastModal: React.FC<OccupancyForecastModalProps> = ({
       showNext={false}
       showSave={true}
       saveDisabled={loading}
-      maxWidth="max-w-7xl" // Updated to a much wider max-width to fit all tables side by side
+      maxWidth="max-w-full w-11/12" // Using almost full width with a small margin
     >
-      <OccupancyForecastContent property={property} />
+      <div className="overflow-x-auto">
+        <OccupancyForecastContent property={property} />
+      </div>
     </ModalWrapper>
   );
 };
