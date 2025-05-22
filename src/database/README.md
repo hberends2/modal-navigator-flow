@@ -1,20 +1,30 @@
 
 # Database Schema for Property Management System
 
-This database schema represents a comprehensive property management system with 13 interconnected tables. The Property_Details table serves as the primary table that all other tables reference via foreign keys.
+This database schema represents a comprehensive property management system designed for hotel property analysis and forecasting.
+
+## Schema Organization
+
+The schema is organized into logical sections:
+
+1. **Core Tables**: Basic property information and occupancy forecasts
+2. **Financial Information**: Acquisition, financing, and disposition details
+3. **Operations & Analytics**: CapEx, inflation assumptions, and market penetration
+4. **Revenue & Expense Tables**: Operating revenue, departmental expenses, fees, etc.
 
 ## Key Features
 
-- **Property_Details**: The primary table containing basic property information
-- **Foreign Key Relationships**: All tables reference the Property_Details table via property_id
-- **Data Types**: Carefully chosen types based on the specified format requirements
-- **Timestamps**: All tables include created_at and updated_at fields for record tracking
-- **Indexes**: Added for optimizing join performance
+- **Modular Design**: Tables are grouped by function for easier maintenance
+- **Referential Integrity**: All related tables reference the Property_Details table with CASCADE DELETE
+- **Optimized Indexes**: Strategic indexes for frequently queried columns and join operations
+- **Data Types**: Appropriate types based on data requirements (NUMERIC for percentages, TEXT for string data)
+- **Audit Trails**: All tables include created_at and updated_at timestamp fields
 
-## Table Relationships
+## Table Structure
 
 ```
 Property_Details
+ ├── Occupancy_Forecast
  ├── Acquisition
  ├── Financing
  ├── Disposition
@@ -23,7 +33,7 @@ Property_Details
  ├── Penetration
  ├── Operating_Revenue
  ├── Dept_Expense
- ├── Fees (Management & Franchise)
+ ├── Fees
  ├── Undist_Expense
  ├── NonOp_Expense
  └── FFE_Reserve
@@ -31,8 +41,8 @@ Property_Details
 
 ## Implementation Notes
 
-1. All tables include an auto-incrementing primary key (id)
-2. All tables include a reference to the Property_Details table (property_id)
-3. Numeric fields use NUMERIC(10, 2) for percentage values to allow for precision
-4. All tables include created_at and updated_at timestamp fields
-5. Indexes have been added to optimize join performance
+1. The Property_Details table serves as the central entity
+2. The Occupancy_Forecast table stores JSONB data for flexible forecast storage
+3. All tables cascade on deletion to maintain data integrity
+4. Indexes are created for all foreign keys and commonly filtered/sorted columns
+5. All monetary values are stored as INTEGER or NUMERIC(10,2) for consistent handling
