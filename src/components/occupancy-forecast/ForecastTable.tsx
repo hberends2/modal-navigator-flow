@@ -1,7 +1,7 @@
 
 import React from "react";
 import { OccupancyData } from "./types";
-import { calculateOccupiedRooms, formatPercent } from "./utils";
+import { calculateOccupiedRooms, formatPercent, formatNumber } from "./utils";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../ui/table";
 
 interface ForecastTableProps {
@@ -25,10 +25,10 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Year</TableHead>
-                <TableHead>Occupancy</TableHead>
-                <TableHead>YoY</TableHead>
-                <TableHead>Occupied Rooms</TableHead>
+                <TableHead className="text-base font-bold bg-gray-200">Year</TableHead>
+                <TableHead className="text-base font-bold bg-gray-200">Occupancy</TableHead>
+                <TableHead className="text-base font-bold bg-gray-200">YoY</TableHead>
+                <TableHead className="text-base font-bold bg-gray-200">Occupied Rooms</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -46,7 +46,7 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                             step="0.1"
                             value={(data.occupancy * 100).toFixed(1)}
                             onChange={(e) => handleOccupancyChange(index, e.target.value)}
-                            className="w-16 p-1 border rounded text-right mr-1"
+                            className="w-16 p-1 border rounded text-right mr-1 text-blue-600 font-medium"
                           />
                           <span>%</span>
                         </>
@@ -66,7 +66,7 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                             step="0.1"
                             value={data.growthRate.toFixed(1)}
                             onChange={(e) => handleGrowthRateChange(index, e.target.value)}
-                            className="w-16 p-1 border rounded text-right mr-1"
+                            className="w-16 p-1 border rounded text-right mr-1 text-blue-600 font-medium"
                           />
                           <span>%</span>
                         </>
@@ -77,7 +77,7 @@ const ForecastTable: React.FC<ForecastTableProps> = ({
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>{calculateOccupiedRooms(data.occupancy)}</TableCell>
+                  <TableCell>{formatNumber(calculateOccupiedRooms(data.occupancy))}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

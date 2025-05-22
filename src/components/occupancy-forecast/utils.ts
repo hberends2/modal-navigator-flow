@@ -12,6 +12,11 @@ export function formatPercent(value: number, decimalPlaces = 1) {
   return (value * 100).toFixed(decimalPlaces) + '%';
 }
 
+// Format number with commas
+export function formatNumber(value: number) {
+  return value.toLocaleString();
+}
+
 // Calculate historical growth rates
 export function calculateHistoricalGrowthRates(historicalData: HistoricalData[]): HistoricalGrowthRate[] {
   return historicalData.slice(1).map((data, index) => {

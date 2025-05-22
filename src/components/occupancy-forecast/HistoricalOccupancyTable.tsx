@@ -1,7 +1,7 @@
 
 import React from "react";
 import { HistoricalData, HistoricalGrowthRate, MarketData, CompSetData } from "./types";
-import { calculateOccupiedRooms, formatPercent } from "./utils";
+import { calculateOccupiedRooms, formatPercent, formatNumber } from "./utils";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../ui/table";
 
 interface HistoricalOccupancyTableProps {
@@ -39,19 +39,19 @@ const HistoricalOccupancyTable: React.FC<HistoricalOccupancyTableProps> = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead rowSpan={2} className="bg-gray-200">Year</TableHead>
-                <TableHead colSpan={3} className="text-center bg-gray-200">Subject Property</TableHead>
-                <TableHead colSpan={2} className="text-center bg-gray-200">Market</TableHead>
-                <TableHead colSpan={2} className="text-center bg-gray-200">Comp Set</TableHead>
+                <TableHead rowSpan={2} className="bg-gray-200 text-base font-bold">Year</TableHead>
+                <TableHead colSpan={3} className="text-center bg-gray-200 text-base font-bold">Subject Property</TableHead>
+                <TableHead colSpan={2} className="text-center bg-gray-200 text-base font-bold">Market</TableHead>
+                <TableHead colSpan={2} className="text-center bg-gray-200 text-base font-bold">Comp Set</TableHead>
               </TableRow>
               <TableRow>
-                <TableHead className="bg-gray-200">Occupancy</TableHead>
-                <TableHead className="bg-gray-200">YoY</TableHead>
-                <TableHead className="bg-gray-200">Occupied Rooms</TableHead>
-                <TableHead className="bg-gray-200">Occupancy</TableHead>
-                <TableHead className="bg-gray-200">YoY</TableHead>
-                <TableHead className="bg-gray-200">Occupancy</TableHead>
-                <TableHead className="bg-gray-200">YoY</TableHead>
+                <TableHead className="bg-gray-200 text-base font-bold">Occupancy</TableHead>
+                <TableHead className="bg-gray-200 text-base font-bold">YoY</TableHead>
+                <TableHead className="bg-gray-200 text-base font-bold">Occupied Rooms</TableHead>
+                <TableHead className="bg-gray-200 text-base font-bold">Occupancy</TableHead>
+                <TableHead className="bg-gray-200 text-base font-bold">YoY</TableHead>
+                <TableHead className="bg-gray-200 text-base font-bold">Occupancy</TableHead>
+                <TableHead className="bg-gray-200 text-base font-bold">YoY</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -65,7 +65,7 @@ const HistoricalOccupancyTable: React.FC<HistoricalOccupancyTableProps> = ({
                       ? formatPercent(historicalGrowthRates[index - 1].growthRate / 100) 
                       : "-"}
                   </TableCell>
-                  <TableCell>{calculateOccupiedRooms(data.occupancy, data.rooms)}</TableCell>
+                  <TableCell>{formatNumber(calculateOccupiedRooms(data.occupancy, data.rooms))}</TableCell>
                   
                   {/* Market Data */}
                   <TableCell>
@@ -94,7 +94,7 @@ const HistoricalOccupancyTable: React.FC<HistoricalOccupancyTableProps> = ({
                   {formatPercent(avgHistoricalGrowthRate / 100)}
                 </TableCell>
                 <TableCell className="font-medium">
-                  {avgHistoricalOccupiedRooms}
+                  {formatNumber(avgHistoricalOccupiedRooms)}
                 </TableCell>
                 
                 {/* Market Averages */}
