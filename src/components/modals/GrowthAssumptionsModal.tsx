@@ -46,20 +46,45 @@ const GrowthAssumptionsModal: React.FC<GrowthAssumptionsModalProps> = ({
     setFlatGrowthRate(sanitizedValue);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent, year?: number) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      
+      if (growthType === "yearly" && year !== undefined) {
+        // Move to next year input or save if it's the last year
+        const nextYear = year + 1;
+        const lastYear = startYear + holdPeriod - 1;
+        
+        if (nextYear <= lastYear) {
+          const nextInput = document.getElementById(`year-${nextYear}`);
+          if (nextInput) {
+            nextInput.focus();
+          }
+        } else {
+          handleSave();
+        }
+      } else if (growthType === "flat") {
+        handleSave();
+      }
+    }
+  };
+
   const renderYearlyInputs = () => {
     const inputs = [];
     for (let i = 0; i < holdPeriod; i++) {
       const year = startYear + i;
       inputs.push(
-        <div key={year} className="flex items-center space-x-4">
-          <Label className="w-16 text-sm font-medium">Year {year}:</Label>
-          <div className="relative flex-1">
+        <div key={year} className="flex flex-col items-center space-y-2">
+          <Label className="text-sm font-medium text-center">Year {year}</Label>
+          <div className="relative w-24">
             <Input
+              id={`year-${year}`}
               type="text"
               value={yearlyGrowthRates[year] || ""}
               onChange={(e) => handleYearlyGrowthChange(year, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e, year)}
               placeholder="0.00"
-              className="pr-8"
+              className="pr-8 text-center"
             />
             <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
           </div>
@@ -102,6 +127,7 @@ const GrowthAssumptionsModal: React.FC<GrowthAssumptionsModalProps> = ({
                 type="text"
                 value={flatGrowthRate}
                 onChange={(e) => handleFlatGrowthChange(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder="0.00"
                 className="pr-8"
               />
@@ -113,7 +139,7 @@ const GrowthAssumptionsModal: React.FC<GrowthAssumptionsModalProps> = ({
         {growthType === "yearly" && (
           <div className="space-y-4">
             <Label className="text-sm font-medium">Yearly Growth Rates</Label>
-            <div className="space-y-3">
+            <div className="flex justify-center space-x-4 flex-wrap gap-4">
               {renderYearlyInputs()}
             </div>
           </div>
