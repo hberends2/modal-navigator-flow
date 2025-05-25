@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import PropertyDetailsModal from "../components/modals/PropertyDetailsModal";
@@ -16,6 +15,7 @@ import UndistributedExpensesModal from "../components/modals/UndistributedExpens
 import UndistributedExpensesSecondModal from "../components/modals/UndistributedExpensesSecondModal";
 import NonOperatingExpensesModal from "../components/modals/NonOperatingExpensesModal";
 import FFEReserveModal from "../components/modals/FFEReserveModal";
+import GrowthAssumptionsModal from "../components/modals/GrowthAssumptionsModal";
 import { usePropertyData } from "../hooks/usePropertyData";
 import { Property } from "../types/PropertyTypes";
 import { useLocation } from "react-router-dom";
@@ -108,7 +108,8 @@ const Index = () => {
       "inflationAssumptions",
       "subjectOccupancy", 
       "penetrationAnalysis", 
-      "operatingRevenue", 
+      "operatingRevenue",
+      "growthAssumptions",
       "departmentalExpenses", 
       "managementAndFranchiseFees", 
       "undistributedExpenses", 
@@ -163,6 +164,7 @@ const Index = () => {
       {activeModal === "subjectOccupancy" && <OccupancyForecastModal onClose={closeModal} onNext={() => handleNext("subjectOccupancy")} property={activeProperty} />}
       {activeModal === "penetrationAnalysis" && <PenetrationAnalysisModal onClose={closeModal} onNext={() => handleNext("penetrationAnalysis")} />}
       {activeModal === "operatingRevenue" && <OperatingRevenueModal onClose={closeModal} onNext={() => handleNext("operatingRevenue")} />}
+      {activeModal === "growthAssumptions" && <GrowthAssumptionsModal onClose={closeModal} onNext={() => handleNext("growthAssumptions")} />}
       {activeModal === "departmentalExpenses" && <DepartmentalExpensesModal onClose={closeModal} onNext={() => handleNext("departmentalExpenses")} />}
       {activeModal === "managementAndFranchiseFees" && <ManagementAndFranchiseFeesModal onClose={closeModal} onNext={() => handleNext("managementAndFranchiseFees")} />}
       {activeModal === "undistributedExpenses" && <UndistributedExpensesModal onClose={closeModal} onNext={() => handleNext("undistributedExpenses")} />}

@@ -52,7 +52,8 @@ export const proformaCategories: CategoryItem[] = [
     id: "revenue",
     name: "Revenue",
     subCategories: [
-      { id: "operatingRevenue", name: "Operating Revenue" }
+      { id: "operatingRevenue", name: "Operating Revenue" },
+      { id: "growthAssumptions", name: "Growth Assumptions" }
     ]
   },
   {
