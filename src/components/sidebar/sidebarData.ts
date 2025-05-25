@@ -51,6 +51,7 @@ export const proformaCategories: CategoryItem[] = [
   {
     id: "revenue",
     name: "Revenue",
+    path: "/revenue",
     subCategories: [
       { id: "operatingRevenue", name: "Operating Revenue" },
       { id: "growthAssumptions", name: "Growth Assumptions" }
