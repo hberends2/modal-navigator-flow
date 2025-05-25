@@ -152,32 +152,32 @@ const Revenue = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-48">Metric</TableHead>
-                  <TableHead className="text-center bg-blue-50">2021</TableHead>
-                  <TableHead className="text-center bg-blue-50">2022</TableHead>
-                  <TableHead className="text-center bg-blue-50">2023</TableHead>
-                  <TableHead className="text-center bg-blue-50">2024</TableHead>
-                  <TableHead className="text-center bg-green-50">2025</TableHead>
-                  <TableHead className="text-center bg-green-50">2026</TableHead>
-                  <TableHead className="text-center bg-green-50">2027</TableHead>
-                  <TableHead className="text-center bg-green-50">2028</TableHead>
-                  <TableHead className="text-center bg-green-50">2029</TableHead>
+                  <TableHead className="w-48 px-2">Metric</TableHead>
+                  <TableHead className="text-center bg-blue-50 px-2">2021</TableHead>
+                  <TableHead className="text-center bg-blue-50 px-2">2022</TableHead>
+                  <TableHead className="text-center bg-blue-50 px-2">2023</TableHead>
+                  <TableHead className="text-center bg-blue-50 px-2">2024</TableHead>
+                  <TableHead className="text-center bg-green-50 px-2">2025</TableHead>
+                  <TableHead className="text-center bg-green-50 px-2">2026</TableHead>
+                  <TableHead className="text-center bg-green-50 px-2">2027</TableHead>
+                  <TableHead className="text-center bg-green-50 px-2">2028</TableHead>
+                  <TableHead className="text-center bg-green-50 px-2">2029</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {/* Rooms/Keys */}
                 <TableRow>
-                  <TableCell className="font-medium">Rooms/Keys</TableCell>
+                  <TableCell className="font-medium px-2">Rooms/Keys</TableCell>
                   {[...historicalYears, ...forecastYears].map(year => (
-                    <TableCell key={year} className="text-center">{roomsKeys}</TableCell>
+                    <TableCell key={year} className="text-center px-2">{roomsKeys}</TableCell>
                   ))}
                 </TableRow>
 
                 {/* Available Rooms */}
                 <TableRow>
-                  <TableCell className="font-medium">Available Rooms</TableCell>
+                  <TableCell className="font-medium px-2">Available Rooms</TableCell>
                   {[...historicalYears, ...forecastYears].map(year => (
-                    <TableCell key={year} className="text-center">
+                    <TableCell key={year} className="text-center px-2">
                       {getAvailableRooms(year).toLocaleString()}
                     </TableCell>
                   ))}
@@ -185,14 +185,14 @@ const Revenue = () => {
 
                 {/* Rooms Revenue */}
                 <TableRow>
-                  <TableCell className="font-medium">Rooms Revenue</TableCell>
+                  <TableCell className="font-medium px-2">Rooms Revenue</TableCell>
                   {historicalYears.map(year => (
-                    <TableCell key={year} className="text-center">
+                    <TableCell key={year} className="text-center px-2">
                       {formatCurrency(historicalData.roomsRevenue[year])}
                     </TableCell>
                   ))}
                   {forecastYears.map(year => (
-                    <TableCell key={year} className="text-center">
+                    <TableCell key={year} className="text-center px-2">
                       {formatCurrency(getForecastRoomsRevenue(year))}
                     </TableCell>
                   ))}
@@ -200,14 +200,14 @@ const Revenue = () => {
 
                 {/* RevPAR */}
                 <TableRow>
-                  <TableCell className="font-medium">RevPAR</TableCell>
+                  <TableCell className="font-medium px-2">RevPAR</TableCell>
                   {historicalYears.map(year => (
-                    <TableCell key={year} className="text-center">
+                    <TableCell key={year} className="text-center px-2">
                       ${historicalData.revpar[year].toFixed(2)}
                     </TableCell>
                   ))}
                   {forecastYears.map(year => (
-                    <TableCell key={year} className="text-center">
+                    <TableCell key={year} className="text-center px-2">
                       ${getForecastRevpar(year).toFixed(2)}
                     </TableCell>
                   ))}
@@ -215,7 +215,7 @@ const Revenue = () => {
 
                 {/* RevPAR YoY Growth */}
                 <TableRow>
-                  <TableCell className="font-medium">
+                  <TableCell className="font-medium px-2">
                     <div className="flex items-center gap-2">
                       <span>RevPAR YoY</span>
                       <Select value={revparGrowthType} onValueChange={setRevparGrowthType}>
@@ -223,8 +223,8 @@ const Revenue = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="flat">Flat Growth</SelectItem>
-                          <SelectItem value="yearly">Yearly Growth</SelectItem>
+                          <SelectItem value="flat" className="text-left">Flat Growth</SelectItem>
+                          <SelectItem value="yearly" className="text-left">Yearly Growth</SelectItem>
                         </SelectContent>
                       </Select>
                       {revparGrowthType === "flat" && (
@@ -233,7 +233,7 @@ const Revenue = () => {
                             type="text"
                             value={flatRevparGrowth}
                             onChange={(e) => setFlatRevparGrowth(e.target.value.replace(/[^0-9.-]/g, ""))}
-                            className="pr-6 text-center h-8"
+                            className="pr-6 text-center h-8 text-blue-600"
                           />
                           <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
                         </div>
@@ -241,22 +241,22 @@ const Revenue = () => {
                     </div>
                   </TableCell>
                   {historicalYears.map(year => (
-                    <TableCell key={year} className="text-center text-gray-400">-</TableCell>
+                    <TableCell key={year} className="text-center text-gray-400 px-2">-</TableCell>
                   ))}
                   {forecastYears.map(year => (
-                    <TableCell key={year} className="text-center">
+                    <TableCell key={year} className="text-center px-2">
                       {revparGrowthType === "yearly" ? (
                         <div className="relative w-16 mx-auto">
                           <Input
                             type="text"
                             value={yearlyRevparGrowth[year] || ""}
                             onChange={(e) => handleYearlyRevparChange(year, e.target.value)}
-                            className="pr-6 text-center h-8"
+                            className="pr-6 text-center h-8 text-blue-600"
                           />
                           <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
                         </div>
                       ) : (
-                        <span className="text-gray-600">{flatRevparGrowth}%</span>
+                        <span className="text-gray-600">{parseFloat(flatRevparGrowth).toFixed(1)}%</span>
                       )}
                     </TableCell>
                   ))}
@@ -264,20 +264,20 @@ const Revenue = () => {
 
                 {/* Occupancy */}
                 <TableRow>
-                  <TableCell className="font-medium">Occupancy</TableCell>
+                  <TableCell className="font-medium px-2">Occupancy</TableCell>
                   {historicalYears.map(year => (
-                    <TableCell key={year} className="text-center">
+                    <TableCell key={year} className="text-center px-2">
                       {formatPercent(historicalData.occupancy[year])}
                     </TableCell>
                   ))}
                   {forecastYears.map(year => (
-                    <TableCell key={year} className="text-center">
+                    <TableCell key={year} className="text-center px-2">
                       <div className="relative w-16 mx-auto">
                         <Input
                           type="text"
                           value={occupancyForecast[year] || ""}
                           onChange={(e) => handleOccupancyChange(year, e.target.value)}
-                          className="pr-6 text-center h-8"
+                          className="pr-6 text-center h-8 text-blue-600"
                         />
                         <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
                       </div>
