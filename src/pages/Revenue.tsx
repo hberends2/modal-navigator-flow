@@ -2,11 +2,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 import { ArrowLeft } from "lucide-react";
+import RevenueTable from "../components/revenue/RevenueTable";
 
 const Revenue = () => {
   const navigate = useNavigate();
@@ -147,158 +144,25 @@ const Revenue = () => {
         </div>
 
         {/* Revenue Table */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                {/* Period Headers */}
-                <TableRow>
-                  <TableHead className="w-48 px-1"></TableHead>
-                  <TableHead className="text-center bg-blue-50 px-1" colSpan={4}>Historical</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">Year 1</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">Year 2</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">Year 3</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">Year 4</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">Year 5</TableHead>
-                </TableRow>
-                {/* Year Headers */}
-                <TableRow>
-                  <TableHead className="w-48 px-1">Metric</TableHead>
-                  <TableHead className="text-center bg-blue-50 px-1">2021</TableHead>
-                  <TableHead className="text-center bg-blue-50 px-1">2022</TableHead>
-                  <TableHead className="text-center bg-blue-50 px-1">2023</TableHead>
-                  <TableHead className="text-center bg-blue-50 px-1">2024</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">2025</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">2026</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">2027</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">2028</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1">2029</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {/* Rooms/Keys */}
-                <TableRow>
-                  <TableCell className="font-medium px-1">Rooms/Keys</TableCell>
-                  {[...historicalYears, ...forecastYears].map(year => (
-                    <TableCell key={year} className="text-center px-1">{roomsKeys}</TableCell>
-                  ))}
-                </TableRow>
-
-                {/* Available Rooms */}
-                <TableRow>
-                  <TableCell className="font-medium px-1">Available Rooms</TableCell>
-                  {[...historicalYears, ...forecastYears].map(year => (
-                    <TableCell key={year} className="text-center px-1">
-                      {getAvailableRooms(year).toLocaleString()}
-                    </TableCell>
-                  ))}
-                </TableRow>
-
-                {/* Rooms Revenue */}
-                <TableRow>
-                  <TableCell className="font-medium px-1">Rooms Revenue</TableCell>
-                  {historicalYears.map(year => (
-                    <TableCell key={year} className="text-center px-1">
-                      {formatCurrency(historicalData.roomsRevenue[year])}
-                    </TableCell>
-                  ))}
-                  {forecastYears.map(year => (
-                    <TableCell key={year} className="text-center px-1">
-                      {formatCurrency(getForecastRoomsRevenue(year))}
-                    </TableCell>
-                  ))}
-                </TableRow>
-
-                {/* RevPAR */}
-                <TableRow>
-                  <TableCell className="font-medium px-1">RevPAR</TableCell>
-                  {historicalYears.map(year => (
-                    <TableCell key={year} className="text-center px-1">
-                      ${historicalData.revpar[year].toFixed(2)}
-                    </TableCell>
-                  ))}
-                  {forecastYears.map(year => (
-                    <TableCell key={year} className="text-center px-1">
-                      ${getForecastRevpar(year).toFixed(2)}
-                    </TableCell>
-                  ))}
-                </TableRow>
-
-                {/* RevPAR YoY Growth */}
-                <TableRow>
-                  <TableCell className="font-medium px-1">
-                    <div className="flex items-center gap-2">
-                      <span>RevPAR YoY</span>
-                      <Select value={revparGrowthType} onValueChange={setRevparGrowthType}>
-                        <SelectTrigger className="w-32 h-8">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="flat" className="text-left">Flat Growth</SelectItem>
-                          <SelectItem value="yearly" className="text-left">Yearly Growth</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {revparGrowthType === "flat" && (
-                        <div className="relative w-20">
-                          <Input
-                            type="text"
-                            value={flatRevparGrowth}
-                            onChange={(e) => setFlatRevparGrowth(e.target.value.replace(/[^0-9.-]/g, ""))}
-                            className="pr-6 text-center h-8 text-blue-600"
-                          />
-                          <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
-                        </div>
-                      )}
-                    </div>
-                  </TableCell>
-                  {historicalYears.map(year => (
-                    <TableCell key={year} className="text-center text-gray-400 px-1">-</TableCell>
-                  ))}
-                  {forecastYears.map(year => (
-                    <TableCell key={year} className="text-center px-1">
-                      {revparGrowthType === "yearly" ? (
-                        <div className="relative w-16 mx-auto">
-                          <Input
-                            type="text"
-                            value={yearlyRevparGrowth[year] || ""}
-                            onChange={(e) => handleYearlyRevparChange(year, e.target.value)}
-                            className="pr-6 text-center h-8 text-blue-600"
-                          />
-                          <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
-                        </div>
-                      ) : (
-                        <span className="text-gray-600">{parseFloat(flatRevparGrowth).toFixed(1)}%</span>
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-
-                {/* Occupancy */}
-                <TableRow>
-                  <TableCell className="font-medium px-1">Occupancy</TableCell>
-                  {historicalYears.map(year => (
-                    <TableCell key={year} className="text-center px-1">
-                      {formatPercent(historicalData.occupancy[year])}
-                    </TableCell>
-                  ))}
-                  {forecastYears.map(year => (
-                    <TableCell key={year} className="text-center px-1">
-                      <div className="relative w-20 mx-auto">
-                        <Input
-                          type="text"
-                          value={occupancyForecast[year] || ""}
-                          onChange={(e) => handleOccupancyChange(year, e.target.value)}
-                          className="pr-6 text-center h-8 text-blue-600 text-sm"
-                        />
-                        <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
-                      </div>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
-        </div>
+        <RevenueTable
+          roomsKeys={roomsKeys}
+          historicalYears={historicalYears}
+          forecastYears={forecastYears}
+          historicalData={historicalData}
+          revparGrowthType={revparGrowthType}
+          setRevparGrowthType={setRevparGrowthType}
+          flatRevparGrowth={flatRevparGrowth}
+          setFlatRevparGrowth={setFlatRevparGrowth}
+          yearlyRevparGrowth={yearlyRevparGrowth}
+          handleYearlyRevparChange={handleYearlyRevparChange}
+          occupancyForecast={occupancyForecast}
+          handleOccupancyChange={handleOccupancyChange}
+          getAvailableRooms={getAvailableRooms}
+          getForecastRevpar={getForecastRevpar}
+          getForecastRoomsRevenue={getForecastRoomsRevenue}
+          formatCurrency={formatCurrency}
+          formatPercent={formatPercent}
+        />
 
         {/* Save Button */}
         <div className="flex justify-end">
