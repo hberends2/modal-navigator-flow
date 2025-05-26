@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
@@ -41,12 +40,7 @@ const Revenue = () => {
       2023: 9876543,
       2024: 10234567
     },
-    revpar: {
-      2021: 222.15,
-      2022: 234.11,
-      2023: 250.42,
-      2024: 259.53
-    },
+    revpar: {} as Record<number, number>, // Will be calculated
     occupancy: {
       2021: 72.5,
       2022: 74.2,
@@ -54,6 +48,13 @@ const Revenue = () => {
       2024: 78.1
     }
   };
+
+  // Calculate historical RevPAR
+  historicalYears.forEach(year => {
+    const roomsRevenue = historicalData.roomsRevenue[year];
+    const availableRooms = getAvailableRooms(year);
+    historicalData.revpar[year] = roomsRevenue / availableRooms;
+  });
 
   // Calculations
   const getAvailableRooms = (year: number) => {
