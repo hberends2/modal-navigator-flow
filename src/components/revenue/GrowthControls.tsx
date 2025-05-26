@@ -26,7 +26,7 @@ const GrowthControls: React.FC<GrowthControlsProps> = ({
     <div className="flex items-center gap-2">
       <span>RevPAR YoY</span>
       <Select value={revparGrowthType} onValueChange={setRevparGrowthType}>
-        <SelectTrigger className="w-32 h-auto min-h-[32px] py-1">
+        <SelectTrigger className="w-32 h-auto min-h-[32px] py-1 [&>span]:whitespace-normal [&>span]:leading-tight">
           <SelectValue className="whitespace-normal text-left leading-tight" />
         </SelectTrigger>
         <SelectContent className="bg-white border border-gray-300 shadow-lg z-50">
