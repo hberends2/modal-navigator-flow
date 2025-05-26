@@ -26,12 +26,12 @@ const GrowthControls: React.FC<GrowthControlsProps> = ({
     <div className="flex items-center gap-2">
       <span>RevPAR YoY</span>
       <Select value={revparGrowthType} onValueChange={setRevparGrowthType}>
-        <SelectTrigger className="w-32 h-8">
-          <SelectValue />
+        <SelectTrigger className="w-32 h-auto min-h-[32px] py-1">
+          <SelectValue className="whitespace-normal text-left leading-tight" />
         </SelectTrigger>
         <SelectContent className="bg-white border border-gray-300 shadow-lg z-50">
-          <SelectItem value="flat" className="text-left">Flat Growth</SelectItem>
-          <SelectItem value="yearly" className="text-left">Yearly Growth</SelectItem>
+          <SelectItem value="flat" className="text-left whitespace-normal">Flat Growth</SelectItem>
+          <SelectItem value="yearly" className="text-left whitespace-normal">Yearly Growth</SelectItem>
         </SelectContent>
       </Select>
       {revparGrowthType === "flat" && (
