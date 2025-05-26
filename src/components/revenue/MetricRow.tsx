@@ -42,7 +42,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
       <TableCell className="font-medium px-1">{label}</TableCell>
       {historicalData.map((value, index) => (
         <TableCell key={`historical-${index}`} className="text-center px-1">
-          {isGrowthRow ? <span className="text-gray-400">-</span> : value}
+          {value}
         </TableCell>
       ))}
       {forecastData.map((value, index) => (
