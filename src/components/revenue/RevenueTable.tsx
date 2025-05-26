@@ -12,6 +12,7 @@ interface RevenueTableProps {
   historicalData: {
     roomsRevenue: Record<number, number>;
     revpar: Record<number, number>;
+    revparYoY: Record<number, number>;
     occupancy: Record<number, number>;
   };
   revparGrowthType: string;
@@ -95,7 +96,9 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                   forecastYears={forecastYears}
                 />
               }
-              historicalData={historicalYears.map(() => "")}
+              historicalData={historicalYears.map((year, index) => 
+                index === 0 ? "-" : `${historicalData.revparYoY[year].toFixed(1)}%`
+              )}
               forecastData={forecastYears.map(year => 
                 revparGrowthType === "yearly" ? "" : `${parseFloat(flatRevparGrowth).toFixed(1)}%`
               )}

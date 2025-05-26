@@ -47,6 +47,7 @@ const Revenue = () => {
       2024: 10234567
     },
     revpar: {} as Record<number, number>, // Will be calculated
+    revparYoY: {} as Record<number, number>, // Will be calculated
     occupancy: {
       2021: 72.5,
       2022: 74.2,
@@ -60,6 +61,19 @@ const Revenue = () => {
     const roomsRevenue = historicalData.roomsRevenue[year];
     const availableRooms = getAvailableRooms(year);
     historicalData.revpar[year] = roomsRevenue / availableRooms;
+  });
+
+  // Calculate historical RevPAR YoY growth (skip first year)
+  historicalYears.forEach((year, index) => {
+    if (index === 0) {
+      // First year - no previous year to compare
+      historicalData.revparYoY[year] = 0; // or could be null/undefined
+    } else {
+      const currentRevpar = historicalData.revpar[year];
+      const previousYear = historicalYears[index - 1];
+      const previousRevpar = historicalData.revpar[previousYear];
+      historicalData.revparYoY[year] = ((currentRevpar - previousRevpar) / previousRevpar) * 100;
+    }
   });
 
   const getForecastRevpar = (year: number) => {
