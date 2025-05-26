@@ -32,6 +32,12 @@ const Revenue = () => {
   const forecastYears = [2025, 2026, 2027, 2028, 2029];
   const historicalYears = [2021, 2022, 2023, 2024];
   
+  // Function definitions (moved before usage)
+  const getAvailableRooms = (year: number) => {
+    const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+    return roomsKeys * (isLeapYear ? 366 : 365);
+  };
+  
   // Historical data (from mockup)
   const historicalData = {
     roomsRevenue: {
@@ -55,12 +61,6 @@ const Revenue = () => {
     const availableRooms = getAvailableRooms(year);
     historicalData.revpar[year] = roomsRevenue / availableRooms;
   });
-
-  // Calculations
-  const getAvailableRooms = (year: number) => {
-    const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-    return roomsKeys * (isLeapYear ? 366 : 365);
-  };
 
   const getForecastRevpar = (year: number) => {
     const yearIndex = forecastYears.indexOf(year);
