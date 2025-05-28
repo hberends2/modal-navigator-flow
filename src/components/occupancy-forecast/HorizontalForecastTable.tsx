@@ -41,28 +41,24 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
             {/* Period Headers */}
             <TableRow>
               <TableHead className="w-24 px-1"></TableHead>
-              <TableHead className="text-center bg-blue-50 px-1" colSpan={historicalYears.length * 3}>Historical</TableHead>
-              <TableHead className="text-center bg-green-50 px-1" colSpan={3}>Year 1</TableHead>
-              <TableHead className="text-center bg-green-50 px-1" colSpan={3}>Year 2</TableHead>
-              <TableHead className="text-center bg-green-50 px-1" colSpan={3}>Year 3</TableHead>
-              <TableHead className="text-center bg-green-50 px-1" colSpan={3}>Year 4</TableHead>
-              <TableHead className="text-center bg-green-50 px-1" colSpan={3}>Year 5</TableHead>
+              <TableHead className="text-center bg-blue-50 px-1" colSpan={historicalYears.length * 2}>Historical</TableHead>
+              <TableHead className="text-center bg-green-50 px-1" colSpan={2}>Year 1</TableHead>
+              <TableHead className="text-center bg-green-50 px-1" colSpan={2}>Year 2</TableHead>
+              <TableHead className="text-center bg-green-50 px-1" colSpan={2}>Year 3</TableHead>
+              <TableHead className="text-center bg-green-50 px-1" colSpan={2}>Year 4</TableHead>
+              <TableHead className="text-center bg-green-50 px-1" colSpan={2}>Year 5</TableHead>
             </TableRow>
             {/* Year Headers */}
             <TableRow>
               <TableHead className="w-24 px-1">Metric</TableHead>
               {historicalYears.map(year => (
                 <React.Fragment key={year}>
-                  <TableHead className="text-center bg-blue-50 px-1 text-xs">{year}</TableHead>
-                  <TableHead className="text-center bg-blue-50 px-1 text-xs"></TableHead>
-                  <TableHead className="text-center bg-blue-50 px-1 text-xs"></TableHead>
+                  <TableHead className="text-center bg-blue-50 px-1 text-xs" colSpan={2}>{year}</TableHead>
                 </React.Fragment>
               ))}
               {forecastYears.map(year => (
                 <React.Fragment key={year}>
-                  <TableHead className="text-center bg-green-50 px-1 text-xs">{year}</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1 text-xs"></TableHead>
-                  <TableHead className="text-center bg-green-50 px-1 text-xs"></TableHead>
+                  <TableHead className="text-center bg-green-50 px-1 text-xs" colSpan={2}>{year}</TableHead>
                 </React.Fragment>
               ))}
             </TableRow>
@@ -73,14 +69,12 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
                 <React.Fragment key={year}>
                   <TableHead className="text-center bg-blue-50 px-1 text-xs">Occ</TableHead>
                   <TableHead className="text-center bg-blue-50 px-1 text-xs">YoY</TableHead>
-                  <TableHead className="text-center bg-blue-50 px-1 text-xs">Occupied</TableHead>
                 </React.Fragment>
               ))}
               {forecastYears.map(year => (
                 <React.Fragment key={year}>
                   <TableHead className="text-center bg-green-50 px-1 text-xs">Occ</TableHead>
                   <TableHead className="text-center bg-green-50 px-1 text-xs">YoY</TableHead>
-                  <TableHead className="text-center bg-green-50 px-1 text-xs">Occupied</TableHead>
                 </React.Fragment>
               ))}
             </TableRow>
@@ -94,7 +88,6 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
                 <React.Fragment key={year}>
                   <TableCell className="p-1 text-xs text-center">-</TableCell>
                   <TableCell className="p-1 text-xs text-center">-</TableCell>
-                  <TableCell className="p-1 text-xs text-center">-</TableCell>
                 </React.Fragment>
               ))}
               {/* Forecast data - show occupied rooms in Occ column */}
@@ -103,7 +96,6 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
                   <TableCell className="p-1 text-xs text-center">
                     {formatNumber(calculateOccupiedRooms(data.occupancy))}
                   </TableCell>
-                  <TableCell className="p-1 text-xs text-center">-</TableCell>
                   <TableCell className="p-1 text-xs text-center">-</TableCell>
                 </React.Fragment>
               ))}
@@ -115,7 +107,6 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
               {/* Historical placeholder data */}
               {historicalYears.map((year, yearIndex) => (
                 <React.Fragment key={year}>
-                  <TableCell className="p-1 text-xs text-center">-</TableCell>
                   <TableCell className="p-1 text-xs text-center">-</TableCell>
                   <TableCell className="p-1 text-xs text-center">-</TableCell>
                 </React.Fragment>
@@ -161,7 +152,6 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
                       </span>
                     )}
                   </TableCell>
-                  <TableCell className="p-1 text-xs text-center">-</TableCell>
                 </React.Fragment>
               ))}
             </TableRow>
