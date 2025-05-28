@@ -49,6 +49,31 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   formatCurrency,
   formatPercent
 }) => {
+  // Helper functions for new calculations
+  const getHistoricalOccupiedRooms = (year: number) => {
+    const availableRooms = getAvailableRooms(year);
+    const occupancy = historicalData.occupancy[year] / 100; // Convert percentage to decimal
+    return Math.round(availableRooms * occupancy);
+  };
+
+  const getForecastOccupiedRooms = (year: number) => {
+    const availableRooms = getAvailableRooms(year);
+    const occupancy = parseFloat(occupancyForecast[year] || "0") / 100; // Convert percentage to decimal
+    return Math.round(availableRooms * occupancy);
+  };
+
+  const getHistoricalADR = (year: number) => {
+    const roomsRevenue = historicalData.roomsRevenue[year];
+    const occupiedRooms = getHistoricalOccupiedRooms(year);
+    return occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
+  };
+
+  const getForecastADR = (year: number) => {
+    const roomsRevenue = getForecastRoomsRevenue(year);
+    const occupiedRooms = getForecastOccupiedRooms(year);
+    return occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
       <div className="overflow-x-auto">
@@ -67,6 +92,13 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               label="Available Rooms"
               historicalData={historicalYears.map(year => getAvailableRooms(year).toLocaleString())}
               forecastData={forecastYears.map(year => getAvailableRooms(year).toLocaleString())}
+            />
+
+            {/* Occupied Rooms */}
+            <MetricRow
+              label="Occupied Rooms"
+              historicalData={historicalYears.map(year => getHistoricalOccupiedRooms(year).toLocaleString())}
+              forecastData={forecastYears.map(year => getForecastOccupiedRooms(year).toLocaleString())}
             />
 
             {/* Rooms Revenue */}
@@ -107,6 +139,13 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               yearlyRevparGrowth={yearlyRevparGrowth}
               handleYearlyRevparChange={handleYearlyRevparChange}
               forecastYears={forecastYears}
+            />
+
+            {/* ADR */}
+            <MetricRow
+              label="ADR"
+              historicalData={historicalYears.map(year => `$${getHistoricalADR(year).toFixed(2)}`)}
+              forecastData={forecastYears.map(year => `$${getForecastADR(year).toFixed(2)}`)}
             />
 
             {/* Occupancy */}
