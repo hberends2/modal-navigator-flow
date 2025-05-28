@@ -1,111 +1,84 @@
 
 import { CategoryItem } from "./SidebarCategory";
 
+// Top-level categories for main navigation (kept simple without subcategories)
 export const mainNavCategories: CategoryItem[] = [
   {
+    id: "summary",
+    name: "Summary"
+  },
+  {
+    id: "reports",
+    name: "Reports"
+  },
+  {
     id: "propertyDetails",
-    name: "Property Details",
-    icon: "📋"
+    name: "Property Details"
   },
   {
-    id: "acquisition",
-    name: "Acquisition",
-    icon: "🏢"
-  },
-  {
-    id: "financing",
-    name: "Financing",
-    icon: "💰"
-  },
-  {
-    id: "disposition",
-    name: "Disposition",
-    icon: "📊"
-  },
-  {
-    id: "caps",
-    name: "Caps",
-    icon: "🧢"
-  },
-  {
-    id: "inflationAssumptions",
-    name: "Inflation Assumptions",
-    icon: "📈"
+    id: "subjectOccupancy",
+    name: "Subject Occupancy"
   },
   {
     id: "market",
     name: "Market Analysis",
-    icon: "📊",
     path: "/market"
-  },
-  {
-    id: "subjectOccupancy",
-    name: "Subject Occupancy",
-    icon: "🏨",
-    path: "/subject-occupancy"
-  },
-  {
-    id: "penetrationAnalysis",
-    name: "Penetration Analysis",
-    icon: "🎯"
   },
   {
     id: "revenue",
     name: "Revenue",
-    icon: "💵",
     path: "/revenue"
-  },
-  {
-    id: "operatingRevenue",
-    name: "Operating Revenue",
-    icon: "💸"
-  },
-  {
-    id: "growthAssumptions",
-    name: "Growth Assumptions",
-    icon: "📊"
-  },
-  {
-    id: "departmentalExpenses",
-    name: "Departmental Expenses",
-    icon: "💼"
-  },
-  {
-    id: "managementAndFranchiseFees",
-    name: "Management & Franchise Fees",
-    icon: "🏛️"
-  },
-  {
-    id: "undistributedExpenses",
-    name: "Undistributed Expenses",
-    icon: "📋"
-  },
-  {
-    id: "undistributedExpensesSecond",
-    name: "Undistributed Expenses (Second)",
-    icon: "📝"
-  },
-  {
-    id: "nonOperatingExpenses",
-    name: "Non-Operating Expenses",
-    icon: "⚖️"
-  },
-  {
-    id: "ffeReserve",
-    name: "FF&E Reserve",
-    icon: "🛠️"
   }
 ];
 
+// Parking lot categories (maintaining existing Category/Sub-Category format)
 export const parkingLotCategories: CategoryItem[] = [
   {
-    id: "parkingLot1",
-    name: "Parking Lot Item 1",
-    icon: "🅿️"
+    id: "investmentAssumptions",
+    name: "Investment Assumptions",
+    subCategories: [
+      { id: "acquisition", name: "Acquisition" },
+      { id: "financing", name: "Financing" },
+      { id: "disposition", name: "Disposition" }
+    ]
   },
   {
-    id: "parkingLot2",
-    name: "Parking Lot Item 2",
-    icon: "🚗"
+    id: "caps",
+    name: "Capital Expense",
+    subCategories: [
+      { id: "caps", name: "Capital Expense" }
+    ]
+  },
+  {
+    id: "marketSection",
+    name: "Market",
+    subCategories: [
+      { id: "inflationAssumptions", name: "Inflation Assumptions" },
+      { id: "penetrationAnalysis", name: "Penetration Analysis" }
+    ]
+  },
+  {
+    id: "revenueSection",
+    name: "Revenue",
+    subCategories: [
+      { id: "operatingRevenue", name: "Operating Revenue" },
+      { id: "growthAssumptions", name: "Growth Assumptions" }
+    ]
+  },
+  {
+    id: "expense",
+    name: "Expense",
+    subCategories: [
+      { id: "departmentalExpenses", name: "Departmental Expenses" },
+      { id: "managementAndFranchiseFees", name: "Management & Franchise Fees" },
+      { id: "undistributedExpenses", name: "Undistributed Expenses" },
+      { id: "undistributedExpensesSecond", name: "Undistributed Expenses - p2" },
+      { id: "nonOperatingExpenses", name: "Non-Operating Expenses" },
+      { id: "ffeReserve", name: "FF&E Reserve" }
+    ]
+  },
+  {
+    id: "waterfall",
+    name: "Waterfall"
   }
 ];
