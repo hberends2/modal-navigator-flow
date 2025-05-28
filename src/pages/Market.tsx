@@ -94,26 +94,28 @@ const Market: React.FC = () => {
       <Sidebar onItemClick={handleSidebarItemClick} />
       
       <div className="flex-1 p-6 overflow-auto">
-        <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Market Analysis</h1>
-          <Button onClick={handleAddProperty} className="flex items-center gap-2">
-            <PlusSquare className="h-5 w-5" />
-            <span>Add Property</span>
-          </Button>
-        </div>
-
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <p className="text-gray-500">Loading properties...</p>
+        <div className="w-full">
+          <div className="mb-6 flex justify-between items-center">
+            <h1 className="text-2xl font-bold">Market Analysis</h1>
+            <Button onClick={handleAddProperty} className="flex items-center gap-2">
+              <PlusSquare className="h-5 w-5" />
+              <span>Add Property</span>
+            </Button>
           </div>
-        ) : (
-          <PropertyTable 
-            properties={properties}
-            onEdit={handleEditProperty}
-            onDelete={deleteProperty}
-            onAnalyze={handleAnalyzeProperty}
-          />
-        )}
+
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <p className="text-gray-500">Loading properties...</p>
+            </div>
+          ) : (
+            <PropertyTable 
+              properties={properties}
+              onEdit={handleEditProperty}
+              onDelete={deleteProperty}
+              onAnalyze={handleAnalyzeProperty}
+            />
+          )}
+        </div>
       </div>
 
       {isModalOpen && (

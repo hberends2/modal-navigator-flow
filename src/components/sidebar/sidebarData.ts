@@ -5,11 +5,13 @@ import { CategoryItem } from "./SidebarCategory";
 export const mainNavCategories: CategoryItem[] = [
   {
     id: "summary",
-    name: "Summary"
+    name: "Summary",
+    path: "/under-construction"
   },
   {
     id: "reports",
-    name: "Reports"
+    name: "Reports",
+    path: "/under-construction"
   },
   {
     id: "propertyDetails",
