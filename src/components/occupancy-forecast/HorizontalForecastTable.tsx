@@ -86,8 +86,9 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
+            {/* Occupied Row */}
             <TableRow>
-              <TableCell className="p-1 text-xs font-medium">Values</TableCell>
+              <TableCell className="p-1 text-xs font-medium">Occupied</TableCell>
               {/* Historical placeholder data */}
               {historicalYears.map((year, yearIndex) => (
                 <React.Fragment key={year}>
@@ -96,7 +97,30 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
                   <TableCell className="p-1 text-xs text-center">-</TableCell>
                 </React.Fragment>
               ))}
-              {/* Forecast data */}
+              {/* Forecast data - show occupied rooms in Occ column */}
+              {occupancyValues.map((data, index) => (
+                <React.Fragment key={data.year}>
+                  <TableCell className="p-1 text-xs text-center">
+                    {formatNumber(calculateOccupiedRooms(data.occupancy))}
+                  </TableCell>
+                  <TableCell className="p-1 text-xs text-center">-</TableCell>
+                  <TableCell className="p-1 text-xs text-center">-</TableCell>
+                </React.Fragment>
+              ))}
+            </TableRow>
+            
+            {/* Inputs Row */}
+            <TableRow>
+              <TableCell className="p-1 text-xs font-medium">Inputs</TableCell>
+              {/* Historical placeholder data */}
+              {historicalYears.map((year, yearIndex) => (
+                <React.Fragment key={year}>
+                  <TableCell className="p-1 text-xs text-center">-</TableCell>
+                  <TableCell className="p-1 text-xs text-center">-</TableCell>
+                  <TableCell className="p-1 text-xs text-center">-</TableCell>
+                </React.Fragment>
+              ))}
+              {/* Forecast data - input cells for Occ and YoY */}
               {occupancyValues.map((data, index) => (
                 <React.Fragment key={data.year}>
                   <TableCell className="p-1 text-xs text-center">
@@ -137,9 +161,7 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
                       </span>
                     )}
                   </TableCell>
-                  <TableCell className="p-1 text-xs text-center">
-                    {formatNumber(calculateOccupiedRooms(data.occupancy))}
-                  </TableCell>
+                  <TableCell className="p-1 text-xs text-center">-</TableCell>
                 </React.Fragment>
               ))}
             </TableRow>
