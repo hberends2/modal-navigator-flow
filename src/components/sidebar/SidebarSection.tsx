@@ -1,7 +1,5 @@
-
 import React from "react";
 import SidebarCategory, { CategoryItem } from "./SidebarCategory";
-
 interface SidebarSectionProps {
   title?: string;
   categories: CategoryItem[];
@@ -10,44 +8,28 @@ interface SidebarSectionProps {
   onSubCategoryClick: (subCategoryId: string, path?: string) => void;
   showDivider?: boolean;
 }
-
 const SidebarSection: React.FC<SidebarSectionProps> = ({
   title,
   categories,
   expandedCategories,
   onCategoryClick,
   onSubCategoryClick,
-  showDivider = false,
+  showDivider = false
 }) => {
-  return (
-    <>
-      {showDivider && (
-        <li className="py-2">
+  return <>
+      {showDivider && <li className="py-2">
           <div className="px-4">
             <div className="border-b border-gray-300"></div>
           </div>
-        </li>
-      )}
+        </li>}
       
-      {title && (
-        <li className="py-2">
+      {title && <li className="py-2">
           <div className="px-4">
-            <p className="font-medium text-gray-800">{title}</p>
+            <p className="text-gray-800 font-bold">{title}</p>
           </div>
-        </li>
-      )}
+        </li>}
 
-      {categories.map((category) => (
-        <SidebarCategory
-          key={category.id}
-          category={category}
-          expandedCategories={expandedCategories}
-          onCategoryClick={onCategoryClick}
-          onSubCategoryClick={onSubCategoryClick}
-        />
-      ))}
-    </>
-  );
+      {categories.map(category => <SidebarCategory key={category.id} category={category} expandedCategories={expandedCategories} onCategoryClick={onCategoryClick} onSubCategoryClick={onSubCategoryClick} />)}
+    </>;
 };
-
 export default SidebarSection;
