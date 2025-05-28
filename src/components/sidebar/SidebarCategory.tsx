@@ -11,6 +11,7 @@ interface SubCategory {
 export interface CategoryItem {
   id: string;
   name: string;
+  icon?: string;
   path?: string;
   subCategories?: SubCategory[];
 }
