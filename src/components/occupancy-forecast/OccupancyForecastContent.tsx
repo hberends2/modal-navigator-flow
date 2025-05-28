@@ -14,6 +14,8 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
   property
 }) => {
   const {
+    historicalData,
+    historicalGrowthRates,
     marketData,
     avgMarketOccupancy,
     avgMarketGrowthRate,
@@ -54,6 +56,8 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
           forecastMethod={forecastMethod}
           setForecastMethod={setForecastMethod}
           occupancyValues={occupancyValues}
+          historicalData={historicalData}
+          historicalGrowthRates={historicalGrowthRates}
           handleOccupancyChange={handleOccupancyChange}
           handleGrowthRateChange={handleGrowthRateChange}
         />

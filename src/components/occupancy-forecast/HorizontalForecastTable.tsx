@@ -1,6 +1,6 @@
 
 import React from "react";
-import { OccupancyData } from "./types";
+import { OccupancyData, HistoricalData } from "./types";
 import { calculateOccupiedRooms, formatPercent, formatNumber } from "./utils";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../ui/table";
 import ForecastMethodSelector from "./ForecastMethodSelector";
@@ -9,6 +9,8 @@ interface HorizontalForecastTableProps {
   forecastMethod: string;
   setForecastMethod: (method: string) => void;
   occupancyValues: OccupancyData[];
+  historicalData: HistoricalData[];
+  historicalGrowthRates: { year: number; growthRate: number }[];
   handleOccupancyChange: (index: number, value: string) => void;
   handleGrowthRateChange: (index: number, value: string) => void;
 }
@@ -17,11 +19,19 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
   forecastMethod,
   setForecastMethod,
   occupancyValues,
+  historicalData,
+  historicalGrowthRates,
   handleOccupancyChange,
   handleGrowthRateChange
 }) => {
   const historicalYears = [2022, 2023, 2024];
   const forecastYears = [2025, 2026, 2027, 2028, 2029];
+
+  // Helper function to get growth rate for a specific year
+  const getGrowthRateForYear = (year: number) => {
+    const growthData = historicalGrowthRates.find(g => g.year === year);
+    return growthData ? growthData.growthRate : 0;
+  };
 
   return (
     <div className="w-full">
@@ -83,11 +93,13 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
             {/* Occupied Row */}
             <TableRow>
               <TableCell className="p-1 text-xs font-medium">Occupied</TableCell>
-              {/* Historical placeholder data */}
-              {historicalYears.map((year, yearIndex) => (
-                <React.Fragment key={year}>
-                  <TableCell className="p-1 text-xs text-center">-</TableCell>
-                  <TableCell className="p-1 text-xs text-center">-</TableCell>
+              {/* Historical data - show occupied rooms */}
+              {historicalData.map((data, index) => (
+                <React.Fragment key={data.year}>
+                  <TableCell className="p-1 text-xs text-center bg-blue-25">
+                    {formatNumber(calculateOccupiedRooms(data.occupancy, data.rooms))}
+                  </TableCell>
+                  <TableCell className="p-1 text-xs text-center bg-blue-25">-</TableCell>
                 </React.Fragment>
               ))}
               {/* Forecast data - show occupied rooms in Occ column */}
@@ -104,11 +116,19 @@ const HorizontalForecastTable: React.FC<HorizontalForecastTableProps> = ({
             {/* Inputs Row */}
             <TableRow>
               <TableCell className="p-1 text-xs font-medium">Inputs</TableCell>
-              {/* Historical placeholder data */}
-              {historicalYears.map((year, yearIndex) => (
-                <React.Fragment key={year}>
-                  <TableCell className="p-1 text-xs text-center">-</TableCell>
-                  <TableCell className="p-1 text-xs text-center">-</TableCell>
+              {/* Historical data - show actual occupancy and growth rates (read-only) */}
+              {historicalData.map((data, index) => (
+                <React.Fragment key={data.year}>
+                  <TableCell className="p-1 text-xs text-center bg-blue-25">
+                    <span className="text-gray-700 font-medium">
+                      {formatPercent(data.occupancy)}
+                    </span>
+                  </TableCell>
+                  <TableCell className="p-1 text-xs text-center bg-blue-25">
+                    <span className="text-gray-700 font-medium">
+                      {data.year === 2022 ? '-' : `${getGrowthRateForYear(data.year).toFixed(1)}%`}
+                    </span>
+                  </TableCell>
                 </React.Fragment>
               ))}
               {/* Forecast data - input cells for Occ and YoY */}
