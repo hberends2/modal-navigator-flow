@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import SidebarSection from "./sidebar/SidebarSection";
 import SidebarFooter from "./sidebar/SidebarFooter";
 import { CategoryItem } from "./sidebar/SidebarCategory";
-import { topCategories, proformaCategories } from "./sidebar/sidebarData";
+import { mainNavCategories, parkingLotCategories } from "./sidebar/sidebarData";
 import { toast } from "./ui/use-toast";
 
 interface SidebarProps {
@@ -12,7 +12,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(["market"]);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -81,18 +81,18 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
       </div>
       <nav className="mt-2 flex-grow">
         <ul>
-          {/* Top-level categories (Summary and Reports) */}
+          {/* Main navigation categories */}
           <SidebarSection
-            categories={topCategories}
+            categories={mainNavCategories}
             expandedCategories={expandedCategories}
             onCategoryClick={handleCategoryClick}
             onSubCategoryClick={handleSubCategoryClick}
           />
           
-          {/* Proforma Development section */}
+          {/* Parking Lot section */}
           <SidebarSection
-            title="Proforma Development"
-            categories={proformaCategories}
+            title="Parking Lot"
+            categories={parkingLotCategories}
             expandedCategories={expandedCategories}
             onCategoryClick={handleCategoryClick}
             onSubCategoryClick={handleSubCategoryClick}

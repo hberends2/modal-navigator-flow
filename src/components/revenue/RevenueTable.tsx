@@ -87,11 +87,15 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               forecastData={forecastYears.map(() => roomsKeys)}
             />
 
-            {/* Available Rooms */}
+            {/* Occupancy - moved to be directly below Rooms/Keys */}
             <MetricRow
-              label="Available Rooms"
-              historicalData={historicalYears.map(year => getAvailableRooms(year).toLocaleString())}
-              forecastData={forecastYears.map(year => getAvailableRooms(year).toLocaleString())}
+              label="Occupancy"
+              historicalData={historicalYears.map(year => formatPercent(historicalData.occupancy[year]))}
+              forecastData={forecastYears.map(() => "")}
+              isEditable={true}
+              editableData={occupancyForecast}
+              onEditableChange={handleOccupancyChange}
+              forecastYears={forecastYears}
             />
 
             {/* Occupied Rooms */}
@@ -146,17 +150,6 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               label="ADR"
               historicalData={historicalYears.map(year => `$${getHistoricalADR(year).toFixed(2)}`)}
               forecastData={forecastYears.map(year => `$${getForecastADR(year).toFixed(2)}`)}
-            />
-
-            {/* Occupancy */}
-            <MetricRow
-              label="Occupancy"
-              historicalData={historicalYears.map(year => formatPercent(historicalData.occupancy[year]))}
-              forecastData={forecastYears.map(() => "")}
-              isEditable={true}
-              editableData={occupancyForecast}
-              onEditableChange={handleOccupancyChange}
-              forecastYears={forecastYears}
             />
           </TableBody>
         </Table>

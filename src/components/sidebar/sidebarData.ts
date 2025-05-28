@@ -1,27 +1,38 @@
 
 import { CategoryItem } from "./SidebarCategory";
 
-// Top-level categories (Summary and Reports)
-export const topCategories: CategoryItem[] = [
+// Top-level categories for main navigation (kept simple without subcategories)
+export const mainNavCategories: CategoryItem[] = [
   {
     id: "summary",
     name: "Summary"
-    // No subCategories for Summary
   },
   {
     id: "reports",
     name: "Reports"
-    // No subCategories for Reports
-  }
-];
-
-// Proforma development categories
-export const proformaCategories: CategoryItem[] = [
+  },
   {
     id: "propertyDetails",
     name: "Property Details"
-    // No subCategories for Property Details
   },
+  {
+    id: "subjectOccupancy",
+    name: "Subject Occupancy"
+  },
+  {
+    id: "market",
+    name: "Market Analysis",
+    path: "/market"
+  },
+  {
+    id: "revenue",
+    name: "Revenue",
+    path: "/revenue"
+  }
+];
+
+// Parking lot categories (maintaining existing Category/Sub-Category format)
+export const parkingLotCategories: CategoryItem[] = [
   {
     id: "investmentAssumptions",
     name: "Investment Assumptions",
@@ -39,19 +50,16 @@ export const proformaCategories: CategoryItem[] = [
     ]
   },
   {
-    id: "market",
+    id: "marketSection",
     name: "Market",
     subCategories: [
       { id: "inflationAssumptions", name: "Inflation Assumptions" },
-      { id: "subjectOccupancy", name: "Subject Occupancy" },
-      { id: "penetrationAnalysis", name: "Penetration Analysis" },
-      { id: "marketAnalysis", name: "Market Analysis", path: "/market" }
+      { id: "penetrationAnalysis", name: "Penetration Analysis" }
     ]
   },
   {
-    id: "revenue",
+    id: "revenueSection",
     name: "Revenue",
-    path: "/revenue",
     subCategories: [
       { id: "operatingRevenue", name: "Operating Revenue" },
       { id: "growthAssumptions", name: "Growth Assumptions" }
@@ -72,6 +80,5 @@ export const proformaCategories: CategoryItem[] = [
   {
     id: "waterfall",
     name: "Waterfall"
-    // No subCategories for Waterfall
   }
 ];
