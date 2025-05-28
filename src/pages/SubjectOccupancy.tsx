@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
-import { OccupancyForecastContent } from "../components/occupancy-forecast/OccupancyForecastContent";
+import OccupancyForecastContent from "../components/occupancy-forecast/OccupancyForecastContent";
 
 const SubjectOccupancy = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
