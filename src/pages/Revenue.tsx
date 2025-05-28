@@ -1,12 +1,10 @@
+
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import RevenueTable from "../components/revenue/RevenueTable";
+import Sidebar from "../components/Sidebar";
 
 const Revenue = () => {
-  const navigate = useNavigate();
-  
   // State for growth rate settings
   const [revparGrowthType, setRevparGrowthType] = useState<string>("flat");
   const [flatRevparGrowth, setFlatRevparGrowth] = useState<string>("3.0");
@@ -141,49 +139,48 @@ const Revenue = () => {
     return `${value.toFixed(decimals)}%`;
   };
 
+  const handleItemClick = (modalName: string) => {
+    console.log("Modal clicked:", modalName);
+    // TODO: Implement modal functionality
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
-          </Button>
-          <h1 className="text-3xl font-bold text-gray-900">Revenue Analysis</h1>
-        </div>
+    <div className="flex min-h-screen bg-gray-50">
+      <Sidebar onItemClick={handleItemClick} />
+      <div className="flex-1 p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900">Revenue Analysis</h1>
+          </div>
 
-        {/* Revenue Table */}
-        <RevenueTable
-          roomsKeys={roomsKeys}
-          historicalYears={historicalYears}
-          forecastYears={forecastYears}
-          historicalData={historicalData}
-          revparGrowthType={revparGrowthType}
-          setRevparGrowthType={setRevparGrowthType}
-          flatRevparGrowth={flatRevparGrowth}
-          setFlatRevparGrowth={setFlatRevparGrowth}
-          yearlyRevparGrowth={yearlyRevparGrowth}
-          handleYearlyRevparChange={handleYearlyRevparChange}
-          occupancyForecast={occupancyForecast}
-          handleOccupancyChange={handleOccupancyChange}
-          getAvailableRooms={getAvailableRooms}
-          getForecastRevpar={getForecastRevpar}
-          getForecastRoomsRevenue={getForecastRoomsRevenue}
-          formatCurrency={formatCurrency}
-          formatPercent={formatPercent}
-        />
+          {/* Revenue Table */}
+          <RevenueTable
+            roomsKeys={roomsKeys}
+            historicalYears={historicalYears}
+            forecastYears={forecastYears}
+            historicalData={historicalData}
+            revparGrowthType={revparGrowthType}
+            setRevparGrowthType={setRevparGrowthType}
+            flatRevparGrowth={flatRevparGrowth}
+            setFlatRevparGrowth={setFlatRevparGrowth}
+            yearlyRevparGrowth={yearlyRevparGrowth}
+            handleYearlyRevparChange={handleYearlyRevparChange}
+            occupancyForecast={occupancyForecast}
+            handleOccupancyChange={handleOccupancyChange}
+            getAvailableRooms={getAvailableRooms}
+            getForecastRevpar={getForecastRevpar}
+            getForecastRoomsRevenue={getForecastRoomsRevenue}
+            formatCurrency={formatCurrency}
+            formatPercent={formatPercent}
+          />
 
-        {/* Save Button */}
-        <div className="flex justify-end">
-          <Button onClick={handleSave} className="px-8">
-            Save Revenue Data
-          </Button>
+          {/* Save Button */}
+          <div className="flex justify-end">
+            <Button onClick={handleSave} className="px-8">
+              Save Revenue Data
+            </Button>
+          </div>
         </div>
       </div>
     </div>
