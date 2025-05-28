@@ -13,11 +13,13 @@ export const mainNavCategories: CategoryItem[] = [
   },
   {
     id: "propertyDetails",
-    name: "Property Details"
+    name: "Property Details",
+    path: "/property-details"
   },
   {
     id: "subjectOccupancy",
-    name: "Subject Occupancy"
+    name: "Subject Occupancy",
+    path: "/subject-occupancy"
   },
   {
     id: "market",
