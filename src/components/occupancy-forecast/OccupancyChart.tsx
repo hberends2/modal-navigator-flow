@@ -29,10 +29,10 @@ const OccupancyChart: React.FC<OccupancyChartProps> = ({
     
     chartData.push({
       year,
-      subject: subjectData ? subjectData.occupancy * 100 : undefined,
-      market: marketDataPoint ? marketDataPoint.occupancy * 100 : undefined,
-      compSet: compSetDataPoint ? compSetDataPoint.occupancy * 100 : undefined,
-      forecast: undefined // No forecast for historical years
+      subject: subjectData ? subjectData.occupancy * 100 : null,
+      market: marketDataPoint ? marketDataPoint.occupancy * 100 : null,
+      compSet: compSetDataPoint ? compSetDataPoint.occupancy * 100 : null,
+      forecast: null // No forecast for historical years
     });
   });
   
@@ -40,9 +40,9 @@ const OccupancyChart: React.FC<OccupancyChartProps> = ({
   forecastData.forEach(forecast => {
     chartData.push({
       year: forecast.year,
-      subject: undefined, // No historical subject data for forecast years
-      market: undefined, // No market data for forecast years
-      compSet: undefined, // No comp set data for forecast years
+      subject: null, // No historical subject data for forecast years
+      market: null, // No market data for forecast years
+      compSet: null, // No comp set data for forecast years
       forecast: forecast.occupancy * 100
     });
   });
@@ -58,7 +58,7 @@ const OccupancyChart: React.FC<OccupancyChartProps> = ({
           <p className="font-medium">{`Year: ${label}`}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
-              {`${entry.name}: ${entry.value !== undefined ? entry.value.toFixed(1) : 'N/A'}%`}
+              {`${entry.name}: ${entry.value !== undefined && entry.value !== null ? entry.value.toFixed(1) : 'N/A'}%`}
             </p>
           ))}
         </div>
@@ -98,6 +98,18 @@ const OccupancyChart: React.FC<OccupancyChartProps> = ({
             name="Subject Property"
           />
           
+          {/* Forecast Line - Same blue as Subject Property, positioned second in legend */}
+          <Line
+            type="monotone"
+            dataKey="forecast"
+            stroke="#3b82f6"
+            strokeWidth={3}
+            strokeDasharray="5 5"
+            dot={{ fill: "#3b82f6", strokeWidth: 2, r: 5 }}
+            connectNulls={false}
+            name="Forecast (- - -)"
+          />
+          
           {/* Market Line */}
           <Line
             type="monotone"
@@ -118,18 +130,6 @@ const OccupancyChart: React.FC<OccupancyChartProps> = ({
             dot={{ fill: "#f59e0b", strokeWidth: 2, r: 5 }}
             connectNulls={false}
             name="Comp Set"
-          />
-          
-          {/* Forecast Line */}
-          <Line
-            type="monotone"
-            dataKey="forecast"
-            stroke="#8b5cf6"
-            strokeWidth={3}
-            strokeDasharray="5 5"
-            dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 5 }}
-            connectNulls={false}
-            name="Forecast"
           />
         </LineChart>
       </ResponsiveContainer>
