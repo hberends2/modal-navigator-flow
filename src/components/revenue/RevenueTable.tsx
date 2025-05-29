@@ -74,6 +74,55 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     return occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
   };
 
+  // Calculate RevPAR YoY growth for forecast years
+  const getForecastRevparYoY = (year: number) => {
+    const yearIndex = forecastYears.indexOf(year);
+    if (yearIndex === 0) {
+      // First forecast year - compare to last historical year (2024)
+      const currentRevpar = getForecastRevpar(year);
+      const previousRevpar = historicalData.revpar[2024];
+      return ((currentRevpar - previousRevpar) / previousRevpar) * 100;
+    } else {
+      // Subsequent years - compare to previous forecast year
+      const currentRevpar = getForecastRevpar(year);
+      const previousYear = forecastYears[yearIndex - 1];
+      const previousRevpar = getForecastRevpar(previousYear);
+      return ((currentRevpar - previousRevpar) / previousRevpar) * 100;
+    }
+  };
+
+  // Calculate ADR YoY growth for historical years
+  const getHistoricalADRYoY = (year: number, index: number) => {
+    if (index === 0) return 0; // First year has no previous year
+    const currentADR = getHistoricalADR(year);
+    const previousYear = historicalYears[index - 1];
+    const previousADR = getHistoricalADR(previousYear);
+    return ((currentADR - previousADR) / previousADR) * 100;
+  };
+
+  // Calculate ADR YoY growth for forecast years
+  const getForecastADRYoY = (year: number) => {
+    const yearIndex = forecastYears.indexOf(year);
+    if (yearIndex === 0) {
+      // First forecast year - compare to last historical year (2024)
+      const currentADR = getForecastADR(year);
+      const previousADR = getHistoricalADR(2024);
+      return ((currentADR - previousADR) / previousADR) * 100;
+    } else {
+      // Subsequent years - compare to previous forecast year
+      const currentADR = getForecastADR(year);
+      const previousYear = forecastYears[yearIndex - 1];
+      const previousADR = getForecastADR(previousYear);
+      return ((currentADR - previousADR) / previousADR) * 100;
+    }
+  };
+
+  // Helper function to format YoY growth with color
+  const formatYoYWithColor = (value: number) => {
+    const color = value >= 0 ? "text-green-600" : "text-red-600";
+    return <span className={color}>{value.toFixed(1)}%</span>;
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
       <div className="overflow-x-auto">
@@ -121,6 +170,15 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
             {/* RevPAR YoY Growth */}
             <MetricRow
+              label="RevPAR YoY Growth"
+              historicalData={historicalYears.map((year, index) => 
+                index === 0 ? "-" : formatYoYWithColor(historicalData.revparYoY[year])
+              )}
+              forecastData={forecastYears.map(year => formatYoYWithColor(getForecastRevparYoY(year)))}
+            />
+
+            {/* RevPAR Growth Controls */}
+            <MetricRow
               label={
                 <GrowthControls
                   revparGrowthType={revparGrowthType}
@@ -150,6 +208,15 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               label="ADR"
               historicalData={historicalYears.map(year => `$${getHistoricalADR(year).toFixed(2)}`)}
               forecastData={forecastYears.map(year => `$${getForecastADR(year).toFixed(2)}`)}
+            />
+
+            {/* ADR YoY Growth */}
+            <MetricRow
+              label="ADR YoY Growth"
+              historicalData={historicalYears.map((year, index) => 
+                index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index))
+              )}
+              forecastData={forecastYears.map(year => formatYoYWithColor(getForecastADRYoY(year)))}
             />
           </TableBody>
         </Table>
