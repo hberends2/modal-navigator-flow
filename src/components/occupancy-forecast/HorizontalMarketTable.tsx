@@ -16,7 +16,7 @@ const HorizontalMarketTable: React.FC<HorizontalMarketTableProps> = ({
   avgMarketGrowthRate
 }) => {
   return (
-    <div className="w-full">
+    <div className="w-full max-w-md">
       <h3 className="text-lg font-semibold mb-3 text-gray-700">Market Analysis</h3>
       <div className="bg-gray-50 p-2 rounded-lg">
         <Table>
