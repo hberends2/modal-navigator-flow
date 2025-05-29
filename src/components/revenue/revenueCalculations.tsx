@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { marketRevparData, compSetRevparData, marketADRData, compSetADRData } from './revenueData';
+import { marketRevparData, compSetRevparData, marketADRData, compSetADRData, marketOccupancyData, compSetOccupancyData } from './revenueData';
 
 export const getMarketRevparYoY = (year: number, index: number, historicalYears: number[]) => {
   console.log('getMarketRevparYoY called:', { year, index, historicalYears });
@@ -59,6 +58,51 @@ export const getCompSetADRYoY = (year: number, index: number, historicalYears: n
   }
   const result = ((currentADR - previousADR) / previousADR) * 100;
   console.log('Comp Set ADR YoY result:', result);
+  return result;
+};
+
+export const getMarketOccupancyYoY = (year: number, index: number, historicalYears: number[]) => {
+  console.log('getMarketOccupancyYoY called:', { year, index, historicalYears });
+  if (index === 0) return 0;
+  const currentOccupancy = marketOccupancyData[year as keyof typeof marketOccupancyData];
+  const previousYear = historicalYears[index - 1];
+  const previousOccupancy = marketOccupancyData[previousYear as keyof typeof marketOccupancyData];
+  if (!currentOccupancy || !previousOccupancy) {
+    console.warn('Missing market occupancy data:', { year, currentOccupancy, previousYear, previousOccupancy });
+    return 0;
+  }
+  const result = ((currentOccupancy - previousOccupancy) / previousOccupancy) * 100;
+  console.log('Market Occupancy YoY result:', result);
+  return result;
+};
+
+export const getCompSetOccupancyYoY = (year: number, index: number, historicalYears: number[]) => {
+  console.log('getCompSetOccupancyYoY called:', { year, index, historicalYears });
+  if (index === 0) return 0;
+  const currentOccupancy = compSetOccupancyData[year as keyof typeof compSetOccupancyData];
+  const previousYear = historicalYears[index - 1];
+  const previousOccupancy = compSetOccupancyData[previousYear as keyof typeof compSetOccupancyData];
+  if (!currentOccupancy || !previousOccupancy) {
+    console.warn('Missing comp set occupancy data:', { year, currentOccupancy, previousYear, previousOccupancy });
+    return 0;
+  }
+  const result = ((currentOccupancy - previousOccupancy) / previousOccupancy) * 100;
+  console.log('Comp Set Occupancy YoY result:', result);
+  return result;
+};
+
+export const getHistoricalOccupancyYoY = (year: number, index: number, historicalYears: number[], occupancyData: Record<number, number>) => {
+  console.log('getHistoricalOccupancyYoY called:', { year, index, historicalYears });
+  if (index === 0) return 0;
+  const currentOccupancy = occupancyData[year];
+  const previousYear = historicalYears[index - 1];
+  const previousOccupancy = occupancyData[previousYear];
+  if (!currentOccupancy || !previousOccupancy) {
+    console.warn('Missing historical occupancy data:', { year, currentOccupancy, previousYear, previousOccupancy });
+    return 0;
+  }
+  const result = ((currentOccupancy - previousOccupancy) / previousOccupancy) * 100;
+  console.log('Historical Occupancy YoY result:', result);
   return result;
 };
 

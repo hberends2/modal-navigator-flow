@@ -2,6 +2,7 @@
 import React from "react";
 import MetricRow from "./MetricRow";
 import { marketOccupancyData, compSetOccupancyData } from "./revenueData";
+import { getMarketOccupancyYoY, getCompSetOccupancyYoY, getHistoricalOccupancyYoY, formatYoYWithColor } from "./revenueCalculations";
 
 interface OccupancySectionProps {
   historicalYears: number[];
@@ -69,6 +70,16 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         forecastData={forecastYears.map(() => "-")}
       />
 
+      {/* Market Occupancy YoY */}
+      <MetricRow
+        label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YoY Growth</span>}
+        historicalData={historicalYears.map((year, index) => {
+          const yoyValue = getMarketOccupancyYoY(year, index, historicalYears);
+          return formatYoYWithColor(yoyValue);
+        })}
+        forecastData={forecastYears.map(() => formatYoYWithColor(0))}
+      />
+
       {/* Comp Set Occupancy */}
       <MetricRow
         label={<span>&nbsp;&nbsp;&nbsp;Comp Set (STR / Trend Report)</span>}
@@ -77,6 +88,16 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
           return data ? `${data.toFixed(1)}%` : "-";
         })}
         forecastData={forecastYears.map(() => "-")}
+      />
+
+      {/* Comp Set Occupancy YoY */}
+      <MetricRow
+        label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YoY Growth</span>}
+        historicalData={historicalYears.map((year, index) => {
+          const yoyValue = getCompSetOccupancyYoY(year, index, historicalYears);
+          return formatYoYWithColor(yoyValue);
+        })}
+        forecastData={forecastYears.map(() => formatYoYWithColor(0))}
       />
 
       {/* Subject Property Occupancy */}
@@ -88,6 +109,16 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         editableData={occupancyForecast}
         onEditableChange={handleOccupancyChange}
         forecastYears={forecastYears}
+      />
+
+      {/* Subject Property Occupancy YoY */}
+      <MetricRow
+        label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YoY Growth</span>}
+        historicalData={historicalYears.map((year, index) => {
+          const yoyValue = getHistoricalOccupancyYoY(year, index, historicalYears, historicalData.occupancy);
+          return formatYoYWithColor(yoyValue);
+        })}
+        forecastData={forecastYears.map(() => formatYoYWithColor(0))}
       />
 
       {/* Index Calculations */}
