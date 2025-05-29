@@ -46,6 +46,7 @@ const RevPARSection: React.FC<RevPARSectionProps> = ({
         label={<span className="font-bold text-gray-900">RevPAR</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
       />
 
       {/* Market RevPAR */}

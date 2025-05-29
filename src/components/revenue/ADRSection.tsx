@@ -30,6 +30,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
         label={<span className="font-bold text-gray-900">ADR</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
       />
 
       {/* Market ADR */}
