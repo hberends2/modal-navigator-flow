@@ -50,6 +50,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 }) => {
   // Sample market data
   const marketRevparData = {
+    2021: 252,
     2022: 262,
     2023: 262,
     2024: 269
@@ -57,6 +58,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
   // Sample comp set data
   const compSetRevparData = {
+    2021: 223,
     2022: 232,
     2023: 237,
     2024: 232
