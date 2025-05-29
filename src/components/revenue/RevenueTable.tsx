@@ -2,7 +2,8 @@
 import React from "react";
 import { Table, TableBody } from "../ui/table";
 import RevenueTableHeaders from "./RevenueTableHeaders";
-import MetricRow from "./MetricRow";
+import OccupancySection from "./OccupancySection";
+import RoomsRevenueSection from "./RoomsRevenueSection";
 import RevPARSection from "./RevPARSection";
 import ADRSection from "./ADRSection";
 import { getHistoricalOccupiedRooms, getForecastOccupiedRooms, getHistoricalADR, getForecastADR } from "./revenueCalculations";
@@ -114,36 +115,27 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
           <Table>
             <RevenueTableHeaders />
             <TableBody>
-              {/* Rooms/Keys */}
-              <MetricRow
-                label="Rooms/Keys"
-                historicalData={historicalYears.map(() => roomsKeys)}
-                forecastData={forecastYears.map(() => roomsKeys)}
-              />
-
-              {/* Occupancy - moved to be directly below Rooms/Keys */}
-              <MetricRow
-                label="Occupancy"
-                historicalData={historicalYears.map(year => formatPercent(historicalData.occupancy[year] || 0))}
-                forecastData={forecastYears.map(() => "")}
-                isEditable={true}
-                editableData={occupancyForecast}
-                onEditableChange={handleOccupancyChange}
+              {/* Occupancy Section */}
+              <OccupancySection
+                historicalYears={historicalYears}
                 forecastYears={forecastYears}
+                roomsKeys={roomsKeys}
+                historicalData={historicalData}
+                occupancyForecast={occupancyForecast}
+                handleOccupancyChange={handleOccupancyChange}
+                getAvailableRooms={getAvailableRooms}
+                getHistoricalOccupiedRooms={getHistoricalOccupiedRoomsForYear}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatPercent={formatPercent}
               />
 
-              {/* Occupied Rooms */}
-              <MetricRow
-                label="Occupied Rooms"
-                historicalData={historicalYears.map(year => getHistoricalOccupiedRoomsForYear(year).toLocaleString())}
-                forecastData={forecastYears.map(year => getForecastOccupiedRoomsForYear(year).toLocaleString())}
-              />
-
-              {/* Rooms Revenue */}
-              <MetricRow
-                label="Rooms Revenue"
-                historicalData={historicalYears.map(year => formatCurrency(historicalData.roomsRevenue[year] || 0))}
-                forecastData={forecastYears.map(year => formatCurrency(getForecastRoomsRevenue(year)))}
+              {/* Rooms Revenue Section */}
+              <RoomsRevenueSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                getForecastRoomsRevenue={getForecastRoomsRevenue}
+                formatCurrency={formatCurrency}
               />
 
               {/* RevPAR Section */}

@@ -1,0 +1,41 @@
+
+import React from "react";
+import MetricRow from "./MetricRow";
+
+interface RoomsRevenueSectionProps {
+  historicalYears: number[];
+  forecastYears: number[];
+  historicalData: {
+    roomsRevenue: Record<number, number>;
+  };
+  getForecastRoomsRevenue: (year: number) => number;
+  formatCurrency: (value: number) => string;
+}
+
+const RoomsRevenueSection: React.FC<RoomsRevenueSectionProps> = ({
+  historicalYears,
+  forecastYears,
+  historicalData,
+  getForecastRoomsRevenue,
+  formatCurrency
+}) => {
+  return (
+    <>
+      {/* Rooms Revenue Section Header */}
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Rooms Revenue</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+      />
+
+      {/* Rooms Revenue */}
+      <MetricRow
+        label="Rooms Revenue"
+        historicalData={historicalYears.map(year => formatCurrency(historicalData.roomsRevenue[year] || 0))}
+        forecastData={forecastYears.map(year => formatCurrency(getForecastRoomsRevenue(year)))}
+      />
+    </>
+  );
+};
+
+export default RoomsRevenueSection;

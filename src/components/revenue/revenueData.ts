@@ -26,3 +26,17 @@ export const compSetADRData = {
   2023: 285,
   2024: 290
 };
+
+export const marketOccupancyData = {
+  2021: 86.2,
+  2022: 85.6,
+  2023: 84.1,
+  2024: 82.6
+};
+
+export const compSetOccupancyData = {
+  2021: 84.0,
+  2022: 83.0,
+  2023: 83.0,
+  2024: 80.0
+};
