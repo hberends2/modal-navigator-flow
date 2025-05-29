@@ -3,6 +3,7 @@ import React from "react";
 import HorizontalMarketTable from "./HorizontalMarketTable";
 import HorizontalCompSetTable from "./HorizontalCompSetTable";
 import HorizontalForecastTable from "./HorizontalForecastTable";
+import OccupancyChart from "./OccupancyChart";
 import { Property } from "../../types/PropertyTypes";
 import { useOccupancyForecast } from "../../hooks/useOccupancyForecast";
 
@@ -32,22 +33,33 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
 
   return (
     <>
-      {/* Market Section */}
-      <div className="mb-6">
-        <HorizontalMarketTable
-          marketData={marketData}
-          avgMarketOccupancy={avgMarketOccupancy}
-          avgMarketGrowthRate={avgMarketGrowthRate}
-        />
-      </div>
+      {/* Top Section: Market Analysis, Comp Set Analysis, and Chart */}
+      <div className="mb-6 flex gap-6">
+        <div className="flex flex-col gap-6">
+          {/* Market Section */}
+          <HorizontalMarketTable
+            marketData={marketData}
+            avgMarketOccupancy={avgMarketOccupancy}
+            avgMarketGrowthRate={avgMarketGrowthRate}
+          />
 
-      {/* Comp Set Section */}
-      <div className="mb-6">
-        <HorizontalCompSetTable
-          compSetData={compSetData}
-          avgCompSetOccupancy={avgCompSetOccupancy}
-          avgCompSetGrowthRate={avgCompSetGrowthRate}
-        />
+          {/* Comp Set Section */}
+          <HorizontalCompSetTable
+            compSetData={compSetData}
+            avgCompSetOccupancy={avgCompSetOccupancy}
+            avgCompSetGrowthRate={avgCompSetGrowthRate}
+          />
+        </div>
+
+        {/* Chart Section */}
+        <div className="flex-1">
+          <OccupancyChart
+            historicalData={historicalData}
+            marketData={marketData}
+            compSetData={compSetData}
+            forecastData={occupancyValues}
+          />
+        </div>
       </div>
 
       {/* Forecast Occupancy Section */}
