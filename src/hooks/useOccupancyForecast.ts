@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { 
   OccupancyData,
@@ -38,11 +37,11 @@ export const useOccupancyForecast = (property?: Property | null) => {
     { year: 2024, occupancy: 0.723, growthRate: 1.3 },
   ];
   
-  // Sample comp set data
+  // Updated comp set data with new occupancy percentages
   const compSetData: CompSetData[] = [
-    { year: 2022, occupancy: 0.700, growthRate: 0 },
-    { year: 2023, occupancy: 0.714, growthRate: 2.0 },
-    { year: 2024, occupancy: 0.723, growthRate: 1.3 },
+    { year: 2022, occupancy: 0.707, growthRate: 0 },
+    { year: 2023, occupancy: 0.732, growthRate: 3.5 }, // YoY: (73.2% - 70.7%) / 70.7% = 3.5%
+    { year: 2024, occupancy: 0.740, growthRate: 1.1 }, // YoY: (74.0% - 73.2%) / 73.2% = 1.1%
   ];
   
   // Calculate historical growth rates
