@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Table, TableBody } from "../ui/table";
 import RevenueTableHeaders from "./RevenueTableHeaders";
