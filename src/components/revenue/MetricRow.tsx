@@ -6,8 +6,8 @@ import GrowthControls from "./GrowthControls";
 
 interface MetricRowProps {
   label: string | React.ReactNode;
-  historicalData: (string | number)[];
-  forecastData: (string | number)[];
+  historicalData: (string | number | React.ReactElement)[];
+  forecastData: (string | number | React.ReactElement)[];
   isEditable?: boolean;
   editableData?: Record<number, string>;
   onEditableChange?: (year: number, value: string) => void;
