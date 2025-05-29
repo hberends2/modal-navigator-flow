@@ -170,7 +170,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
             {/* RevPAR YoY Growth */}
             <MetricRow
-              label="   RevPAR YoY Growth"
+              label={<span>&nbsp;&nbsp;&nbsp;RevPAR YoY Growth</span>}
               historicalData={historicalYears.map((year, index) => 
                 index === 0 ? "-" : formatYoYWithColor(historicalData.revparYoY[year])
               )}
@@ -212,7 +212,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
             {/* ADR YoY Growth */}
             <MetricRow
-              label="   ADR YoY Growth"
+              label={<span>&nbsp;&nbsp;&nbsp;ADR YoY Growth</span>}
               historicalData={historicalYears.map((year, index) => 
                 index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index))
               )}
