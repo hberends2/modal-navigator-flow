@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "../components/ui/button";
 import RevenueTable from "../components/revenue/RevenueTable";
@@ -181,38 +182,40 @@ const Revenue = () => {
   console.log('About to render Revenue component');
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
       <Sidebar onItemClick={handleItemClick} />
-      <div className="flex-1 p-6">
-        <div className="w-full">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="p-6 flex-1 flex flex-col">
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900">Revenue Analysis</h1>
           </div>
 
-          {/* Revenue Table */}
-          <RevenueTable
-            roomsKeys={roomsKeys}
-            historicalYears={historicalYears}
-            forecastYears={forecastYears}
-            historicalData={historicalData}
-            revparGrowthType={revparGrowthType}
-            setRevparGrowthType={setRevparGrowthType}
-            flatRevparGrowth={flatRevparGrowth}
-            setFlatRevparGrowth={setFlatRevparGrowth}
-            yearlyRevparGrowth={yearlyRevparGrowth}
-            handleYearlyRevparChange={handleYearlyRevparChange}
-            occupancyForecast={occupancyForecast}
-            handleOccupancyChange={handleOccupancyChange}
-            getAvailableRooms={getAvailableRooms}
-            getForecastRevpar={getForecastRevpar}
-            getForecastRoomsRevenue={getForecastRoomsRevenue}
-            formatCurrency={formatCurrency}
-            formatPercent={formatPercent}
-          />
+          {/* Revenue Table - takes remaining space */}
+          <div className="flex-1 min-h-0">
+            <RevenueTable
+              roomsKeys={roomsKeys}
+              historicalYears={historicalYears}
+              forecastYears={forecastYears}
+              historicalData={historicalData}
+              revparGrowthType={revparGrowthType}
+              setRevparGrowthType={setRevparGrowthType}
+              flatRevparGrowth={flatRevparGrowth}
+              setFlatRevparGrowth={setFlatRevparGrowth}
+              yearlyRevparGrowth={yearlyRevparGrowth}
+              handleYearlyRevparChange={handleYearlyRevparChange}
+              occupancyForecast={occupancyForecast}
+              handleOccupancyChange={handleOccupancyChange}
+              getAvailableRooms={getAvailableRooms}
+              getForecastRevpar={getForecastRevpar}
+              getForecastRoomsRevenue={getForecastRoomsRevenue}
+              formatCurrency={formatCurrency}
+              formatPercent={formatPercent}
+            />
+          </div>
 
           {/* Save Button */}
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-4">
             <Button onClick={handleSave} className="px-8">
               Save Revenue Data
             </Button>

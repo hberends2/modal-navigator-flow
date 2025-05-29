@@ -26,6 +26,7 @@ const RoomsRevenueSection: React.FC<RoomsRevenueSectionProps> = ({
         label={<span className="font-bold text-gray-900">Rooms Revenue</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
       />
 
       {/* Rooms Revenue */}

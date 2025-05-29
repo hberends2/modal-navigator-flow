@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Table, TableBody } from "../ui/table";
+import { ScrollArea } from "../ui/scroll-area";
 import RevenueTableHeaders from "./RevenueTableHeaders";
 import OccupancySection from "./OccupancySection";
 import RoomsRevenueSection from "./RoomsRevenueSection";
@@ -111,7 +112,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   try {
     return (
       <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-        <div className="overflow-x-auto">
+        <ScrollArea className="h-[calc(100vh-200px)] w-full">
           <Table>
             <RevenueTableHeaders />
             <TableBody>
@@ -161,7 +162,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               />
             </TableBody>
           </Table>
-        </div>
+        </ScrollArea>
       </div>
     );
   } catch (error) {

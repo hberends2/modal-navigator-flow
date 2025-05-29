@@ -44,6 +44,7 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         label={<span className="font-bold text-gray-900">Occupancy</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
       />
 
       {/* Rooms/Keys */}

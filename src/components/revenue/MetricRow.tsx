@@ -19,6 +19,7 @@ interface MetricRowProps {
   setFlatRevparGrowth?: (value: string) => void;
   yearlyRevparGrowth?: Record<number, string>;
   handleYearlyRevparChange?: (year: number, value: string) => void;
+  isSectionHeader?: boolean;
 }
 
 const MetricRow: React.FC<MetricRowProps> = ({
@@ -35,10 +36,11 @@ const MetricRow: React.FC<MetricRowProps> = ({
   flatRevparGrowth,
   setFlatRevparGrowth,
   yearlyRevparGrowth,
-  handleYearlyRevparChange
+  handleYearlyRevparChange,
+  isSectionHeader = false
 }) => {
   return (
-    <TableRow>
+    <TableRow className={isSectionHeader ? "bg-gray-100" : ""}>
       <TableCell className="font-medium px-1">{label}</TableCell>
       {historicalData.map((value, index) => (
         <TableCell key={`historical-${index}`} className="text-center px-1">
