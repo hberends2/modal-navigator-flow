@@ -1,8 +1,11 @@
+
 import React from "react";
 import { Table, TableBody } from "../ui/table";
 import RevenueTableHeaders from "./RevenueTableHeaders";
 import MetricRow from "./MetricRow";
-import GrowthControls from "./GrowthControls";
+import RevPARSection from "./RevPARSection";
+import ADRSection from "./ADRSection";
+import { getHistoricalOccupiedRooms, getForecastOccupiedRooms, getHistoricalADR, getForecastADR } from "./revenueCalculations";
 
 interface RevenueTableProps {
   roomsKeys: number;
@@ -48,146 +51,25 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   formatCurrency,
   formatPercent
 }) => {
-  // Sample market data
-  const marketRevparData = {
-    2021: 252,
-    2022: 262,
-    2023: 262,
-    2024: 269
+  // Helper functions for calculations
+  const getHistoricalOccupiedRoomsForYear = (year: number) => {
+    return getHistoricalOccupiedRooms(year, getAvailableRooms, historicalData.occupancy[year]);
   };
 
-  // Sample comp set data
-  const compSetRevparData = {
-    2021: 223,
-    2022: 232,
-    2023: 237,
-    2024: 232
+  const getForecastOccupiedRoomsForYear = (year: number) => {
+    return getForecastOccupiedRooms(year, getAvailableRooms, occupancyForecast[year]);
   };
 
-  // Sample market ADR data
-  const marketADRData = {
-    2021: 292.80,
-    2022: 306.11,
-    2023: 311.07,
-    2024: 326.10
-  };
-
-  // Sample comp set ADR data
-  const compSetADRData = {
-    2021: 265,
-    2022: 280,
-    2023: 285,
-    2024: 290
-  };
-
-  // Calculate market RevPAR YoY growth
-  const getMarketRevparYoY = (year: number, index: number) => {
-    if (index === 0) return 0; // First year has no previous year
-    const currentRevpar = marketRevparData[year as keyof typeof marketRevparData];
-    const previousYear = historicalYears[index - 1];
-    const previousRevpar = marketRevparData[previousYear as keyof typeof marketRevparData];
-    return ((currentRevpar - previousRevpar) / previousRevpar) * 100;
-  };
-
-  // Calculate comp set RevPAR YoY growth
-  const getCompSetRevparYoY = (year: number, index: number) => {
-    if (index === 0) return 0; // First year has no previous year
-    const currentRevpar = compSetRevparData[year as keyof typeof compSetRevparData];
-    const previousYear = historicalYears[index - 1];
-    const previousRevpar = compSetRevparData[previousYear as keyof typeof compSetRevparData];
-    return ((currentRevpar - previousRevpar) / previousRevpar) * 100;
-  };
-
-  // Calculate market ADR YoY growth
-  const getMarketADRYoY = (year: number, index: number) => {
-    if (index === 0) return 0; // First year has no previous year
-    const currentADR = marketADRData[year as keyof typeof marketADRData];
-    const previousYear = historicalYears[index - 1];
-    const previousADR = marketADRData[previousYear as keyof typeof marketADRData];
-    return ((currentADR - previousADR) / previousADR) * 100;
-  };
-
-  // Calculate comp set ADR YoY growth
-  const getCompSetADRYoY = (year: number, index: number) => {
-    if (index === 0) return 0; // First year has no previous year
-    const currentADR = compSetADRData[year as keyof typeof compSetADRData];
-    const previousYear = historicalYears[index - 1];
-    const previousADR = compSetADRData[previousYear as keyof typeof compSetADRData];
-    return ((currentADR - previousADR) / previousADR) * 100;
-  };
-
-  // Helper functions for new calculations
-  const getHistoricalOccupiedRooms = (year: number) => {
-    const availableRooms = getAvailableRooms(year);
-    const occupancy = historicalData.occupancy[year] / 100; // Convert percentage to decimal
-    return Math.round(availableRooms * occupancy);
-  };
-
-  const getForecastOccupiedRooms = (year: number) => {
-    const availableRooms = getAvailableRooms(year);
-    const occupancy = parseFloat(occupancyForecast[year] || "0") / 100; // Convert percentage to decimal
-    return Math.round(availableRooms * occupancy);
-  };
-
-  const getHistoricalADR = (year: number) => {
+  const getHistoricalADRForYear = (year: number) => {
     const roomsRevenue = historicalData.roomsRevenue[year];
-    const occupiedRooms = getHistoricalOccupiedRooms(year);
-    return occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
+    const occupiedRooms = getHistoricalOccupiedRoomsForYear(year);
+    return getHistoricalADR(year, roomsRevenue, occupiedRooms);
   };
 
-  const getForecastADR = (year: number) => {
+  const getForecastADRForYear = (year: number) => {
     const roomsRevenue = getForecastRoomsRevenue(year);
-    const occupiedRooms = getForecastOccupiedRooms(year);
-    return occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
-  };
-
-  // Calculate RevPAR YoY growth for forecast years
-  const getForecastRevparYoY = (year: number) => {
-    const yearIndex = forecastYears.indexOf(year);
-    if (yearIndex === 0) {
-      // First forecast year - compare to last historical year (2024)
-      const currentRevpar = getForecastRevpar(year);
-      const previousRevpar = historicalData.revpar[2024];
-      return ((currentRevpar - previousRevpar) / previousRevpar) * 100;
-    } else {
-      // Subsequent years - compare to previous forecast year
-      const currentRevpar = getForecastRevpar(year);
-      const previousYear = forecastYears[yearIndex - 1];
-      const previousRevpar = getForecastRevpar(previousYear);
-      return ((currentRevpar - previousRevpar) / previousRevpar) * 100;
-    }
-  };
-
-  // Calculate ADR YoY growth for historical years
-  const getHistoricalADRYoY = (year: number, index: number) => {
-    if (index === 0) return 0; // First year has no previous year
-    const currentADR = getHistoricalADR(year);
-    const previousYear = historicalYears[index - 1];
-    const previousADR = getHistoricalADR(previousYear);
-    return ((currentADR - previousADR) / previousADR) * 100;
-  };
-
-  // Calculate ADR YoY growth for forecast years
-  const getForecastADRYoY = (year: number) => {
-    const yearIndex = forecastYears.indexOf(year);
-    if (yearIndex === 0) {
-      // First forecast year - compare to last historical year (2024)
-      const currentADR = getForecastADR(year);
-      const previousADR = getHistoricalADR(2024);
-      return ((currentADR - previousADR) / previousADR) * 100;
-    } else {
-      // Subsequent years - compare to previous forecast year
-      const currentADR = getForecastADR(year);
-      const previousYear = forecastYears[yearIndex - 1];
-      const previousADR = getForecastADR(previousYear);
-      return ((currentADR - previousADR) / previousADR) * 100;
-    }
-  };
-
-  // Helper function to format YoY growth with color
-  const formatYoYWithColor = (value: number) => {
-    const color = value >= 0 ? "text-green-600" : "text-red-600";
-    return <span className={color}>{value.toFixed(1)}%</span>;
+    const occupiedRooms = getForecastOccupiedRoomsForYear(year);
+    return getForecastADR(roomsRevenue, occupiedRooms);
   };
 
   return (
@@ -217,8 +99,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
             {/* Occupied Rooms */}
             <MetricRow
               label="Occupied Rooms"
-              historicalData={historicalYears.map(year => getHistoricalOccupiedRooms(year).toLocaleString())}
-              forecastData={forecastYears.map(year => getForecastOccupiedRooms(year).toLocaleString())}
+              historicalData={historicalYears.map(year => getHistoricalOccupiedRoomsForYear(year).toLocaleString())}
+              forecastData={forecastYears.map(year => getForecastOccupiedRoomsForYear(year).toLocaleString())}
             />
 
             {/* Rooms Revenue */}
@@ -228,152 +110,26 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               forecastData={forecastYears.map(year => formatCurrency(getForecastRoomsRevenue(year)))}
             />
 
-            {/* RevPAR Section Header */}
-            <MetricRow
-              label={<span className="font-bold text-gray-900">RevPAR</span>}
-              historicalData={historicalYears.map(() => "")}
-              forecastData={forecastYears.map(() => "")}
-            />
-
-            {/* Market RevPAR */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;Market (Hotel Horizons / LARC)</span>}
-              historicalData={historicalYears.map(year => {
-                const data = marketRevparData[year as keyof typeof marketRevparData];
-                return data ? `$${data}` : "-";
-              })}
-              forecastData={forecastYears.map(() => "-")}
-            />
-
-            {/* Market RevPAR YoY Growth */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Market RevPAR YoY Growth</span>}
-              historicalData={historicalYears.map((year, index) => 
-                index === 0 ? "-" : formatYoYWithColor(getMarketRevparYoY(year, index))
-              )}
-              forecastData={forecastYears.map(() => "-")}
-            />
-
-            {/* Comp Set RevPAR */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;Comp Set (STR / Trend Report)</span>}
-              historicalData={historicalYears.map(year => {
-                const data = compSetRevparData[year as keyof typeof compSetRevparData];
-                return data ? `$${data}` : "-";
-              })}
-              forecastData={forecastYears.map(() => "-")}
-            />
-
-            {/* Comp Set RevPAR YoY Growth */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comp Set RevPAR YoY Growth</span>}
-              historicalData={historicalYears.map((year, index) => 
-                index === 0 ? "-" : formatYoYWithColor(getCompSetRevparYoY(year, index))
-              )}
-              forecastData={forecastYears.map(() => "-")}
-            />
-
-            {/* Subject Property RevPAR */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;Subject Property RevPAR</span>}
-              historicalData={historicalYears.map(year => `$${historicalData.revpar[year].toFixed(2)}`)}
-              forecastData={forecastYears.map(year => `$${getForecastRevpar(year).toFixed(2)}`)}
-            />
-
-            {/* Subject Property RevPAR YoY Growth */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property RevPAR YoY Growth</span>}
-              historicalData={historicalYears.map((year, index) => 
-                index === 0 ? "-" : formatYoYWithColor(historicalData.revparYoY[year])
-              )}
-              forecastData={forecastYears.map(year => formatYoYWithColor(getForecastRevparYoY(year)))}
-            />
-
-            {/* RevPAR Growth Controls */}
-            <MetricRow
-              label={
-                <GrowthControls
-                  revparGrowthType={revparGrowthType}
-                  setRevparGrowthType={setRevparGrowthType}
-                  flatRevparGrowth={flatRevparGrowth}
-                  setFlatRevparGrowth={setFlatRevparGrowth}
-                  yearlyRevparGrowth={yearlyRevparGrowth}
-                  handleYearlyRevparChange={handleYearlyRevparChange}
-                  forecastYears={forecastYears}
-                />
-              }
-              historicalData={historicalYears.map((year, index) => 
-                index === 0 ? "-" : `${historicalData.revparYoY[year].toFixed(1)}%`
-              )}
-              forecastData={forecastYears.map(year => 
-                revparGrowthType === "yearly" ? "" : `${parseFloat(flatRevparGrowth).toFixed(1)}%`
-              )}
-              isGrowthRow={true}
+            {/* RevPAR Section */}
+            <RevPARSection
+              historicalYears={historicalYears}
+              forecastYears={forecastYears}
+              historicalData={historicalData}
               revparGrowthType={revparGrowthType}
+              setRevparGrowthType={setRevparGrowthType}
+              flatRevparGrowth={flatRevparGrowth}
+              setFlatRevparGrowth={setFlatRevparGrowth}
               yearlyRevparGrowth={yearlyRevparGrowth}
               handleYearlyRevparChange={handleYearlyRevparChange}
+              getForecastRevpar={getForecastRevpar}
+            />
+
+            {/* ADR Section */}
+            <ADRSection
+              historicalYears={historicalYears}
               forecastYears={forecastYears}
-            />
-
-            {/* ADR Section Header */}
-            <MetricRow
-              label={<span className="font-bold text-gray-900">ADR</span>}
-              historicalData={historicalYears.map(() => "")}
-              forecastData={forecastYears.map(() => "")}
-            />
-
-            {/* Market ADR */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;Market (Hotel Horizons / LARC)</span>}
-              historicalData={historicalYears.map(year => {
-                const data = marketADRData[year as keyof typeof marketADRData];
-                return data ? `$${data.toFixed(2)}` : "-";
-              })}
-              forecastData={forecastYears.map(() => "-")}
-            />
-
-            {/* Market ADR YoY Growth */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Market ADR YoY Growth</span>}
-              historicalData={historicalYears.map((year, index) => 
-                index === 0 ? "-" : formatYoYWithColor(getMarketADRYoY(year, index))
-              )}
-              forecastData={forecastYears.map(() => "-")}
-            />
-
-            {/* Comp Set ADR */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;Comp Set (STR / Trend Report)</span>}
-              historicalData={historicalYears.map(year => {
-                const data = compSetADRData[year as keyof typeof compSetADRData];
-                return data ? `$${data.toFixed(2)}` : "-";
-              })}
-              forecastData={forecastYears.map(() => "-")}
-            />
-
-            {/* Comp Set ADR YoY Growth */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comp Set ADR YoY Growth</span>}
-              historicalData={historicalYears.map((year, index) => 
-                index === 0 ? "-" : formatYoYWithColor(getCompSetADRYoY(year, index))
-              )}
-              forecastData={forecastYears.map(() => "-")}
-            />
-
-            {/* Subject Property ADR */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;Subject Property ADR</span>}
-              historicalData={historicalYears.map(year => `$${getHistoricalADR(year).toFixed(2)}`)}
-              forecastData={forecastYears.map(year => `$${getForecastADR(year).toFixed(2)}`)}
-            />
-
-            {/* Subject Property ADR YoY Growth */}
-            <MetricRow
-              label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</span>}
-              historicalData={historicalYears.map((year, index) => 
-                index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index))
-              )}
-              forecastData={forecastYears.map(year => formatYoYWithColor(getForecastADRYoY(year)))}
+              getHistoricalADR={getHistoricalADRForYear}
+              getForecastADR={getForecastADRForYear}
             />
           </TableBody>
         </Table>
