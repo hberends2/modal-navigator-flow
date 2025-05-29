@@ -64,6 +64,22 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     2024: 232
   };
 
+  // Sample market ADR data
+  const marketADRData = {
+    2021: 292.80,
+    2022: 306.11,
+    2023: 311.07,
+    2024: 326.10
+  };
+
+  // Sample comp set ADR data
+  const compSetADRData = {
+    2021: 265,
+    2022: 280,
+    2023: 285,
+    2024: 290
+  };
+
   // Calculate market RevPAR YoY growth
   const getMarketRevparYoY = (year: number, index: number) => {
     if (index === 0) return 0; // First year has no previous year
@@ -80,6 +96,24 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     const previousYear = historicalYears[index - 1];
     const previousRevpar = compSetRevparData[previousYear as keyof typeof compSetRevparData];
     return ((currentRevpar - previousRevpar) / previousRevpar) * 100;
+  };
+
+  // Calculate market ADR YoY growth
+  const getMarketADRYoY = (year: number, index: number) => {
+    if (index === 0) return 0; // First year has no previous year
+    const currentADR = marketADRData[year as keyof typeof marketADRData];
+    const previousYear = historicalYears[index - 1];
+    const previousADR = marketADRData[previousYear as keyof typeof marketADRData];
+    return ((currentADR - previousADR) / previousADR) * 100;
+  };
+
+  // Calculate comp set ADR YoY growth
+  const getCompSetADRYoY = (year: number, index: number) => {
+    if (index === 0) return 0; // First year has no previous year
+    const currentADR = compSetADRData[year as keyof typeof compSetADRData];
+    const previousYear = historicalYears[index - 1];
+    const previousADR = compSetADRData[previousYear as keyof typeof compSetADRData];
+    return ((currentADR - previousADR) / previousADR) * 100;
   };
 
   // Helper functions for new calculations
@@ -286,6 +320,44 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               label={<span className="font-bold text-gray-900">ADR</span>}
               historicalData={historicalYears.map(() => "")}
               forecastData={forecastYears.map(() => "")}
+            />
+
+            {/* Market ADR */}
+            <MetricRow
+              label={<span>&nbsp;&nbsp;&nbsp;Market (Hotel Horizons / LARC)</span>}
+              historicalData={historicalYears.map(year => {
+                const data = marketADRData[year as keyof typeof marketADRData];
+                return data ? `$${data.toFixed(2)}` : "-";
+              })}
+              forecastData={forecastYears.map(() => "-")}
+            />
+
+            {/* Market ADR YoY Growth */}
+            <MetricRow
+              label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Market ADR YoY Growth</span>}
+              historicalData={historicalYears.map((year, index) => 
+                index === 0 ? "-" : formatYoYWithColor(getMarketADRYoY(year, index))
+              )}
+              forecastData={forecastYears.map(() => "-")}
+            />
+
+            {/* Comp Set ADR */}
+            <MetricRow
+              label={<span>&nbsp;&nbsp;&nbsp;Comp Set (STR / Trend Report)</span>}
+              historicalData={historicalYears.map(year => {
+                const data = compSetADRData[year as keyof typeof compSetADRData];
+                return data ? `$${data.toFixed(2)}` : "-";
+              })}
+              forecastData={forecastYears.map(() => "-")}
+            />
+
+            {/* Comp Set ADR YoY Growth */}
+            <MetricRow
+              label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comp Set ADR YoY Growth</span>}
+              historicalData={historicalYears.map((year, index) => 
+                index === 0 ? "-" : formatYoYWithColor(getCompSetADRYoY(year, index))
+              )}
+              forecastData={forecastYears.map(() => "-")}
             />
 
             {/* Subject Property ADR */}
