@@ -32,7 +32,7 @@ const OccupancyChart: React.FC<OccupancyChartProps> = ({
       subject: subjectData ? subjectData.occupancy * 100 : null,
       market: marketDataPoint ? marketDataPoint.occupancy * 100 : null,
       compSet: compSetDataPoint ? compSetDataPoint.occupancy * 100 : null,
-      forecast: null // No forecast for historical years
+      forecast: year === 2024 ? (subjectData ? subjectData.occupancy * 100 : null) : null // Connect 2024 to forecast
     });
   });
   
