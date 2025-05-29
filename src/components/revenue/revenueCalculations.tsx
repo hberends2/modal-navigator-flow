@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { marketRevparData, compSetRevparData, marketADRData, compSetADRData } from './revenueData';
 
 export const getMarketRevparYoY = (year: number, index: number, historicalYears: number[]) => {
