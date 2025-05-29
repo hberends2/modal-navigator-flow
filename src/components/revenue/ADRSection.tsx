@@ -17,6 +17,12 @@ const ADRSection: React.FC<ADRSectionProps> = ({
   getHistoricalADR,
   getForecastADR
 }) => {
+  // Helper function to calculate index percentages
+  const calculateIndex = (numerator: number, denominator: number): string => {
+    if (denominator === 0) return "0.0%";
+    return `${((numerator / denominator) * 100).toFixed(1)}%`;
+  };
+
   return (
     <>
       {/* ADR Section Header */}
@@ -78,6 +84,40 @@ const ADRSection: React.FC<ADRSectionProps> = ({
           index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index, historicalYears, getHistoricalADR))
         )}
         forecastData={forecastYears.map(year => formatYoYWithColor(getForecastADRYoY(year, forecastYears, getForecastADR, getHistoricalADR(2024))))}
+      />
+
+      {/* Index Calculations */}
+      {/* Comp Set Index to Market */}
+      <MetricRow
+        label={<span className="italic">&nbsp;&nbsp;&nbsp;Comp Set Index to Market</span>}
+        historicalData={historicalYears.map(year => {
+          const market = marketADRData[year as keyof typeof marketADRData];
+          const compSet = compSetADRData[year as keyof typeof compSetADRData];
+          return market && compSet ? calculateIndex(compSet, market) : "-";
+        })}
+        forecastData={forecastYears.map(() => "0.0%")}
+      />
+
+      {/* Property Index to Comp Set */}
+      <MetricRow
+        label={<span className="italic">&nbsp;&nbsp;&nbsp;Property Index to Comp Set</span>}
+        historicalData={historicalYears.map(year => {
+          const compSet = compSetADRData[year as keyof typeof compSetADRData];
+          const property = getHistoricalADR(year);
+          return compSet && property ? calculateIndex(property, compSet) : "-";
+        })}
+        forecastData={forecastYears.map(() => "0.0%")}
+      />
+
+      {/* Property Index to Market */}
+      <MetricRow
+        label={<span className="italic">&nbsp;&nbsp;&nbsp;Property Index to Market</span>}
+        historicalData={historicalYears.map(year => {
+          const market = marketADRData[year as keyof typeof marketADRData];
+          const property = getHistoricalADR(year);
+          return market && property ? calculateIndex(property, market) : "-";
+        })}
+        forecastData={forecastYears.map(() => "0.0%")}
       />
     </>
   );

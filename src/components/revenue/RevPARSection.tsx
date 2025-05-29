@@ -33,6 +33,12 @@ const RevPARSection: React.FC<RevPARSectionProps> = ({
   handleYearlyRevparChange,
   getForecastRevpar
 }) => {
+  // Helper function to calculate index percentages
+  const calculateIndex = (numerator: number, denominator: number): string => {
+    if (denominator === 0) return "0.0%";
+    return `${((numerator / denominator) * 100).toFixed(1)}%`;
+  };
+
   return (
     <>
       {/* RevPAR Section Header */}
@@ -120,6 +126,40 @@ const RevPARSection: React.FC<RevPARSectionProps> = ({
         yearlyRevparGrowth={yearlyRevparGrowth}
         handleYearlyRevparChange={handleYearlyRevparChange}
         forecastYears={forecastYears}
+      />
+
+      {/* Index Calculations */}
+      {/* Comp Set Index to Market */}
+      <MetricRow
+        label={<span className="italic">&nbsp;&nbsp;&nbsp;Comp Set Index to Market</span>}
+        historicalData={historicalYears.map(year => {
+          const market = marketRevparData[year as keyof typeof marketRevparData];
+          const compSet = compSetRevparData[year as keyof typeof compSetRevparData];
+          return market && compSet ? calculateIndex(compSet, market) : "-";
+        })}
+        forecastData={forecastYears.map(() => "0.0%")}
+      />
+
+      {/* Property Index to Comp Set */}
+      <MetricRow
+        label={<span className="italic">&nbsp;&nbsp;&nbsp;Property Index to Comp Set</span>}
+        historicalData={historicalYears.map(year => {
+          const compSet = compSetRevparData[year as keyof typeof compSetRevparData];
+          const property = historicalData.revpar[year];
+          return compSet && property ? calculateIndex(property, compSet) : "-";
+        })}
+        forecastData={forecastYears.map(() => "0.0%")}
+      />
+
+      {/* Property Index to Market */}
+      <MetricRow
+        label={<span className="italic">&nbsp;&nbsp;&nbsp;Property Index to Market</span>}
+        historicalData={historicalYears.map(year => {
+          const market = marketRevparData[year as keyof typeof marketRevparData];
+          const property = historicalData.revpar[year];
+          return market && property ? calculateIndex(property, market) : "-";
+        })}
+        forecastData={forecastYears.map(() => "0.0%")}
       />
     </>
   );
