@@ -47,6 +47,10 @@ const OccupancyChart: React.FC<OccupancyChartProps> = ({
     });
   });
 
+  console.log("Chart data:", chartData);
+  console.log("Market data passed to chart:", marketData);
+  console.log("Comp set data passed to chart:", compSetData);
+
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -64,7 +68,7 @@ const OccupancyChart: React.FC<OccupancyChartProps> = ({
   };
 
   return (
-    <div className="w-full h-80 bg-white p-4 rounded-lg border">
+    <div className="w-full h-96 bg-white p-4 rounded-lg border">
       <h3 className="text-lg font-semibold mb-4 text-gray-700 text-center">Occupancy Trends</h3>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
