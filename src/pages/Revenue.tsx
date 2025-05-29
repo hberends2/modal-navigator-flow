@@ -1,10 +1,11 @@
-
 import React, { useState } from "react";
 import { Button } from "../components/ui/button";
 import RevenueTable from "../components/revenue/RevenueTable";
 import Sidebar from "../components/Sidebar";
 
 const Revenue = () => {
+  console.log('Revenue component rendering');
+  
   // State for growth rate settings
   const [revparGrowthType, setRevparGrowthType] = useState<string>("flat");
   const [flatRevparGrowth, setFlatRevparGrowth] = useState<string>("3.0");
@@ -30,10 +31,14 @@ const Revenue = () => {
   const forecastYears = [2025, 2026, 2027, 2028, 2029];
   const historicalYears = [2021, 2022, 2023, 2024];
   
+  console.log('Revenue data setup:', { roomsKeys, forecastYears, historicalYears });
+  
   // Function definitions (moved before usage)
   const getAvailableRooms = (year: number) => {
     const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-    return roomsKeys * (isLeapYear ? 366 : 365);
+    const result = roomsKeys * (isLeapYear ? 366 : 365);
+    console.log('Available rooms for year', year, ':', result);
+    return result;
   };
   
   // Historical data (from mockup)
@@ -54,50 +59,79 @@ const Revenue = () => {
     }
   };
 
+  console.log('Initial historical data:', historicalData);
+
   // Calculate historical RevPAR
-  historicalYears.forEach(year => {
-    const roomsRevenue = historicalData.roomsRevenue[year];
-    const availableRooms = getAvailableRooms(year);
-    historicalData.revpar[year] = roomsRevenue / availableRooms;
-  });
+  try {
+    historicalYears.forEach(year => {
+      const roomsRevenue = historicalData.roomsRevenue[year];
+      const availableRooms = getAvailableRooms(year);
+      historicalData.revpar[year] = roomsRevenue / availableRooms;
+      console.log(`RevPAR for ${year}:`, historicalData.revpar[year]);
+    });
+  } catch (error) {
+    console.error('Error calculating historical RevPAR:', error);
+  }
 
   // Calculate historical RevPAR YoY growth (skip first year)
-  historicalYears.forEach((year, index) => {
-    if (index === 0) {
-      // First year - no previous year to compare
-      historicalData.revparYoY[year] = 0; // or could be null/undefined
-    } else {
-      const currentRevpar = historicalData.revpar[year];
-      const previousYear = historicalYears[index - 1];
-      const previousRevpar = historicalData.revpar[previousYear];
-      historicalData.revparYoY[year] = ((currentRevpar - previousRevpar) / previousRevpar) * 100;
-    }
-  });
+  try {
+    historicalYears.forEach((year, index) => {
+      if (index === 0) {
+        // First year - no previous year to compare
+        historicalData.revparYoY[year] = 0; // or could be null/undefined
+      } else {
+        const currentRevpar = historicalData.revpar[year];
+        const previousYear = historicalYears[index - 1];
+        const previousRevpar = historicalData.revpar[previousYear];
+        historicalData.revparYoY[year] = ((currentRevpar - previousRevpar) / previousRevpar) * 100;
+        console.log(`RevPAR YoY for ${year}:`, historicalData.revparYoY[year]);
+      }
+    });
+  } catch (error) {
+    console.error('Error calculating historical RevPAR YoY:', error);
+  }
 
   const getForecastRevpar = (year: number) => {
-    const yearIndex = forecastYears.indexOf(year);
-    if (yearIndex === 0) {
-      // First forecast year - base on 2024 data
-      const baseRevpar = historicalData.revpar[2024];
-      const growthRate = revparGrowthType === "flat" 
-        ? parseFloat(flatRevparGrowth) || 0
-        : parseFloat(yearlyRevparGrowth[year]) || 0;
-      return baseRevpar * (1 + growthRate / 100);
-    } else {
-      // Subsequent years - base on previous forecast year
-      const prevYear = forecastYears[yearIndex - 1];
-      const prevRevpar = getForecastRevpar(prevYear);
-      const growthRate = revparGrowthType === "flat"
-        ? parseFloat(flatRevparGrowth) || 0
-        : parseFloat(yearlyRevparGrowth[year]) || 0;
-      return prevRevpar * (1 + growthRate / 100);
+    try {
+      console.log('getForecastRevpar called for year:', year);
+      const yearIndex = forecastYears.indexOf(year);
+      if (yearIndex === 0) {
+        // First forecast year - base on 2024 data
+        const baseRevpar = historicalData.revpar[2024];
+        const growthRate = revparGrowthType === "flat" 
+          ? parseFloat(flatRevparGrowth) || 0
+          : parseFloat(yearlyRevparGrowth[year]) || 0;
+        const result = baseRevpar * (1 + growthRate / 100);
+        console.log('Forecast RevPAR (first year):', { year, baseRevpar, growthRate, result });
+        return result;
+      } else {
+        // Subsequent years - base on previous forecast year
+        const prevYear = forecastYears[yearIndex - 1];
+        const prevRevpar = getForecastRevpar(prevYear);
+        const growthRate = revparGrowthType === "flat"
+          ? parseFloat(flatRevparGrowth) || 0
+          : parseFloat(yearlyRevparGrowth[year]) || 0;
+        const result = prevRevpar * (1 + growthRate / 100);
+        console.log('Forecast RevPAR (subsequent year):', { year, prevYear, prevRevpar, growthRate, result });
+        return result;
+      }
+    } catch (error) {
+      console.error('Error in getForecastRevpar:', error);
+      return 0;
     }
   };
 
   const getForecastRoomsRevenue = (year: number) => {
-    const revpar = getForecastRevpar(year);
-    const availableRooms = getAvailableRooms(year);
-    return revpar * availableRooms;
+    try {
+      const revpar = getForecastRevpar(year);
+      const availableRooms = getAvailableRooms(year);
+      const result = revpar * availableRooms;
+      console.log('Forecast rooms revenue:', { year, revpar, availableRooms, result });
+      return result;
+    } catch (error) {
+      console.error('Error in getForecastRoomsRevenue:', error);
+      return 0;
+    }
   };
 
   const handleYearlyRevparChange = (year: number, value: string) => {
@@ -143,6 +177,8 @@ const Revenue = () => {
     console.log("Modal clicked:", modalName);
     // TODO: Implement modal functionality
   };
+
+  console.log('About to render Revenue component');
 
   return (
     <div className="flex min-h-screen bg-gray-50">

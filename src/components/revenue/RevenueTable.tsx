@@ -51,91 +51,137 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   formatCurrency,
   formatPercent
 }) => {
+  console.log('RevenueTable rendering with props:', {
+    roomsKeys,
+    historicalYears,
+    forecastYears,
+    revparGrowthType
+  });
+
   // Helper functions for calculations
   const getHistoricalOccupiedRoomsForYear = (year: number) => {
-    return getHistoricalOccupiedRooms(year, getAvailableRooms, historicalData.occupancy[year]);
+    try {
+      const result = getHistoricalOccupiedRooms(year, getAvailableRooms, historicalData.occupancy[year] || 0);
+      console.log('Historical occupied rooms for', year, ':', result);
+      return result;
+    } catch (error) {
+      console.error('Error calculating historical occupied rooms:', error);
+      return 0;
+    }
   };
 
   const getForecastOccupiedRoomsForYear = (year: number) => {
-    return getForecastOccupiedRooms(year, getAvailableRooms, occupancyForecast[year]);
+    try {
+      const result = getForecastOccupiedRooms(year, getAvailableRooms, occupancyForecast[year] || "0");
+      console.log('Forecast occupied rooms for', year, ':', result);
+      return result;
+    } catch (error) {
+      console.error('Error calculating forecast occupied rooms:', error);
+      return 0;
+    }
   };
 
   const getHistoricalADRForYear = (year: number) => {
-    const roomsRevenue = historicalData.roomsRevenue[year];
-    const occupiedRooms = getHistoricalOccupiedRoomsForYear(year);
-    return getHistoricalADR(year, roomsRevenue, occupiedRooms);
+    try {
+      const roomsRevenue = historicalData.roomsRevenue[year] || 0;
+      const occupiedRooms = getHistoricalOccupiedRoomsForYear(year);
+      const result = getHistoricalADR(year, roomsRevenue, occupiedRooms);
+      console.log('Historical ADR for', year, ':', result);
+      return result;
+    } catch (error) {
+      console.error('Error calculating historical ADR:', error);
+      return 0;
+    }
   };
 
   const getForecastADRForYear = (year: number) => {
-    const roomsRevenue = getForecastRoomsRevenue(year);
-    const occupiedRooms = getForecastOccupiedRoomsForYear(year);
-    return getForecastADR(roomsRevenue, occupiedRooms);
+    try {
+      const roomsRevenue = getForecastRoomsRevenue(year);
+      const occupiedRooms = getForecastOccupiedRoomsForYear(year);
+      const result = getForecastADR(roomsRevenue, occupiedRooms);
+      console.log('Forecast ADR for', year, ':', result);
+      return result;
+    } catch (error) {
+      console.error('Error calculating forecast ADR:', error);
+      return 0;
+    }
   };
 
-  return (
-    <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-      <div className="overflow-x-auto">
-        <Table>
-          <RevenueTableHeaders />
-          <TableBody>
-            {/* Rooms/Keys */}
-            <MetricRow
-              label="Rooms/Keys"
-              historicalData={historicalYears.map(() => roomsKeys)}
-              forecastData={forecastYears.map(() => roomsKeys)}
-            />
+  try {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <div className="overflow-x-auto">
+          <Table>
+            <RevenueTableHeaders />
+            <TableBody>
+              {/* Rooms/Keys */}
+              <MetricRow
+                label="Rooms/Keys"
+                historicalData={historicalYears.map(() => roomsKeys)}
+                forecastData={forecastYears.map(() => roomsKeys)}
+              />
 
-            {/* Occupancy - moved to be directly below Rooms/Keys */}
-            <MetricRow
-              label="Occupancy"
-              historicalData={historicalYears.map(year => formatPercent(historicalData.occupancy[year]))}
-              forecastData={forecastYears.map(() => "")}
-              isEditable={true}
-              editableData={occupancyForecast}
-              onEditableChange={handleOccupancyChange}
-              forecastYears={forecastYears}
-            />
+              {/* Occupancy - moved to be directly below Rooms/Keys */}
+              <MetricRow
+                label="Occupancy"
+                historicalData={historicalYears.map(year => formatPercent(historicalData.occupancy[year] || 0))}
+                forecastData={forecastYears.map(() => "")}
+                isEditable={true}
+                editableData={occupancyForecast}
+                onEditableChange={handleOccupancyChange}
+                forecastYears={forecastYears}
+              />
 
-            {/* Occupied Rooms */}
-            <MetricRow
-              label="Occupied Rooms"
-              historicalData={historicalYears.map(year => getHistoricalOccupiedRoomsForYear(year).toLocaleString())}
-              forecastData={forecastYears.map(year => getForecastOccupiedRoomsForYear(year).toLocaleString())}
-            />
+              {/* Occupied Rooms */}
+              <MetricRow
+                label="Occupied Rooms"
+                historicalData={historicalYears.map(year => getHistoricalOccupiedRoomsForYear(year).toLocaleString())}
+                forecastData={forecastYears.map(year => getForecastOccupiedRoomsForYear(year).toLocaleString())}
+              />
 
-            {/* Rooms Revenue */}
-            <MetricRow
-              label="Rooms Revenue"
-              historicalData={historicalYears.map(year => formatCurrency(historicalData.roomsRevenue[year]))}
-              forecastData={forecastYears.map(year => formatCurrency(getForecastRoomsRevenue(year)))}
-            />
+              {/* Rooms Revenue */}
+              <MetricRow
+                label="Rooms Revenue"
+                historicalData={historicalYears.map(year => formatCurrency(historicalData.roomsRevenue[year] || 0))}
+                forecastData={forecastYears.map(year => formatCurrency(getForecastRoomsRevenue(year)))}
+              />
 
-            {/* RevPAR Section */}
-            <RevPARSection
-              historicalYears={historicalYears}
-              forecastYears={forecastYears}
-              historicalData={historicalData}
-              revparGrowthType={revparGrowthType}
-              setRevparGrowthType={setRevparGrowthType}
-              flatRevparGrowth={flatRevparGrowth}
-              setFlatRevparGrowth={setFlatRevparGrowth}
-              yearlyRevparGrowth={yearlyRevparGrowth}
-              handleYearlyRevparChange={handleYearlyRevparChange}
-              getForecastRevpar={getForecastRevpar}
-            />
+              {/* RevPAR Section */}
+              <RevPARSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                revparGrowthType={revparGrowthType}
+                setRevparGrowthType={setRevparGrowthType}
+                flatRevparGrowth={flatRevparGrowth}
+                setFlatRevparGrowth={setFlatRevparGrowth}
+                yearlyRevparGrowth={yearlyRevparGrowth}
+                handleYearlyRevparChange={handleYearlyRevparChange}
+                getForecastRevpar={getForecastRevpar}
+              />
 
-            {/* ADR Section */}
-            <ADRSection
-              historicalYears={historicalYears}
-              forecastYears={forecastYears}
-              getHistoricalADR={getHistoricalADRForYear}
-              getForecastADR={getForecastADRForYear}
-            />
-          </TableBody>
-        </Table>
+              {/* ADR Section */}
+              <ADRSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                getHistoricalADR={getHistoricalADRForYear}
+                getForecastADR={getForecastADRForYear}
+              />
+            </TableBody>
+          </Table>
+        </div>
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    console.error('Error rendering RevenueTable:', error);
+    return (
+      <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <div className="text-red-600">
+          Error loading revenue table. Please check the console for details.
+        </div>
+      </div>
+    );
+  }
 };
 
 export default RevenueTable;
