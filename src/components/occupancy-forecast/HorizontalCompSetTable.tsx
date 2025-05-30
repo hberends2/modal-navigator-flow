@@ -1,92 +1,72 @@
 
 import React from "react";
+import { CompSetData } from "./types";
 import { formatPercent } from "./utils";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../ui/table";
-import { compSetOccupancyData } from "../revenue/revenueData";
 
 interface HorizontalCompSetTableProps {
-  historicalYears: number[];
+  compSetData: CompSetData[];
+  avgCompSetOccupancy: number;
+  avgCompSetGrowthRate: number;
 }
 
-const HorizontalCompSetTable: React.FC<HorizontalCompSetTableProps> = ({ historicalYears }) => {
-  // Calculate average from historical data
-  const avgOccupancy = historicalYears.reduce((sum, year) => {
-    const data = compSetOccupancyData[year as keyof typeof compSetOccupancyData];
-    return sum + (data || 0);
-  }, 0) / historicalYears.length;
-
-  // Calculate average YoY growth (excluding first year)
-  const avgYoYGrowth = historicalYears.slice(1).reduce((sum, year, index) => {
-    const currentYear = historicalYears[index + 1];
-    const prevYear = historicalYears[index];
-    const currentOccupancy = compSetOccupancyData[currentYear as keyof typeof compSetOccupancyData] || 0;
-    const prevOccupancy = compSetOccupancyData[prevYear as keyof typeof compSetOccupancyData] || 0;
-    const yoyGrowth = prevOccupancy ? ((currentOccupancy - prevOccupancy) / prevOccupancy) * 100 : 0;
-    return sum + yoyGrowth;
-  }, 0) / (historicalYears.length - 1);
-
+const HorizontalCompSetTable: React.FC<HorizontalCompSetTableProps> = ({
+  compSetData,
+  avgCompSetOccupancy,
+  avgCompSetGrowthRate
+}) => {
   return (
-    <div className="w-full">
+    <div className="w-full max-w-md">
       <h3 className="text-lg font-semibold mb-3 text-gray-700">Comp Set Analysis</h3>
       <div className="bg-gray-50 p-2 rounded-lg">
         <Table>
           <TableHeader>
             {/* Period Headers */}
             <TableRow>
-              <TableHead className="w-20 px-2"></TableHead>
-              <TableHead className="text-center bg-blue-50 px-1" colSpan={historicalYears.length}>Historical</TableHead>
+              <TableHead className="w-24 px-1"></TableHead>
+              <TableHead className="text-center bg-blue-50 px-1" colSpan={3}>Historical</TableHead>
               <TableHead className="text-center bg-orange-50 px-1">Average</TableHead>
             </TableRow>
             {/* Year Headers */}
             <TableRow>
-              <TableHead className="w-20 px-2 text-xs">Metric</TableHead>
-              {historicalYears.map(year => (
-                <TableHead key={year} className="text-center bg-blue-50 px-1 text-xs w-16">{year}</TableHead>
-              ))}
-              <TableHead className="text-center bg-orange-50 px-1 text-xs w-16">Avg</TableHead>
+              <TableHead className="w-24 px-1">Metric</TableHead>
+              <TableHead className="text-center bg-blue-50 px-1 text-xs">2022</TableHead>
+              <TableHead className="text-center bg-blue-50 px-1 text-xs">2023</TableHead>
+              <TableHead className="text-center bg-blue-50 px-1 text-xs">2024</TableHead>
+              <TableHead className="text-center bg-orange-50 px-1 text-xs">Avg</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {/* Occupancy Row */}
             <TableRow>
-              <TableCell className="px-2 py-1 text-xs font-medium">Occupancy</TableCell>
-              {historicalYears.map((year) => {
-                const occupancy = compSetOccupancyData[year as keyof typeof compSetOccupancyData] || 0;
-                return (
-                  <TableCell key={year} className="px-1 py-1 text-xs text-center bg-blue-25 w-16">
-                    <span className="text-gray-700 font-medium">
-                      {formatPercent(occupancy / 100)}
-                    </span>
-                  </TableCell>
-                );
-              })}
-              <TableCell className="px-1 py-1 text-xs text-center bg-orange-25 w-16">
+              <TableCell className="p-1 text-xs font-medium">Occupancy</TableCell>
+              {compSetData.map((data) => (
+                <TableCell key={data.year} className="p-1 text-xs text-center bg-blue-25">
+                  <span className="text-gray-700 font-medium">
+                    {formatPercent(data.occupancy)}
+                  </span>
+                </TableCell>
+              ))}
+              <TableCell className="p-1 text-xs text-center bg-orange-25">
                 <span className="text-gray-700 font-medium">
-                  {formatPercent(avgOccupancy / 100)}
+                  {formatPercent(avgCompSetOccupancy)}
                 </span>
               </TableCell>
             </TableRow>
             
             {/* YoY Growth Row */}
             <TableRow>
-              <TableCell className="px-2 py-1 text-xs font-medium">YoY</TableCell>
-              {historicalYears.map((year, index) => {
-                const prevYear = index > 0 ? historicalYears[index - 1] : null;
-                const currentOccupancy = compSetOccupancyData[year as keyof typeof compSetOccupancyData] || 0;
-                const prevOccupancy = prevYear ? compSetOccupancyData[prevYear as keyof typeof compSetOccupancyData] : null;
-                const yoyGrowth = prevOccupancy ? ((currentOccupancy - prevOccupancy) / prevOccupancy) * 100 : null;
-                
-                return (
-                  <TableCell key={`yoy-${year}`} className="px-1 py-1 text-xs text-center bg-blue-25 w-16">
-                    <span className="text-gray-700 font-medium">
-                      {yoyGrowth !== null ? `${yoyGrowth.toFixed(1)}%` : '-'}
-                    </span>
-                  </TableCell>
-                );
-              })}
-              <TableCell className="px-1 py-1 text-xs text-center bg-orange-25 w-16">
+              <TableCell className="p-1 text-xs font-medium">YoY</TableCell>
+              {compSetData.map((data) => (
+                <TableCell key={`yoy-${data.year}`} className="p-1 text-xs text-center bg-blue-25">
+                  <span className="text-gray-700 font-medium">
+                    {data.year === 2022 ? '-' : `${data.growthRate.toFixed(1)}%`}
+                  </span>
+                </TableCell>
+              ))}
+              <TableCell className="p-1 text-xs text-center bg-orange-25">
                 <span className="text-gray-700 font-medium">
-                  {avgYoYGrowth.toFixed(1)}%
+                  {avgCompSetGrowthRate.toFixed(1)}%
                 </span>
               </TableCell>
             </TableRow>

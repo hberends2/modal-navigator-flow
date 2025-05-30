@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import { Button } from "../components/ui/button";
 import RevenueTable from "../components/revenue/RevenueTable";
 import Sidebar from "../components/Sidebar";
-import { useRevenueData } from "../contexts/RevenueDataContext";
-import { useDatabase } from "../hooks/useDatabase";
 
 const Revenue = () => {
   console.log('Revenue component rendering');
@@ -27,9 +26,6 @@ const Revenue = () => {
     2028: "79.0",
     2029: "80.0"
   });
-
-  const { setRevenueData } = useRevenueData();
-  const { saveOccupancyData } = useDatabase();
 
   // Constants
   const roomsKeys = 108;
@@ -96,18 +92,6 @@ const Revenue = () => {
     console.error('Error calculating historical RevPAR YoY:', error);
   }
 
-  // Share data with context
-  useEffect(() => {
-    setRevenueData({
-      roomsKeys,
-      historicalYears,
-      forecastYears,
-      historicalData,
-      occupancyForecast,
-      getAvailableRooms
-    });
-  }, [roomsKeys, historicalData, occupancyForecast, setRevenueData]);
-
   const getForecastRevpar = (year: number) => {
     try {
       console.log('getForecastRevpar called for year:', year);
@@ -167,27 +151,14 @@ const Revenue = () => {
     }));
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     console.log("Saving revenue data:", {
       revparGrowthType,
       flatRevparGrowth,
       yearlyRevparGrowth,
       occupancyForecast
     });
-    
-    // Save to database
-    const revenueDataToSave = {
-      roomsKeys,
-      historicalYears,
-      forecastYears,
-      historicalData,
-      occupancyForecast,
-      revparGrowthType,
-      flatRevparGrowth,
-      yearlyRevparGrowth
-    };
-    
-    await saveOccupancyData('default-property', revenueDataToSave);
+    // TODO: Implement save functionality
   };
 
   const formatCurrency = (value: number) => {
