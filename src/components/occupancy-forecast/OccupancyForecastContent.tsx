@@ -74,7 +74,7 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
         />
       </div>
 
-      {/* Subject Property Section */}
+      {/* Subject Property Section - Now using the original format */}
       <div className="w-full">
         <ReportSubjectPropertyTable />
       </div>
