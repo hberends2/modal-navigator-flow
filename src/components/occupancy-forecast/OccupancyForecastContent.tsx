@@ -7,6 +7,7 @@ import OccupancyChart from "./OccupancyChart";
 import { Property } from "../../types/PropertyTypes";
 import { useRevenueData } from "../../contexts/RevenueDataContext";
 import { marketOccupancyData, compSetOccupancyData } from "../revenue/revenueData";
+import { getLocalData, STORAGE_KEYS } from "../../hooks/database/supabaseClient";
 
 interface OccupancyForecastContentProps {
   property?: Property | null;
@@ -17,12 +18,38 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
 }) => {
   const { revenueData } = useRevenueData();
 
-  // Default historical years if no revenue data
-  const historicalYears = revenueData?.historicalYears || [2021, 2022, 2023, 2024];
+  // Load data from database if context is empty
+  const loadedData = React.useMemo(() => {
+    if (revenueData) return revenueData;
+    
+    const allOccupancyData = getLocalData<Record<string, any>>(STORAGE_KEYS.OCCUPANCY_DATA, {});
+    const savedData = allOccupancyData['default-property'];
+    
+    if (savedData) {
+      const getAvailableRooms = (year: number) => {
+        const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+        return savedData.roomsKeys * (isLeapYear ? 366 : 365);
+      };
+      
+      return {
+        roomsKeys: savedData.roomsKeys,
+        historicalYears: savedData.historicalYears,
+        forecastYears: savedData.forecastYears,
+        historicalData: savedData.historicalData,
+        occupancyForecast: savedData.occupancyForecast,
+        getAvailableRooms
+      };
+    }
+    
+    return null;
+  }, [revenueData]);
 
-  // Create chart data from revenue data if available
+  // Default historical years if no data
+  const historicalYears = loadedData?.historicalYears || [2021, 2022, 2023, 2024];
+
+  // Create chart data from loaded data
   const getChartData = () => {
-    if (!revenueData) {
+    if (!loadedData) {
       return {
         historicalData: [],
         marketData: [],
@@ -31,26 +58,54 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
       };
     }
 
-    const { historicalYears, forecastYears, historicalData, occupancyForecast } = revenueData;
+    const { historicalYears, forecastYears, historicalData, occupancyForecast } = loadedData;
 
     // Convert historical data to chart format
     const historicalChartData = historicalYears.map(year => ({
       year,
       occupancy: (historicalData.occupancy[year] || 0) / 100,
-      rooms: property?.rooms || 108
+      rooms: property?.rooms || loadedData.roomsKeys || 108
     }));
 
-    // Convert market data to chart format
-    const marketChartData = historicalYears.map(year => ({
-      year,
-      occupancy: (marketOccupancyData[year as keyof typeof marketOccupancyData] || 0) / 100
-    }));
+    // Convert market data to chart format with growth rates
+    const marketChartData = historicalYears.map((year, index) => {
+      const occupancy = (marketOccupancyData[year as keyof typeof marketOccupancyData] || 0) / 100;
+      let growthRate = 0;
+      
+      if (index > 0) {
+        const prevYear = historicalYears[index - 1];
+        const prevOccupancy = (marketOccupancyData[prevYear as keyof typeof marketOccupancyData] || 0) / 100;
+        if (prevOccupancy > 0) {
+          growthRate = ((occupancy - prevOccupancy) / prevOccupancy) * 100;
+        }
+      }
+      
+      return {
+        year,
+        occupancy,
+        growthRate
+      };
+    });
 
-    // Convert comp set data to chart format
-    const compSetChartData = historicalYears.map(year => ({
-      year,
-      occupancy: (compSetOccupancyData[year as keyof typeof compSetOccupancyData] || 0) / 100
-    }));
+    // Convert comp set data to chart format with growth rates
+    const compSetChartData = historicalYears.map((year, index) => {
+      const occupancy = (compSetOccupancyData[year as keyof typeof compSetOccupancyData] || 0) / 100;
+      let growthRate = 0;
+      
+      if (index > 0) {
+        const prevYear = historicalYears[index - 1];
+        const prevOccupancy = (compSetOccupancyData[prevYear as keyof typeof compSetOccupancyData] || 0) / 100;
+        if (prevOccupancy > 0) {
+          growthRate = ((occupancy - prevOccupancy) / prevOccupancy) * 100;
+        }
+      }
+      
+      return {
+        year,
+        occupancy,
+        growthRate
+      };
+    });
 
     // Convert forecast data to chart format
     const forecastChartData = forecastYears.map(year => ({
