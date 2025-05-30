@@ -1,8 +1,8 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import RevenueTable from "../components/revenue/RevenueTable";
 import Sidebar from "../components/Sidebar";
+import { useRevenueData } from "../contexts/RevenueDataContext";
 
 const Revenue = () => {
   console.log('Revenue component rendering');
@@ -26,6 +26,8 @@ const Revenue = () => {
     2028: "79.0",
     2029: "80.0"
   });
+
+  const { setRevenueData } = useRevenueData();
 
   // Constants
   const roomsKeys = 108;
@@ -91,6 +93,18 @@ const Revenue = () => {
   } catch (error) {
     console.error('Error calculating historical RevPAR YoY:', error);
   }
+
+  // Share data with context
+  useEffect(() => {
+    setRevenueData({
+      roomsKeys,
+      historicalYears,
+      forecastYears,
+      historicalData,
+      occupancyForecast,
+      getAvailableRooms
+    });
+  }, [roomsKeys, historicalData, occupancyForecast, setRevenueData]);
 
   const getForecastRevpar = (year: number) => {
     try {
