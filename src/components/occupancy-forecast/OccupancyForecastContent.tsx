@@ -1,7 +1,7 @@
 
 import React from "react";
-import ReportMarketTable from "./ReportMarketTable";
-import ReportCompSetTable from "./ReportCompSetTable";
+import HorizontalMarketTable from "./HorizontalMarketTable";
+import HorizontalCompSetTable from "./HorizontalCompSetTable";
 import ReportSubjectPropertyTable from "./ReportSubjectPropertyTable";
 import OccupancyChart from "./OccupancyChart";
 import { Property } from "../../types/PropertyTypes";
@@ -57,33 +57,28 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
   const chartData = getChartData();
 
   return (
-    <>
-      {/* Top Section: Market Analysis, Comp Set Analysis, and Chart */}
-      <div className="mb-6 flex gap-6">
-        <div className="flex flex-col gap-6">
-          {/* Market Section */}
-          <ReportMarketTable historicalYears={historicalYears} />
+    <div className="space-y-6">
+      {/* Top Section: Market Analysis and Comp Set Analysis tables side by side */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <HorizontalMarketTable historicalYears={historicalYears} />
+        <HorizontalCompSetTable historicalYears={historicalYears} />
+      </div>
 
-          {/* Comp Set Section */}
-          <ReportCompSetTable historicalYears={historicalYears} />
-        </div>
-
-        {/* Chart Section */}
-        <div className="flex-1">
-          <OccupancyChart
-            historicalData={chartData.historicalData}
-            marketData={chartData.marketData}
-            compSetData={chartData.compSetData}
-            forecastData={chartData.forecastData}
-          />
-        </div>
+      {/* Chart Section */}
+      <div className="w-full">
+        <OccupancyChart
+          historicalData={chartData.historicalData}
+          marketData={chartData.marketData}
+          compSetData={chartData.compSetData}
+          forecastData={chartData.forecastData}
+        />
       </div>
 
       {/* Subject Property Section */}
-      <div className="mb-6">
+      <div className="w-full">
         <ReportSubjectPropertyTable />
       </div>
-    </>
+    </div>
   );
 };
 

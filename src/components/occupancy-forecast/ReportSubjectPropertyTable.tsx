@@ -10,7 +10,7 @@ const ReportSubjectPropertyTable: React.FC = () => {
   if (!revenueData) {
     return (
       <div className="w-full">
-        <h3 className="text-lg font-semibold mb-2 text-gray-700 text-center">Subject Property</h3>
+        <h3 className="text-lg font-semibold mb-3 text-gray-700">Subject Property</h3>
         <div className="bg-gray-50 p-2 rounded-lg">
           <p className="text-center text-gray-500">No revenue data available. Please visit the Revenue page first.</p>
         </div>
@@ -31,54 +31,155 @@ const ReportSubjectPropertyTable: React.FC = () => {
     return sum + calculateOccupiedRooms(occupancy / 100, roomsKeys);
   }, 0) / historicalYears.length;
 
+  // Calculate average YoY growth (excluding first year)
+  const avgYoYGrowth = allYears.slice(1).reduce((sum, year, index) => {
+    const currentYear = allYears[index + 1];
+    const prevYear = allYears[index];
+    
+    const currentOccupancy = historicalYears.includes(currentYear)
+      ? historicalData.occupancy[currentYear] || 0
+      : parseFloat(occupancyForecast[currentYear] || "0");
+    
+    const prevOccupancy = historicalYears.includes(prevYear)
+      ? historicalData.occupancy[prevYear] || 0
+      : parseFloat(occupancyForecast[prevYear] || "0");
+    
+    const yoyGrowth = prevOccupancy ? ((currentOccupancy - prevOccupancy) / prevOccupancy) * 100 : 0;
+    return sum + yoyGrowth;
+  }, 0) / (allYears.length - 1);
+
   return (
     <div className="w-full">
-      <h3 className="text-lg font-semibold mb-2 text-gray-700 text-center">Subject Property</h3>
+      <h3 className="text-lg font-semibold mb-3 text-gray-700">Subject Property</h3>
       <div className="bg-gray-50 p-2 rounded-lg">
         <Table>
           <TableHeader>
+            {/* Period Headers */}
             <TableRow>
-              <TableHead className="bg-gray-200 text-xs font-bold p-1">Year</TableHead>
-              <TableHead className="bg-gray-200 text-xs font-bold p-1">Occupancy</TableHead>
-              <TableHead className="bg-gray-200 text-xs font-bold p-1">YoY</TableHead>
-              <TableHead className="bg-gray-200 text-xs font-bold p-1">Occ Rooms</TableHead>
+              <TableHead className="w-24 px-1"></TableHead>
+              <TableHead className="text-center bg-blue-50 px-1" colSpan={historicalYears.length}>Historical</TableHead>
+              <TableHead className="text-center bg-green-50 px-1" colSpan={forecastYears.length}>Forecast</TableHead>
+              <TableHead className="text-center bg-orange-50 px-1">Average</TableHead>
+            </TableRow>
+            {/* Year Headers */}
+            <TableRow>
+              <TableHead className="w-24 px-1">Metric</TableHead>
+              {historicalYears.map(year => (
+                <TableHead key={year} className="text-center bg-blue-50 px-1 text-xs">{year}</TableHead>
+              ))}
+              {forecastYears.map(year => (
+                <TableHead key={year} className="text-center bg-green-50 px-1 text-xs">{year}</TableHead>
+              ))}
+              <TableHead className="text-center bg-orange-50 px-1 text-xs">Avg</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {allYears.map((year, index) => {
-              const isHistorical = historicalYears.includes(year);
-              const occupancy = isHistorical 
-                ? historicalData.occupancy[year] || 0
-                : parseFloat(occupancyForecast[year] || "0");
-              
-              // Calculate YoY growth
-              let yoyGrowth: number | null = null;
-              if (index > 0) {
-                const prevYear = allYears[index - 1];
+            {/* Occupancy Row */}
+            <TableRow>
+              <TableCell className="p-1 text-xs font-medium">Occupancy</TableCell>
+              {/* Historical data */}
+              {historicalYears.map((year) => {
+                const occupancy = historicalData.occupancy[year] || 0;
+                return (
+                  <TableCell key={year} className="p-1 text-xs text-center bg-blue-25">
+                    <span className="text-gray-700 font-medium">
+                      {formatPercent(occupancy / 100)}
+                    </span>
+                  </TableCell>
+                );
+              })}
+              {/* Forecast data */}
+              {forecastYears.map((year) => {
+                const occupancy = parseFloat(occupancyForecast[year] || "0");
+                return (
+                  <TableCell key={year} className="p-1 text-xs text-center bg-green-25">
+                    <span className="text-gray-700 font-medium">
+                      {formatPercent(occupancy / 100)}
+                    </span>
+                  </TableCell>
+                );
+              })}
+              <TableCell className="p-1 text-xs text-center bg-orange-25">
+                <span className="text-gray-700 font-medium">
+                  {formatPercent(avgHistoricalOccupancy / 100)}
+                </span>
+              </TableCell>
+            </TableRow>
+            
+            {/* YoY Growth Row */}
+            <TableRow>
+              <TableCell className="p-1 text-xs font-medium">YoY</TableCell>
+              {/* Historical data */}
+              {historicalYears.map((year, index) => {
+                const prevYear = index > 0 ? historicalYears[index - 1] : null;
+                const currentOccupancy = historicalData.occupancy[year] || 0;
+                const prevOccupancy = prevYear ? historicalData.occupancy[prevYear] : null;
+                const yoyGrowth = prevOccupancy ? ((currentOccupancy - prevOccupancy) / prevOccupancy) * 100 : null;
+                
+                return (
+                  <TableCell key={`yoy-${year}`} className="p-1 text-xs text-center bg-blue-25">
+                    <span className="text-gray-700 font-medium">
+                      {yoyGrowth !== null ? `${yoyGrowth.toFixed(1)}%` : '-'}
+                    </span>
+                  </TableCell>
+                );
+              })}
+              {/* Forecast data */}
+              {forecastYears.map((year, index) => {
+                const prevYear = index > 0 ? forecastYears[index - 1] : historicalYears[historicalYears.length - 1];
+                const currentOccupancy = parseFloat(occupancyForecast[year] || "0");
                 const prevOccupancy = historicalYears.includes(prevYear)
                   ? historicalData.occupancy[prevYear] || 0
                   : parseFloat(occupancyForecast[prevYear] || "0");
-                yoyGrowth = ((occupancy - prevOccupancy) / prevOccupancy) * 100;
-              }
-
-              const occupiedRooms = calculateOccupiedRooms(occupancy / 100, roomsKeys);
-
-              return (
-                <TableRow key={year}>
-                  <TableCell className="p-1 text-xs">{year}</TableCell>
-                  <TableCell className="p-1 text-xs">{formatPercent(occupancy / 100)}</TableCell>
-                  <TableCell className="p-1 text-xs">
-                    {yoyGrowth !== null ? formatPercent(yoyGrowth / 100) : "-"}
+                const yoyGrowth = prevOccupancy ? ((currentOccupancy - prevOccupancy) / prevOccupancy) * 100 : null;
+                
+                return (
+                  <TableCell key={`yoy-${year}`} className="p-1 text-xs text-center bg-green-25">
+                    <span className="text-gray-700 font-medium">
+                      {yoyGrowth !== null ? `${yoyGrowth.toFixed(1)}%` : '-'}
+                    </span>
                   </TableCell>
-                  <TableCell className="p-1 text-xs">{formatNumber(occupiedRooms)}</TableCell>
-                </TableRow>
-              );
-            })}
-            <TableRow className="bg-gray-100">
-              <TableCell className="p-1 text-xs font-medium">Avg</TableCell>
-              <TableCell className="p-1 text-xs font-medium">{formatPercent(avgHistoricalOccupancy / 100)}</TableCell>
-              <TableCell className="p-1 text-xs font-medium">-</TableCell>
-              <TableCell className="p-1 text-xs font-medium">{formatNumber(avgHistoricalOccupiedRooms)}</TableCell>
+                );
+              })}
+              <TableCell className="p-1 text-xs text-center bg-orange-25">
+                <span className="text-gray-700 font-medium">
+                  {avgYoYGrowth.toFixed(1)}%
+                </span>
+              </TableCell>
+            </TableRow>
+
+            {/* Occupied Rooms Row */}
+            <TableRow>
+              <TableCell className="p-1 text-xs font-medium">Occ Rooms</TableCell>
+              {/* Historical data */}
+              {historicalYears.map((year) => {
+                const occupancy = historicalData.occupancy[year] || 0;
+                const occupiedRooms = calculateOccupiedRooms(occupancy / 100, roomsKeys);
+                return (
+                  <TableCell key={year} className="p-1 text-xs text-center bg-blue-25">
+                    <span className="text-gray-700 font-medium">
+                      {formatNumber(occupiedRooms)}
+                    </span>
+                  </TableCell>
+                );
+              })}
+              {/* Forecast data */}
+              {forecastYears.map((year) => {
+                const occupancy = parseFloat(occupancyForecast[year] || "0");
+                const occupiedRooms = calculateOccupiedRooms(occupancy / 100, roomsKeys);
+                return (
+                  <TableCell key={year} className="p-1 text-xs text-center bg-green-25">
+                    <span className="text-gray-700 font-medium">
+                      {formatNumber(occupiedRooms)}
+                    </span>
+                  </TableCell>
+                );
+              })}
+              <TableCell className="p-1 text-xs text-center bg-orange-25">
+                <span className="text-gray-700 font-medium">
+                  {formatNumber(avgHistoricalOccupiedRooms)}
+                </span>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
