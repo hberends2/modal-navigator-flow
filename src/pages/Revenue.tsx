@@ -3,6 +3,7 @@ import { Button } from "../components/ui/button";
 import RevenueTable from "../components/revenue/RevenueTable";
 import Sidebar from "../components/Sidebar";
 import { useRevenueData } from "../contexts/RevenueDataContext";
+import { useDatabase } from "../hooks/useDatabase";
 
 const Revenue = () => {
   console.log('Revenue component rendering');
@@ -28,6 +29,7 @@ const Revenue = () => {
   });
 
   const { setRevenueData } = useRevenueData();
+  const { saveOccupancyData } = useDatabase();
 
   // Constants
   const roomsKeys = 108;
@@ -165,14 +167,27 @@ const Revenue = () => {
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     console.log("Saving revenue data:", {
       revparGrowthType,
       flatRevparGrowth,
       yearlyRevparGrowth,
       occupancyForecast
     });
-    // TODO: Implement save functionality
+    
+    // Save to database
+    const revenueDataToSave = {
+      roomsKeys,
+      historicalYears,
+      forecastYears,
+      historicalData,
+      occupancyForecast,
+      revparGrowthType,
+      flatRevparGrowth,
+      yearlyRevparGrowth
+    };
+    
+    await saveOccupancyData('default-property', revenueDataToSave);
   };
 
   const formatCurrency = (value: number) => {

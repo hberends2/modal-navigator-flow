@@ -6,6 +6,7 @@ import ReportSubjectPropertyTable from "./ReportSubjectPropertyTable";
 import OccupancyChart from "./OccupancyChart";
 import { Property } from "../../types/PropertyTypes";
 import { useRevenueData } from "../../contexts/RevenueDataContext";
+import { marketOccupancyData, compSetOccupancyData } from "../revenue/revenueData";
 
 interface OccupancyForecastContentProps {
   property?: Property | null;
@@ -39,6 +40,18 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
       rooms: property?.rooms || 108
     }));
 
+    // Convert market data to chart format
+    const marketChartData = historicalYears.map(year => ({
+      year,
+      occupancy: (marketOccupancyData[year as keyof typeof marketOccupancyData] || 0) / 100
+    }));
+
+    // Convert comp set data to chart format
+    const compSetChartData = historicalYears.map(year => ({
+      year,
+      occupancy: (compSetOccupancyData[year as keyof typeof compSetOccupancyData] || 0) / 100
+    }));
+
     // Convert forecast data to chart format
     const forecastChartData = forecastYears.map(year => ({
       year,
@@ -48,8 +61,8 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
 
     return {
       historicalData: historicalChartData,
-      marketData: [], // Empty for now, can be populated if needed
-      compSetData: [], // Empty for now, can be populated if needed
+      marketData: marketChartData,
+      compSetData: compSetChartData,
       forecastData: forecastChartData
     };
   };
@@ -58,9 +71,13 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Top Section: Market Analysis and Comp Set Analysis tables side by side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Market Analysis table - full width */}
+      <div className="w-full">
         <HorizontalMarketTable historicalYears={historicalYears} />
+      </div>
+
+      {/* Comp Set Analysis table - full width */}
+      <div className="w-full">
         <HorizontalCompSetTable historicalYears={historicalYears} />
       </div>
 
@@ -74,7 +91,7 @@ const OccupancyForecastContent: React.FC<OccupancyForecastContentProps> = ({
         />
       </div>
 
-      {/* Subject Property Section - Now using the original format */}
+      {/* Subject Property Section */}
       <div className="w-full">
         <ReportSubjectPropertyTable />
       </div>
