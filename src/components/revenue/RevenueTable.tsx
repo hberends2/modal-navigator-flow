@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Table, TableBody } from "../ui/table";
 import { ScrollArea } from "../ui/scroll-area";
@@ -157,6 +158,14 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 formatCurrency={formatCurrency}
               />
 
+              {/* ADR Section */}
+              <ADRSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                getHistoricalADR={getHistoricalADRForYear}
+                getForecastADR={getForecastADRForYear}
+              />
+
               {/* RevPAR Section */}
               <RevPARSection
                 historicalYears={historicalYears}
@@ -169,14 +178,6 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 yearlyRevparGrowth={yearlyRevparGrowth}
                 handleYearlyRevparChange={handleYearlyRevparChange}
                 getForecastRevpar={getForecastRevpar}
-              />
-
-              {/* ADR Section */}
-              <ADRSection
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
-                getHistoricalADR={getHistoricalADRForYear}
-                getForecastADR={getForecastADRForYear}
               />
             </TableBody>
           </Table>

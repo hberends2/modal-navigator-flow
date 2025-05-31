@@ -82,20 +82,6 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         isSectionHeader={true}
       />
 
-      {/* Rooms/Keys */}
-      <MetricRow
-        label="Rooms/Keys"
-        historicalData={historicalYears.map(() => roomsKeys)}
-        forecastData={forecastYears.map(() => roomsKeys)}
-      />
-
-      {/* Occupied Rooms */}
-      <MetricRow
-        label="Occupied Rooms"
-        historicalData={historicalYears.map(year => getHistoricalOccupiedRooms(year).toLocaleString())}
-        forecastData={forecastYears.map(year => getForecastOccupiedRooms(year).toLocaleString())}
-      />
-
       {/* Market Occupancy */}
       <MetricRow
         label={<span>&nbsp;&nbsp;&nbsp;Market (Hotel Horizons / LARC)</span>}
@@ -219,6 +205,20 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
           return market && property ? calculateIndex(property, market) : "-";
         })}
         forecastData={forecastYears.map(() => "0.0%")}
+      />
+
+      {/* Rooms/Keys - moved to end */}
+      <MetricRow
+        label="Rooms/Keys"
+        historicalData={historicalYears.map(() => roomsKeys)}
+        forecastData={forecastYears.map(() => roomsKeys)}
+      />
+
+      {/* Occupied Rooms - moved to end */}
+      <MetricRow
+        label="Occupied Rooms"
+        historicalData={historicalYears.map(year => getHistoricalOccupiedRooms(year).toLocaleString())}
+        forecastData={forecastYears.map(year => getForecastOccupiedRooms(year).toLocaleString())}
       />
     </>
   );
