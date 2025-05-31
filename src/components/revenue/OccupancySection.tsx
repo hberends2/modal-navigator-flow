@@ -3,6 +3,7 @@ import React from "react";
 import MetricRow from "./MetricRow";
 import { marketOccupancyData, compSetOccupancyData } from "./revenueData";
 import { getMarketOccupancyYoY, getCompSetOccupancyYoY, getHistoricalOccupancyYoY, formatYoYWithColor } from "./revenueCalculations";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface OccupancySectionProps {
   historicalYears: number[];
@@ -13,6 +14,11 @@ interface OccupancySectionProps {
   };
   occupancyForecast: Record<number, string>;
   handleOccupancyChange: (year: number, value: string) => void;
+  occupancyForecastMethod: string;
+  setOccupancyForecastMethod: (value: string) => void;
+  occupancyYoYGrowth: Record<number, string>;
+  handleOccupancyYoYChange: (year: number, value: string) => void;
+  calculateOccupancyFromYoY: (year: number) => number;
   getAvailableRooms: (year: number) => number;
   getHistoricalOccupiedRooms: (year: number) => number;
   getForecastOccupiedRooms: (year: number) => number;
@@ -26,6 +32,11 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
   historicalData,
   occupancyForecast,
   handleOccupancyChange,
+  occupancyForecastMethod,
+  setOccupancyForecastMethod,
+  occupancyYoYGrowth,
+  handleOccupancyYoYChange,
+  calculateOccupancyFromYoY,
   getAvailableRooms,
   getHistoricalOccupiedRooms,
   getForecastOccupiedRooms,
@@ -35,6 +46,30 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
   const calculateIndex = (numerator: number, denominator: number): string => {
     if (denominator === 0) return "0.0%";
     return `${((numerator / denominator) * 100).toFixed(1)}%`;
+  };
+
+  // Calculate YoY growth for forecast years
+  const calculateForecastYoY = (year: number, index: number): React.ReactElement => {
+    if (index === 0) {
+      // First forecast year - compare with last historical year (2024)
+      const lastHistoricalOccupancy = historicalData.occupancy[2024] || 0;
+      const currentOccupancy = occupancyForecastMethod === "Occupancy" 
+        ? parseFloat(occupancyForecast[year]) || 0
+        : calculateOccupancyFromYoY(year);
+      const yoyValue = ((currentOccupancy - lastHistoricalOccupancy) / lastHistoricalOccupancy) * 100;
+      return formatYoYWithColor(yoyValue);
+    } else {
+      // Subsequent years - compare with previous forecast year
+      const prevYear = forecastYears[index - 1];
+      const prevOccupancy = occupancyForecastMethod === "Occupancy" 
+        ? parseFloat(occupancyForecast[prevYear]) || 0
+        : calculateOccupancyFromYoY(prevYear);
+      const currentOccupancy = occupancyForecastMethod === "Occupancy" 
+        ? parseFloat(occupancyForecast[year]) || 0
+        : calculateOccupancyFromYoY(year);
+      const yoyValue = ((currentOccupancy - prevOccupancy) / prevOccupancy) * 100;
+      return formatYoYWithColor(yoyValue);
+    }
   };
 
   return (
@@ -101,12 +136,31 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         forecastData={forecastYears.map(() => formatYoYWithColor(0))}
       />
 
-      {/* Subject Property Occupancy */}
+      {/* Subject Property Occupancy with Dropdown */}
       <MetricRow
-        label={<span>&nbsp;&nbsp;&nbsp;Occupancy</span>}
+        label={
+          <div className="flex items-center gap-2">
+            <span>&nbsp;&nbsp;&nbsp;Subject Property</span>
+            <Select value={occupancyForecastMethod} onValueChange={setOccupancyForecastMethod}>
+              <SelectTrigger className="w-32 h-6 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-300 shadow-lg z-50">
+                <SelectItem value="Occupancy" className="text-xs">Occupancy</SelectItem>
+                <SelectItem value="YoY Growth" className="text-xs">YoY Growth</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        }
         historicalData={historicalYears.map(year => formatPercent(historicalData.occupancy[year] || 0))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
+        forecastData={forecastYears.map(year => {
+          if (occupancyForecastMethod === "Occupancy") {
+            return "";
+          } else {
+            return formatPercent(calculateOccupancyFromYoY(year));
+          }
+        })}
+        isEditable={occupancyForecastMethod === "Occupancy"}
         editableData={occupancyForecast}
         onEditableChange={handleOccupancyChange}
         forecastYears={forecastYears}
@@ -119,7 +173,18 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
           const yoyValue = getHistoricalOccupancyYoY(year, index, historicalYears, historicalData.occupancy);
           return formatYoYWithColor(yoyValue);
         })}
-        forecastData={forecastYears.map(() => formatYoYWithColor(0))}
+        forecastData={forecastYears.map((year, index) => {
+          if (occupancyForecastMethod === "YoY Growth") {
+            return "";
+          } else {
+            return calculateForecastYoY(year, index);
+          }
+        })}
+        isEditable={occupancyForecastMethod === "YoY Growth"}
+        editableData={occupancyYoYGrowth}
+        onEditableChange={handleOccupancyYoYChange}
+        forecastYears={forecastYears}
+        isYoYRow={true}
       />
 
       {/* Index Calculations */}

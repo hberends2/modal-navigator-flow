@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Table, TableBody } from "../ui/table";
 import { ScrollArea } from "../ui/scroll-area";
@@ -27,6 +26,11 @@ interface RevenueTableProps {
   handleYearlyRevparChange: (year: number, value: string) => void;
   occupancyForecast: Record<number, string>;
   handleOccupancyChange: (year: number, value: string) => void;
+  occupancyForecastMethod: string;
+  setOccupancyForecastMethod: (value: string) => void;
+  occupancyYoYGrowth: Record<number, string>;
+  handleOccupancyYoYChange: (year: number, value: string) => void;
+  calculateOccupancyFromYoY: (year: number) => number;
   getAvailableRooms: (year: number) => number;
   getForecastRevpar: (year: number) => number;
   getForecastRoomsRevenue: (year: number) => number;
@@ -47,6 +51,11 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   handleYearlyRevparChange,
   occupancyForecast,
   handleOccupancyChange,
+  occupancyForecastMethod,
+  setOccupancyForecastMethod,
+  occupancyYoYGrowth,
+  handleOccupancyYoYChange,
+  calculateOccupancyFromYoY,
   getAvailableRooms,
   getForecastRevpar,
   getForecastRoomsRevenue,
@@ -57,7 +66,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     roomsKeys,
     historicalYears,
     forecastYears,
-    revparGrowthType
+    revparGrowthType,
+    occupancyForecastMethod
   });
 
   // Helper functions for calculations
@@ -74,7 +84,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
   const getForecastOccupiedRoomsForYear = (year: number) => {
     try {
-      const result = getForecastOccupiedRooms(year, getAvailableRooms, occupancyForecast[year] || "0");
+      const occupancyValue = occupancyForecastMethod === "Occupancy" 
+        ? occupancyForecast[year] || "0"
+        : calculateOccupancyFromYoY(year).toString();
+      const result = getForecastOccupiedRooms(year, getAvailableRooms, occupancyValue);
       console.log('Forecast occupied rooms for', year, ':', result);
       return result;
     } catch (error) {
@@ -124,6 +137,11 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 historicalData={historicalData}
                 occupancyForecast={occupancyForecast}
                 handleOccupancyChange={handleOccupancyChange}
+                occupancyForecastMethod={occupancyForecastMethod}
+                setOccupancyForecastMethod={setOccupancyForecastMethod}
+                occupancyYoYGrowth={occupancyYoYGrowth}
+                handleOccupancyYoYChange={handleOccupancyYoYChange}
+                calculateOccupancyFromYoY={calculateOccupancyFromYoY}
                 getAvailableRooms={getAvailableRooms}
                 getHistoricalOccupiedRooms={getHistoricalOccupiedRoomsForYear}
                 getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}

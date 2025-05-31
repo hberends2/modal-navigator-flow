@@ -20,6 +20,7 @@ interface MetricRowProps {
   yearlyRevparGrowth?: Record<number, string>;
   handleYearlyRevparChange?: (year: number, value: string) => void;
   isSectionHeader?: boolean;
+  isYoYRow?: boolean;
 }
 
 const MetricRow: React.FC<MetricRowProps> = ({
@@ -37,7 +38,8 @@ const MetricRow: React.FC<MetricRowProps> = ({
   setFlatRevparGrowth,
   yearlyRevparGrowth,
   handleYearlyRevparChange,
-  isSectionHeader = false
+  isSectionHeader = false,
+  isYoYRow = false
 }) => {
   return (
     <TableRow className={isSectionHeader ? "bg-gray-100" : ""}>
@@ -55,7 +57,13 @@ const MetricRow: React.FC<MetricRowProps> = ({
                 type="text"
                 value={editableData[forecastYears[index]] || ""}
                 onChange={(e) => onEditableChange(forecastYears[index], e.target.value)}
-                className="pr-6 text-center h-8 text-blue-600 text-sm"
+                className={`pr-6 text-center h-8 text-sm ${
+                  isYoYRow 
+                    ? parseFloat(editableData[forecastYears[index]] || "0") >= 0 
+                      ? "text-green-600" 
+                      : "text-red-600"
+                    : "text-blue-600"
+                }`}
               />
               <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
             </div>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "../components/ui/button";
 import RevenueTable from "../components/revenue/RevenueTable";
@@ -25,6 +24,16 @@ const Revenue = () => {
     2027: "78.0", 
     2028: "79.0",
     2029: "80.0"
+  });
+
+  // New state for occupancy forecasting method and YoY growth inputs
+  const [occupancyForecastMethod, setOccupancyForecastMethod] = useState<string>("Occupancy");
+  const [occupancyYoYGrowth, setOccupancyYoYGrowth] = useState<Record<number, string>>({
+    2025: "6.7",
+    2026: "2.7",
+    2027: "1.3",
+    2028: "1.3",
+    2029: "1.3"
   });
 
   // Constants
@@ -92,6 +101,23 @@ const Revenue = () => {
     console.error('Error calculating historical RevPAR YoY:', error);
   }
 
+  // New function to calculate occupancy from YoY growth
+  const calculateOccupancyFromYoY = (year: number): number => {
+    const yearIndex = forecastYears.indexOf(year);
+    if (yearIndex === 0) {
+      // First forecast year - base on 2024 actual occupancy
+      const baseOccupancy = historicalData.occupancy[2024] || 0;
+      const growthRate = parseFloat(occupancyYoYGrowth[year]) || 0;
+      return baseOccupancy * (1 + growthRate / 100);
+    } else {
+      // Subsequent years - base on previous calculated occupancy
+      const prevYear = forecastYears[yearIndex - 1];
+      const prevOccupancy = calculateOccupancyFromYoY(prevYear);
+      const growthRate = parseFloat(occupancyYoYGrowth[year]) || 0;
+      return prevOccupancy * (1 + growthRate / 100);
+    }
+  };
+
   const getForecastRevpar = (year: number) => {
     try {
       console.log('getForecastRevpar called for year:', year);
@@ -151,12 +177,23 @@ const Revenue = () => {
     }));
   };
 
+  // New handler for YoY growth changes
+  const handleOccupancyYoYChange = (year: number, value: string) => {
+    const sanitizedValue = value.replace(/[^0-9.-]/g, "");
+    setOccupancyYoYGrowth(prev => ({
+      ...prev,
+      [year]: sanitizedValue
+    }));
+  };
+
   const handleSave = () => {
     console.log("Saving revenue data:", {
       revparGrowthType,
       flatRevparGrowth,
       yearlyRevparGrowth,
-      occupancyForecast
+      occupancyForecast,
+      occupancyForecastMethod,
+      occupancyYoYGrowth
     });
     // TODO: Implement save functionality
   };
@@ -206,6 +243,11 @@ const Revenue = () => {
               handleYearlyRevparChange={handleYearlyRevparChange}
               occupancyForecast={occupancyForecast}
               handleOccupancyChange={handleOccupancyChange}
+              occupancyForecastMethod={occupancyForecastMethod}
+              setOccupancyForecastMethod={setOccupancyForecastMethod}
+              occupancyYoYGrowth={occupancyYoYGrowth}
+              handleOccupancyYoYChange={handleOccupancyYoYChange}
+              calculateOccupancyFromYoY={calculateOccupancyFromYoY}
               getAvailableRooms={getAvailableRooms}
               getForecastRevpar={getForecastRevpar}
               getForecastRoomsRevenue={getForecastRoomsRevenue}
