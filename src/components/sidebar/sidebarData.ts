@@ -1,4 +1,3 @@
-
 import { CategoryItem } from "./SidebarCategory";
 
 // Top-level categories for main navigation (kept simple without subcategories)
@@ -11,17 +10,14 @@ export const mainNavCategories: CategoryItem[] = [
   {
     id: "reports",
     name: "Reports",
-    path: "/under-construction"
+    subCategories: [
+      { id: "occupancyReport", name: "Occupancy Report", path: "/subject-occupancy" }
+    ]
   },
   {
     id: "propertyDetails",
     name: "Property Details",
     path: "/property-details"
-  },
-  {
-    id: "subjectOccupancy",
-    name: "Subject Occupancy",
-    path: "/subject-occupancy"
   },
   {
     id: "market",
