@@ -128,12 +128,12 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
           <div className="flex items-center gap-2">
             <span>&nbsp;&nbsp;&nbsp;Subject Property</span>
             <Select value={occupancyForecastMethod} onValueChange={setOccupancyForecastMethod}>
-              <SelectTrigger className="w-32 h-6 text-xs">
+              <SelectTrigger className="w-32 h-6 text-xs text-blue-600">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-white border border-gray-300 shadow-lg z-50">
-                <SelectItem value="Occupancy" className="text-xs">Occupancy</SelectItem>
-                <SelectItem value="YoY Growth" className="text-xs">YoY Growth</SelectItem>
+                <SelectItem value="Occupancy" className="text-xs text-blue-600">Occupancy</SelectItem>
+                <SelectItem value="YoY Growth" className="text-xs text-blue-600">YoY Growth</SelectItem>
               </SelectContent>
             </Select>
           </div>
