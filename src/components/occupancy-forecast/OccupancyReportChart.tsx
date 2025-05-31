@@ -100,7 +100,7 @@ const OccupancyReportChart: React.FC<OccupancyReportChartProps> = ({
             stroke="#666"
             fontSize={12}
             domain={['dataMin - 5', 'dataMax + 5']}
-            tickFormatter={(value) => `${value}%`}
+            tickFormatter={(value) => `${Math.round(value)}%`}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
