@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import SidebarSection from "./sidebar/SidebarSection";
@@ -17,10 +16,35 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   const location = useLocation();
 
   useEffect(() => {
+    // Auto-expand categories that contain the current active page
+    const currentPath = location.pathname;
+    const categoriesToExpand: string[] = [];
+
+    [...mainNavCategories, ...parkingLotCategories].forEach(category => {
+      if (category.subCategories) {
+        const hasActiveSubcategory = category.subCategories.some(sub => sub.path === currentPath);
+        if (hasActiveSubcategory) {
+          categoriesToExpand.push(category.id);
+        }
+      }
+    });
+
+    if (categoriesToExpand.length > 0) {
+      setExpandedCategories(prev => {
+        const newExpanded = [...prev];
+        categoriesToExpand.forEach(categoryId => {
+          if (!newExpanded.includes(categoryId)) {
+            newExpanded.push(categoryId);
+          }
+        });
+        return newExpanded;
+      });
+    }
+
     // Log the current path and state on mount or route change
     console.log("Sidebar - current path:", location.pathname);
     console.log("Sidebar - expanded categories:", expandedCategories);
-  }, [location.pathname, expandedCategories]);
+  }, [location.pathname]);
 
   const toggleCategory = (categoryId: string) => {
     console.log("Toggling category:", categoryId);
