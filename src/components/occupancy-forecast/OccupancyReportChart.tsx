@@ -85,6 +85,28 @@ const OccupancyReportChart: React.FC<OccupancyReportChartProps> = ({
     return null;
   };
 
+  // Generate custom ticks in 5% increments
+  const generateTicks = () => {
+    const allValues = chartData.flatMap(d => [d.subject, d.market, d.compSet, d.forecast]).filter(v => v !== null && v !== undefined);
+    if (allValues.length === 0) return [50, 55, 60, 65, 70, 75, 80, 85];
+    
+    const min = Math.min(...allValues);
+    const max = Math.max(...allValues);
+    
+    // Round down to nearest 5 for min, round up to nearest 5 for max
+    const minTick = Math.floor(min / 5) * 5;
+    const maxTick = Math.ceil(max / 5) * 5;
+    
+    const ticks = [];
+    for (let i = minTick; i <= maxTick; i += 5) {
+      ticks.push(i);
+    }
+    
+    return ticks;
+  };
+
+  const customTicks = generateTicks();
+
   return (
     <div className="w-full h-96 bg-white p-4 rounded-lg border">
       <h3 className="text-lg font-semibold mb-4 text-gray-700 text-center">Occupancy Trends</h3>
@@ -99,7 +121,8 @@ const OccupancyReportChart: React.FC<OccupancyReportChartProps> = ({
           <YAxis 
             stroke="#666"
             fontSize={12}
-            domain={['dataMin - 5', 'dataMax + 5']}
+            domain={[customTicks[0], customTicks[customTicks.length - 1]]}
+            ticks={customTicks}
             tickFormatter={(value) => `${Math.round(value)}%`}
           />
           <Tooltip content={<CustomTooltip />} />
