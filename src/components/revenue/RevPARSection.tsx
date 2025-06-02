@@ -1,7 +1,7 @@
 
 import React from "react";
 import MetricRow from "./MetricRow";
-import GrowthControls from "./GrowthControls";
+import RevPARGrowthControls from "./RevPARGrowthControls";
 import { marketRevparData, compSetRevparData } from "./revenueData";
 import { getMarketRevparYoY, getCompSetRevparYoY, getForecastRevparYoY, formatYoYWithColor } from "./revenueCalculations";
 
@@ -106,7 +106,7 @@ const RevPARSection: React.FC<RevPARSectionProps> = ({
       {/* RevPAR Growth Controls */}
       <MetricRow
         label={
-          <GrowthControls
+          <RevPARGrowthControls
             revparGrowthType={revparGrowthType}
             setRevparGrowthType={setRevparGrowthType}
             flatRevparGrowth={flatRevparGrowth}
