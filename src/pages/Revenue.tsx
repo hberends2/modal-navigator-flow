@@ -1,251 +1,84 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "../components/ui/button";
 import RevenueTable from "../components/revenue/RevenueTable";
 import KPICards from "../components/revenue/KPICards";
 import FixedSummaryRows from "../components/revenue/FixedSummaryRows";
 import Sidebar from "../components/Sidebar";
+import { useRevenueCalculations } from "../hooks/useRevenueCalculations";
+import { useRevenueData } from "../hooks/useRevenueData";
+import { 
+  getAvailableRooms, 
+  calculateOccupancyFromYoY, 
+  getForecastRevpar, 
+  getForecastRoomsRevenue,
+  getHistoricalADRForYear,
+  getForecastADRForYear,
+  formatCurrency,
+  formatPercent
+} from "../utils/revenueUtils";
 
 const Revenue = () => {
   console.log('Revenue component rendering');
   
-  // State for growth rate settings
-  const [revparGrowthType, setRevparGrowthType] = useState<string>("flat");
-  const [flatRevparGrowth, setFlatRevparGrowth] = useState<string>("3.0");
-  const [yearlyRevparGrowth, setYearlyRevparGrowth] = useState<Record<number, string>>({
-    2025: "3.0",
-    2026: "3.0", 
-    2027: "3.0",
-    2028: "3.0",
-    2029: "3.0"
-  });
-  
-  // State for occupancy forecast
-  const [occupancyForecast, setOccupancyForecast] = useState<Record<number, string>>({
-    2025: "75.0",
-    2026: "77.0",
-    2027: "78.0", 
-    2028: "79.0",
-    2029: "80.0"
-  });
-
-  // New state for occupancy forecasting method and YoY growth inputs
-  const [occupancyForecastMethod, setOccupancyForecastMethod] = useState<string>("Occupancy");
-  const [occupancyYoYGrowth, setOccupancyYoYGrowth] = useState<Record<number, string>>({
-    2025: "6.7",
-    2026: "2.7",
-    2027: "1.3",
-    2028: "1.3",
-    2029: "1.3"
-  });
-
-  // Constants
   const roomsKeys = 108;
-  const forecastYears = [2025, 2026, 2027, 2028, 2029];
-  const historicalYears = [2021, 2022, 2023, 2024];
   
-  console.log('Revenue data setup:', { roomsKeys, forecastYears, historicalYears });
+  // Use custom hooks for state management and data
+  const revenueCalculations = useRevenueCalculations();
+  const { historicalData, forecastYears, historicalYears } = useRevenueData(roomsKeys);
+
+  // Helper functions that use the current state
+  const getAvailableRoomsForYear = (year: number) => getAvailableRooms(year, roomsKeys);
   
-  // Function definitions (moved before usage)
-  const getAvailableRooms = (year: number) => {
-    const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-    const result = roomsKeys * (isLeapYear ? 366 : 365);
-    console.log('Available rooms for year', year, ':', result);
-    return result;
-  };
-  
-  // Historical data (from mockup)
-  const historicalData = {
-    roomsRevenue: {
-      2021: 8765432,
-      2022: 9234567,
-      2023: 9876543,
-      2024: 10234567
-    },
-    revpar: {} as Record<number, number>, // Will be calculated
-    revparYoY: {} as Record<number, number>, // Will be calculated
-    occupancy: {
-      2021: 72.5,
-      2022: 74.2,
-      2023: 76.8,
-      2024: 78.1
-    }
+  const calculateOccupancyFromYoYForYear = (year: number) => 
+    calculateOccupancyFromYoY(
+      year, 
+      forecastYears, 
+      revenueCalculations.occupancyYoYGrowth, 
+      historicalData.occupancy[2024] || 0
+    );
+
+  const getForecastRevparForYear = (year: number) => 
+    getForecastRevpar(
+      year, 
+      forecastYears, 
+      historicalData.revpar[2024], 
+      revenueCalculations.revparGrowthType, 
+      revenueCalculations.flatRevparGrowth, 
+      revenueCalculations.yearlyRevparGrowth
+    );
+
+  const getForecastRoomsRevenueForYear = (year: number) => {
+    const revpar = getForecastRevparForYear(year);
+    return getForecastRoomsRevenue(year, revpar, roomsKeys);
   };
 
-  console.log('Initial historical data:', historicalData);
+  const getHistoricalADRForYearCalculated = (year: number) => 
+    getHistoricalADRForYear(
+      year, 
+      historicalData.roomsRevenue[year] || 0, 
+      roomsKeys, 
+      historicalData.occupancy[year] || 0
+    );
 
-  // Calculate historical RevPAR
-  try {
-    historicalYears.forEach(year => {
-      const roomsRevenue = historicalData.roomsRevenue[year];
-      const availableRooms = getAvailableRooms(year);
-      historicalData.revpar[year] = roomsRevenue / availableRooms;
-      console.log(`RevPAR for ${year}:`, historicalData.revpar[year]);
-    });
-  } catch (error) {
-    console.error('Error calculating historical RevPAR:', error);
-  }
-
-  // Calculate historical RevPAR YoY growth (skip first year)
-  try {
-    historicalYears.forEach((year, index) => {
-      if (index === 0) {
-        // First year - no previous year to compare
-        historicalData.revparYoY[year] = 0; // or could be null/undefined
-      } else {
-        const currentRevpar = historicalData.revpar[year];
-        const previousYear = historicalYears[index - 1];
-        const previousRevpar = historicalData.revpar[previousYear];
-        historicalData.revparYoY[year] = ((currentRevpar - previousRevpar) / previousRevpar) * 100;
-        console.log(`RevPAR YoY for ${year}:`, historicalData.revparYoY[year]);
-      }
-    });
-  } catch (error) {
-    console.error('Error calculating historical RevPAR YoY:', error);
-  }
-
-  // New function to calculate occupancy from YoY growth
-  const calculateOccupancyFromYoY = (year: number): number => {
-    const yearIndex = forecastYears.indexOf(year);
-    if (yearIndex === 0) {
-      // First forecast year - base on 2024 actual occupancy
-      const baseOccupancy = historicalData.occupancy[2024] || 0;
-      const growthRate = parseFloat(occupancyYoYGrowth[year]) || 0;
-      return baseOccupancy * (1 + growthRate / 100);
-    } else {
-      // Subsequent years - base on previous calculated occupancy
-      const prevYear = forecastYears[yearIndex - 1];
-      const prevOccupancy = calculateOccupancyFromYoY(prevYear);
-      const growthRate = parseFloat(occupancyYoYGrowth[year]) || 0;
-      return prevOccupancy * (1 + growthRate / 100);
-    }
-  };
-
-  const getForecastRevpar = (year: number) => {
-    try {
-      console.log('getForecastRevpar called for year:', year);
-      const yearIndex = forecastYears.indexOf(year);
-      if (yearIndex === 0) {
-        // First forecast year - base on 2024 data
-        const baseRevpar = historicalData.revpar[2024];
-        const growthRate = revparGrowthType === "flat" 
-          ? parseFloat(flatRevparGrowth) || 0
-          : parseFloat(yearlyRevparGrowth[year]) || 0;
-        const result = baseRevpar * (1 + growthRate / 100);
-        console.log('Forecast RevPAR (first year):', { year, baseRevpar, growthRate, result });
-        return result;
-      } else {
-        // Subsequent years - base on previous forecast year
-        const prevYear = forecastYears[yearIndex - 1];
-        const prevRevpar = getForecastRevpar(prevYear);
-        const growthRate = revparGrowthType === "flat"
-          ? parseFloat(flatRevparGrowth) || 0
-          : parseFloat(yearlyRevparGrowth[year]) || 0;
-        const result = prevRevpar * (1 + growthRate / 100);
-        console.log('Forecast RevPAR (subsequent year):', { year, prevYear, prevRevpar, growthRate, result });
-        return result;
-      }
-    } catch (error) {
-      console.error('Error in getForecastRevpar:', error);
-      return 0;
-    }
-  };
-
-  const getForecastRoomsRevenue = (year: number) => {
-    try {
-      const revpar = getForecastRevpar(year);
-      const availableRooms = getAvailableRooms(year);
-      const result = revpar * availableRooms;
-      console.log('Forecast rooms revenue:', { year, revpar, availableRooms, result });
-      return result;
-    } catch (error) {
-      console.error('Error in getForecastRoomsRevenue:', error);
-      return 0;
-    }
-  };
-
-  // Helper functions for ADR calculations
-  const getHistoricalADRForYear = (year: number) => {
-    try {
-      const roomsRevenue = historicalData.roomsRevenue[year] || 0;
-      const availableRooms = getAvailableRooms(year);
-      const occupancyDecimal = (historicalData.occupancy[year] || 0) / 100;
-      const occupiedRooms = Math.round(availableRooms * occupancyDecimal);
-      const result = occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
-      console.log('Historical ADR for', year, ':', result);
-      return result;
-    } catch (error) {
-      console.error('Error calculating historical ADR:', error);
-      return 0;
-    }
-  };
-
-  const getForecastADRForYear = (year: number) => {
-    try {
-      const roomsRevenue = getForecastRoomsRevenue(year);
-      const availableRooms = getAvailableRooms(year);
-      const occupancyValue = occupancyForecastMethod === "Occupancy" 
-        ? occupancyForecast[year] || "0"
-        : calculateOccupancyFromYoY(year).toString();
-      const occupancyDecimal = parseFloat(occupancyValue) / 100;
-      const occupiedRooms = Math.round(availableRooms * occupancyDecimal);
-      const result = occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
-      console.log('Forecast ADR for', year, ':', result);
-      return result;
-    } catch (error) {
-      console.error('Error calculating forecast ADR:', error);
-      return 0;
-    }
-  };
-
-  const handleYearlyRevparChange = (year: number, value: string) => {
-    const sanitizedValue = value.replace(/[^0-9.-]/g, "");
-    setYearlyRevparGrowth(prev => ({
-      ...prev,
-      [year]: sanitizedValue
-    }));
-  };
-
-  const handleOccupancyChange = (year: number, value: string) => {
-    const sanitizedValue = value.replace(/[^0-9.]/g, "");
-    setOccupancyForecast(prev => ({
-      ...prev,
-      [year]: sanitizedValue
-    }));
-  };
-
-  // New handler for YoY growth changes
-  const handleOccupancyYoYChange = (year: number, value: string) => {
-    const sanitizedValue = value.replace(/[^0-9.-]/g, "");
-    setOccupancyYoYGrowth(prev => ({
-      ...prev,
-      [year]: sanitizedValue
-    }));
+  const getForecastADRForYearCalculated = (year: number) => {
+    const roomsRevenue = getForecastRoomsRevenueForYear(year);
+    const occupancyValue = revenueCalculations.occupancyForecastMethod === "Occupancy" 
+      ? revenueCalculations.occupancyForecast[year] || "0"
+      : calculateOccupancyFromYoYForYear(year).toString();
+    return getForecastADRForYear(year, roomsRevenue, roomsKeys, occupancyValue);
   };
 
   const handleSave = () => {
     console.log("Saving revenue data:", {
-      revparGrowthType,
-      flatRevparGrowth,
-      yearlyRevparGrowth,
-      occupancyForecast,
-      occupancyForecastMethod,
-      occupancyYoYGrowth
+      revparGrowthType: revenueCalculations.revparGrowthType,
+      flatRevparGrowth: revenueCalculations.flatRevparGrowth,
+      yearlyRevparGrowth: revenueCalculations.yearlyRevparGrowth,
+      occupancyForecast: revenueCalculations.occupancyForecast,
+      occupancyForecastMethod: revenueCalculations.occupancyForecastMethod,
+      occupancyYoYGrowth: revenueCalculations.occupancyYoYGrowth
     });
     // TODO: Implement save functionality
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
-
-  const formatPercent = (value: number, decimals: number = 1) => {
-    return `${value.toFixed(decimals)}%`;
   };
 
   const handleItemClick = (modalName: string) => {
@@ -270,14 +103,14 @@ const Revenue = () => {
               historicalYears={historicalYears}
               forecastYears={forecastYears}
               historicalData={historicalData}
-              occupancyForecast={occupancyForecast}
-              occupancyForecastMethod={occupancyForecastMethod}
-              calculateOccupancyFromYoY={calculateOccupancyFromYoY}
-              getAvailableRooms={getAvailableRooms}
-              getForecastRoomsRevenue={getForecastRoomsRevenue}
-              getHistoricalADR={getHistoricalADRForYear}
-              getForecastADR={getForecastADRForYear}
-              getForecastRevpar={getForecastRevpar}
+              occupancyForecast={revenueCalculations.occupancyForecast}
+              occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
+              calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear}
+              getAvailableRooms={getAvailableRoomsForYear}
+              getForecastRoomsRevenue={getForecastRoomsRevenueForYear}
+              getHistoricalADR={getHistoricalADRForYearCalculated}
+              getForecastADR={getForecastADRForYearCalculated}
+              getForecastRevpar={getForecastRevparForYear}
               formatCurrency={formatCurrency}
               formatPercent={formatPercent}
             />
@@ -290,22 +123,11 @@ const Revenue = () => {
               historicalYears={historicalYears}
               forecastYears={forecastYears}
               historicalData={historicalData}
-              revparGrowthType={revparGrowthType}
-              setRevparGrowthType={setRevparGrowthType}
-              flatRevparGrowth={flatRevparGrowth}
-              setFlatRevparGrowth={setFlatRevparGrowth}
-              yearlyRevparGrowth={yearlyRevparGrowth}
-              handleYearlyRevparChange={handleYearlyRevparChange}
-              occupancyForecast={occupancyForecast}
-              handleOccupancyChange={handleOccupancyChange}
-              occupancyForecastMethod={occupancyForecastMethod}
-              setOccupancyForecastMethod={setOccupancyForecastMethod}
-              occupancyYoYGrowth={occupancyYoYGrowth}
-              handleOccupancyYoYChange={handleOccupancyYoYChange}
-              calculateOccupancyFromYoY={calculateOccupancyFromYoY}
-              getAvailableRooms={getAvailableRooms}
-              getForecastRevpar={getForecastRevpar}
-              getForecastRoomsRevenue={getForecastRoomsRevenue}
+              {...revenueCalculations}
+              calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear}
+              getAvailableRooms={getAvailableRoomsForYear}
+              getForecastRevpar={getForecastRevparForYear}
+              getForecastRoomsRevenue={getForecastRoomsRevenueForYear}
               formatCurrency={formatCurrency}
               formatPercent={formatPercent}
             />
