@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import SidebarSection from "./sidebar/SidebarSection";
@@ -102,6 +103,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
           alt="InnVestAI Logo" 
           className="h-20 w-auto"
         />
+        {location.pathname === '/revenue' && (
+          <div className="mt-4 pt-4 border-t border-gray-300">
+            <h2 className="text-lg font-semibold text-gray-800">Revenue Analysis</h2>
+          </div>
+        )}
       </div>
       <nav className="mt-2 flex-grow">
         <ul>

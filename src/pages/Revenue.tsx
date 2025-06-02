@@ -1,6 +1,9 @@
+
 import React, { useState } from "react";
 import { Button } from "../components/ui/button";
 import RevenueTable from "../components/revenue/RevenueTable";
+import KPICards from "../components/revenue/KPICards";
+import FixedSummaryRows from "../components/revenue/FixedSummaryRows";
 import Sidebar from "../components/Sidebar";
 
 const Revenue = () => {
@@ -161,6 +164,40 @@ const Revenue = () => {
     }
   };
 
+  // Helper functions for ADR calculations
+  const getHistoricalADRForYear = (year: number) => {
+    try {
+      const roomsRevenue = historicalData.roomsRevenue[year] || 0;
+      const availableRooms = getAvailableRooms(year);
+      const occupancyDecimal = (historicalData.occupancy[year] || 0) / 100;
+      const occupiedRooms = Math.round(availableRooms * occupancyDecimal);
+      const result = occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
+      console.log('Historical ADR for', year, ':', result);
+      return result;
+    } catch (error) {
+      console.error('Error calculating historical ADR:', error);
+      return 0;
+    }
+  };
+
+  const getForecastADRForYear = (year: number) => {
+    try {
+      const roomsRevenue = getForecastRoomsRevenue(year);
+      const availableRooms = getAvailableRooms(year);
+      const occupancyValue = occupancyForecastMethod === "Occupancy" 
+        ? occupancyForecast[year] || "0"
+        : calculateOccupancyFromYoY(year).toString();
+      const occupancyDecimal = parseFloat(occupancyValue) / 100;
+      const occupiedRooms = Math.round(availableRooms * occupancyDecimal);
+      const result = occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
+      console.log('Forecast ADR for', year, ':', result);
+      return result;
+    } catch (error) {
+      console.error('Error calculating forecast ADR:', error);
+      return 0;
+    }
+  };
+
   const handleYearlyRevparChange = (year: number, value: string) => {
     const sanitizedValue = value.replace(/[^0-9.-]/g, "");
     setYearlyRevparGrowth(prev => ({
@@ -223,9 +260,27 @@ const Revenue = () => {
       <Sidebar onItemClick={handleItemClick} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="p-6 flex-1 flex flex-col">
-          {/* Header */}
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Revenue Analysis</h1>
+          {/* KPI Cards */}
+          <KPICards />
+
+          {/* Fixed Summary Rows */}
+          <div className="sticky top-0 z-10 bg-gray-50 pb-4">
+            <FixedSummaryRows
+              roomsKeys={roomsKeys}
+              historicalYears={historicalYears}
+              forecastYears={forecastYears}
+              historicalData={historicalData}
+              occupancyForecast={occupancyForecast}
+              occupancyForecastMethod={occupancyForecastMethod}
+              calculateOccupancyFromYoY={calculateOccupancyFromYoY}
+              getAvailableRooms={getAvailableRooms}
+              getForecastRoomsRevenue={getForecastRoomsRevenue}
+              getHistoricalADR={getHistoricalADRForYear}
+              getForecastADR={getForecastADRForYear}
+              getForecastRevpar={getForecastRevpar}
+              formatCurrency={formatCurrency}
+              formatPercent={formatPercent}
+            />
           </div>
 
           {/* Revenue Table - takes remaining space */}
