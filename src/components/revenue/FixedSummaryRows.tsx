@@ -139,13 +139,18 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border mb-4">
+    <div className="bg-white rounded-lg shadow-sm border mb-2">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-48 font-semibold">Metric</TableHead>
-            {allYears.map(year => (
-              <TableHead key={year} className="text-center font-semibold">
+            {historicalYears.map(year => (
+              <TableHead key={year} className="text-center font-semibold bg-blue-50">
+                {year}
+              </TableHead>
+            ))}
+            {forecastYears.map(year => (
+              <TableHead key={year} className="text-center font-semibold bg-green-50">
                 {year}
               </TableHead>
             ))}

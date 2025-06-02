@@ -77,7 +77,7 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
           <div className="flex items-center gap-2">
             <span>Subject Property Occupancy</span>
             <GrowthControls
-              growthType={occupancyForecastMethod}
+              currentGrowthType={occupancyForecastMethod}
               setGrowthType={setOccupancyForecastMethod}
               options={[
                 { value: "Occupancy", label: "Occupancy" },
