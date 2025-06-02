@@ -126,7 +126,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   try {
     return (
       <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-        <ScrollArea className="h-[calc(100vh-200px)] w-full">
+        <ScrollArea className="h-[600px] w-full">
           <Table>
             <RevenueTableHeaders />
             <TableBody>
