@@ -1,6 +1,7 @@
 
 import React from "react";
 import MetricRow from "./MetricRow";
+import ADRGrowthControls from "./ADRGrowthControls";
 import { marketADRData, compSetADRData } from "./revenueData";
 import { getMarketADRYoY, getCompSetADRYoY, getHistoricalADRYoY, getForecastADRYoY, formatYoYWithColor } from "./revenueCalculations";
 
@@ -9,13 +10,25 @@ interface ADRSectionProps {
   forecastYears: number[];
   getHistoricalADR: (year: number) => number;
   getForecastADR: (year: number) => number;
+  adrGrowthType: string;
+  setAdrGrowthType: (value: string) => void;
+  flatAdrGrowth: string;
+  setFlatAdrGrowth: (value: string) => void;
+  yearlyAdrGrowth: Record<number, string>;
+  handleYearlyAdrChange: (year: number, value: string) => void;
 }
 
 const ADRSection: React.FC<ADRSectionProps> = ({
   historicalYears,
   forecastYears,
   getHistoricalADR,
-  getForecastADR
+  getForecastADR,
+  adrGrowthType,
+  setAdrGrowthType,
+  flatAdrGrowth,
+  setFlatAdrGrowth,
+  yearlyAdrGrowth,
+  handleYearlyAdrChange
 }) => {
   // Helper function to calculate index percentages
   const calculateIndex = (numerator: number, denominator: number): string => {
@@ -78,13 +91,30 @@ const ADRSection: React.FC<ADRSectionProps> = ({
         forecastData={forecastYears.map(year => `$${getForecastADR(year).toFixed(2)}`)}
       />
 
-      {/* Subject Property ADR YoY Growth */}
+      {/* Subject Property ADR YoY Growth with Controls */}
       <MetricRow
-        label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</span>}
+        label={
+          <ADRGrowthControls
+            adrGrowthType={adrGrowthType}
+            setAdrGrowthType={setAdrGrowthType}
+            flatAdrGrowth={flatAdrGrowth}
+            setFlatAdrGrowth={setFlatAdrGrowth}
+            yearlyAdrGrowth={yearlyAdrGrowth}
+            handleYearlyAdrChange={handleYearlyAdrChange}
+            forecastYears={forecastYears}
+          />
+        }
         historicalData={historicalYears.map((year, index) => 
           index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index, historicalYears, getHistoricalADR))
         )}
-        forecastData={forecastYears.map(year => formatYoYWithColor(getForecastADRYoY(year, forecastYears, getForecastADR, getHistoricalADR(2024))))}
+        forecastData={forecastYears.map(year => 
+          adrGrowthType === "yearly" ? "" : `${parseFloat(flatAdrGrowth).toFixed(1)}%`
+        )}
+        isGrowthRow={true}
+        adrGrowthType={adrGrowthType}
+        yearlyAdrGrowth={yearlyAdrGrowth}
+        handleYearlyAdrChange={handleYearlyAdrChange}
+        forecastYears={forecastYears}
       />
 
       {/* Index Calculations */}

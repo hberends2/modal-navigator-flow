@@ -1,9 +1,8 @@
 
 import React from "react";
 import MetricRow from "./MetricRow";
-import RevPARGrowthControls from "./RevPARGrowthControls";
 import { marketRevparData, compSetRevparData } from "./revenueData";
-import { getMarketRevparYoY, getCompSetRevparYoY, getForecastRevparYoY, formatYoYWithColor } from "./revenueCalculations";
+import { getMarketRevparYoY, getCompSetRevparYoY, formatYoYWithColor } from "./revenueCalculations";
 
 interface RevPARSectionProps {
   historicalYears: number[];
@@ -12,12 +11,6 @@ interface RevPARSectionProps {
     revpar: Record<number, number>;
     revparYoY: Record<number, number>;
   };
-  revparGrowthType: string;
-  setRevparGrowthType: (value: string) => void;
-  flatRevparGrowth: string;
-  setFlatRevparGrowth: (value: string) => void;
-  yearlyRevparGrowth: Record<number, string>;
-  handleYearlyRevparChange: (year: number, value: string) => void;
   getForecastRevpar: (year: number) => number;
 }
 
@@ -25,18 +18,27 @@ const RevPARSection: React.FC<RevPARSectionProps> = ({
   historicalYears,
   forecastYears,
   historicalData,
-  revparGrowthType,
-  setRevparGrowthType,
-  flatRevparGrowth,
-  setFlatRevparGrowth,
-  yearlyRevparGrowth,
-  handleYearlyRevparChange,
   getForecastRevpar
 }) => {
   // Helper function to calculate index percentages
   const calculateIndex = (numerator: number, denominator: number): string => {
     if (denominator === 0) return "0.0%";
     return `${((numerator / denominator) * 100).toFixed(1)}%`;
+  };
+
+  // Calculate RevPAR YoY for forecast years
+  const getForecastRevparYoY = (year: number) => {
+    const yearIndex = forecastYears.indexOf(year);
+    if (yearIndex === 0) {
+      const currentRevpar = getForecastRevpar(year);
+      const lastHistoricalRevpar = historicalData.revpar[2024];
+      return ((currentRevpar - lastHistoricalRevpar) / lastHistoricalRevpar) * 100;
+    } else {
+      const currentRevpar = getForecastRevpar(year);
+      const previousYear = forecastYears[yearIndex - 1];
+      const previousRevpar = getForecastRevpar(previousYear);
+      return ((currentRevpar - previousRevpar) / previousRevpar) * 100;
+    }
   };
 
   return (
@@ -94,39 +96,13 @@ const RevPARSection: React.FC<RevPARSectionProps> = ({
         forecastData={forecastYears.map(year => `$${getForecastRevpar(year).toFixed(2)}`)}
       />
 
-      {/* Subject Property RevPAR YoY Growth */}
+      {/* Subject Property RevPAR YoY Growth (calculated, no controls) */}
       <MetricRow
         label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property RevPAR YoY Growth</span>}
         historicalData={historicalYears.map((year, index) => 
           index === 0 ? "-" : formatYoYWithColor(historicalData.revparYoY[year])
         )}
-        forecastData={forecastYears.map(year => formatYoYWithColor(getForecastRevparYoY(year, forecastYears, getForecastRevpar, historicalData.revpar[2024])))}
-      />
-
-      {/* RevPAR Growth Controls */}
-      <MetricRow
-        label={
-          <RevPARGrowthControls
-            revparGrowthType={revparGrowthType}
-            setRevparGrowthType={setRevparGrowthType}
-            flatRevparGrowth={flatRevparGrowth}
-            setFlatRevparGrowth={setFlatRevparGrowth}
-            yearlyRevparGrowth={yearlyRevparGrowth}
-            handleYearlyRevparChange={handleYearlyRevparChange}
-            forecastYears={forecastYears}
-          />
-        }
-        historicalData={historicalYears.map((year, index) => 
-          index === 0 ? "-" : `${historicalData.revparYoY[year].toFixed(1)}%`
-        )}
-        forecastData={forecastYears.map(year => 
-          revparGrowthType === "yearly" ? "" : `${parseFloat(flatRevparGrowth).toFixed(1)}%`
-        )}
-        isGrowthRow={true}
-        revparGrowthType={revparGrowthType}
-        yearlyRevparGrowth={yearlyRevparGrowth}
-        handleYearlyRevparChange={handleYearlyRevparChange}
-        forecastYears={forecastYears}
+        forecastData={forecastYears.map(year => formatYoYWithColor(getForecastRevparYoY(year)))}
       />
 
       {/* Index Calculations */}

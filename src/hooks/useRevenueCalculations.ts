@@ -2,15 +2,15 @@
 import { useState } from 'react';
 
 export const useRevenueCalculations = () => {
-  // State for growth rate settings
-  const [revparGrowthType, setRevparGrowthType] = useState<string>("flat");
-  const [flatRevparGrowth, setFlatRevparGrowth] = useState<string>("3.0");
-  const [yearlyRevparGrowth, setYearlyRevparGrowth] = useState<Record<number, string>>({
-    2025: "3.0",
-    2026: "3.0", 
-    2027: "3.0",
-    2028: "3.0",
-    2029: "3.0"
+  // State for ADR growth rate settings (replacing RevPAR growth)
+  const [adrGrowthType, setAdrGrowthType] = useState<string>("flat");
+  const [flatAdrGrowth, setFlatAdrGrowth] = useState<string>("0.0");
+  const [yearlyAdrGrowth, setYearlyAdrGrowth] = useState<Record<number, string>>({
+    2025: "0.0",
+    2026: "0.0", 
+    2027: "0.0",
+    2028: "0.0",
+    2029: "0.0"
   });
   
   // State for occupancy forecast
@@ -32,37 +32,51 @@ export const useRevenueCalculations = () => {
     2029: "1.3"
   });
 
-  const handleYearlyRevparChange = (year: number, value: string) => {
+  const formatPercentageInput = (value: string): string => {
+    const numValue = parseFloat(value.replace(/[^0-9.-]/g, ""));
+    return isNaN(numValue) ? "0.0" : numValue.toFixed(1);
+  };
+
+  const handleYearlyAdrChange = (year: number, value: string) => {
     const sanitizedValue = value.replace(/[^0-9.-]/g, "");
-    setYearlyRevparGrowth(prev => ({
+    const formattedValue = formatPercentageInput(sanitizedValue);
+    setYearlyAdrGrowth(prev => ({
       ...prev,
-      [year]: sanitizedValue
+      [year]: formattedValue
     }));
+  };
+
+  const handleFlatAdrChange = (value: string) => {
+    const sanitizedValue = value.replace(/[^0-9.-]/g, "");
+    const formattedValue = formatPercentageInput(sanitizedValue);
+    setFlatAdrGrowth(formattedValue);
   };
 
   const handleOccupancyChange = (year: number, value: string) => {
     const sanitizedValue = value.replace(/[^0-9.]/g, "");
+    const formattedValue = formatPercentageInput(sanitizedValue);
     setOccupancyForecast(prev => ({
       ...prev,
-      [year]: sanitizedValue
+      [year]: formattedValue
     }));
   };
 
   const handleOccupancyYoYChange = (year: number, value: string) => {
     const sanitizedValue = value.replace(/[^0-9.-]/g, "");
+    const formattedValue = formatPercentageInput(sanitizedValue);
     setOccupancyYoYGrowth(prev => ({
       ...prev,
-      [year]: sanitizedValue
+      [year]: formattedValue
     }));
   };
 
   return {
-    revparGrowthType,
-    setRevparGrowthType,
-    flatRevparGrowth,
-    setFlatRevparGrowth,
-    yearlyRevparGrowth,
-    handleYearlyRevparChange,
+    adrGrowthType,
+    setAdrGrowthType,
+    flatAdrGrowth,
+    setFlatAdrGrowth: handleFlatAdrChange,
+    yearlyAdrGrowth,
+    handleYearlyAdrChange,
     occupancyForecast,
     handleOccupancyChange,
     occupancyForecastMethod,

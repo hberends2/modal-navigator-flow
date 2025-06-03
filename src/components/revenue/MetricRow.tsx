@@ -19,6 +19,9 @@ interface MetricRowProps {
   setFlatRevparGrowth?: (value: string) => void;
   yearlyRevparGrowth?: Record<number, string>;
   handleYearlyRevparChange?: (year: number, value: string) => void;
+  adrGrowthType?: string;
+  yearlyAdrGrowth?: Record<number, string>;
+  handleYearlyAdrChange?: (year: number, value: string) => void;
   isSectionHeader?: boolean;
   isYoYRow?: boolean;
 }
@@ -38,6 +41,9 @@ const MetricRow: React.FC<MetricRowProps> = ({
   setFlatRevparGrowth,
   yearlyRevparGrowth,
   handleYearlyRevparChange,
+  adrGrowthType,
+  yearlyAdrGrowth,
+  handleYearlyAdrChange,
   isSectionHeader = false,
   isYoYRow = false
 }) => {
@@ -64,6 +70,16 @@ const MetricRow: React.FC<MetricRowProps> = ({
                       : "text-red-600"
                     : "text-blue-600"
                 }`}
+              />
+              <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
+            </div>
+          ) : isGrowthRow && adrGrowthType === "yearly" && yearlyAdrGrowth && handleYearlyAdrChange ? (
+            <div className="relative w-16 mx-auto">
+              <Input
+                type="text"
+                value={yearlyAdrGrowth[forecastYears[index]] || ""}
+                onChange={(e) => handleYearlyAdrChange(forecastYears[index], e.target.value)}
+                className="pr-6 text-center h-8 text-blue-600"
               />
               <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
             </div>

@@ -26,54 +26,73 @@ export const calculateOccupancyFromYoY = (
   }
 };
 
-export const getForecastRevpar = (
+export const getForecastADR = (
   year: number,
   forecastYears: number[],
-  baseRevpar: number,
-  revparGrowthType: string,
-  flatRevparGrowth: string,
-  yearlyRevparGrowth: Record<number, string>
+  baseADR: number,
+  adrGrowthType: string,
+  flatAdrGrowth: string,
+  yearlyAdrGrowth: Record<number, string>
 ): number => {
   try {
-    console.log('getForecastRevpar called for year:', year);
+    console.log('getForecastADR called for year:', year);
     const yearIndex = forecastYears.indexOf(year);
     if (yearIndex === 0) {
       // First forecast year - base on 2024 data
-      const growthRate = revparGrowthType === "flat" 
-        ? parseFloat(flatRevparGrowth) || 0
-        : parseFloat(yearlyRevparGrowth[year]) || 0;
-      const result = baseRevpar * (1 + growthRate / 100);
-      console.log('Forecast RevPAR (first year):', { year, baseRevpar, growthRate, result });
+      const growthRate = adrGrowthType === "flat" 
+        ? parseFloat(flatAdrGrowth) || 0
+        : parseFloat(yearlyAdrGrowth[year]) || 0;
+      const result = baseADR * (1 + growthRate / 100);
+      console.log('Forecast ADR (first year):', { year, baseADR, growthRate, result });
       return result;
     } else {
       // Subsequent years - base on previous forecast year
       const prevYear = forecastYears[yearIndex - 1];
-      const prevRevpar = getForecastRevpar(prevYear, forecastYears, baseRevpar, revparGrowthType, flatRevparGrowth, yearlyRevparGrowth);
-      const growthRate = revparGrowthType === "flat"
-        ? parseFloat(flatRevparGrowth) || 0
-        : parseFloat(yearlyRevparGrowth[year]) || 0;
-      const result = prevRevpar * (1 + growthRate / 100);
-      console.log('Forecast RevPAR (subsequent year):', { year, prevYear, prevRevpar, growthRate, result });
+      const prevADR = getForecastADR(prevYear, forecastYears, baseADR, adrGrowthType, flatAdrGrowth, yearlyAdrGrowth);
+      const growthRate = adrGrowthType === "flat"
+        ? parseFloat(flatAdrGrowth) || 0
+        : parseFloat(yearlyAdrGrowth[year]) || 0;
+      const result = prevADR * (1 + growthRate / 100);
+      console.log('Forecast ADR (subsequent year):', { year, prevYear, prevADR, growthRate, result });
       return result;
     }
   } catch (error) {
-    console.error('Error in getForecastRevpar:', error);
+    console.error('Error in getForecastADR:', error);
     return 0;
   }
 };
 
 export const getForecastRoomsRevenue = (
   year: number,
-  revpar: number,
+  adr: number,
+  roomsKeys: number,
+  occupancyValue: string
+): number => {
+  try {
+    const availableRooms = getAvailableRooms(year, roomsKeys);
+    const occupancyDecimal = parseFloat(occupancyValue) / 100;
+    const occupiedRooms = Math.round(availableRooms * occupancyDecimal);
+    const result = adr * occupiedRooms;
+    console.log('Forecast rooms revenue:', { year, adr, occupiedRooms, result });
+    return result;
+  } catch (error) {
+    console.error('Error in getForecastRoomsRevenue:', error);
+    return 0;
+  }
+};
+
+export const getForecastRevpar = (
+  year: number,
+  roomsRevenue: number,
   roomsKeys: number
 ): number => {
   try {
     const availableRooms = getAvailableRooms(year, roomsKeys);
-    const result = revpar * availableRooms;
-    console.log('Forecast rooms revenue:', { year, revpar, availableRooms, result });
+    const result = roomsRevenue / availableRooms;
+    console.log('Forecast RevPAR (calculated from revenue):', { year, roomsRevenue, availableRooms, result });
     return result;
   } catch (error) {
-    console.error('Error in getForecastRoomsRevenue:', error);
+    console.error('Error in getForecastRevpar:', error);
     return 0;
   }
 };
