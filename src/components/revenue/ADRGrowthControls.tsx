@@ -31,9 +31,6 @@ const ADRGrowthControls: React.FC<ADRGrowthControlsProps> = ({
 
   return (
     <div className="flex items-center gap-3">
-      <span className="whitespace-pre-line leading-tight text-xs min-w-[80px]">
-        {"Subject Property\nADR YoY Growth"}
-      </span>
       <Select value={adrGrowthType} onValueChange={setAdrGrowthType}>
         <SelectTrigger className="w-40 min-w-[140px] h-auto min-h-[36px] py-2 [&>span]:whitespace-normal [&>span]:leading-tight">
           <SelectValue className="whitespace-normal text-left leading-tight" />
