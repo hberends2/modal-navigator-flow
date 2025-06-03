@@ -75,21 +75,21 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         forecastData={forecastYears.map(year => getForecastOccupiedRooms(year).toLocaleString())}
       />
 
-      {/* Subject Property Occupancy */}
+      {/* Subject Property Occupancy with Two Row Layout */}
       <MetricRow
-        label={
-          <div className="flex items-center gap-3">
-            <span className="min-w-[140px]">Subject Property Occupancy</span>
-            <GrowthControls
-              currentGrowthType={occupancyForecastMethod}
-              setGrowthType={setOccupancyForecastMethod}
-              options={[
-                { value: "Occupancy", label: "Occupancy" },
-                { value: "YoY Growth", label: "YoY Growth" }
-              ]}
-            />
-          </div>
+        isTwoRowMetric={true}
+        metricText="Subject Property Occupancy"
+        controls={
+          <GrowthControls
+            currentGrowthType={occupancyForecastMethod}
+            setGrowthType={setOccupancyForecastMethod}
+            options={[
+              { value: "Occupancy", label: "Occupancy" },
+              { value: "YoY Growth", label: "YoY Growth" }
+            ]}
+          />
         }
+        label=""
         historicalData={historicalYears.map(year => formatPercent(historicalData.occupancy[year] || 0))}
         forecastData={forecastYears.map(year => {
           if (occupancyForecastMethod === "Occupancy") {

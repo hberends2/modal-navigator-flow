@@ -95,9 +95,11 @@ const ADRSection: React.FC<ADRSectionProps> = ({
         forecastData={forecastYears.map(year => `$${getForecastADR(year).toFixed(2)}`)}
       />
 
-      {/* Subject Property ADR YoY Growth with Controls */}
+      {/* Subject Property ADR YoY Growth with Two Row Layout */}
       <MetricRow
-        label={
+        isTwoRowMetric={true}
+        metricText="Subject Property ADR YoY Growth"
+        controls={
           <ADRGrowthControls
             adrGrowthType={adrGrowthType}
             setAdrGrowthType={setAdrGrowthType}
@@ -109,6 +111,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
             forecastYears={forecastYears}
           />
         }
+        label=""
         historicalData={historicalYears.map((year, index) => 
           index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index, historicalYears, getHistoricalADR))
         )}
