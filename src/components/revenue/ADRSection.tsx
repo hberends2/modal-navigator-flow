@@ -14,8 +14,10 @@ interface ADRSectionProps {
   setAdrGrowthType: (value: string) => void;
   flatAdrGrowth: string;
   setFlatAdrGrowth: (value: string) => void;
+  handleFlatAdrBlur: (value: string) => void;
   yearlyAdrGrowth: Record<number, string>;
   handleYearlyAdrChange: (year: number, value: string) => void;
+  handleYearlyAdrBlur: (year: number, value: string) => void;
 }
 
 const ADRSection: React.FC<ADRSectionProps> = ({
@@ -27,8 +29,10 @@ const ADRSection: React.FC<ADRSectionProps> = ({
   setAdrGrowthType,
   flatAdrGrowth,
   setFlatAdrGrowth,
+  handleFlatAdrBlur,
   yearlyAdrGrowth,
-  handleYearlyAdrChange
+  handleYearlyAdrChange,
+  handleYearlyAdrBlur
 }) => {
   // Helper function to calculate index percentages
   const calculateIndex = (numerator: number, denominator: number): string => {
@@ -99,6 +103,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
             setAdrGrowthType={setAdrGrowthType}
             flatAdrGrowth={flatAdrGrowth}
             setFlatAdrGrowth={setFlatAdrGrowth}
+            handleFlatAdrBlur={handleFlatAdrBlur}
             yearlyAdrGrowth={yearlyAdrGrowth}
             handleYearlyAdrChange={handleYearlyAdrChange}
             forecastYears={forecastYears}
@@ -114,6 +119,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
         adrGrowthType={adrGrowthType}
         yearlyAdrGrowth={yearlyAdrGrowth}
         handleYearlyAdrChange={handleYearlyAdrChange}
+        handleYearlyAdrBlur={handleYearlyAdrBlur}
         forecastYears={forecastYears}
       />
 

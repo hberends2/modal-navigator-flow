@@ -137,10 +137,18 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 historicalData={historicalData}
                 occupancyForecast={occupancyForecast}
                 handleOccupancyChange={handleOccupancyChange}
+                handleOccupancyBlur={(year, value) => {
+                  // This will be handled by the revenue calculations hook
+                  console.log('Occupancy blur event:', year, value);
+                }}
                 occupancyForecastMethod={occupancyForecastMethod}
                 setOccupancyForecastMethod={setOccupancyForecastMethod}
                 occupancyYoYGrowth={occupancyYoYGrowth}
                 handleOccupancyYoYChange={handleOccupancyYoYChange}
+                handleOccupancyYoYBlur={(year, value) => {
+                  // This will be handled by the revenue calculations hook
+                  console.log('Occupancy YoY blur event:', year, value);
+                }}
                 calculateOccupancyFromYoY={calculateOccupancyFromYoY}
                 getAvailableRooms={getAvailableRooms}
                 getHistoricalOccupiedRooms={getHistoricalOccupiedRoomsForYear}
@@ -167,8 +175,16 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 setAdrGrowthType={setAdrGrowthType}
                 flatAdrGrowth={flatAdrGrowth}
                 setFlatAdrGrowth={setFlatAdrGrowth}
+                handleFlatAdrBlur={(value) => {
+                  // This will be handled by the revenue calculations hook
+                  console.log('Flat ADR blur event:', value);
+                }}
                 yearlyAdrGrowth={yearlyAdrGrowth}
                 handleYearlyAdrChange={handleYearlyAdrChange}
+                handleYearlyAdrBlur={(year, value) => {
+                  // This will be handled by the revenue calculations hook
+                  console.log('Yearly ADR blur event:', year, value);
+                }}
               />
 
               {/* RevPAR Section */}

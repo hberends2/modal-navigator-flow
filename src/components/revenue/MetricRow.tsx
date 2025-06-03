@@ -11,6 +11,7 @@ interface MetricRowProps {
   isEditable?: boolean;
   editableData?: Record<number, string>;
   onEditableChange?: (year: number, value: string) => void;
+  onEditableBlur?: (year: number, value: string) => void;
   forecastYears?: number[];
   isGrowthRow?: boolean;
   revparGrowthType?: string;
@@ -22,6 +23,7 @@ interface MetricRowProps {
   adrGrowthType?: string;
   yearlyAdrGrowth?: Record<number, string>;
   handleYearlyAdrChange?: (year: number, value: string) => void;
+  handleYearlyAdrBlur?: (year: number, value: string) => void;
   isSectionHeader?: boolean;
   isYoYRow?: boolean;
 }
@@ -33,6 +35,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
   isEditable = false,
   editableData,
   onEditableChange,
+  onEditableBlur,
   forecastYears = [],
   isGrowthRow = false,
   revparGrowthType,
@@ -44,26 +47,28 @@ const MetricRow: React.FC<MetricRowProps> = ({
   adrGrowthType,
   yearlyAdrGrowth,
   handleYearlyAdrChange,
+  handleYearlyAdrBlur,
   isSectionHeader = false,
   isYoYRow = false
 }) => {
   return (
     <TableRow className={isSectionHeader ? "bg-gray-100" : ""}>
-      <TableCell className="font-medium px-1">{label}</TableCell>
+      <TableCell className="font-medium px-2 py-3">{label}</TableCell>
       {historicalData.map((value, index) => (
-        <TableCell key={`historical-${index}`} className="text-center px-1">
+        <TableCell key={`historical-${index}`} className="text-center px-2 py-3">
           {value}
         </TableCell>
       ))}
       {forecastData.map((value, index) => (
-        <TableCell key={`forecast-${index}`} className="text-center px-1">
+        <TableCell key={`forecast-${index}`} className="text-center px-2 py-3">
           {isEditable && editableData && onEditableChange ? (
-            <div className="relative w-20 mx-auto">
+            <div className="relative w-24 mx-auto">
               <Input
                 type="text"
                 value={editableData[forecastYears[index]] || ""}
                 onChange={(e) => onEditableChange(forecastYears[index], e.target.value)}
-                className={`pr-6 text-center h-8 text-sm ${
+                onBlur={(e) => onEditableBlur && onEditableBlur(forecastYears[index], e.target.value)}
+                className={`pr-8 text-center h-9 text-sm ${
                   isYoYRow 
                     ? parseFloat(editableData[forecastYears[index]] || "0") >= 0 
                       ? "text-green-600" 
@@ -74,22 +79,23 @@ const MetricRow: React.FC<MetricRowProps> = ({
               <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
             </div>
           ) : isGrowthRow && adrGrowthType === "yearly" && yearlyAdrGrowth && handleYearlyAdrChange ? (
-            <div className="relative w-16 mx-auto">
+            <div className="relative w-20 mx-auto">
               <Input
                 type="text"
                 value={yearlyAdrGrowth[forecastYears[index]] || ""}
                 onChange={(e) => handleYearlyAdrChange(forecastYears[index], e.target.value)}
-                className="pr-6 text-center h-8 text-blue-600"
+                onBlur={(e) => handleYearlyAdrBlur && handleYearlyAdrBlur(forecastYears[index], e.target.value)}
+                className="pr-8 text-center h-9 text-blue-600"
               />
               <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
             </div>
           ) : isGrowthRow && revparGrowthType === "yearly" && yearlyRevparGrowth && handleYearlyRevparChange ? (
-            <div className="relative w-16 mx-auto">
+            <div className="relative w-20 mx-auto">
               <Input
                 type="text"
                 value={yearlyRevparGrowth[forecastYears[index]] || ""}
                 onChange={(e) => handleYearlyRevparChange(forecastYears[index], e.target.value)}
-                className="pr-6 text-center h-8 text-blue-600"
+                className="pr-8 text-center h-9 text-blue-600"
               />
               <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
             </div>

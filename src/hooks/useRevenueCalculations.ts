@@ -33,13 +33,23 @@ export const useRevenueCalculations = () => {
   });
 
   const formatPercentageInput = (value: string): string => {
-    const numValue = parseFloat(value.replace(/[^0-9.-]/g, ""));
+    // Remove any non-numeric characters except decimal point and negative sign
+    const cleanValue = value.replace(/[^0-9.-]/g, "");
+    const numValue = parseFloat(cleanValue);
     return isNaN(numValue) ? "0.0" : numValue.toFixed(1);
   };
 
   const handleYearlyAdrChange = (year: number, value: string) => {
-    const sanitizedValue = value.replace(/[^0-9.-]/g, "");
-    const formattedValue = formatPercentageInput(sanitizedValue);
+    // Allow raw input during typing, don't format immediately
+    setYearlyAdrGrowth(prev => ({
+      ...prev,
+      [year]: value
+    }));
+  };
+
+  const handleYearlyAdrBlur = (year: number, value: string) => {
+    // Format only on blur
+    const formattedValue = formatPercentageInput(value);
     setYearlyAdrGrowth(prev => ({
       ...prev,
       [year]: formattedValue
@@ -47,14 +57,27 @@ export const useRevenueCalculations = () => {
   };
 
   const handleFlatAdrChange = (value: string) => {
-    const sanitizedValue = value.replace(/[^0-9.-]/g, "");
-    const formattedValue = formatPercentageInput(sanitizedValue);
+    // Allow raw input during typing
+    setFlatAdrGrowth(value);
+  };
+
+  const handleFlatAdrBlur = (value: string) => {
+    // Format only on blur
+    const formattedValue = formatPercentageInput(value);
     setFlatAdrGrowth(formattedValue);
   };
 
   const handleOccupancyChange = (year: number, value: string) => {
-    const sanitizedValue = value.replace(/[^0-9.]/g, "");
-    const formattedValue = formatPercentageInput(sanitizedValue);
+    // Allow raw input during typing
+    setOccupancyForecast(prev => ({
+      ...prev,
+      [year]: value
+    }));
+  };
+
+  const handleOccupancyBlur = (year: number, value: string) => {
+    // Format only on blur
+    const formattedValue = formatPercentageInput(value);
     setOccupancyForecast(prev => ({
       ...prev,
       [year]: formattedValue
@@ -62,8 +85,16 @@ export const useRevenueCalculations = () => {
   };
 
   const handleOccupancyYoYChange = (year: number, value: string) => {
-    const sanitizedValue = value.replace(/[^0-9.-]/g, "");
-    const formattedValue = formatPercentageInput(sanitizedValue);
+    // Allow raw input during typing
+    setOccupancyYoYGrowth(prev => ({
+      ...prev,
+      [year]: value
+    }));
+  };
+
+  const handleOccupancyYoYBlur = (year: number, value: string) => {
+    // Format only on blur
+    const formattedValue = formatPercentageInput(value);
     setOccupancyYoYGrowth(prev => ({
       ...prev,
       [year]: formattedValue
@@ -75,13 +106,17 @@ export const useRevenueCalculations = () => {
     setAdrGrowthType,
     flatAdrGrowth,
     setFlatAdrGrowth: handleFlatAdrChange,
+    handleFlatAdrBlur,
     yearlyAdrGrowth,
     handleYearlyAdrChange,
+    handleYearlyAdrBlur,
     occupancyForecast,
     handleOccupancyChange,
+    handleOccupancyBlur,
     occupancyForecastMethod,
     setOccupancyForecastMethod,
     occupancyYoYGrowth,
-    handleOccupancyYoYChange
+    handleOccupancyYoYChange,
+    handleOccupancyYoYBlur
   };
 };

@@ -12,10 +12,12 @@ interface OccupancySectionProps {
   };
   occupancyForecast: Record<number, string>;
   handleOccupancyChange: (year: number, value: string) => void;
+  handleOccupancyBlur: (year: number, value: string) => void;
   occupancyForecastMethod: string;
   setOccupancyForecastMethod: (value: string) => void;
   occupancyYoYGrowth: Record<number, string>;
   handleOccupancyYoYChange: (year: number, value: string) => void;
+  handleOccupancyYoYBlur: (year: number, value: string) => void;
   calculateOccupancyFromYoY: (year: number) => number;
   getAvailableRooms: (year: number) => number;
   getHistoricalOccupiedRooms: (year: number) => number;
@@ -30,10 +32,12 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
   historicalData,
   occupancyForecast,
   handleOccupancyChange,
+  handleOccupancyBlur,
   occupancyForecastMethod,
   setOccupancyForecastMethod,
   occupancyYoYGrowth,
   handleOccupancyYoYChange,
+  handleOccupancyYoYBlur,
   calculateOccupancyFromYoY,
   getAvailableRooms,
   getHistoricalOccupiedRooms,
@@ -74,8 +78,8 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
       {/* Subject Property Occupancy */}
       <MetricRow
         label={
-          <div className="flex items-center gap-2">
-            <span>Subject Property Occupancy</span>
+          <div className="flex items-center gap-3">
+            <span className="min-w-[140px]">Subject Property Occupancy</span>
             <GrowthControls
               currentGrowthType={occupancyForecastMethod}
               setGrowthType={setOccupancyForecastMethod}
@@ -97,6 +101,7 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         isEditable={occupancyForecastMethod === "Occupancy"}
         editableData={occupancyForecast}
         onEditableChange={handleOccupancyChange}
+        onEditableBlur={handleOccupancyBlur}
         forecastYears={forecastYears}
       />
 
@@ -145,6 +150,7 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         isEditable={occupancyForecastMethod === "YoY Growth"}
         editableData={occupancyYoYGrowth}
         onEditableChange={handleOccupancyYoYChange}
+        onEditableBlur={handleOccupancyYoYBlur}
         forecastYears={forecastYears}
         isYoYRow={true}
       />
