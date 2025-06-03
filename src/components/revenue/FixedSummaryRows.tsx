@@ -54,18 +54,6 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
     return Math.round(availableRooms * occupancyDecimal);
   };
 
-  const getHistoricalRevPOR = (year: number) => {
-    const roomsRevenue = historicalData.roomsRevenue[year] || 0;
-    const occupiedRooms = getHistoricalOccupiedRooms(year);
-    return occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
-  };
-
-  const getForecastRevPOR = (year: number) => {
-    const roomsRevenue = getForecastRoomsRevenue(year);
-    const occupiedRooms = getForecastOccupiedRooms(year);
-    return occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
-  };
-
   const getHistoricalRevpar = (year: number) => {
     const roomsRevenue = historicalData.roomsRevenue[year] || 0;
     const availableRooms = getAvailableRooms(year);
@@ -107,6 +95,16 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
       })
     },
     {
+      label: "Rooms Revenue",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(historicalData.roomsRevenue[year] || 0);
+        } else {
+          return formatCurrency(getForecastRoomsRevenue(year));
+        }
+      })
+    },
+    {
       label: "Subject Property ADR",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
@@ -125,16 +123,6 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
           return formatCurrency(getForecastRevpar(year));
         }
       })
-    },
-    {
-      label: "Subject Property RevPOR",
-      data: allYears.map(year => {
-        if (historicalYears.includes(year)) {
-          return formatCurrency(getHistoricalRevPOR(year));
-        } else {
-          return formatCurrency(getForecastRevPOR(year));
-        }
-      })
     }
   ];
 
@@ -143,14 +131,14 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-48 font-semibold">Metric</TableHead>
+            <TableHead className="w-48 font-semibold text-xs">Metric</TableHead>
             {historicalYears.map(year => (
-              <TableHead key={year} className="text-center font-semibold bg-blue-50">
+              <TableHead key={year} className="text-center font-semibold bg-blue-50 text-xs">
                 {year}
               </TableHead>
             ))}
             {forecastYears.map(year => (
-              <TableHead key={year} className="text-center font-semibold bg-green-50">
+              <TableHead key={year} className="text-center font-semibold bg-green-50 text-xs">
                 {year}
               </TableHead>
             ))}
@@ -158,10 +146,10 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
         </TableHeader>
         <TableBody>
           {summaryRows.map((row, index) => (
-            <TableRow key={index} className="h-8">
-              <TableCell className="font-medium text-sm py-1">{row.label}</TableCell>
+            <TableRow key={index} className="h-6">
+              <TableCell className="font-medium text-xs py-0.5">{row.label}</TableCell>
               {row.data.map((value, yearIndex) => (
-                <TableCell key={yearIndex} className="text-center text-sm py-1">
+                <TableCell key={yearIndex} className="text-center text-xs py-0.5">
                   {value}
                 </TableCell>
               ))}
