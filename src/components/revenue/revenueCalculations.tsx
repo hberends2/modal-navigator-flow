@@ -1,6 +1,37 @@
-
 import React from 'react';
 import { marketRevparData, compSetRevparData, marketADRData, compSetADRData, marketOccupancyData, compSetOccupancyData } from './revenueData';
+
+export const getHistoricalOccupiedRooms = (year: number, getAvailableRooms: (year: number) => number, occupancy: number) => {
+  const availableRooms = getAvailableRooms(year);
+  const occupancyDecimal = occupancy / 100;
+  const result = Math.round(availableRooms * occupancyDecimal);
+  console.log('getHistoricalOccupiedRooms called:', { year, occupancy });
+  console.log('Historical occupied rooms result:', result);
+  return result;
+};
+
+export const getForecastOccupiedRooms = (year: number, getAvailableRooms: (year: number) => number, occupancyValue: string) => {
+  const availableRooms = getAvailableRooms(year);
+  const occupancyDecimal = parseFloat(occupancyValue) / 100;
+  const result = Math.round(availableRooms * occupancyDecimal);
+  console.log('getForecastOccupiedRooms called:', { year, occupancyValue });
+  console.log('Forecast occupied rooms result:', result);
+  return result;
+};
+
+export const getHistoricalADR = (year: number, roomsRevenue: number, occupiedRooms: number) => {
+  const result = occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
+  console.log('getHistoricalADR called:', { year, roomsRevenue, occupiedRooms });
+  console.log('Historical ADR result:', result);
+  return result;
+};
+
+export const getForecastADR = (roomsRevenue: number, occupiedRooms: number) => {
+  const result = occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
+  console.log('getForecastADR called:', { roomsRevenue, occupiedRooms });
+  console.log('Forecast ADR result:', result);
+  return result;
+};
 
 export const getMarketRevparYoY = (year: number, index: number, historicalYears: number[]) => {
   console.log('getMarketRevparYoY called:', { year, index, historicalYears });
