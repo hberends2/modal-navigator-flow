@@ -127,7 +127,18 @@ const Revenue = () => {
               historicalYears={historicalYears}
               forecastYears={forecastYears}
               historicalData={historicalData}
-              {...revenueCalculations}
+              adrGrowthType={revenueCalculations.adrGrowthType}
+              setAdrGrowthType={revenueCalculations.setAdrGrowthType}
+              flatAdrGrowth={revenueCalculations.flatAdrGrowth}
+              setFlatAdrGrowth={revenueCalculations.setFlatAdrGrowth}
+              yearlyAdrGrowth={revenueCalculations.yearlyAdrGrowth}
+              handleYearlyAdrChange={revenueCalculations.handleYearlyAdrChange}
+              occupancyForecast={revenueCalculations.occupancyForecast}
+              handleOccupancyChange={revenueCalculations.handleOccupancyChange}
+              occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
+              setOccupancyForecastMethod={revenueCalculations.setOccupancyForecastMethod}
+              occupancyYoYGrowth={revenueCalculations.occupancyYoYGrowth}
+              handleOccupancyYoYChange={revenueCalculations.handleOccupancyYoYChange}
               calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear}
               getAvailableRooms={getAvailableRoomsForYear}
               getForecastRevpar={getForecastRevparForYear}

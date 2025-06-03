@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Table, TableBody } from "../ui/table";
 import { ScrollArea } from "../ui/scroll-area";
@@ -19,12 +18,12 @@ interface RevenueTableProps {
     revparYoY: Record<number, number>;
     occupancy: Record<number, number>;
   };
-  revparGrowthType: string;
-  setRevparGrowthType: (value: string) => void;
-  flatRevparGrowth: string;
-  setFlatRevparGrowth: (value: string) => void;
-  yearlyRevparGrowth: Record<number, string>;
-  handleYearlyRevparChange: (year: number, value: string) => void;
+  adrGrowthType: string;
+  setAdrGrowthType: (value: string) => void;
+  flatAdrGrowth: string;
+  setFlatAdrGrowth: (value: string) => void;
+  yearlyAdrGrowth: Record<number, string>;
+  handleYearlyAdrChange: (year: number, value: string) => void;
   occupancyForecast: Record<number, string>;
   handleOccupancyChange: (year: number, value: string) => void;
   occupancyForecastMethod: string;
@@ -44,12 +43,12 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   historicalYears,
   forecastYears,
   historicalData,
-  revparGrowthType,
-  setRevparGrowthType,
-  flatRevparGrowth,
-  setFlatRevparGrowth,
-  yearlyRevparGrowth,
-  handleYearlyRevparChange,
+  adrGrowthType,
+  setAdrGrowthType,
+  flatAdrGrowth,
+  setFlatAdrGrowth,
+  yearlyAdrGrowth,
+  handleYearlyAdrChange,
   occupancyForecast,
   handleOccupancyChange,
   occupancyForecastMethod,
@@ -67,7 +66,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     roomsKeys,
     historicalYears,
     forecastYears,
-    revparGrowthType,
+    adrGrowthType,
     occupancyForecastMethod
   });
 
@@ -164,6 +163,12 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 forecastYears={forecastYears}
                 getHistoricalADR={getHistoricalADRForYear}
                 getForecastADR={getForecastADRForYear}
+                adrGrowthType={adrGrowthType}
+                setAdrGrowthType={setAdrGrowthType}
+                flatAdrGrowth={flatAdrGrowth}
+                setFlatAdrGrowth={setFlatAdrGrowth}
+                yearlyAdrGrowth={yearlyAdrGrowth}
+                handleYearlyAdrChange={handleYearlyAdrChange}
               />
 
               {/* RevPAR Section */}
@@ -171,12 +176,6 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 historicalYears={historicalYears}
                 forecastYears={forecastYears}
                 historicalData={historicalData}
-                revparGrowthType={revparGrowthType}
-                setRevparGrowthType={setRevparGrowthType}
-                flatRevparGrowth={flatRevparGrowth}
-                setFlatRevparGrowth={setFlatRevparGrowth}
-                yearlyRevparGrowth={yearlyRevparGrowth}
-                handleYearlyRevparChange={handleYearlyRevparChange}
                 getForecastRevpar={getForecastRevpar}
               />
             </TableBody>
