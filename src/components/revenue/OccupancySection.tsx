@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "./MetricRow";
 import GrowthControls from "./GrowthControls";
@@ -103,6 +102,7 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         onEditableChange={handleOccupancyChange}
         onEditableBlur={handleOccupancyBlur}
         forecastYears={forecastYears}
+        isUserInputRow={true}
       />
 
       {/* Subject Property Occupancy YoY Growth */}
@@ -153,6 +153,7 @@ const OccupancySection: React.FC<OccupancySectionProps> = ({
         onEditableBlur={handleOccupancyYoYBlur}
         forecastYears={forecastYears}
         isYoYRow={true}
+        isUserInputRow={true}
       />
     </>
   );

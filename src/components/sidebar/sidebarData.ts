@@ -25,8 +25,8 @@ export const mainNavCategories: CategoryItem[] = [
     path: "/market"
   },
   {
-    id: "revenue",
-    name: "Revenue",
+    id: "valuation",
+    name: "Valuation",
     path: "/revenue"
   }
 ];

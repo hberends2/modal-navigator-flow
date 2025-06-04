@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Button } from "../components/ui/button";
+import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import RevenueTable from "../components/revenue/RevenueTable";
 import KPICards from "../components/revenue/KPICards";
 import FixedSummaryRows from "../components/revenue/FixedSummaryRows";
@@ -93,70 +94,75 @@ const Revenue = () => {
   console.log('About to render Revenue component');
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
-      <Sidebar onItemClick={handleItemClick} />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="p-6 flex-1 flex flex-col">
-          {/* KPI Cards */}
-          <KPICards />
-
-          {/* Fixed Summary Rows */}
-          <div className="sticky top-0 z-10 bg-gray-50 pb-4">
-            <FixedSummaryRows
-              roomsKeys={roomsKeys}
-              historicalYears={historicalYears}
-              forecastYears={forecastYears}
-              historicalData={historicalData}
-              occupancyForecast={revenueCalculations.occupancyForecast}
-              occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
-              calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear}
-              getAvailableRooms={getAvailableRoomsForYear}
-              getForecastRoomsRevenue={getForecastRoomsRevenueForYear}
-              getHistoricalADR={getHistoricalADRForYearCalculated}
-              getForecastADR={getForecastADRForYearCalculated}
-              getForecastRevpar={getForecastRevparForYear}
-              formatCurrency={formatCurrency}
-              formatPercent={formatPercent}
-            />
+    <SidebarProvider>
+      <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
+        <Sidebar onItemClick={handleItemClick} />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="p-2">
+            <SidebarTrigger />
           </div>
+          <div className="p-6 flex-1 flex flex-col">
+            {/* KPI Cards */}
+            <KPICards />
 
-          {/* Revenue Table - takes remaining space */}
-          <div className="flex-1 min-h-0">
-            <RevenueTable
-              roomsKeys={roomsKeys}
-              historicalYears={historicalYears}
-              forecastYears={forecastYears}
-              historicalData={historicalData}
-              adrGrowthType={revenueCalculations.adrGrowthType}
-              setAdrGrowthType={revenueCalculations.setAdrGrowthType}
-              flatAdrGrowth={revenueCalculations.flatAdrGrowth}
-              setFlatAdrGrowth={revenueCalculations.setFlatAdrGrowth}
-              yearlyAdrGrowth={revenueCalculations.yearlyAdrGrowth}
-              handleYearlyAdrChange={revenueCalculations.handleYearlyAdrChange}
-              occupancyForecast={revenueCalculations.occupancyForecast}
-              handleOccupancyChange={revenueCalculations.handleOccupancyChange}
-              occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
-              setOccupancyForecastMethod={revenueCalculations.setOccupancyForecastMethod}
-              occupancyYoYGrowth={revenueCalculations.occupancyYoYGrowth}
-              handleOccupancyYoYChange={revenueCalculations.handleOccupancyYoYChange}
-              calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear}
-              getAvailableRooms={getAvailableRoomsForYear}
-              getForecastRevpar={getForecastRevparForYear}
-              getForecastRoomsRevenue={getForecastRoomsRevenueForYear}
-              formatCurrency={formatCurrency}
-              formatPercent={formatPercent}
-            />
-          </div>
+            {/* Fixed Summary Rows */}
+            <div className="sticky top-0 z-10 bg-gray-50 pb-4">
+              <FixedSummaryRows
+                roomsKeys={roomsKeys}
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                occupancyForecast={revenueCalculations.occupancyForecast}
+                occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
+                calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear}
+                getAvailableRooms={getAvailableRoomsForYear}
+                getForecastRoomsRevenue={getForecastRoomsRevenueForYear}
+                getHistoricalADR={getHistoricalADRForYearCalculated}
+                getForecastADR={getForecastADRForYearCalculated}
+                getForecastRevpar={getForecastRevparForYear}
+                formatCurrency={formatCurrency}
+                formatPercent={formatPercent}
+              />
+            </div>
 
-          {/* Save Button */}
-          <div className="flex justify-end pt-4">
-            <Button onClick={handleSave} className="px-8">
-              Save Revenue Data
-            </Button>
+            {/* Revenue Table - takes remaining space */}
+            <div className="flex-1 min-h-0">
+              <RevenueTable
+                roomsKeys={roomsKeys}
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                adrGrowthType={revenueCalculations.adrGrowthType}
+                setAdrGrowthType={revenueCalculations.setAdrGrowthType}
+                flatAdrGrowth={revenueCalculations.flatAdrGrowth}
+                setFlatAdrGrowth={revenueCalculations.setFlatAdrGrowth}
+                yearlyAdrGrowth={revenueCalculations.yearlyAdrGrowth}
+                handleYearlyAdrChange={revenueCalculations.handleYearlyAdrChange}
+                occupancyForecast={revenueCalculations.occupancyForecast}
+                handleOccupancyChange={revenueCalculations.handleOccupancyChange}
+                occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
+                setOccupancyForecastMethod={revenueCalculations.setOccupancyForecastMethod}
+                occupancyYoYGrowth={revenueCalculations.occupancyYoYGrowth}
+                handleOccupancyYoYChange={revenueCalculations.handleOccupancyYoYChange}
+                calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear}
+                getAvailableRooms={getAvailableRoomsForYear}
+                getForecastRevpar={getForecastRevparForYear}
+                getForecastRoomsRevenue={getForecastRoomsRevenueForYear}
+                formatCurrency={formatCurrency}
+                formatPercent={formatPercent}
+              />
+            </div>
+
+            {/* Save Button */}
+            <div className="flex justify-end pt-4">
+              <Button onClick={handleSave} className="px-8">
+                Save Revenue Data
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 

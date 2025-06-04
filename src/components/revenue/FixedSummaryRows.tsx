@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 
@@ -68,19 +67,6 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
       data: allYears.map(() => roomsKeys.toLocaleString())
     },
     {
-      label: "Subject Property Occupancy",
-      data: allYears.map(year => {
-        if (historicalYears.includes(year)) {
-          return formatPercent(historicalData.occupancy[year] || 0);
-        } else {
-          const occupancyValue = occupancyForecastMethod === "Occupancy" 
-            ? parseFloat(occupancyForecast[year] || "0")
-            : calculateOccupancyFromYoY(year);
-          return formatPercent(occupancyValue);
-        }
-      })
-    },
-    {
       label: "Available Rooms",
       data: allYears.map(year => getAvailableRooms(year).toLocaleString())
     },
@@ -95,12 +81,15 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
       })
     },
     {
-      label: "Rooms Revenue",
+      label: "Subject Property Occupancy",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
-          return formatCurrency(historicalData.roomsRevenue[year] || 0);
+          return formatPercent(historicalData.occupancy[year] || 0);
         } else {
-          return formatCurrency(getForecastRoomsRevenue(year));
+          const occupancyValue = occupancyForecastMethod === "Occupancy" 
+            ? parseFloat(occupancyForecast[year] || "0")
+            : calculateOccupancyFromYoY(year);
+          return formatPercent(occupancyValue);
         }
       })
     },
@@ -131,7 +120,7 @@ const FixedSummaryRows: React.FC<FixedSummaryRowsProps> = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-48 font-semibold text-xs">Metric</TableHead>
+            <TableHead className="w-48 font-semibold text-xs">Summary</TableHead>
             {historicalYears.map(year => (
               <TableHead key={year} className="text-center font-semibold bg-blue-50 text-xs">
                 {year}

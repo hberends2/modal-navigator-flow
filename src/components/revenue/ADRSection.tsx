@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "./MetricRow";
 import ADRGrowthControls from "./ADRGrowthControls";
@@ -124,6 +123,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
         handleYearlyAdrChange={handleYearlyAdrChange}
         handleYearlyAdrBlur={handleYearlyAdrBlur}
         forecastYears={forecastYears}
+        isUserInputRow={true}
       />
 
       {/* Index Calculations */}
