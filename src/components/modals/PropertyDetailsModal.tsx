@@ -17,15 +17,14 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
     state: "",
     numberOfRooms: "",
     propertyType: "",
-    keyMoney: "",
     versionName: "",
     status: "",
     brand: "",
     management: "",
+    zipCode: "",
   });
 
   const [propertyTypeOption, setPropertyTypeOption] = useState("");
-  const [keyMoneyOption, setKeyMoneyOption] = useState("");
   const [statusOption, setStatusOption] = useState("");
 
   // Property type options
@@ -39,6 +38,15 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
 
   // Status options (keeping as placeholders)
   const statusOptions = ["Option 1", "Option 2", "Option 3", "Option 4"];
+  
+  // All 50 US states with 2-letter abbreviations, sorted alphabetically
+  const stateOptions = [
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", 
+    "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", 
+    "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", 
+    "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", 
+    "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
+  ];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({
@@ -75,7 +83,6 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
     console.log("Saving Property Details:", {
       ...formData,
       propertyType: propertyTypeOption,
-      keyMoney: keyMoneyOption,
       status: statusOption,
     });
     
@@ -120,14 +127,28 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           required
         />
         
-        <FormField
-          id="state"
-          label="State"
-          type="text"
-          value={formData.state}
-          onChange={(value) => handleInputChange("state", value)}
-          required
-        />
+        <div className="flex mb-4 gap-4">
+          <div className="w-1/3">
+            <Dropdown
+              id="state"
+              label="State"
+              value={formData.state}
+              onChange={(value) => handleInputChange("state", value)}
+              options={stateOptions}
+              required
+            />
+          </div>
+          <div className="w-2/3">
+            <FormField
+              id="zipCode"
+              label="Zip Code"
+              type="integer"
+              value={formData.zipCode}
+              onChange={(value) => handleInputChange("zipCode", value)}
+              required
+            />
+          </div>
+        </div>
         
         <FormField
           id="numberOfRooms"
@@ -170,13 +191,6 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           type="text"
           value={formData.management}
           onChange={(value) => handleInputChange("management", value)}
-        />
-        
-        <Dropdown
-          id="keyMoney"
-          label="Key Money"
-          value={keyMoneyOption}
-          onChange={setKeyMoneyOption}
         />
         
         <FormField
