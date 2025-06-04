@@ -98,10 +98,10 @@ const Revenue = () => {
       <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
         <Sidebar onItemClick={handleItemClick} />
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="p-2">
+          <div className="p-2 border-b bg-white">
             <SidebarTrigger />
           </div>
-          <div className="p-6 flex-1 flex flex-col">
+          <div className="p-6 flex-1 flex flex-col overflow-hidden">
             {/* KPI Cards */}
             <KPICards />
 
@@ -125,8 +125,8 @@ const Revenue = () => {
               />
             </div>
 
-            {/* Revenue Table - takes remaining space */}
-            <div className="flex-1 min-h-0">
+            {/* Revenue Table - takes remaining space and has proper scrolling */}
+            <div className="flex-1 min-h-0 overflow-hidden">
               <RevenueTable
                 roomsKeys={roomsKeys}
                 historicalYears={historicalYears}

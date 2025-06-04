@@ -22,14 +22,14 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <div className="mb-4">
-      <label htmlFor={id} className="block mb-1 font-medium">
+      <label htmlFor={id} className="block mb-1 font-medium text-xs">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="relative">
         <button
           id={id}
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-4 py-2 text-left bg-white border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-4 py-2 text-left bg-white border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
           type="button"
@@ -53,17 +53,12 @@ const Dropdown: React.FC<DropdownProps> = ({
         </button>
         
         {isOpen && (
-          <div
-            className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg"
-          >
-            <ul
-              className="py-1 overflow-auto text-base max-h-60"
-              role="listbox"
-            >
+          <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg">
+            <ul className="py-1 overflow-auto text-base max-h-60" role="listbox">
               {options.map((option) => (
                 <li
                   key={option}
-                  className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                  className="px-4 py-2 cursor-pointer hover:bg-gray-100 text-xs"
                   role="option"
                   aria-selected={value === option}
                   onClick={() => {

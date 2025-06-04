@@ -124,8 +124,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
   try {
     return (
-      <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-        <ScrollArea className="h-[600px] w-full">
+      <div className="bg-white rounded-lg shadow-sm border p-6 mb-6 h-full overflow-hidden">
+        <ScrollArea className="h-full w-full">
           <Table>
             <RevenueTableHeaders />
             <TableBody>
@@ -154,15 +154,6 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 getHistoricalOccupiedRooms={getHistoricalOccupiedRoomsForYear}
                 getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
                 formatPercent={formatPercent}
-              />
-
-              {/* Rooms Revenue Section */}
-              <RoomsRevenueSection
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
-                historicalData={historicalData}
-                getForecastRoomsRevenue={getForecastRoomsRevenue}
-                formatCurrency={formatCurrency}
               />
 
               {/* ADR Section */}
