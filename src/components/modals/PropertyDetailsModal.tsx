@@ -128,7 +128,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
         />
         
         <div className="flex mb-4 gap-4">
-          <div className="w-1/3">
+          <div className="w-1/2">
             <Dropdown
               id="state"
               label="State"
@@ -138,7 +138,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
               required
             />
           </div>
-          <div className="w-2/3">
+          <div className="w-1/2">
             <FormField
               id="zipCode"
               label="Zip Code"
