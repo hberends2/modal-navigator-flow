@@ -20,7 +20,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="mb-4">
+    <div className="mb-0">
       <label htmlFor={id} className="block mb-1 font-medium text-xs">
         {label} {required && <span className="text-red-500">*</span>}
       </label>

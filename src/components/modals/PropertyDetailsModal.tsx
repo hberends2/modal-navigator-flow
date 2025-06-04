@@ -127,7 +127,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           required
         />
         
-        <div className="flex mb-4 gap-4">
+        <div className="flex gap-4">
           <div className="w-1/2">
             <Dropdown
               id="state"
