@@ -7,7 +7,6 @@ import DispositionModal from "../components/modals/DispositionModal";
 import CapsModal from "../components/modals/CapsModal";
 import InflationAssumptionsModal from "../components/modals/InflationAssumptionsModal";
 import PenetrationAnalysisModal from "../components/modals/PenetrationAnalysisModal";
-import OccupancyForecastModal from "../components/modals/OccupancyForecastModal";
 import OperatingRevenueModal from "../components/modals/OperatingRevenueModal";
 import DepartmentalExpensesModal from "../components/modals/DepartmentalExpensesModal";
 import ManagementAndFranchiseFeesModal from "../components/modals/ManagementAndFranchiseFeesModal";
@@ -18,13 +17,14 @@ import FFEReserveModal from "../components/modals/FFEReserveModal";
 import GrowthAssumptionsModal from "../components/modals/GrowthAssumptionsModal";
 import { usePropertyData } from "../hooks/usePropertyData";
 import { Property } from "../types/PropertyTypes";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeProperty, setActiveProperty] = useState<Property | null>(null);
   const { properties } = usePropertyData();
   const location = useLocation();
+  const navigate = useNavigate();
   // Flag to track if we've already processed the location state
   const processedLocationState = useRef(false);
 
@@ -39,6 +39,23 @@ const Index = () => {
     // Only process location state if we haven't already and we have state to process
     if (location.state && location.state.openModal && !processedLocationState.current) {
       console.log("Opening modal from navigation state:", location.state.openModal);
+      
+      // Handle special case for subjectOccupancy - navigate to dedicated page
+      if (location.state.openModal === "subjectOccupancy") {
+        console.log("Redirecting to subject occupancy page");
+        const navigationState: any = { tab: "forecast" };
+        
+        // Include property ID if available
+        if (location.state.propertyId) {
+          navigationState.propertyId = location.state.propertyId;
+        }
+        
+        // Navigate to the subject occupancy page
+        navigate('/subject-occupancy', { state: navigationState });
+        return;
+      }
+      
+      // For other modals, open them as before
       setActiveModal(location.state.openModal);
       
       // Check if a property ID was passed
@@ -60,7 +77,7 @@ const Index = () => {
     return () => {
       console.log("Index component will unmount");
     };
-  }, [location, activeModal, properties]);
+  }, [location, activeModal, properties, navigate]);
 
   // Reset the processed flag when location actually changes
   useEffect(() => {
@@ -73,6 +90,20 @@ const Index = () => {
 
   const openModal = (modalName: string, propertyId?: string) => {
     console.log("Opening modal:", modalName);
+    
+    // If the modal is subject occupancy, redirect to the dedicated page
+    if (modalName === "subjectOccupancy") {
+      console.log("Redirecting to subject occupancy page");
+      const navigationState: any = { tab: "forecast" };
+      
+      // Include property ID if available
+      if (propertyId) {
+        navigationState.propertyId = propertyId;
+      }
+      
+      navigate('/subject-occupancy', { state: navigationState });
+      return;
+    }
     
     // Clear any existing navigation state before setting new modal
     window.history.replaceState({}, document.title);
@@ -106,7 +137,7 @@ const Index = () => {
       "disposition", 
       "caps", 
       "inflationAssumptions",
-      "subjectOccupancy", 
+      // "subjectOccupancy" removed from modal order
       "penetrationAnalysis", 
       "operatingRevenue",
       "growthAssumptions",
@@ -161,7 +192,6 @@ const Index = () => {
       {activeModal === "disposition" && <DispositionModal onClose={closeModal} onNext={() => handleNext("disposition")} />}
       {activeModal === "caps" && <CapsModal onClose={closeModal} onNext={() => handleNext("caps")} />}
       {activeModal === "inflationAssumptions" && <InflationAssumptionsModal onClose={closeModal} onNext={() => handleNext("inflationAssumptions")} />}
-      {activeModal === "subjectOccupancy" && <OccupancyForecastModal onClose={closeModal} onNext={() => handleNext("subjectOccupancy")} property={activeProperty} />}
       {activeModal === "penetrationAnalysis" && <PenetrationAnalysisModal onClose={closeModal} onNext={() => handleNext("penetrationAnalysis")} />}
       {activeModal === "operatingRevenue" && <OperatingRevenueModal onClose={closeModal} onNext={() => handleNext("operatingRevenue")} />}
       {activeModal === "growthAssumptions" && <GrowthAssumptionsModal onClose={closeModal} onNext={() => handleNext("growthAssumptions")} />}

@@ -54,7 +54,8 @@ export const parkingLotCategories: CategoryItem[] = [
     name: "Market",
     subCategories: [
       { id: "inflationAssumptions", name: "Inflation Assumptions" },
-      { id: "penetrationAnalysis", name: "Penetration Analysis" }
+      { id: "penetrationAnalysis", name: "Penetration Analysis" },
+      { id: "subjectOccupancy", name: "Subject Occupancy", path: "/subject-occupancy" }
     ]
   },
   {
