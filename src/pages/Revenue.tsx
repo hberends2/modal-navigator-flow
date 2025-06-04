@@ -5,7 +5,7 @@ import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import RevenueTable from "../components/revenue/RevenueTable";
 import KPICards from "../components/revenue/KPICards";
 import FixedSummaryRows from "../components/revenue/FixedSummaryRows";
-import Sidebar from "../components/Sidebar";
+import AppSidebar from "../components/AppSidebar";
 import { useRevenueCalculations } from "../hooks/useRevenueCalculations";
 import { useRevenueData } from "../hooks/useRevenueData";
 import { 
@@ -96,7 +96,7 @@ const Revenue = () => {
   return (
     <SidebarProvider>
       <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
-        <Sidebar onItemClick={handleItemClick} />
+        <AppSidebar onItemClick={handleItemClick} />
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="p-2 border-b bg-white">
             <SidebarTrigger />
