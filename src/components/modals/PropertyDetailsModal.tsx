@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import ModalWrapper from "../ui/ModalWrapper";
 import FormField from "../ui/FormField";
@@ -28,6 +27,18 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
   const [propertyTypeOption, setPropertyTypeOption] = useState("");
   const [keyMoneyOption, setKeyMoneyOption] = useState("");
   const [statusOption, setStatusOption] = useState("");
+
+  // Property type options
+  const propertyTypeOptions = [
+    "Full Service",
+    "Select Service",
+    "Convention",
+    "Extended Stay",
+    "All Inclusive"
+  ];
+
+  // Status options (keeping as placeholders)
+  const statusOptions = ["Option 1", "Option 2", "Option 3", "Option 4"];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({
@@ -132,6 +143,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           label="Property Type"
           value={propertyTypeOption}
           onChange={setPropertyTypeOption}
+          options={propertyTypeOptions}
           required
         />
         
@@ -140,6 +152,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           label="Status"
           value={statusOption}
           onChange={setStatusOption}
+          options={statusOptions}
           required
         />
 
