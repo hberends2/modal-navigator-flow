@@ -50,35 +50,6 @@ export const parkingLotCategories: CategoryItem[] = [
     ]
   },
   {
-    id: "marketSection",
-    name: "Market",
-    subCategories: [
-      { id: "inflationAssumptions", name: "Inflation Assumptions" },
-      { id: "penetrationAnalysis", name: "Penetration Analysis" },
-      { id: "subjectOccupancy", name: "Subject Occupancy", path: "/subject-occupancy" }
-    ]
-  },
-  {
-    id: "revenueSection",
-    name: "Revenue",
-    subCategories: [
-      { id: "operatingRevenue", name: "Operating Revenue" },
-      { id: "growthAssumptions", name: "Growth Assumptions" }
-    ]
-  },
-  {
-    id: "expense",
-    name: "Expense",
-    subCategories: [
-      { id: "departmentalExpenses", name: "Departmental Expenses" },
-      { id: "managementAndFranchiseFees", name: "Management & Franchise Fees" },
-      { id: "undistributedExpenses", name: "Undistributed Expenses" },
-      { id: "undistributedExpensesSecond", name: "Undistributed Expenses - p2" },
-      { id: "nonOperatingExpenses", name: "Non-Operating Expenses" },
-      { id: "ffeReserve", name: "FF&E Reserve" }
-    ]
-  },
-  {
     id: "waterfall",
     name: "Waterfall"
   }
