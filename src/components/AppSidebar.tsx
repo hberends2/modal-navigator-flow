@@ -8,7 +8,7 @@ import {
   SidebarFooter,
 } from "./ui/sidebar";
 import SidebarSection from "./sidebar/SidebarSection";
-import SidebarFooter as CustomSidebarFooter from "./sidebar/SidebarFooter";
+import CustomSidebarFooter from "./sidebar/SidebarFooter";
 import { CategoryItem } from "./sidebar/SidebarCategory";
 import { mainNavCategories, parkingLotCategories } from "./sidebar/sidebarData";
 import { toast } from "./ui/use-toast";
