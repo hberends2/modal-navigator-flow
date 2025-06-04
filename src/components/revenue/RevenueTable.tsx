@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Table, TableBody } from "../ui/table";
 import { ScrollArea } from "../ui/scroll-area";
@@ -184,6 +185,15 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 forecastYears={forecastYears}
                 historicalData={historicalData}
                 getForecastRevpar={getForecastRevpar}
+              />
+
+              {/* Rooms Revenue Section - Added back at the bottom */}
+              <RoomsRevenueSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                getForecastRoomsRevenue={getForecastRoomsRevenue}
+                formatCurrency={formatCurrency}
               />
             </TableBody>
           </Table>
