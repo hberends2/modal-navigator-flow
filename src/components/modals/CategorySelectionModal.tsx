@@ -69,21 +69,19 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     }
   }, [initialSelections]);
 
-  // Handle primary category selection
+  // Handle primary category selection - MODIFIED TO NOT CASCADE
   const handleCategoryChange = (categoryId: string, checked: boolean) => {
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Add the category and all its descendants
-      const descendantIds = getAllDescendantIds(categoryId, categories);
-      descendantIds.forEach(id => newSelectedItems.add(id));
+      // Only add the category itself, not its descendants
+      newSelectedItems.add(categoryId);
       
       // Expand this category
       setExpandedCategories(prev => new Set([...prev, categoryId]));
     } else {
-      // Remove the category and all its descendants
-      const descendantIds = getAllDescendantIds(categoryId, categories);
-      descendantIds.forEach(id => newSelectedItems.delete(id));
+      // Only remove the category itself, not its descendants
+      newSelectedItems.delete(categoryId);
       
       // Collapse this category
       const newExpandedCategories = new Set(expandedCategories);
@@ -94,93 +92,46 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     setSelectedItems(newSelectedItems);
   };
 
-  // Handle subcategory selection
+  // Handle subcategory selection - MODIFIED TO NOT CASCADE
   const handleSubCategoryChange = (subCategoryId: string, parentId: string, checked: boolean) => {
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Add the subcategory and all its line items
-      const descendantIds = getAllDescendantIds(subCategoryId, categories);
-      descendantIds.forEach(id => newSelectedItems.add(id));
-      
-      // Also select the parent category if not already selected
-      newSelectedItems.add(parentId);
+      // Only add the subcategory itself, not its descendants or parent
+      newSelectedItems.add(subCategoryId);
       
       // Expand this subcategory
       setExpandedSubCategories(prev => new Set([...prev, subCategoryId]));
       // Ensure parent category is also expanded
       setExpandedCategories(prev => new Set([...prev, parentId]));
     } else {
-      // Remove the subcategory and all its line items
-      const descendantIds = getAllDescendantIds(subCategoryId, categories);
-      descendantIds.forEach(id => newSelectedItems.delete(id));
+      // Only remove the subcategory itself, not its descendants
+      newSelectedItems.delete(subCategoryId);
       
       // Collapse this subcategory
       const newExpandedSubCategories = new Set(expandedSubCategories);
       newExpandedSubCategories.delete(subCategoryId);
       setExpandedSubCategories(newExpandedSubCategories);
-      
-      // Check if we need to unselect the parent category
-      // (if no subcategories of this parent are selected)
-      const parentCategory = categories.find(cat => cat.id === parentId);
-      if (parentCategory) {
-        const anySubCategorySelected = parentCategory.subCategories.some(
-          subCat => subCat.id !== subCategoryId && newSelectedItems.has(subCat.id)
-        );
-        
-        if (!anySubCategorySelected) {
-          newSelectedItems.delete(parentId);
-        }
-      }
     }
     
     setSelectedItems(newSelectedItems);
   };
 
-  // Handle line item selection
+  // Handle line item selection - MODIFIED TO NOT CASCADE
   const handleLineItemChange = (lineItemId: string, parentIds: string[], checked: boolean) => {
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Add the line item
+      // Only add the line item itself, not its parents
       newSelectedItems.add(lineItemId);
       
-      // Also select all parents if not already selected
-      parentIds.forEach(id => newSelectedItems.add(id));
-      
-      // Ensure parent subcategory and category are expanded
+      // Ensure parent subcategory and category are expanded (but not selected)
       const [subCategoryId, primaryCategoryId] = parentIds;
       setExpandedSubCategories(prev => new Set([...prev, subCategoryId]));
       setExpandedCategories(prev => new Set([...prev, primaryCategoryId]));
     } else {
-      // Remove the line item
+      // Only remove the line item itself
       newSelectedItems.delete(lineItemId);
-      
-      // Check if we need to unselect the parent subcategory
-      // (if no line items of this subcategory are selected)
-      const [subCategoryId, primaryCategoryId] = parentIds;
-      const primaryCategory = categories.find(cat => cat.id === primaryCategoryId);
-      if (primaryCategory) {
-        const subCategory = primaryCategory.subCategories.find(subCat => subCat.id === subCategoryId);
-        if (subCategory) {
-          const anyLineItemSelected = subCategory.lineItems.some(
-            item => item.id !== lineItemId && newSelectedItems.has(item.id)
-          );
-          
-          if (!anyLineItemSelected) {
-            newSelectedItems.delete(subCategoryId);
-            
-            // Check if we need to unselect the primary category
-            const anySubCategorySelected = primaryCategory.subCategories.some(
-              subCat => subCat.id !== subCategoryId && newSelectedItems.has(subCat.id)
-            );
-            
-            if (!anySubCategorySelected) {
-              newSelectedItems.delete(primaryCategoryId);
-            }
-          }
-        }
-      }
     }
     
     setSelectedItems(newSelectedItems);
