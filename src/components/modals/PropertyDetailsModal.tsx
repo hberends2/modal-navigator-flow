@@ -90,7 +90,13 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
   };
 
   return (
-    <ModalWrapper title="Property Details" onClose={onClose} onSave={handleSave} onNext={onNext}>
+    <ModalWrapper 
+      title="Property Details" 
+      onClose={onClose} 
+      onSave={handleSave} 
+      onNext={onNext}
+      showSave={false}
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           id="propertyName"
