@@ -114,67 +114,173 @@ export const categories: PrimaryCategory[] = [
         id: "casino",
         name: "Casino",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "casino-ops",
+            name: "Casino",
+            parentId: "casino",
+          }
+        ]
       },
       {
         id: "farms-vineyards",
         name: "Farms and Vineyards",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "vineyard",
+            name: "Vineyard",
+            parentId: "farms-vineyards",
+          }
+        ]
       },
       {
         id: "golf",
         name: "Golf",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "golf-ops",
+            name: "Golf",
+            parentId: "golf",
+          },
+          {
+            id: "golf-pro-shop",
+            name: "Golf Pro Shop",
+            parentId: "golf",
+          }
+        ]
       },
       {
         id: "marina",
         name: "Marina",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "marina-ops",
+            name: "Marina",
+            parentId: "marina",
+          }
+        ]
       },
       {
         id: "membership",
         name: "Membership",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "membership-services",
+            name: "Membership Services",
+            parentId: "membership",
+          }
+        ]
       },
       {
         id: "minor-operated-departments",
         name: "Minor Operated Departments",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "other-minor-ops",
+            name: "Other Minor Ops",
+            parentId: "minor-operated-departments",
+          },
+          {
+            id: "telecommunications",
+            name: "Telecommunications",
+            parentId: "minor-operated-departments",
+          }
+        ]
       },
       {
         id: "parking-transportation",
         name: "Parking and Transportation",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "parking-garage",
+            name: "Parking/Garage",
+            parentId: "parking-transportation",
+          },
+          {
+            id: "transportation",
+            name: "Transportation",
+            parentId: "parking-transportation",
+          }
+        ]
       },
       {
         id: "racquet-court-sports",
         name: "Racquet and Court Sports",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "tennis-pickleball",
+            name: "Tennis and Pickleball",
+            parentId: "racquet-court-sports",
+          }
+        ]
       },
       {
         id: "recreation",
         name: "Recreation",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "activity-center",
+            name: "Activity Center",
+            parentId: "recreation",
+          },
+          {
+            id: "central-recreation",
+            name: "Central Recreation",
+            parentId: "recreation",
+          },
+          {
+            id: "kids-club",
+            name: "Kids Club",
+            parentId: "recreation",
+          }
+        ]
       },
       {
         id: "retail",
         name: "Retail",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "gift-shop",
+            name: "Gift Shop",
+            parentId: "retail",
+          }
+        ]
       },
       {
         id: "spa-fitness",
         name: "Spa and Fitness",
         parentId: "other-operated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "fitness-center",
+            name: "Fitness Center",
+            parentId: "spa-fitness",
+          },
+          {
+            id: "health-club",
+            name: "Health Club",
+            parentId: "spa-fitness",
+          },
+          {
+            id: "salon",
+            name: "Salon",
+            parentId: "spa-fitness",
+          },
+          {
+            id: "spa",
+            name: "Spa",
+            parentId: "spa-fitness",
+          }
+        ]
       }
     ]
   },
@@ -186,7 +292,13 @@ export const categories: PrimaryCategory[] = [
         id: "misc-income-expense",
         name: "Miscellaneous Income/Expense",
         parentId: "miscellaneous",
-        lineItems: []
+        lineItems: [
+          {
+            id: "misc-income-expense-item",
+            name: "Miscellaneous Income/Expense",
+            parentId: "misc-income-expense",
+          }
+        ]
       }
     ]
   },
@@ -198,7 +310,28 @@ export const categories: PrimaryCategory[] = [
         id: "allocated-expenses",
         name: "Allocated",
         parentId: "allocated",
-        lineItems: []
+        lineItems: [
+          {
+            id: "employee-dining",
+            name: "Employee Dining",
+            parentId: "allocated-expenses",
+          },
+          {
+            id: "in-house-laundry",
+            name: "In House Laundry",
+            parentId: "allocated-expenses",
+          },
+          {
+            id: "other-allocated",
+            name: "Other Allocated",
+            parentId: "allocated-expenses",
+          },
+          {
+            id: "payroll-benefits",
+            name: "Payroll Tax and Employee Benefits",
+            parentId: "allocated-expenses",
+          }
+        ]
       }
     ]
   }
