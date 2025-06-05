@@ -31,15 +31,23 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
   // State for selected items (primary categories, subcategories, and line items)
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set(initialSelections));
   
+  // State to track if "None" is selected
+  const [isNoneSelected, setIsNoneSelected] = useState<boolean>(false);
+  
   // State for expanded accordions
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [expandedSubCategories, setExpandedSubCategories] = useState<Set<string>>(new Set());
 
-  // Set initial expanded state based on initial selections
+  // Set initial expanded state based on initial selections and check if None is selected
   useEffect(() => {
     if (initialSelections.size > 0) {
       const expandedCats = new Set<string>();
       const expandedSubCats = new Set<string>();
+      
+      // Check if "none" is initially selected
+      if (initialSelections.has("none")) {
+        setIsNoneSelected(true);
+      }
       
       // Check each primary category
       categories.forEach(cat => {
@@ -69,24 +77,45 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     }
   }, [initialSelections]);
 
-  // Handle primary category selection - MODIFIED TO NOT CASCADE
+  // Handle primary category selection - MODIFIED TO HANDLE NONE SPECIALLY
   const handleCategoryChange = (categoryId: string, checked: boolean) => {
     const newSelectedItems = new Set(selectedItems);
     
-    if (checked) {
-      // Only add the category itself, not its descendants
-      newSelectedItems.add(categoryId);
-      
-      // Expand this category
-      setExpandedCategories(prev => new Set([...prev, categoryId]));
+    // Special handling for "none" category
+    if (categoryId === "none") {
+      if (checked) {
+        // Clear all other selections and just select "none"
+        newSelectedItems.clear();
+        newSelectedItems.add("none");
+        setIsNoneSelected(true);
+      } else {
+        // Remove "none" selection
+        newSelectedItems.delete("none");
+        setIsNoneSelected(false);
+      }
     } else {
-      // Only remove the category itself, not its descendants
-      newSelectedItems.delete(categoryId);
-      
-      // Collapse this category
-      const newExpandedCategories = new Set(expandedCategories);
-      newExpandedCategories.delete(categoryId);
-      setExpandedCategories(newExpandedCategories);
+      // If selecting a category other than "none"
+      if (checked) {
+        // If "none" was previously selected, remove it
+        if (isNoneSelected) {
+          newSelectedItems.delete("none");
+          setIsNoneSelected(false);
+        }
+        
+        // Only add the category itself, not its descendants
+        newSelectedItems.add(categoryId);
+        
+        // Expand this category
+        setExpandedCategories(prev => new Set([...prev, categoryId]));
+      } else {
+        // Only remove the category itself, not its descendants
+        newSelectedItems.delete(categoryId);
+        
+        // Collapse this category
+        const newExpandedCategories = new Set(expandedCategories);
+        newExpandedCategories.delete(categoryId);
+        setExpandedCategories(newExpandedCategories);
+      }
     }
     
     setSelectedItems(newSelectedItems);
@@ -210,6 +239,8 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                     handleCategoryChange(category.id, !!checked);
                   }}
                   className="mr-2"
+                  // Disable all checkboxes except "none" when "none" is selected
+                  disabled={isNoneSelected && category.id !== "none"}
                 />
                 {/* For "None" option, don't render the AccordionTrigger with chevron */}
                 {category.id === "none" ? (
@@ -227,11 +258,15 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                       const newIsOpen = !expandedCategories.has(category.id);
                       handleCategoryExpand(category.id, newIsOpen);
                     }}
-                    className="flex-1 hover:no-underline py-0"
+                    className={`flex-1 hover:no-underline py-0 ${
+                      isNoneSelected ? "opacity-50 pointer-events-none" : ""
+                    }`}
                   >
                     <Label
                       htmlFor={`category-${category.id}`}
-                      className="text-base font-medium cursor-pointer"
+                      className={`text-base font-medium cursor-pointer ${
+                        isNoneSelected ? "text-gray-400" : ""
+                      }`}
                     >
                       {category.name}
                     </Label>
@@ -240,7 +275,7 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
               </div>
               
               {category.id !== "none" && (
-                <AccordionContent>
+                <AccordionContent className={isNoneSelected ? "opacity-50 pointer-events-none" : ""}>
                   <div className="mt-2 ml-6 space-y-1">
                     {/* Subcategories */}
                     {category.subCategories.map((subCategory) => (
@@ -262,6 +297,7 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                                 handleSubCategoryChange(subCategory.id, category.id, !!checked);
                               }}
                               className="mr-2"
+                              disabled={isNoneSelected}
                             />
                             <AccordionTrigger 
                               onClick={(e) => {
@@ -269,18 +305,22 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                                 const newIsOpen = !expandedSubCategories.has(subCategory.id);
                                 handleSubCategoryExpand(subCategory.id, newIsOpen);
                               }}
-                              className="flex-1 hover:no-underline"
+                              className={`flex-1 hover:no-underline ${
+                                isNoneSelected ? "opacity-50 pointer-events-none" : ""
+                              }`}
                             >
                               <Label
                                 htmlFor={`subcategory-${subCategory.id}`}
-                                className="font-medium cursor-pointer"
+                                className={`font-medium cursor-pointer ${
+                                  isNoneSelected ? "text-gray-400" : ""
+                                }`}
                               >
                                 {subCategory.name}
                               </Label>
                             </AccordionTrigger>
                           </div>
                           
-                          <AccordionContent>
+                          <AccordionContent className={isNoneSelected ? "opacity-50 pointer-events-none" : ""}>
                             <div className="mt-1 ml-6 space-y-1">
                               {/* Line Items */}
                               {subCategory.lineItems.map((lineItem) => (
@@ -292,10 +332,13 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                                       handleLineItemChange(lineItem.id, [subCategory.id, category.id], !!checked);
                                     }}
                                     className="mr-2"
+                                    disabled={isNoneSelected}
                                   />
                                   <Label
                                     htmlFor={`lineitem-${lineItem.id}`}
-                                    className="cursor-pointer text-sm"
+                                    className={`cursor-pointer text-sm ${
+                                      isNoneSelected ? "text-gray-400" : ""
+                                    }`}
                                   >
                                     {lineItem.name}
                                   </Label>
