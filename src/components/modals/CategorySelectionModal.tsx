@@ -92,20 +92,23 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     setSelectedItems(newSelectedItems);
   };
 
-  // Handle subcategory selection - MODIFIED TO NOT CASCADE
+  // Handle subcategory selection - MODIFIED TO CASCADE UP BUT NOT DOWN
   const handleSubCategoryChange = (subCategoryId: string, parentId: string, checked: boolean) => {
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Only add the subcategory itself, not its descendants or parent
+      // Add the subcategory itself
       newSelectedItems.add(subCategoryId);
+      
+      // Also select the parent category (cascade up)
+      newSelectedItems.add(parentId);
       
       // Expand this subcategory
       setExpandedSubCategories(prev => new Set([...prev, subCategoryId]));
       // Ensure parent category is also expanded
       setExpandedCategories(prev => new Set([...prev, parentId]));
     } else {
-      // Only remove the subcategory itself, not its descendants
+      // Only remove the subcategory itself
       newSelectedItems.delete(subCategoryId);
       
       // Collapse this subcategory
@@ -117,16 +120,20 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     setSelectedItems(newSelectedItems);
   };
 
-  // Handle line item selection - MODIFIED TO NOT CASCADE
+  // Handle line item selection - MODIFIED TO CASCADE UP BUT NOT DOWN
   const handleLineItemChange = (lineItemId: string, parentIds: string[], checked: boolean) => {
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Only add the line item itself, not its parents
+      // Add the line item itself
       newSelectedItems.add(lineItemId);
       
-      // Ensure parent subcategory and category are expanded (but not selected)
+      // Also select all parents (cascade up)
       const [subCategoryId, primaryCategoryId] = parentIds;
+      newSelectedItems.add(subCategoryId);
+      newSelectedItems.add(primaryCategoryId);
+      
+      // Ensure parent subcategory and category are expanded
       setExpandedSubCategories(prev => new Set([...prev, subCategoryId]));
       setExpandedCategories(prev => new Set([...prev, primaryCategoryId]));
     } else {
