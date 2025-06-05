@@ -74,9 +74,8 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Add the category and all its descendants
-      const descendantIds = getAllDescendantIds(categoryId, categories);
-      descendantIds.forEach(id => newSelectedItems.add(id));
+      // Add the category only, not its descendants
+      newSelectedItems.add(categoryId);
       
       // Expand this category
       setExpandedCategories(prev => new Set([...prev, categoryId]));
@@ -99,9 +98,8 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Add the subcategory and all its line items
-      const descendantIds = getAllDescendantIds(subCategoryId, categories);
-      descendantIds.forEach(id => newSelectedItems.add(id));
+      // Add the subcategory only, not its line items
+      newSelectedItems.add(subCategoryId);
       
       // Also select the parent category if not already selected
       newSelectedItems.add(parentId);

@@ -28,12 +28,8 @@ export const mainNavCategories: CategoryItem[] = [
     id: "valuation",
     name: "Valuation",
     path: "/revenue"
-  },
-  {
-    id: "departmentSelection",
-    name: "Department & Item Setup",
-    subCategories: []
   }
+  // Department & Item Setup removed from sidebar
 ];
 
 // Parking lot categories (maintaining existing Category/Sub-Category format)
