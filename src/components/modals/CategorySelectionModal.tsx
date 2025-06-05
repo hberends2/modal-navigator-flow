@@ -74,8 +74,9 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Add the category only, not its descendants
-      newSelectedItems.add(categoryId);
+      // Add the category and all its descendants
+      const descendantIds = getAllDescendantIds(categoryId, categories);
+      descendantIds.forEach(id => newSelectedItems.add(id));
       
       // Expand this category
       setExpandedCategories(prev => new Set([...prev, categoryId]));
@@ -98,8 +99,9 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
     const newSelectedItems = new Set(selectedItems);
     
     if (checked) {
-      // Add the subcategory only, not its line items
-      newSelectedItems.add(subCategoryId);
+      // Add the subcategory and all its line items
+      const descendantIds = getAllDescendantIds(subCategoryId, categories);
+      descendantIds.forEach(id => newSelectedItems.add(id));
       
       // Also select the parent category if not already selected
       newSelectedItems.add(parentId);
@@ -251,92 +253,104 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                   }}
                   className="mr-2"
                 />
-                <AccordionTrigger 
-                  onClick={(e) => {
-                    // Prevent default to handle manually
-                    e.preventDefault();
-                    const newIsOpen = !expandedCategories.has(category.id);
-                    handleCategoryExpand(category.id, newIsOpen);
-                  }}
-                  className="flex-1 hover:no-underline py-0"
-                >
+                {/* For "None" option, don't render the AccordionTrigger with chevron */}
+                {category.id === "none" ? (
                   <Label
                     htmlFor={`category-${category.id}`}
-                    className="text-base font-medium cursor-pointer"
+                    className="text-base font-medium cursor-pointer flex-1 py-0"
                   >
                     {category.name}
                   </Label>
-                </AccordionTrigger>
+                ) : (
+                  <AccordionTrigger 
+                    onClick={(e) => {
+                      // Prevent default to handle manually
+                      e.preventDefault();
+                      const newIsOpen = !expandedCategories.has(category.id);
+                      handleCategoryExpand(category.id, newIsOpen);
+                    }}
+                    className="flex-1 hover:no-underline py-0"
+                  >
+                    <Label
+                      htmlFor={`category-${category.id}`}
+                      className="text-base font-medium cursor-pointer"
+                    >
+                      {category.name}
+                    </Label>
+                  </AccordionTrigger>
+                )}
               </div>
               
-              <AccordionContent>
-                <div className="mt-2 ml-6 space-y-1">
-                  {/* Subcategories */}
-                  {category.subCategories.map((subCategory) => (
-                    <Accordion 
-                      key={subCategory.id} 
-                      type="multiple" 
-                      value={Array.from(expandedSubCategories)}
-                      className="border-none"
-                    >
-                      <AccordionItem 
-                        value={subCategory.id}
-                        className="border-l border-gray-200 pl-2 mb-2"
+              {category.id !== "none" && (
+                <AccordionContent>
+                  <div className="mt-2 ml-6 space-y-1">
+                    {/* Subcategories */}
+                    {category.subCategories.map((subCategory) => (
+                      <Accordion 
+                        key={subCategory.id} 
+                        type="multiple" 
+                        value={Array.from(expandedSubCategories)}
+                        className="border-none"
                       >
-                        <div className="flex items-center">
-                          <Checkbox
-                            id={`subcategory-${subCategory.id}`}
-                            checked={selectedItems.has(subCategory.id)}
-                            onCheckedChange={(checked) => {
-                              handleSubCategoryChange(subCategory.id, category.id, !!checked);
-                            }}
-                            className="mr-2"
-                          />
-                          <AccordionTrigger 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              const newIsOpen = !expandedSubCategories.has(subCategory.id);
-                              handleSubCategoryExpand(subCategory.id, newIsOpen);
-                            }}
-                            className="flex-1 hover:no-underline"
-                          >
-                            <Label
-                              htmlFor={`subcategory-${subCategory.id}`}
-                              className="font-medium cursor-pointer"
+                        <AccordionItem 
+                          value={subCategory.id}
+                          className="border-l border-gray-200 pl-2 mb-2"
+                        >
+                          <div className="flex items-center">
+                            <Checkbox
+                              id={`subcategory-${subCategory.id}`}
+                              checked={selectedItems.has(subCategory.id)}
+                              onCheckedChange={(checked) => {
+                                handleSubCategoryChange(subCategory.id, category.id, !!checked);
+                              }}
+                              className="mr-2"
+                            />
+                            <AccordionTrigger 
+                              onClick={(e) => {
+                                e.preventDefault();
+                                const newIsOpen = !expandedSubCategories.has(subCategory.id);
+                                handleSubCategoryExpand(subCategory.id, newIsOpen);
+                              }}
+                              className="flex-1 hover:no-underline"
                             >
-                              {subCategory.name}
-                            </Label>
-                          </AccordionTrigger>
-                        </div>
-                        
-                        <AccordionContent>
-                          <div className="mt-1 ml-6 space-y-1">
-                            {/* Line Items */}
-                            {subCategory.lineItems.map((lineItem) => (
-                              <div key={lineItem.id} className="flex items-center py-1 border-l border-gray-200 pl-2">
-                                <Checkbox
-                                  id={`lineitem-${lineItem.id}`}
-                                  checked={selectedItems.has(lineItem.id)}
-                                  onCheckedChange={(checked) => {
-                                    handleLineItemChange(lineItem.id, [subCategory.id, category.id], !!checked);
-                                  }}
-                                  className="mr-2"
-                                />
-                                <Label
-                                  htmlFor={`lineitem-${lineItem.id}`}
-                                  className="cursor-pointer text-sm"
-                                >
-                                  {lineItem.name}
-                                </Label>
-                              </div>
-                            ))}
+                              <Label
+                                htmlFor={`subcategory-${subCategory.id}`}
+                                className="font-medium cursor-pointer"
+                              >
+                                {subCategory.name}
+                              </Label>
+                            </AccordionTrigger>
                           </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  ))}
-                </div>
-              </AccordionContent>
+                          
+                          <AccordionContent>
+                            <div className="mt-1 ml-6 space-y-1">
+                              {/* Line Items */}
+                              {subCategory.lineItems.map((lineItem) => (
+                                <div key={lineItem.id} className="flex items-center py-1 border-l border-gray-200 pl-2">
+                                  <Checkbox
+                                    id={`lineitem-${lineItem.id}`}
+                                    checked={selectedItems.has(lineItem.id)}
+                                    onCheckedChange={(checked) => {
+                                      handleLineItemChange(lineItem.id, [subCategory.id, category.id], !!checked);
+                                    }}
+                                    className="mr-2"
+                                  />
+                                  <Label
+                                    htmlFor={`lineitem-${lineItem.id}`}
+                                    className="cursor-pointer text-sm"
+                                  >
+                                    {lineItem.name}
+                                  </Label>
+                                </div>
+                              ))}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    ))}
+                  </div>
+                </AccordionContent>
+              )}
             </AccordionItem>
           ))}
         </Accordion>
