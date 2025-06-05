@@ -23,6 +23,11 @@ export interface PrimaryCategory {
 // Initialize mock data for Food & Beverage
 export const categories: PrimaryCategory[] = [
   {
+    id: "none",
+    name: "None",
+    subCategories: []
+  },
+  {
     id: "food-beverage",
     name: "Food & Beverage",
     subCategories: [
@@ -32,6 +37,11 @@ export const categories: PrimaryCategory[] = [
         parentId: "food-beverage",
         lineItems: [
           {
+            id: "audio-visual",
+            name: "Audio Visual",
+            parentId: "banquets-catering-av",
+          },
+          {
             id: "banquets",
             name: "Banquets",
             parentId: "banquets-catering-av",
@@ -39,11 +49,6 @@ export const categories: PrimaryCategory[] = [
           {
             id: "catering",
             name: "Catering",
-            parentId: "banquets-catering-av",
-          },
-          {
-            id: "audio-visual",
-            name: "Audio Visual",
             parentId: "banquets-catering-av",
           }
         ]
@@ -66,28 +71,6 @@ export const categories: PrimaryCategory[] = [
         ]
       },
       {
-        id: "outlets",
-        name: "Outlets",
-        parentId: "food-beverage",
-        lineItems: [
-          {
-            id: "restaurant",
-            name: "Restaurant",
-            parentId: "outlets",
-          },
-          {
-            id: "bar",
-            name: "Bar",
-            parentId: "outlets",
-          },
-          {
-            id: "lounge",
-            name: "Lounge",
-            parentId: "outlets",
-          }
-        ]
-      },
-      {
         id: "minor-fb",
         name: "Minor F&B",
         parentId: "food-beverage",
@@ -101,6 +84,28 @@ export const categories: PrimaryCategory[] = [
             id: "mini-bar",
             name: "Mini Bar",
             parentId: "minor-fb",
+          }
+        ]
+      },
+      {
+        id: "outlets",
+        name: "Outlets",
+        parentId: "food-beverage",
+        lineItems: [
+          {
+            id: "bar",
+            name: "Bar",
+            parentId: "outlets",
+          },
+          {
+            id: "lounge",
+            name: "Lounge",
+            parentId: "outlets",
+          },
+          {
+            id: "restaurant",
+            name: "Restaurant",
+            parentId: "outlets",
           }
         ]
       }
