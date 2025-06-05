@@ -111,26 +111,70 @@ export const categories: PrimaryCategory[] = [
     name: "Other Operated",
     subCategories: [
       {
-        id: "other-operated-departments",
-        name: "Other Operated Departments",
+        id: "casino",
+        name: "Casino",
         parentId: "other-operated",
-        lineItems: [
-          {
-            id: "golf",
-            name: "Golf",
-            parentId: "other-operated-departments",
-          },
-          {
-            id: "spa",
-            name: "Spa",
-            parentId: "other-operated-departments",
-          },
-          {
-            id: "retail",
-            name: "Retail",
-            parentId: "other-operated-departments",
-          }
-        ]
+        lineItems: []
+      },
+      {
+        id: "farms-vineyards",
+        name: "Farms and Vineyards",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "golf",
+        name: "Golf",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "marina",
+        name: "Marina",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "membership",
+        name: "Membership",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "minor-operated-departments",
+        name: "Minor Operated Departments",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "parking-transportation",
+        name: "Parking and Transportation",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "racquet-court-sports",
+        name: "Racquet and Court Sports",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "recreation",
+        name: "Recreation",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "retail",
+        name: "Retail",
+        parentId: "other-operated",
+        lineItems: []
+      },
+      {
+        id: "spa-fitness",
+        name: "Spa and Fitness",
+        parentId: "other-operated",
+        lineItems: []
       }
     ]
   },
@@ -139,21 +183,10 @@ export const categories: PrimaryCategory[] = [
     name: "Miscellaneous",
     subCategories: [
       {
-        id: "misc-revenue",
-        name: "Miscellaneous Revenue",
+        id: "misc-income-expense",
+        name: "Miscellaneous Income/Expense",
         parentId: "miscellaneous",
-        lineItems: [
-          {
-            id: "parking",
-            name: "Parking",
-            parentId: "misc-revenue",
-          },
-          {
-            id: "other-income",
-            name: "Other Income",
-            parentId: "misc-revenue",
-          }
-        ]
+        lineItems: []
       }
     ]
   },
@@ -163,20 +196,9 @@ export const categories: PrimaryCategory[] = [
     subCategories: [
       {
         id: "allocated-expenses",
-        name: "Allocated Expenses",
+        name: "Allocated",
         parentId: "allocated",
-        lineItems: [
-          {
-            id: "corporate-allocation",
-            name: "Corporate Allocation",
-            parentId: "allocated-expenses",
-          },
-          {
-            id: "system-charges",
-            name: "System Charges",
-            parentId: "allocated-expenses",
-          }
-        ]
+        lineItems: []
       }
     ]
   }
