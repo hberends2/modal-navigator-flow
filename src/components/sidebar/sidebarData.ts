@@ -28,6 +28,11 @@ export const mainNavCategories: CategoryItem[] = [
     id: "valuation",
     name: "Valuation",
     path: "/revenue"
+  },
+  {
+    id: "departmentSelection",
+    name: "Department & Item Setup",
+    subCategories: []
   }
 ];
 

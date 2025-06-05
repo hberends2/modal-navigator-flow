@@ -15,6 +15,7 @@ import UndistributedExpensesSecondModal from "../components/modals/Undistributed
 import NonOperatingExpensesModal from "../components/modals/NonOperatingExpensesModal";
 import FFEReserveModal from "../components/modals/FFEReserveModal";
 import GrowthAssumptionsModal from "../components/modals/GrowthAssumptionsModal";
+import CategorySelectionModal from "../components/modals/CategorySelectionModal";
 import { usePropertyData } from "../hooks/usePropertyData";
 import { Property } from "../types/PropertyTypes";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -22,6 +23,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 const Index = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeProperty, setActiveProperty] = useState<Property | null>(null);
+  const [showCategorySelectionModal, setShowCategorySelectionModal] = useState<boolean>(false);
+  const [categorySelections, setCategorySelections] = useState<Set<string>>(new Set());
+  
   const { properties } = usePropertyData();
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,13 +39,19 @@ const Index = () => {
     console.log("Active modal:", activeModal);
     console.log("Location state:", location.state);
     console.log("Processed location state:", processedLocationState.current);
+    console.log("Category Selection Modal visible:", showCategorySelectionModal);
 
     // Only process location state if we haven't already and we have state to process
     if (location.state && location.state.openModal && !processedLocationState.current) {
       console.log("Opening modal from navigation state:", location.state.openModal);
       
+      // Handle special case for department selection
+      if (location.state.openModal === "departmentSelection") {
+        setShowCategorySelectionModal(true);
+        setActiveModal(null);
+      }
       // Handle special case for subjectOccupancy - navigate to dedicated page
-      if (location.state.openModal === "subjectOccupancy") {
+      else if (location.state.openModal === "subjectOccupancy") {
         console.log("Redirecting to subject occupancy page");
         const navigationState: any = { tab: "forecast" };
         
@@ -54,9 +64,10 @@ const Index = () => {
         navigate('/subject-occupancy', { state: navigationState });
         return;
       }
-      
       // For other modals, open them as before
-      setActiveModal(location.state.openModal);
+      else {
+        setActiveModal(location.state.openModal);
+      }
       
       // Check if a property ID was passed
       if (location.state.propertyId && properties.length > 0) {
@@ -77,7 +88,7 @@ const Index = () => {
     return () => {
       console.log("Index component will unmount");
     };
-  }, [location, activeModal, properties, navigate]);
+  }, [location, activeModal, properties, navigate, showCategorySelectionModal]);
 
   // Reset the processed flag when location actually changes
   useEffect(() => {
@@ -90,6 +101,13 @@ const Index = () => {
 
   const openModal = (modalName: string, propertyId?: string) => {
     console.log("Opening modal:", modalName);
+    
+    // Check if this is the new category selection modal
+    if (modalName === "departmentSelection") {
+      setShowCategorySelectionModal(true);
+      setActiveModal(null);
+      return;
+    }
     
     // If the modal is subject occupancy, redirect to the dedicated page
     if (modalName === "subjectOccupancy") {
@@ -125,6 +143,12 @@ const Index = () => {
     
     setActiveModal(null);
     setActiveProperty(null);
+  };
+  
+  const handleCategoryModalSave = (selectedItems: Set<string>) => {
+    console.log("Saving category selections:", selectedItems);
+    setCategorySelections(selectedItems);
+    setShowCategorySelectionModal(false);
   };
 
   const handleNext = (currentModal: string) => {
@@ -177,7 +201,7 @@ const Index = () => {
       <Sidebar onItemClick={openModal} />
       
       <div className="flex-1 p-6 overflow-auto">
-        {activeModal === null && (
+        {activeModal === null && !showCategorySelectionModal && (
           <div className="text-center mt-20">
             <h1 className="text-3xl font-bold text-gray-700">InnVestAI Dashboard</h1>
             <p className="text-lg text-gray-500 mt-4">Select an option from the sidebar to get started</p>
@@ -201,6 +225,15 @@ const Index = () => {
       {activeModal === "undistributedExpensesSecond" && <UndistributedExpensesSecondModal onClose={closeModal} onNext={() => handleNext("undistributedExpensesSecond")} />}
       {activeModal === "nonOperatingExpenses" && <NonOperatingExpensesModal onClose={closeModal} onNext={() => handleNext("nonOperatingExpenses")} />}
       {activeModal === "ffeReserve" && <FFEReserveModal onClose={closeModal} onNext={() => handleNext("ffeReserve")} />}
+      
+      {/* New Category Selection Modal */}
+      {showCategorySelectionModal && (
+        <CategorySelectionModal
+          onClose={() => setShowCategorySelectionModal(false)}
+          onSave={handleCategoryModalSave}
+          initialSelections={categorySelections}
+        />
+      )}
     </div>
   );
 };
