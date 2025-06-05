@@ -104,6 +104,7 @@ const Index = () => {
     
     // Check if this is the new category selection modal
     if (modalName === "departmentSelection") {
+      console.log("Opening department selection modal");
       setShowCategorySelectionModal(true);
       setActiveModal(null);
       return;
@@ -153,9 +154,19 @@ const Index = () => {
 
   const handleNext = (currentModal: string) => {
     console.log("Handle next from modal:", currentModal);
-    // Logic to determine the next modal to open
+    
+    // Special case for propertyDetails - go to department selection
+    if (currentModal === "propertyDetails") {
+      console.log("Moving from property details to department selection");
+      setShowCategorySelectionModal(true);
+      setActiveModal(null);
+      return;
+    }
+    
+    // For other modals, use the standard flow
     const modalOrder = [
       "propertyDetails", 
+      // departmentSelection happens here, but we handle it separately
       "acquisition", 
       "financing", 
       "disposition", 

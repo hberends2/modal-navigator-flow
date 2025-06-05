@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import SidebarSection from "./sidebar/SidebarSection";
@@ -66,14 +65,18 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
       return;
     }
     
-    if (!category.subCategories) {
+    if (!category.subCategories || category.subCategories.length === 0) {
       // If no subcategories and no path, open the modal
       console.log("Opening modal for category:", category.id);
       onItemClick(category.id);
-      toast({
-        title: "Opening modal",
-        description: `Opening ${category.name} modal`
-      });
+      
+      // Only show toast for modals that actually exist
+      if (category.id !== "departmentSelection") {
+        toast({
+          title: "Opening modal",
+          description: `Opening ${category.name} modal`
+        });
+      }
     } else {
       console.log("Category has subcategories, toggling:", category.id);
       toggleCategory(category.id);
