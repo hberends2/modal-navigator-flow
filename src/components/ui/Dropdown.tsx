@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 
 interface DropdownProps {
@@ -6,6 +5,7 @@ interface DropdownProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  options?: string[];
   required?: boolean;
 }
 
@@ -14,14 +14,13 @@ const Dropdown: React.FC<DropdownProps> = ({
   label, 
   value, 
   onChange, 
+  options = ["Option 1", "Option 2", "Option 3", "Option 4"],
   required = false 
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const options = ["Option 1", "Option 2", "Option 3", "Option 4"];
-
   return (
-    <div className="mb-4">
+    <div className="mb-0">
       <label htmlFor={id} className="block mb-1 font-medium text-xs">
         {label} {required && <span className="text-red-500">*</span>}
       </label>

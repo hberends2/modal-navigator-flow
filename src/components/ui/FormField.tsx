@@ -1,4 +1,3 @@
-
 import React from "react";
 
 interface FormFieldProps {
@@ -39,7 +38,7 @@ const FormField: React.FC<FormFieldProps> = ({
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-0">
       <label htmlFor={id} className="block mb-1 font-medium text-xs">
         {label} {required && <span className="text-red-500">*</span>}
       </label>

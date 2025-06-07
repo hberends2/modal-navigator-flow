@@ -1,15 +1,23 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import PropertyDetailsModal from "../components/modals/PropertyDetailsModal";
+import CategorySelectionModal from "../components/modals/CategorySelectionModal";
 
 const PropertyDetails = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [showPropertyModal, setShowPropertyModal] = useState(true);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [categorySelections, setCategorySelections] = useState<Set<string>>(new Set());
   const navigate = useNavigate();
 
   const handleItemClick = (modalName: string) => {
+    // If it's the department selection, show that modal
+    if (modalName === "departmentSelection") {
+      setShowCategoryModal(true);
+      return;
+    }
+    
     setActiveModal(modalName);
   };
 
@@ -24,7 +32,23 @@ const PropertyDetails = () => {
   };
 
   const handlePropertyModalNext = () => {
-    // Navigate to next logical page (Subject Occupancy)
+    // Show the category selection modal after property details
+    setShowPropertyModal(false);
+    setShowCategoryModal(true);
+  };
+  
+  const handleCategoryModalClose = () => {
+    setShowCategoryModal(false);
+    // Navigate back to home when modal is closed
+    navigate('/');
+  };
+  
+  const handleCategoryModalSave = (selectedItems: Set<string>) => {
+    console.log("Saving category selections:", selectedItems);
+    setCategorySelections(selectedItems);
+    setShowCategoryModal(false);
+    
+    // Navigate to next logical page after saving categories
     navigate('/subject-occupancy');
   };
 
@@ -44,6 +68,14 @@ const PropertyDetails = () => {
         <PropertyDetailsModal 
           onClose={handlePropertyModalClose} 
           onNext={handlePropertyModalNext} 
+        />
+      )}
+      
+      {showCategoryModal && (
+        <CategorySelectionModal
+          onClose={handleCategoryModalClose}
+          onSave={handleCategoryModalSave}
+          initialSelections={categorySelections}
         />
       )}
     </div>
