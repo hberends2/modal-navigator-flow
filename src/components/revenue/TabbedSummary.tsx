@@ -235,7 +235,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
   return (
     <div className="mb-6">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-4">
+        <TabsList className="mb-0">
           <TabsTrigger value="occupancy">Occupancy</TabsTrigger>
           <TabsTrigger value="revenue">Revenue</TabsTrigger>
         </TabsList>
