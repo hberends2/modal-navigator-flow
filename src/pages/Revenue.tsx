@@ -70,7 +70,7 @@ const Revenue = () => {
             <KPICards />
 
             {/* Tabbed Summary - Replaces FixedSummaryRows */}
-            <div className="sticky top-0 z-10 bg-gray-50 pb-4">
+            <div className="sticky top-0 z-10 bg-gray-50 pb-3">
               <TabbedSummary
                 roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
