@@ -3,7 +3,7 @@ import { Button } from "../components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import RevenueTable from "../components/revenue/RevenueTable";
 import KPICards from "../components/revenue/KPICards";
-import FixedSummaryRows from "../components/revenue/FixedSummaryRows";
+import TabbedSummary from "../components/revenue/TabbedSummary";
 import AppSidebar from "../components/AppSidebar";
 import { useRevenueCalculations } from "../hooks/useRevenueCalculations";
 import { useRevenueData } from "../hooks/useRevenueData";
@@ -69,9 +69,28 @@ const Revenue = () => {
             {/* KPI Cards */}
             <KPICards />
 
-            {/* Fixed Summary Rows */}
+            {/* Tabbed Summary - Replaces FixedSummaryRows */}
             <div className="sticky top-0 z-10 bg-gray-50 pb-4">
-              <FixedSummaryRows roomsKeys={roomsKeys} historicalYears={historicalYears} forecastYears={forecastYears} historicalData={historicalData} occupancyForecast={revenueCalculations.occupancyForecast} occupancyForecastMethod={revenueCalculations.occupancyForecastMethod} calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear} getAvailableRooms={getAvailableRoomsForYear} getForecastRoomsRevenue={getForecastRoomsRevenueForYear} getHistoricalADR={getHistoricalADRForYearCalculated} getForecastADR={getForecastADRForYearCalculated} getForecastRevpar={getForecastRevparForYear} formatCurrency={formatCurrency} formatPercent={formatPercent} />
+              <TabbedSummary
+                roomsKeys={roomsKeys}
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                occupancyForecast={revenueCalculations.occupancyForecast}
+                occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
+                calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear}
+                getAvailableRooms={getAvailableRoomsForYear}
+                getForecastRoomsRevenue={getForecastRoomsRevenueForYear}
+                getHistoricalADR={getHistoricalADRForYearCalculated}
+                getForecastADR={getForecastADRForYearCalculated}
+                getForecastRevpar={getForecastRevparForYear}
+                fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom}
+                otherOperatedPerOccupiedRoom={revenueCalculations.otherOperatedPerOccupiedRoom}
+                miscellaneousPerOccupiedRoom={revenueCalculations.miscellaneousPerOccupiedRoom}
+                allocatedPerOccupiedRoom={revenueCalculations.allocatedPerOccupiedRoom}
+                formatCurrency={formatCurrency}
+                formatPercent={formatPercent}
+              />
             </div>
 
             {/* Revenue Table - takes remaining space and has proper scrolling */}
