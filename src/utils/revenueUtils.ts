@@ -1,9 +1,24 @@
-
 export const getAvailableRooms = (year: number, roomsKeys: number): number => {
   const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
   const result = roomsKeys * (isLeapYear ? 366 : 365);
   console.log('Available rooms for year', year, ':', result);
   return result;
+};
+
+export const getHistoricalOccupiedRooms = (year: number, roomsKeys: number, occupancyPercent: number): number => {
+  const availableRooms = getAvailableRooms(year, roomsKeys);
+  const occupancyDecimal = occupancyPercent / 100;
+  const result = Math.round(availableRooms * occupancyDecimal);
+  console.log('Historical occupied rooms for', year, ':', result);
+  return result;
+};
+
+export const calculateHistoricalPerOccupiedRoom = (
+  totalRevenue: number, 
+  occupiedRooms: number
+): number => {
+  if (occupiedRooms === 0) return 0;
+  return Math.round(totalRevenue / occupiedRooms);
 };
 
 export const calculateOccupancyFromYoY = (

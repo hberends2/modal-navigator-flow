@@ -1,9 +1,15 @@
 import React from "react";
 import MetricRow from "./MetricRow";
+import { getHistoricalOccupiedRooms, calculateHistoricalPerOccupiedRoom } from "../../utils/revenueUtils";
 
 interface MiscellaneousSectionProps {
+  roomsKeys: number;
   historicalYears: number[];
   forecastYears: number[];
+  historicalData: {
+    miscellaneousRevenue: Record<number, number>;
+    occupancy: Record<number, number>;
+  };
   miscellaneousPerOccupiedRoom: Record<number, string>;
   handleMiscellaneousPerOccupiedRoomChange: (year: number, value: string) => void;
   handleMiscellaneousPerOccupiedRoomBlur: (year: number, value: string) => void;
@@ -12,19 +18,41 @@ interface MiscellaneousSectionProps {
 }
 
 const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
+  roomsKeys,
   historicalYears,
   forecastYears,
+  historicalData,
   miscellaneousPerOccupiedRoom,
   handleMiscellaneousPerOccupiedRoomChange,
   handleMiscellaneousPerOccupiedRoomBlur,
   getForecastOccupiedRooms,
   formatCurrency
 }) => {
+  // Calculate historical $ per occupied room values
+  const getHistoricalPerOccupiedRoom = (year: number): string => {
+    const miscellaneousRevenue = historicalData.miscellaneousRevenue[year];
+    const occupancyPercent = historicalData.occupancy[year];
+    
+    if (!miscellaneousRevenue || !occupancyPercent) {
+      return "-";
+    }
+    
+    const occupiedRooms = getHistoricalOccupiedRooms(year, roomsKeys, occupancyPercent);
+    const perRoom = calculateHistoricalPerOccupiedRoom(miscellaneousRevenue, occupiedRooms);
+    return `$${perRoom}`;
+  };
+
   // Calculate Miscellaneous Revenue for forecast years
   const calculateMiscellaneousRevenue = (year: number): number => {
     const perRoom = parseFloat(miscellaneousPerOccupiedRoom[year] || "0");
     const occupiedRooms = getForecastOccupiedRooms(year);
     return perRoom * occupiedRooms;
+  };
+
+  // Calculate historical Miscellaneous Revenue (for display purposes)
+  const getHistoricalMiscellaneousRevenue = (year: number): string => {
+    const miscellaneousRevenue = historicalData.miscellaneousRevenue[year];
+    return miscellaneousRevenue ? formatCurrency(miscellaneousRevenue) : "-";
   };
 
   return (
@@ -40,7 +68,7 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
         label="$ / Occupied Room / Year"
-        historicalData={historicalYears.map(() => "-")}
+        historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
         editableData={miscellaneousPerOccupiedRoom}
@@ -54,7 +82,7 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
       {/* Miscellaneous Revenue Row */}
       <MetricRow
         label="Miscellaneous Revenue"
-        historicalData={historicalYears.map(() => "-")}
+        historicalData={historicalYears.map(year => getHistoricalMiscellaneousRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateMiscellaneousRevenue(year)))}
       />
     </>

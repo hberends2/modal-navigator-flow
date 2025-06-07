@@ -21,6 +21,10 @@ interface RevenueTableProps {
     revpar: Record<number, number>;
     revparYoY: Record<number, number>;
     occupancy: Record<number, number>;
+    fbRevenue: Record<number, number>;
+    otherOperatedRevenue: Record<number, number>;
+    miscellaneousRevenue: Record<number, number>;
+    allocatedRevenue: Record<number, number>;
   };
   adrGrowthType: string;
   setAdrGrowthType: (value: string) => void;
@@ -225,8 +229,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
               {/* Food & Beverage Section */}
               <FoodBeverageSection
+                roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
                 forecastYears={forecastYears}
+                historicalData={historicalData}
                 fbPerOccupiedRoom={fbPerOccupiedRoom}
                 handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
                 handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
@@ -236,8 +242,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
               {/* Other Operated Section */}
               <OtherOperatedSection
+                roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
                 forecastYears={forecastYears}
+                historicalData={historicalData}
                 otherOperatedPerOccupiedRoom={otherOperatedPerOccupiedRoom}
                 handleOtherOperatedPerOccupiedRoomChange={handleOtherOperatedPerOccupiedRoomChange}
                 handleOtherOperatedPerOccupiedRoomBlur={handleOtherOperatedPerOccupiedRoomBlur}
@@ -247,8 +255,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
               {/* Miscellaneous Section */}
               <MiscellaneousSection
+                roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
                 forecastYears={forecastYears}
+                historicalData={historicalData}
                 miscellaneousPerOccupiedRoom={miscellaneousPerOccupiedRoom}
                 handleMiscellaneousPerOccupiedRoomChange={handleMiscellaneousPerOccupiedRoomChange}
                 handleMiscellaneousPerOccupiedRoomBlur={handleMiscellaneousPerOccupiedRoomBlur}
@@ -258,8 +268,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
               {/* Allocated Section */}
               <AllocatedSection
+                roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
                 forecastYears={forecastYears}
+                historicalData={historicalData}
                 allocatedPerOccupiedRoom={allocatedPerOccupiedRoom}
                 handleAllocatedPerOccupiedRoomChange={handleAllocatedPerOccupiedRoomChange}
                 handleAllocatedPerOccupiedRoomBlur={handleAllocatedPerOccupiedRoomBlur}
