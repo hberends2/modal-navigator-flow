@@ -1,10 +1,10 @@
-
 import React from "react";
 import { Table, TableBody } from "../ui/table";
 import { ScrollArea } from "../ui/scroll-area";
 import RevenueTableHeaders from "./RevenueTableHeaders";
 import OccupancySection from "./OccupancySection";
 import RoomsRevenueSection from "./RoomsRevenueSection";
+import FoodBeverageSection from "./FoodBeverageSection";
 import RevPARSection from "./RevPARSection";
 import ADRSection from "./ADRSection";
 import { getHistoricalOccupiedRooms, getForecastOccupiedRooms, getHistoricalADR, getForecastADR } from "./revenueCalculations";
@@ -35,6 +35,9 @@ interface RevenueTableProps {
   getAvailableRooms: (year: number) => number;
   getForecastRevpar: (year: number) => number;
   getForecastRoomsRevenue: (year: number) => number;
+  fbPerOccupiedRoom: Record<number, string>;
+  handleFbPerOccupiedRoomChange: (year: number, value: string) => void;
+  handleFbPerOccupiedRoomBlur: (year: number, value: string) => void;
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
 }
@@ -60,6 +63,9 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   getAvailableRooms,
   getForecastRevpar,
   getForecastRoomsRevenue,
+  fbPerOccupiedRoom,
+  handleFbPerOccupiedRoomChange,
+  handleFbPerOccupiedRoomBlur,
   formatCurrency,
   formatPercent
 }) => {
@@ -187,12 +193,23 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 getForecastRevpar={getForecastRevpar}
               />
 
-              {/* Rooms Revenue Section - Added back at the bottom */}
+              {/* Rooms Revenue Section */}
               <RoomsRevenueSection
                 historicalYears={historicalYears}
                 forecastYears={forecastYears}
                 historicalData={historicalData}
                 getForecastRoomsRevenue={getForecastRoomsRevenue}
+                formatCurrency={formatCurrency}
+              />
+
+              {/* Food & Beverage Section - NEW */}
+              <FoodBeverageSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                fbPerOccupiedRoom={fbPerOccupiedRoom}
+                handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
+                handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
                 formatCurrency={formatCurrency}
               />
             </TableBody>

@@ -22,6 +22,7 @@ interface MetricRowProps {
   handleYearlyAdrChange?: (year: number, value: string) => void;
   handleYearlyAdrBlur?: (year: number, value: string) => void;
   isUserInputRow?: boolean;
+  isFbInputRow?: boolean;
 }
 
 const MetricRow: React.FC<MetricRowProps> = ({
@@ -43,7 +44,8 @@ const MetricRow: React.FC<MetricRowProps> = ({
   yearlyAdrGrowth,
   handleYearlyAdrChange,
   handleYearlyAdrBlur,
-  isUserInputRow = false
+  isUserInputRow = false,
+  isFbInputRow = false
 }) => {
   const handleInputChange = (year: number, value: string) => {
     if (onEditableChange) {
@@ -59,6 +61,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
 
   const getRowClassName = () => {
     if (isSectionHeader) return "bg-gray-100 border-t-2 border-gray-300";
+    if (isUserInputRow && isFbInputRow) return "bg-yellow-50"; // Pale yellow background for F&B input
     if (isUserInputRow) return "bg-yellow-50";
     return "";
   };
@@ -126,9 +129,11 @@ const MetricRow: React.FC<MetricRowProps> = ({
                   value={editableData[year] || ""}
                   onChange={(e) => handleInputChange(year, e.target.value)}
                   onBlur={(e) => handleInputBlur(year, e.target.value)}
-                  className={`text-center text-xs h-6 py-0 text-blue-600 ${isYoYRow ? 'pr-4' : 'pr-4'}`}
+                  className={`text-center text-xs h-6 py-0 text-right ${
+                    isFbInputRow ? 'text-blue-600 bg-yellow-50' : 'text-blue-600'
+                  } ${isYoYRow ? 'pr-4' : 'pr-1'}`}
                 />
-                <span className="absolute right-1 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>
+                {isYoYRow && <span className="absolute right-1 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>}
               </div>
             </TableCell>
           );

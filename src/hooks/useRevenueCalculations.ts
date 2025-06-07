@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 
 export const useRevenueCalculations = () => {
@@ -29,7 +28,16 @@ export const useRevenueCalculations = () => {
     2026: "2.7",
     2027: "1.3",
     2028: "1.3",
-    2029: "1.3"
+    2929: "1.3"
+  });
+
+  // State for Food & Beverage per occupied room
+  const [fbPerOccupiedRoom, setFbPerOccupiedRoom] = useState<Record<number, string>>({
+    2025: "0",
+    2026: "0",
+    2027: "0",
+    2028: "0",
+    2929: "0"
   });
 
   const formatPercentageInput = (value: string): string => {
@@ -37,6 +45,13 @@ export const useRevenueCalculations = () => {
     const cleanValue = value.replace(/[^0-9.-]/g, "");
     const numValue = parseFloat(cleanValue);
     return isNaN(numValue) ? "0.0" : numValue.toFixed(1);
+  };
+
+  const formatIntegerInput = (value: string): string => {
+    // Remove any non-numeric characters except negative sign
+    const cleanValue = value.replace(/[^0-9-]/g, "");
+    const numValue = parseInt(cleanValue);
+    return isNaN(numValue) ? "0" : numValue.toString();
   };
 
   const handleYearlyAdrChange = (year: number, value: string) => {
@@ -101,6 +116,23 @@ export const useRevenueCalculations = () => {
     }));
   };
 
+  const handleFbPerOccupiedRoomChange = (year: number, value: string) => {
+    // Allow raw input during typing
+    setFbPerOccupiedRoom(prev => ({
+      ...prev,
+      [year]: value
+    }));
+  };
+
+  const handleFbPerOccupiedRoomBlur = (year: number, value: string) => {
+    // Format only on blur
+    const formattedValue = formatIntegerInput(value);
+    setFbPerOccupiedRoom(prev => ({
+      ...prev,
+      [year]: formattedValue
+    }));
+  };
+
   return {
     adrGrowthType,
     setAdrGrowthType,
@@ -117,6 +149,9 @@ export const useRevenueCalculations = () => {
     setOccupancyForecastMethod,
     occupancyYoYGrowth,
     handleOccupancyYoYChange,
-    handleOccupancyYoYBlur
+    handleOccupancyYoYBlur,
+    fbPerOccupiedRoom,
+    handleFbPerOccupiedRoomChange,
+    handleFbPerOccupiedRoomBlur
   };
 };
