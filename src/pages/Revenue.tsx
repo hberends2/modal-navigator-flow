@@ -46,7 +46,10 @@ const Revenue = () => {
       occupancyForecast: revenueCalculations.occupancyForecast,
       occupancyForecastMethod: revenueCalculations.occupancyForecastMethod,
       occupancyYoYGrowth: revenueCalculations.occupancyYoYGrowth,
-      fbPerOccupiedRoom: revenueCalculations.fbPerOccupiedRoom
+      fbPerOccupiedRoom: revenueCalculations.fbPerOccupiedRoom,
+      otherOperatedPerOccupiedRoom: revenueCalculations.otherOperatedPerOccupiedRoom,
+      miscellaneousPerOccupiedRoom: revenueCalculations.miscellaneousPerOccupiedRoom,
+      allocatedPerOccupiedRoom: revenueCalculations.allocatedPerOccupiedRoom
     });
     // TODO: Implement save functionality
   };
@@ -73,7 +76,42 @@ const Revenue = () => {
 
             {/* Revenue Table - takes remaining space and has proper scrolling */}
             <div className="flex-1 min-h-0 overflow-hidden">
-              <RevenueTable roomsKeys={roomsKeys} historicalYears={historicalYears} forecastYears={forecastYears} historicalData={historicalData} adrGrowthType={revenueCalculations.adrGrowthType} setAdrGrowthType={revenueCalculations.setAdrGrowthType} flatAdrGrowth={revenueCalculations.flatAdrGrowth} setFlatAdrGrowth={revenueCalculations.setFlatAdrGrowth} yearlyAdrGrowth={revenueCalculations.yearlyAdrGrowth} handleYearlyAdrChange={revenueCalculations.handleYearlyAdrChange} occupancyForecast={revenueCalculations.occupancyForecast} handleOccupancyChange={revenueCalculations.handleOccupancyChange} occupancyForecastMethod={revenueCalculations.occupancyForecastMethod} setOccupancyForecastMethod={revenueCalculations.setOccupancyForecastMethod} occupancyYoYGrowth={revenueCalculations.occupancyYoYGrowth} handleOccupancyYoYChange={revenueCalculations.handleOccupancyYoYChange} calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear} getAvailableRooms={getAvailableRoomsForYear} getForecastRevpar={getForecastRevparForYear} getForecastRoomsRevenue={getForecastRoomsRevenueForYear} fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom} handleFbPerOccupiedRoomChange={revenueCalculations.handleFbPerOccupiedRoomChange} handleFbPerOccupiedRoomBlur={revenueCalculations.handleFbPerOccupiedRoomBlur} formatCurrency={formatCurrency} formatPercent={formatPercent} />
+              <RevenueTable 
+                roomsKeys={roomsKeys} 
+                historicalYears={historicalYears} 
+                forecastYears={forecastYears} 
+                historicalData={historicalData} 
+                adrGrowthType={revenueCalculations.adrGrowthType} 
+                setAdrGrowthType={revenueCalculations.setAdrGrowthType} 
+                flatAdrGrowth={revenueCalculations.flatAdrGrowth} 
+                setFlatAdrGrowth={revenueCalculations.setFlatAdrGrowth} 
+                yearlyAdrGrowth={revenueCalculations.yearlyAdrGrowth} 
+                handleYearlyAdrChange={revenueCalculations.handleYearlyAdrChange} 
+                occupancyForecast={revenueCalculations.occupancyForecast} 
+                handleOccupancyChange={revenueCalculations.handleOccupancyChange} 
+                occupancyForecastMethod={revenueCalculations.occupancyForecastMethod} 
+                setOccupancyForecastMethod={revenueCalculations.setOccupancyForecastMethod} 
+                occupancyYoYGrowth={revenueCalculations.occupancyYoYGrowth} 
+                handleOccupancyYoYChange={revenueCalculations.handleOccupancyYoYChange} 
+                calculateOccupancyFromYoY={calculateOccupancyFromYoYForYear} 
+                getAvailableRooms={getAvailableRoomsForYear} 
+                getForecastRevpar={getForecastRevparForYear} 
+                getForecastRoomsRevenue={getForecastRoomsRevenueForYear} 
+                fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom} 
+                handleFbPerOccupiedRoomChange={revenueCalculations.handleFbPerOccupiedRoomChange} 
+                handleFbPerOccupiedRoomBlur={revenueCalculations.handleFbPerOccupiedRoomBlur}
+                otherOperatedPerOccupiedRoom={revenueCalculations.otherOperatedPerOccupiedRoom}
+                handleOtherOperatedPerOccupiedRoomChange={revenueCalculations.handleOtherOperatedPerOccupiedRoomChange}
+                handleOtherOperatedPerOccupiedRoomBlur={revenueCalculations.handleOtherOperatedPerOccupiedRoomBlur}
+                miscellaneousPerOccupiedRoom={revenueCalculations.miscellaneousPerOccupiedRoom}
+                handleMiscellaneousPerOccupiedRoomChange={revenueCalculations.handleMiscellaneousPerOccupiedRoomChange}
+                handleMiscellaneousPerOccupiedRoomBlur={revenueCalculations.handleMiscellaneousPerOccupiedRoomBlur}
+                allocatedPerOccupiedRoom={revenueCalculations.allocatedPerOccupiedRoom}
+                handleAllocatedPerOccupiedRoomChange={revenueCalculations.handleAllocatedPerOccupiedRoomChange}
+                handleAllocatedPerOccupiedRoomBlur={revenueCalculations.handleAllocatedPerOccupiedRoomBlur}
+                formatCurrency={formatCurrency} 
+                formatPercent={formatPercent} 
+              />
             </div>
 
             {/* Save Button */}

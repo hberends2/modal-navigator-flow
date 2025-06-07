@@ -5,6 +5,9 @@ import RevenueTableHeaders from "./RevenueTableHeaders";
 import OccupancySection from "./OccupancySection";
 import RoomsRevenueSection from "./RoomsRevenueSection";
 import FoodBeverageSection from "./FoodBeverageSection";
+import OtherOperatedSection from "./OtherOperatedSection";
+import MiscellaneousSection from "./MiscellaneousSection";
+import AllocatedSection from "./AllocatedSection";
 import RevPARSection from "./RevPARSection";
 import ADRSection from "./ADRSection";
 import { getHistoricalOccupiedRooms, getForecastOccupiedRooms, getHistoricalADR, getForecastADR } from "./revenueCalculations";
@@ -38,6 +41,15 @@ interface RevenueTableProps {
   fbPerOccupiedRoom: Record<number, string>;
   handleFbPerOccupiedRoomChange: (year: number, value: string) => void;
   handleFbPerOccupiedRoomBlur: (year: number, value: string) => void;
+  otherOperatedPerOccupiedRoom: Record<number, string>;
+  handleOtherOperatedPerOccupiedRoomChange: (year: number, value: string) => void;
+  handleOtherOperatedPerOccupiedRoomBlur: (year: number, value: string) => void;
+  miscellaneousPerOccupiedRoom: Record<number, string>;
+  handleMiscellaneousPerOccupiedRoomChange: (year: number, value: string) => void;
+  handleMiscellaneousPerOccupiedRoomBlur: (year: number, value: string) => void;
+  allocatedPerOccupiedRoom: Record<number, string>;
+  handleAllocatedPerOccupiedRoomChange: (year: number, value: string) => void;
+  handleAllocatedPerOccupiedRoomBlur: (year: number, value: string) => void;
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
 }
@@ -66,6 +78,15 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   fbPerOccupiedRoom,
   handleFbPerOccupiedRoomChange,
   handleFbPerOccupiedRoomBlur,
+  otherOperatedPerOccupiedRoom,
+  handleOtherOperatedPerOccupiedRoomChange,
+  handleOtherOperatedPerOccupiedRoomBlur,
+  miscellaneousPerOccupiedRoom,
+  handleMiscellaneousPerOccupiedRoomChange,
+  handleMiscellaneousPerOccupiedRoomBlur,
+  allocatedPerOccupiedRoom,
+  handleAllocatedPerOccupiedRoomChange,
+  handleAllocatedPerOccupiedRoomBlur,
   formatCurrency,
   formatPercent
 }) => {
@@ -202,13 +223,46 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 formatCurrency={formatCurrency}
               />
 
-              {/* Food & Beverage Section - NEW */}
+              {/* Food & Beverage Section */}
               <FoodBeverageSection
                 historicalYears={historicalYears}
                 forecastYears={forecastYears}
                 fbPerOccupiedRoom={fbPerOccupiedRoom}
                 handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
                 handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatCurrency={formatCurrency}
+              />
+
+              {/* Other Operated Section */}
+              <OtherOperatedSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                otherOperatedPerOccupiedRoom={otherOperatedPerOccupiedRoom}
+                handleOtherOperatedPerOccupiedRoomChange={handleOtherOperatedPerOccupiedRoomChange}
+                handleOtherOperatedPerOccupiedRoomBlur={handleOtherOperatedPerOccupiedRoomBlur}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatCurrency={formatCurrency}
+              />
+
+              {/* Miscellaneous Section */}
+              <MiscellaneousSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                miscellaneousPerOccupiedRoom={miscellaneousPerOccupiedRoom}
+                handleMiscellaneousPerOccupiedRoomChange={handleMiscellaneousPerOccupiedRoomChange}
+                handleMiscellaneousPerOccupiedRoomBlur={handleMiscellaneousPerOccupiedRoomBlur}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatCurrency={formatCurrency}
+              />
+
+              {/* Allocated Section */}
+              <AllocatedSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                allocatedPerOccupiedRoom={allocatedPerOccupiedRoom}
+                handleAllocatedPerOccupiedRoomChange={handleAllocatedPerOccupiedRoomChange}
+                handleAllocatedPerOccupiedRoomBlur={handleAllocatedPerOccupiedRoomBlur}
                 getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
                 formatCurrency={formatCurrency}
               />

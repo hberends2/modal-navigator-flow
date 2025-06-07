@@ -37,9 +37,9 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
         isSectionHeader={true}
       />
 
-      {/* $ / Occupied Room Row */}
+      {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label="$ / Occupied Room"
+        label="$ / Occupied Room / Year"
         historicalData={historicalYears.map(() => "-")}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}

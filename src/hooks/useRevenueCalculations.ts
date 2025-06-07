@@ -40,6 +40,33 @@ export const useRevenueCalculations = () => {
     2929: "0"
   });
 
+  // State for Other Operated per occupied room
+  const [otherOperatedPerOccupiedRoom, setOtherOperatedPerOccupiedRoom] = useState<Record<number, string>>({
+    2025: "0",
+    2026: "0",
+    2027: "0",
+    2028: "0",
+    2929: "0"
+  });
+
+  // State for Miscellaneous per occupied room
+  const [miscellaneousPerOccupiedRoom, setMiscellaneousPerOccupiedRoom] = useState<Record<number, string>>({
+    2025: "0",
+    2026: "0",
+    2027: "0",
+    2028: "0",
+    2929: "0"
+  });
+
+  // State for Allocated per occupied room
+  const [allocatedPerOccupiedRoom, setAllocatedPerOccupiedRoom] = useState<Record<number, string>>({
+    2025: "0",
+    2026: "0",
+    2027: "0",
+    2028: "0",
+    2929: "0"
+  });
+
   const formatPercentageInput = (value: string): string => {
     // Remove any non-numeric characters except decimal point and negative sign
     const cleanValue = value.replace(/[^0-9.-]/g, "");
@@ -133,6 +160,51 @@ export const useRevenueCalculations = () => {
     }));
   };
 
+  const handleOtherOperatedPerOccupiedRoomChange = (year: number, value: string) => {
+    setOtherOperatedPerOccupiedRoom(prev => ({
+      ...prev,
+      [year]: value
+    }));
+  };
+
+  const handleOtherOperatedPerOccupiedRoomBlur = (year: number, value: string) => {
+    const formattedValue = formatIntegerInput(value);
+    setOtherOperatedPerOccupiedRoom(prev => ({
+      ...prev,
+      [year]: formattedValue
+    }));
+  };
+
+  const handleMiscellaneousPerOccupiedRoomChange = (year: number, value: string) => {
+    setMiscellaneousPerOccupiedRoom(prev => ({
+      ...prev,
+      [year]: value
+    }));
+  };
+
+  const handleMiscellaneousPerOccupiedRoomBlur = (year: number, value: string) => {
+    const formattedValue = formatIntegerInput(value);
+    setMiscellaneousPerOccupiedRoom(prev => ({
+      ...prev,
+      [year]: formattedValue
+    }));
+  };
+
+  const handleAllocatedPerOccupiedRoomChange = (year: number, value: string) => {
+    setAllocatedPerOccupiedRoom(prev => ({
+      ...prev,
+      [year]: value
+    }));
+  };
+
+  const handleAllocatedPerOccupiedRoomBlur = (year: number, value: string) => {
+    const formattedValue = formatIntegerInput(value);
+    setAllocatedPerOccupiedRoom(prev => ({
+      ...prev,
+      [year]: formattedValue
+    }));
+  };
+
   return {
     adrGrowthType,
     setAdrGrowthType,
@@ -152,6 +224,15 @@ export const useRevenueCalculations = () => {
     handleOccupancyYoYBlur,
     fbPerOccupiedRoom,
     handleFbPerOccupiedRoomChange,
-    handleFbPerOccupiedRoomBlur
+    handleFbPerOccupiedRoomBlur,
+    otherOperatedPerOccupiedRoom,
+    handleOtherOperatedPerOccupiedRoomChange,
+    handleOtherOperatedPerOccupiedRoomBlur,
+    miscellaneousPerOccupiedRoom,
+    handleMiscellaneousPerOccupiedRoomChange,
+    handleMiscellaneousPerOccupiedRoomBlur,
+    allocatedPerOccupiedRoom,
+    handleAllocatedPerOccupiedRoomChange,
+    handleAllocatedPerOccupiedRoomBlur
   };
 };
