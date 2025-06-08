@@ -102,7 +102,8 @@ const Revenue = () => {
       'adr-section': 'adr-section', 
       'revpar-section': 'revpar-section',
       'rooms-revenue-section': 'rooms-revenue-section',
-      'other-operated-revenue-section': 'other-operated-revenue-section'
+      'other-operated-revenue-section': 'other-operated-revenue-section',
+      'total-revenue-section': 'total-revenue-section'
     };
     
     if (sectionMappings[modalName]) {
@@ -124,7 +125,8 @@ const Revenue = () => {
         'adr-section', 
         'revpar-section',
         'rooms-revenue-section',
-        'other-operated-revenue-section'
+        'other-operated-revenue-section',
+        'total-revenue-section'
       ];
 
       let currentSection = null;

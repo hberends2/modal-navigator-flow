@@ -393,6 +393,11 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 )}
               />
 
+              {/* Section anchor for Total Revenue */}
+              <tr id="total-revenue-section" className="scroll-mt-4">
+                <td colSpan={10} className="h-0 p-0"></td>
+              </tr>
+
               {/* Total Revenue Row */}
               <MetricRow
                 label={<span className="font-bold text-base">Total Revenue</span>}
