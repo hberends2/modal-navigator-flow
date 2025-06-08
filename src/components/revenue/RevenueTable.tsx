@@ -158,152 +158,167 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   try {
     return (
       <div className="bg-white rounded-lg shadow-sm border p-6 mb-2 h-full overflow-hidden">
-        <div className="h-full w-full overflow-auto relative\" id="revenue-scroll-area">
+        <ScrollArea className="h-full w-full" id="revenue-scroll-area">
           <Table className="relative">
             <RevenueTableHeaders />
             <TableBody>
+              {/* Section anchor for Occupancy */}
+              <tr id="occupancy-section" className="scroll-mt-4">
+                <td colSpan={10} className="h-0 p-0"></td>
+              </tr>
+              
               {/* Occupancy Section */}
-              <div id="occupancy-section" className="scroll-mt-4">
-                <OccupancySection
-                  historicalYears={historicalYears}
-                  forecastYears={forecastYears}
-                  roomsKeys={roomsKeys}
-                  historicalData={historicalData}
-                  occupancyForecast={occupancyForecast}
-                  handleOccupancyChange={handleOccupancyChange}
-                  handleOccupancyBlur={(year, value) => {
-                    // This will be handled by the revenue calculations hook
-                    console.log('Occupancy blur event:', year, value);
-                  }}
-                  occupancyForecastMethod={occupancyForecastMethod}
-                  setOccupancyForecastMethod={setOccupancyForecastMethod}
-                  occupancyYoYGrowth={occupancyYoYGrowth}
-                  handleOccupancyYoYChange={handleOccupancyYoYChange}
-                  handleOccupancyYoYBlur={(year, value) => {
-                    // This will be handled by the revenue calculations hook
-                    console.log('Occupancy YoY blur event:', year, value);
-                  }}
-                  calculateOccupancyFromYoY={calculateOccupancyFromYoY}
-                  getAvailableRooms={getAvailableRooms}
-                  getHistoricalOccupiedRooms={getHistoricalOccupiedRoomsForYear}
-                  getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
-                  formatPercent={formatPercent}
-                />
-              </div>
+              <OccupancySection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                roomsKeys={roomsKeys}
+                historicalData={historicalData}
+                occupancyForecast={occupancyForecast}
+                handleOccupancyChange={handleOccupancyChange}
+                handleOccupancyBlur={(year, value) => {
+                  // This will be handled by the revenue calculations hook
+                  console.log('Occupancy blur event:', year, value);
+                }}
+                occupancyForecastMethod={occupancyForecastMethod}
+                setOccupancyForecastMethod={setOccupancyForecastMethod}
+                occupancyYoYGrowth={occupancyYoYGrowth}
+                handleOccupancyYoYChange={handleOccupancyYoYChange}
+                handleOccupancyYoYBlur={(year, value) => {
+                  // This will be handled by the revenue calculations hook
+                  console.log('Occupancy YoY blur event:', year, value);
+                }}
+                calculateOccupancyFromYoY={calculateOccupancyFromYoY}
+                getAvailableRooms={getAvailableRooms}
+                getHistoricalOccupiedRooms={getHistoricalOccupiedRoomsForYear}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatPercent={formatPercent}
+              />
 
+              {/* Section anchor for ADR */}
+              <tr id="adr-section" className="scroll-mt-4">
+                <td colSpan={10} className="h-0 p-0"></td>
+              </tr>
+              
               {/* ADR Section */}
-              <div id="adr-section" className="scroll-mt-4">
-                <ADRSection
-                  historicalYears={historicalYears}
-                  forecastYears={forecastYears}
-                  getHistoricalADR={getHistoricalADRForYear}
-                  getForecastADR={getForecastADRForYear}
-                  adrGrowthType={adrGrowthType}
-                  setAdrGrowthType={setAdrGrowthType}
-                  flatAdrGrowth={flatAdrGrowth}
-                  setFlatAdrGrowth={setFlatAdrGrowth}
-                  handleFlatAdrBlur={(value) => {
-                    // This will be handled by the revenue calculations hook
-                    console.log('Flat ADR blur event:', value);
-                  }}
-                  yearlyAdrGrowth={yearlyAdrGrowth}
-                  handleYearlyAdrChange={handleYearlyAdrChange}
-                  handleYearlyAdrBlur={(year, value) => {
-                    // This will be handled by the revenue calculations hook
-                    console.log('Yearly ADR blur event:', year, value);
-                  }}
-                />
-              </div>
+              <ADRSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                getHistoricalADR={getHistoricalADRForYear}
+                getForecastADR={getForecastADRForYear}
+                adrGrowthType={adrGrowthType}
+                setAdrGrowthType={setAdrGrowthType}
+                flatAdrGrowth={flatAdrGrowth}
+                setFlatAdrGrowth={setFlatAdrGrowth}
+                handleFlatAdrBlur={(value) => {
+                  // This will be handled by the revenue calculations hook
+                  console.log('Flat ADR blur event:', value);
+                }}
+                yearlyAdrGrowth={yearlyAdrGrowth}
+                handleYearlyAdrChange={handleYearlyAdrChange}
+                handleYearlyAdrBlur={(year, value) => {
+                  // This will be handled by the revenue calculations hook
+                  console.log('Yearly ADR blur event:', year, value);
+                }}
+              />
 
+              {/* Section anchor for RevPAR */}
+              <tr id="revpar-section" className="scroll-mt-4">
+                <td colSpan={10} className="h-0 p-0"></td>
+              </tr>
+              
               {/* RevPAR Section */}
-              <div id="revpar-section" className="scroll-mt-4">
-                <RevPARSection
-                  historicalYears={historicalYears}
-                  forecastYears={forecastYears}
-                  historicalData={historicalData}
-                  getForecastRevpar={getForecastRevpar}
-                />
-              </div>
+              <RevPARSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                getForecastRevpar={getForecastRevpar}
+              />
 
+              {/* Section anchor for Rooms Revenue */}
+              <tr id="rooms-revenue-section" className="scroll-mt-4">
+                <td colSpan={10} className="h-0 p-0"></td>
+              </tr>
+              
               {/* Rooms Revenue Section */}
-              <div id="rooms-revenue-section" className="scroll-mt-4">
-                <RoomsRevenueSection
-                  historicalYears={historicalYears}
-                  forecastYears={forecastYears}
-                  historicalData={historicalData}
-                  getForecastRoomsRevenue={getForecastRoomsRevenue}
-                  formatCurrency={formatCurrency}
-                />
-              </div>
+              <RoomsRevenueSection
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                getForecastRoomsRevenue={getForecastRoomsRevenue}
+                formatCurrency={formatCurrency}
+              />
 
+              {/* Section anchor for Other Operated Revenue */}
+              <tr id="other-operated-revenue-section" className="scroll-mt-4">
+                <td colSpan={10} className="h-0 p-0"></td>
+              </tr>
+              
               {/* Other Operated Revenue Section Header */}
-              <div id="other-operated-revenue-section" className="scroll-mt-4">
-                <MetricRow
-                  label={<span className="font-bold text-gray-900">Other Operated Revenue</span>}
-                  historicalData={historicalYears.map(() => "")}
-                  forecastData={forecastYears.map(() => "")}
-                  isSectionHeader={true}
-                />
+              <MetricRow
+                label={<span className="font-bold text-gray-900">Other Operated Revenue</span>}
+                historicalData={historicalYears.map(() => "")}
+                forecastData={forecastYears.map(() => "")}
+                isSectionHeader={true}
+              />
 
-                {/* Food & Beverage Section (Indented) */}
-                <FoodBeverageSection
-                  roomsKeys={roomsKeys}
-                  historicalYears={historicalYears}
-                  forecastYears={forecastYears}
-                  historicalData={historicalData}
-                  fbPerOccupiedRoom={fbPerOccupiedRoom}
-                  handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
-                  handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
-                  getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
-                  formatCurrency={formatCurrency}
-                  isIndented={true}
-                />
+              {/* Food & Beverage Section (Indented) */}
+              <FoodBeverageSection
+                roomsKeys={roomsKeys}
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                fbPerOccupiedRoom={fbPerOccupiedRoom}
+                handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
+                handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatCurrency={formatCurrency}
+                isIndented={true}
+              />
 
-                {/* Other Operated Section (Indented) */}
-                <OtherOperatedSection
-                  roomsKeys={roomsKeys}
-                  historicalYears={historicalYears}
-                  forecastYears={forecastYears}
-                  historicalData={historicalData}
-                  otherOperatedPerOccupiedRoom={otherOperatedPerOccupiedRoom}
-                  handleOtherOperatedPerOccupiedRoomChange={handleOtherOperatedPerOccupiedRoomChange}
-                  handleOtherOperatedPerOccupiedRoomBlur={handleOtherOperatedPerOccupiedRoomBlur}
-                  getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
-                  formatCurrency={formatCurrency}
-                  isIndented={true}
-                />
+              {/* Other Operated Section (Indented) */}
+              <OtherOperatedSection
+                roomsKeys={roomsKeys}
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                otherOperatedPerOccupiedRoom={otherOperatedPerOccupiedRoom}
+                handleOtherOperatedPerOccupiedRoomChange={handleOtherOperatedPerOccupiedRoomChange}
+                handleOtherOperatedPerOccupiedRoomBlur={handleOtherOperatedPerOccupiedRoomBlur}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatCurrency={formatCurrency}
+                isIndented={true}
+              />
 
-                {/* Miscellaneous Section (Indented) */}
-                <MiscellaneousSection
-                  roomsKeys={roomsKeys}
-                  historicalYears={historicalYears}
-                  forecastYears={forecastYears}
-                  historicalData={historicalData}
-                  miscellaneousPerOccupiedRoom={miscellaneousPerOccupiedRoom}
-                  handleMiscellaneousPerOccupiedRoomChange={handleMiscellaneousPerOccupiedRoomChange}
-                  handleMiscellaneousPerOccupiedRoomBlur={handleMiscellaneousPerOccupiedRoomBlur}
-                  getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
-                  formatCurrency={formatCurrency}
-                  isIndented={true}
-                />
+              {/* Miscellaneous Section (Indented) */}
+              <MiscellaneousSection
+                roomsKeys={roomsKeys}
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                miscellaneousPerOccupiedRoom={miscellaneousPerOccupiedRoom}
+                handleMiscellaneousPerOccupiedRoomChange={handleMiscellaneousPerOccupiedRoomChange}
+                handleMiscellaneousPerOccupiedRoomBlur={handleMiscellaneousPerOccupiedRoomBlur}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatCurrency={formatCurrency}
+                isIndented={true}
+              />
 
-                {/* Allocated Section (Indented) */}
-                <AllocatedSection
-                  roomsKeys={roomsKeys}
-                  historicalYears={historicalYears}
-                  forecastYears={forecastYears}
-                  historicalData={historicalData}
-                  allocatedPerOccupiedRoom={allocatedPerOccupiedRoom}
-                  handleAllocatedPerOccupiedRoomChange={handleAllocatedPerOccupiedRoomChange}
-                  handleAllocatedPerOccupiedRoomBlur={handleAllocatedPerOccupiedRoomBlur}
-                  getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
-                  formatCurrency={formatCurrency}
-                  isIndented={true}
-                />
-              </div>
+              {/* Allocated Section (Indented) */}
+              <AllocatedSection
+                roomsKeys={roomsKeys}
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                allocatedPerOccupiedRoom={allocatedPerOccupiedRoom}
+                handleAllocatedPerOccupiedRoomChange={handleAllocatedPerOccupiedRoomChange}
+                handleAllocatedPerOccupiedRoomBlur={handleAllocatedPerOccupiedRoomBlur}
+                getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
+                formatCurrency={formatCurrency}
+                isIndented={true}
+              />
             </TableBody>
           </Table>
-        </div>
+        </ScrollArea>
       </div>
     );
   } catch (error) {

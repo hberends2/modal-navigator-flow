@@ -57,13 +57,13 @@ const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
     return otherOperatedRevenue ? formatCurrency(otherOperatedRevenue) : "-";
   };
 
-  const indentClass = isIndented ? "&nbsp;&nbsp;&nbsp;" : "";
+  const indentPrefix = isIndented ? "\u00A0\u00A0\u00A0" : "";
 
   return (
     <>
       {/* Other Operated Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900\" dangerouslySetInnerHTML={{__html: `${indentClass}Other Operated`}} />}
+        label={<span className="font-bold text-gray-900">{indentPrefix}Other Operated</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
@@ -71,7 +71,7 @@ const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
 
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}$ / Occupied Room / Year`}} />}
+        label={`${indentPrefix}$ / Occupied Room / Year`}
         historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
@@ -85,7 +85,7 @@ const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
 
       {/* Other Operated Revenue Row */}
       <MetricRow
-        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}Other Operated Revenue`}} />}
+        label={`${indentPrefix}Other Operated Revenue`}
         historicalData={historicalYears.map(year => getHistoricalOtherOperatedRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateOtherOperatedRevenue(year)))}
       />

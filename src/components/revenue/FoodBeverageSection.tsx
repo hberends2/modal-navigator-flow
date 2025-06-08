@@ -57,13 +57,13 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
     return fbRevenue ? formatCurrency(fbRevenue) : "-";
   };
 
-  const indentClass = isIndented ? "&nbsp;&nbsp;&nbsp;" : "";
+  const indentPrefix = isIndented ? "\u00A0\u00A0\u00A0" : "";
 
   return (
     <>
       {/* Food & Beverage Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900\" dangerouslySetInnerHTML={{__html: `${indentClass}Food & Beverage`}} />}
+        label={<span className="font-bold text-gray-900">{indentPrefix}Food & Beverage</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
@@ -71,7 +71,7 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
 
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}$ / Occupied Room / Year`}} />}
+        label={`${indentPrefix}$ / Occupied Room / Year`}
         historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
@@ -85,7 +85,7 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
 
       {/* F&B Revenue Row */}
       <MetricRow
-        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}F&B Revenue`}} />}
+        label={`${indentPrefix}F&B Revenue`}
         historicalData={historicalYears.map(year => getHistoricalFbRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateFbRevenue(year)))}
       />

@@ -57,13 +57,13 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
     return miscellaneousRevenue ? formatCurrency(miscellaneousRevenue) : "-";
   };
 
-  const indentClass = isIndented ? "&nbsp;&nbsp;&nbsp;" : "";
+  const indentPrefix = isIndented ? "\u00A0\u00A0\u00A0" : "";
 
   return (
     <>
       {/* Miscellaneous Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900\" dangerouslySetInnerHTML={{__html: `${indentClass}Miscellaneous`}} />}
+        label={<span className="font-bold text-gray-900">{indentPrefix}Miscellaneous</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
@@ -71,7 +71,7 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
 
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}$ / Occupied Room / Year`}} />}
+        label={`${indentPrefix}$ / Occupied Room / Year`}
         historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
@@ -85,7 +85,7 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
 
       {/* Miscellaneous Revenue Row */}
       <MetricRow
-        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}Miscellaneous Revenue`}} />}
+        label={`${indentPrefix}Miscellaneous Revenue`}
         historicalData={historicalYears.map(year => getHistoricalMiscellaneousRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateMiscellaneousRevenue(year)))}
       />

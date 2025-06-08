@@ -57,13 +57,13 @@ const AllocatedSection: React.FC<AllocatedSectionProps> = ({
     return allocatedRevenue ? formatCurrency(allocatedRevenue) : "-";
   };
 
-  const indentClass = isIndented ? "&nbsp;&nbsp;&nbsp;" : "";
+  const indentPrefix = isIndented ? "\u00A0\u00A0\u00A0" : "";
 
   return (
     <>
       {/* Allocated Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900\" dangerouslySetInnerHTML={{__html: `${indentClass}Allocated`}} />}
+        label={<span className="font-bold text-gray-900">{indentPrefix}Allocated</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
@@ -71,7 +71,7 @@ const AllocatedSection: React.FC<AllocatedSectionProps> = ({
 
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}$ / Occupied Room / Year`}} />}
+        label={`${indentPrefix}$ / Occupied Room / Year`}
         historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
@@ -85,7 +85,7 @@ const AllocatedSection: React.FC<AllocatedSectionProps> = ({
 
       {/* Allocated Revenue Row */}
       <MetricRow
-        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}Allocated Revenue`}} />}
+        label={`${indentPrefix}Allocated Revenue`}
         historicalData={historicalYears.map(year => getHistoricalAllocatedRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateAllocatedRevenue(year)))}
       />
