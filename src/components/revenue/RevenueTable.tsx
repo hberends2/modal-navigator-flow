@@ -60,36 +60,36 @@ interface RevenueTableProps {
 }
 
 const RevenueTable: React.FC<RevenueTableProps> = ({
-  roomsKeys,
-  historicalYears,
-  forecastYears,
+  roomsKeys = 108,
+  historicalYears = [],
+  forecastYears = [],
   historicalData,
   adrGrowthType,
   setAdrGrowthType,
   flatAdrGrowth,
   setFlatAdrGrowth,
-  yearlyAdrGrowth,
+  yearlyAdrGrowth = {},
   handleYearlyAdrChange,
-  occupancyForecast,
+  occupancyForecast = {},
   handleOccupancyChange,
   occupancyForecastMethod,
   setOccupancyForecastMethod,
-  occupancyYoYGrowth,
+  occupancyYoYGrowth = {},
   handleOccupancyYoYChange,
   calculateOccupancyFromYoY,
   getAvailableRooms,
   getForecastRevpar,
   getForecastRoomsRevenue,
-  fbPerOccupiedRoom,
+  fbPerOccupiedRoom = {},
   handleFbPerOccupiedRoomChange,
   handleFbPerOccupiedRoomBlur,
-  otherOperatedPerOccupiedRoom,
+  otherOperatedPerOccupiedRoom = {},
   handleOtherOperatedPerOccupiedRoomChange,
   handleOtherOperatedPerOccupiedRoomBlur,
-  miscellaneousPerOccupiedRoom,
+  miscellaneousPerOccupiedRoom = {},
   handleMiscellaneousPerOccupiedRoomChange,
   handleMiscellaneousPerOccupiedRoomBlur,
-  allocatedPerOccupiedRoom,
+  allocatedPerOccupiedRoom = {},
   handleAllocatedPerOccupiedRoomChange,
   handleAllocatedPerOccupiedRoomBlur,
   formatCurrency,
@@ -103,9 +103,14 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     occupancyForecastMethod
   });
 
-  // Helper functions for calculations
+  // Ensure we have valid arrays to prevent indexOf errors
+  const safeHistoricalYears = Array.isArray(historicalYears) ? historicalYears : [];
+  const safeForecastYears = Array.isArray(forecastYears) ? forecastYears : [];
+
+  // Helper functions for calculations with safety checks
   const getHistoricalOccupiedRoomsForYear = (year: number) => {
     try {
+      if (!getAvailableRooms || !historicalData?.occupancy) return 0;
       const result = getHistoricalOccupiedRooms(year, getAvailableRooms, historicalData.occupancy[year] || 0);
       console.log('Historical occupied rooms for', year, ':', result);
       return result;
@@ -117,6 +122,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
   const getForecastOccupiedRoomsForYear = (year: number) => {
     try {
+      if (!getAvailableRooms || !occupancyForecast || !calculateOccupancyFromYoY) return 0;
       const occupancyValue = occupancyForecastMethod === "Occupancy" 
         ? occupancyForecast[year] || "0"
         : calculateOccupancyFromYoY(year).toString();
@@ -131,6 +137,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
   const getHistoricalADRForYear = (year: number) => {
     try {
+      if (!historicalData?.roomsRevenue) return 0;
       const roomsRevenue = historicalData.roomsRevenue[year] || 0;
       const occupiedRooms = getHistoricalOccupiedRoomsForYear(year);
       const result = getHistoricalADR(year, roomsRevenue, occupiedRooms);
@@ -144,6 +151,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
 
   const getForecastADRForYear = (year: number) => {
     try {
+      if (!getForecastRoomsRevenue) return 0;
       const roomsRevenue = getForecastRoomsRevenue(year);
       const occupiedRooms = getForecastOccupiedRoomsForYear(year);
       const result = getForecastADR(roomsRevenue, occupiedRooms);
@@ -155,43 +163,71 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     }
   };
 
-  // Calculate Other Operated Revenue for forecast years
+  // Calculate Other Operated Revenue for forecast years with safety checks
   const calculateForecastOtherOperatedRevenue = (year: number, perRoomData: Record<number, string>) => {
-    const perRoom = parseFloat(perRoomData[year] || "0");
-    const occupiedRooms = getForecastOccupiedRoomsForYear(year);
-    return perRoom * occupiedRooms;
-  };
-
-  // Calculate Total Other Operated Revenue
-  const calculateTotalOtherOperatedRevenue = (year: number, isHistorical: boolean) => {
-    if (isHistorical) {
-      const fbRevenue = historicalData.fbRevenue[year] || 0;
-      const otherOperatedRevenue = historicalData.otherOperatedRevenue[year] || 0;
-      const miscellaneousRevenue = historicalData.miscellaneousRevenue[year] || 0;
-      const allocatedRevenue = historicalData.allocatedRevenue[year] || 0;
-      return fbRevenue + otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
-    } else {
-      const fbRevenue = calculateForecastOtherOperatedRevenue(year, fbPerOccupiedRoom);
-      const otherOperatedRevenue = calculateForecastOtherOperatedRevenue(year, otherOperatedPerOccupiedRoom);
-      const miscellaneousRevenue = calculateForecastOtherOperatedRevenue(year, miscellaneousPerOccupiedRoom);
-      const allocatedRevenue = calculateForecastOtherOperatedRevenue(year, allocatedPerOccupiedRoom);
-      return fbRevenue + otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+    try {
+      if (!perRoomData) return 0;
+      const perRoom = parseFloat(perRoomData[year] || "0");
+      const occupiedRooms = getForecastOccupiedRoomsForYear(year);
+      return perRoom * occupiedRooms;
+    } catch (error) {
+      console.error('Error calculating forecast other operated revenue:', error);
+      return 0;
     }
   };
 
-  // Calculate Total Revenue
-  const calculateTotalRevenue = (year: number, isHistorical: boolean) => {
-    const roomsRevenue = isHistorical ? 
-      (historicalData.roomsRevenue[year] || 0) : 
-      getForecastRoomsRevenue(year);
-    const totalOtherOperatedRevenue = calculateTotalOtherOperatedRevenue(year, isHistorical);
-    return roomsRevenue + totalOtherOperatedRevenue;
+  // Calculate Total Other Operated Revenue with safety checks
+  const calculateTotalOtherOperatedRevenue = (year: number, isHistorical: boolean) => {
+    try {
+      if (isHistorical) {
+        if (!historicalData) return 0;
+        const fbRevenue = historicalData.fbRevenue?.[year] || 0;
+        const otherOperatedRevenue = historicalData.otherOperatedRevenue?.[year] || 0;
+        const miscellaneousRevenue = historicalData.miscellaneousRevenue?.[year] || 0;
+        const allocatedRevenue = historicalData.allocatedRevenue?.[year] || 0;
+        return fbRevenue + otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+      } else {
+        const fbRevenue = calculateForecastOtherOperatedRevenue(year, fbPerOccupiedRoom);
+        const otherOperatedRevenue = calculateForecastOtherOperatedRevenue(year, otherOperatedPerOccupiedRoom);
+        const miscellaneousRevenue = calculateForecastOtherOperatedRevenue(year, miscellaneousPerOccupiedRoom);
+        const allocatedRevenue = calculateForecastOtherOperatedRevenue(year, allocatedPerOccupiedRoom);
+        return fbRevenue + otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+      }
+    } catch (error) {
+      console.error('Error calculating total other operated revenue:', error);
+      return 0;
+    }
   };
+
+  // Calculate Total Revenue with safety checks
+  const calculateTotalRevenue = (year: number, isHistorical: boolean) => {
+    try {
+      const roomsRevenue = isHistorical ? 
+        (historicalData?.roomsRevenue?.[year] || 0) : 
+        (getForecastRoomsRevenue ? getForecastRoomsRevenue(year) : 0);
+      const totalOtherOperatedRevenue = calculateTotalOtherOperatedRevenue(year, isHistorical);
+      return roomsRevenue + totalOtherOperatedRevenue;
+    } catch (error) {
+      console.error('Error calculating total revenue:', error);
+      return 0;
+    }
+  };
+
+  // Early return if critical props are missing
+  if (!historicalData || !formatCurrency || !formatPercent) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border p-6 mb-2">
+        <div className="text-gray-600">
+          Loading revenue table...
+        </div>
+      </div>
+    );
+  }
 
   try {
     return (
       <div className="bg-white rounded-lg shadow-sm border p-6 mb-2 h-full overflow-hidden">
-        <ScrollArea className="h-full w-full\" id=\"revenue-scroll-area">
+        <ScrollArea className="h-full w-full" id="revenue-scroll-area">
           <Table className="relative">
             <RevenueTableHeaders />
             <TableBody>
@@ -202,14 +238,13 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               
               {/* Occupancy Section */}
               <OccupancySection
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
+                historicalYears={safeHistoricalYears}
+                forecastYears={safeForecastYears}
                 roomsKeys={roomsKeys}
                 historicalData={historicalData}
                 occupancyForecast={occupancyForecast}
                 handleOccupancyChange={handleOccupancyChange}
                 handleOccupancyBlur={(year, value) => {
-                  // This will be handled by the revenue calculations hook
                   console.log('Occupancy blur event:', year, value);
                 }}
                 occupancyForecastMethod={occupancyForecastMethod}
@@ -217,7 +252,6 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 occupancyYoYGrowth={occupancyYoYGrowth}
                 handleOccupancyYoYChange={handleOccupancyYoYChange}
                 handleOccupancyYoYBlur={(year, value) => {
-                  // This will be handled by the revenue calculations hook
                   console.log('Occupancy YoY blur event:', year, value);
                 }}
                 calculateOccupancyFromYoY={calculateOccupancyFromYoY}
@@ -234,8 +268,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               
               {/* ADR Section */}
               <ADRSection
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
+                historicalYears={safeHistoricalYears}
+                forecastYears={safeForecastYears}
                 getHistoricalADR={getHistoricalADRForYear}
                 getForecastADR={getForecastADRForYear}
                 adrGrowthType={adrGrowthType}
@@ -243,13 +277,11 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 flatAdrGrowth={flatAdrGrowth}
                 setFlatAdrGrowth={setFlatAdrGrowth}
                 handleFlatAdrBlur={(value) => {
-                  // This will be handled by the revenue calculations hook
                   console.log('Flat ADR blur event:', value);
                 }}
                 yearlyAdrGrowth={yearlyAdrGrowth}
                 handleYearlyAdrChange={handleYearlyAdrChange}
                 handleYearlyAdrBlur={(year, value) => {
-                  // This will be handled by the revenue calculations hook
                   console.log('Yearly ADR blur event:', year, value);
                 }}
               />
@@ -261,8 +293,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               
               {/* RevPAR Section */}
               <RevPARSection
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
+                historicalYears={safeHistoricalYears}
+                forecastYears={safeForecastYears}
                 historicalData={historicalData}
                 getForecastRevpar={getForecastRevpar}
               />
@@ -274,8 +306,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               
               {/* Rooms Revenue Section */}
               <RoomsRevenueSection
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
+                historicalYears={safeHistoricalYears}
+                forecastYears={safeForecastYears}
                 historicalData={historicalData}
                 getForecastRoomsRevenue={getForecastRoomsRevenue}
                 formatCurrency={formatCurrency}
@@ -289,16 +321,16 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               {/* Other Operated Revenue Section Header */}
               <MetricRow
                 label={<span className="font-bold text-gray-900">Other Operated Revenue</span>}
-                historicalData={historicalYears.map(() => "")}
-                forecastData={forecastYears.map(() => "")}
+                historicalData={safeHistoricalYears.map(() => "")}
+                forecastData={safeForecastYears.map(() => "")}
                 isSectionHeader={true}
               />
 
               {/* Food & Beverage Section (Indented) */}
               <FoodBeverageSection
                 roomsKeys={roomsKeys}
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
+                historicalYears={safeHistoricalYears}
+                forecastYears={safeForecastYears}
                 historicalData={historicalData}
                 fbPerOccupiedRoom={fbPerOccupiedRoom}
                 handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
@@ -311,8 +343,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               {/* Other Operated Section (Indented) */}
               <OtherOperatedSection
                 roomsKeys={roomsKeys}
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
+                historicalYears={safeHistoricalYears}
+                forecastYears={safeForecastYears}
                 historicalData={historicalData}
                 otherOperatedPerOccupiedRoom={otherOperatedPerOccupiedRoom}
                 handleOtherOperatedPerOccupiedRoomChange={handleOtherOperatedPerOccupiedRoomChange}
@@ -325,8 +357,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               {/* Miscellaneous Section (Indented) */}
               <MiscellaneousSection
                 roomsKeys={roomsKeys}
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
+                historicalYears={safeHistoricalYears}
+                forecastYears={safeForecastYears}
                 historicalData={historicalData}
                 miscellaneousPerOccupiedRoom={miscellaneousPerOccupiedRoom}
                 handleMiscellaneousPerOccupiedRoomChange={handleMiscellaneousPerOccupiedRoomChange}
@@ -339,8 +371,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               {/* Allocated Section (Indented) */}
               <AllocatedSection
                 roomsKeys={roomsKeys}
-                historicalYears={historicalYears}
-                forecastYears={forecastYears}
+                historicalYears={safeHistoricalYears}
+                forecastYears={safeForecastYears}
                 historicalData={historicalData}
                 allocatedPerOccupiedRoom={allocatedPerOccupiedRoom}
                 handleAllocatedPerOccupiedRoomChange={handleAllocatedPerOccupiedRoomChange}
@@ -353,10 +385,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               {/* Total Other Operated Revenue Row */}
               <MetricRow
                 label={<span className="font-medium">Total Other Operated Revenue</span>}
-                historicalData={historicalYears.map(year => 
+                historicalData={safeHistoricalYears.map(year => 
                   formatCurrency(calculateTotalOtherOperatedRevenue(year, true))
                 )}
-                forecastData={forecastYears.map(year => 
+                forecastData={safeForecastYears.map(year => 
                   formatCurrency(calculateTotalOtherOperatedRevenue(year, false))
                 )}
               />
@@ -364,12 +396,12 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               {/* Total Revenue Row */}
               <MetricRow
                 label={<span className="font-bold text-base">Total Revenue</span>}
-                historicalData={historicalYears.map(year => (
+                historicalData={safeHistoricalYears.map(year => (
                   <span className="font-bold text-base">
                     {formatCurrency(calculateTotalRevenue(year, true))}
                   </span>
                 ))}
-                forecastData={forecastYears.map(year => (
+                forecastData={safeForecastYears.map(year => (
                   <span className="font-bold text-base">
                     {formatCurrency(calculateTotalRevenue(year, false))}
                   </span>
