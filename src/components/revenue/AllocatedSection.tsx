@@ -63,7 +63,7 @@ const AllocatedSection: React.FC<AllocatedSectionProps> = ({
     <>
       {/* Allocated Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900" dangerouslySetInnerHTML={{__html: `${indentClass}Allocated`}} />}
+        label={<span className="font-bold text-gray-900\" dangerouslySetInnerHTML={{__html: `${indentClass}Allocated`}} />}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}

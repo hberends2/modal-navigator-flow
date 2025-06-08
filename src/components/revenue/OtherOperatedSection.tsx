@@ -63,7 +63,7 @@ const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
     <>
       {/* Other Operated Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900" dangerouslySetInnerHTML={{__html: `${indentClass}Other Operated`}} />}
+        label={<span className="font-bold text-gray-900\" dangerouslySetInnerHTML={{__html: `${indentClass}Other Operated`}} />}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}

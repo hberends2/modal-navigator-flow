@@ -63,7 +63,7 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
     <>
       {/* Food & Beverage Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900" dangerouslySetInnerHTML={{__html: `${indentClass}Food & Beverage`}} />}
+        label={<span className="font-bold text-gray-900\" dangerouslySetInnerHTML={{__html: `${indentClass}Food & Beverage`}} />}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}

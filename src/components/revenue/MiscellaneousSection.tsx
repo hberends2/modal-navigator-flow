@@ -63,7 +63,7 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
     <>
       {/* Miscellaneous Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900" dangerouslySetInnerHTML={{__html: `${indentClass}Miscellaneous`}} />}
+        label={<span className="font-bold text-gray-900\" dangerouslySetInnerHTML={{__html: `${indentClass}Miscellaneous`}} />}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
