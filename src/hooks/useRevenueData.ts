@@ -3,8 +3,11 @@ import { useMemo } from 'react';
 import { REVENUE_CONFIG } from '../config/revenueConfig';
 import { HistoricalRevenueData } from '../types/revenue';
 import { getAvailableRooms, calculateRevpar, calculateOccupiedRooms } from '../utils/calculationUtils';
+import { useRevenueOccupancyData } from './useRevenueOccupancyData';
 
 export const useRevenueData = () => {
+  const { data: occupancyData } = useRevenueOccupancyData();
+
   const historicalData: HistoricalRevenueData = useMemo(() => {
     // Base $ per occupied room data for departments
     const departmentPerRoom = {
@@ -22,7 +25,7 @@ export const useRevenueData = () => {
       allocatedRevenue: {},
       revpar: {},
       revparYoY: {},
-      occupancy: { 2021: 72.5, 2022: 74.2, 2023: 76.8, 2024: 78.1 }
+      occupancy: occupancyData.subjectOccupancy // Use shared occupancy data
     };
 
     // Calculate department revenues based on $ per occupied room * occupied rooms
@@ -55,7 +58,7 @@ export const useRevenueData = () => {
     });
 
     return data;
-  }, []);
+  }, [occupancyData.subjectOccupancy]);
 
   return {
     historicalData,

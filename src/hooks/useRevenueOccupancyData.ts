@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 
 export interface RevenueOccupancyData {
@@ -60,10 +61,10 @@ export const useRevenueOccupancyData = () => {
       2929: 1.3
     },
     subjectOccupancy: {
-      2021: 59.2,
-      2022: 61.7,
-      2023: 65.5,
-      2024: 70.3,
+      2021: 72.5,
+      2022: 74.2,
+      2023: 76.8,
+      2024: 78.1,
       2025: 75.0,
       2026: 77.0,
       2027: 78.0,
@@ -71,14 +72,14 @@ export const useRevenueOccupancyData = () => {
       2029: 80.0
     },
     subjectOccupancyYoY: {
-      2022: 4.2,
-      2023: 6.2,
-      2024: 7.3,
-      2025: 6.7,
+      2022: 2.3,
+      2023: 3.5,
+      2024: 1.7,
+      2025: -4.0,
       2026: 2.7,
       2027: 1.3,
-      2928: 1.3,
-      2929: 1.3
+      2028: 1.3,
+      2029: 1.3
     }
   });
 
@@ -100,8 +101,32 @@ export const useRevenueOccupancyData = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
   };
 
+  const updateSubjectOccupancy = (occupancyData: Record<number, number>) => {
+    const newData = {
+      ...data,
+      subjectOccupancy: {
+        ...data.subjectOccupancy,
+        ...occupancyData
+      }
+    };
+    saveData(newData);
+  };
+
+  const updateSubjectOccupancyYoY = (yoyData: Record<number, number>) => {
+    const newData = {
+      ...data,
+      subjectOccupancyYoY: {
+        ...data.subjectOccupancyYoY,
+        ...yoyData
+      }
+    };
+    saveData(newData);
+  };
+
   return {
     data,
-    saveData
+    saveData,
+    updateSubjectOccupancy,
+    updateSubjectOccupancyYoY
   };
 };
