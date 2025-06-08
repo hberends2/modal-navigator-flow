@@ -158,8 +158,8 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   try {
     return (
       <div className="bg-white rounded-lg shadow-sm border p-6 mb-2 h-full overflow-hidden">
-        <ScrollArea className="h-full w-full\" id="revenue-scroll-area">
-          <Table>
+        <div className="h-full w-full overflow-auto relative" id="revenue-scroll-area">
+          <Table className="relative">
             <RevenueTableHeaders />
             <TableBody>
               {/* Occupancy Section */}
@@ -303,7 +303,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
               </div>
             </TableBody>
           </Table>
-        </ScrollArea>
+        </div>
       </div>
     );
   } catch (error) {

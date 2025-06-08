@@ -69,14 +69,14 @@ const MetricRow: React.FC<MetricRowProps> = ({
   if (isTwoRowMetric) {
     return (
       <TableRow className={getRowClassName()}>
-        <TableCell className="p-2 align-top">
+        <TableCell className="p-2 align-top bg-white sticky left-0 z-10">
           <div className="flex flex-col justify-center h-full space-y-1">
             <div className="text-xs font-medium">{metricText}</div>
             {controls && <div className="flex items-center">{controls}</div>}
           </div>
         </TableCell>
         {historicalData.map((data, index) => (
-          <TableCell key={`hist-${index}`} className="text-center text-xs py-2">
+          <TableCell key={`hist-${index}`} className="text-center text-xs py-2 min-w-[80px]">
             {data}
           </TableCell>
         ))}
@@ -84,7 +84,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
           const year = forecastYears[index];
           if (isGrowthRow && adrGrowthType === "yearly" && year && handleYearlyAdrChange && handleYearlyAdrBlur && yearlyAdrGrowth) {
             return (
-              <TableCell key={`forecast-${index}`} className="text-center text-xs py-2">
+              <TableCell key={`forecast-${index}`} className="text-center text-xs py-2 min-w-[80px]">
                 <div className="relative w-16 mx-auto">
                   <Input
                     type="text"
@@ -99,7 +99,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
             );
           }
           return (
-            <TableCell key={`forecast-${index}`} className="text-center text-xs py-2">
+            <TableCell key={`forecast-${index}`} className="text-center text-xs py-2 min-w-[80px]">
               {data}
             </TableCell>
           );
@@ -110,11 +110,11 @@ const MetricRow: React.FC<MetricRowProps> = ({
 
   return (
     <TableRow className={getRowClassName()}>
-      <TableCell className={`p-2 ${isSectionHeader ? 'font-bold' : ''}`}>
+      <TableCell className={`p-2 bg-white sticky left-0 z-10 ${isSectionHeader ? 'font-bold' : ''}`}>
         <span className="text-xs">{label}</span>
       </TableCell>
       {historicalData.map((data, index) => (
-        <TableCell key={`hist-${index}`} className="text-center text-xs py-2">
+        <TableCell key={`hist-${index}`} className="text-center text-xs py-2 min-w-[80px]">
           {data}
         </TableCell>
       ))}
@@ -122,7 +122,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
         const year = forecastYears[index];
         if (isEditable && year && onEditableChange && onEditableBlur && editableData) {
           return (
-            <TableCell key={`forecast-${index}`} className="text-center text-xs py-2">
+            <TableCell key={`forecast-${index}`} className="text-center text-xs py-2 min-w-[80px]">
               <div className="relative w-16 mx-auto">
                 <Input
                   type="text"
@@ -139,7 +139,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
           );
         }
         return (
-          <TableCell key={`forecast-${index}`} className="text-center text-xs py-2">
+          <TableCell key={`forecast-${index}`} className="text-center text-xs py-2 min-w-[80px]">
             {data}
           </TableCell>
         );
