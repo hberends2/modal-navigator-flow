@@ -20,7 +20,14 @@ export const mainNavCategories: CategoryItem[] = [
   {
     id: "valuation",
     name: "Valuation",
-    path: "/revenue"
+    path: "/revenue",
+    subCategories: [
+      { id: "occupancy-section", name: "Occupancy" },
+      { id: "adr-section", name: "ADR" },
+      { id: "revpar-section", name: "RevPAR" },
+      { id: "rooms-revenue-section", name: "Rooms Revenue" },
+      { id: "other-operated-revenue-section", name: "Other Operated Revenue" }
+    ]
   },
   {
     id: "reports",

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
@@ -20,6 +19,7 @@ interface SidebarCategoryProps {
   expandedCategories: string[];
   onCategoryClick: (category: CategoryItem) => void;
   onSubCategoryClick: (subCategoryId: string, path?: string) => void;
+  activeSection?: string;
 }
 
 const SidebarCategory: React.FC<SidebarCategoryProps> = ({
@@ -27,6 +27,7 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
   expandedCategories,
   onCategoryClick,
   onSubCategoryClick,
+  activeSection
 }) => {
   const isExpanded = expandedCategories.includes(category.id);
 
@@ -66,17 +67,22 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
       
       {category.subCategories && isExpanded && (
         <ul className="pl-8 bg-gray-50">
-          {category.subCategories.map((subCategory) => (
-            <li key={subCategory.id}>
-              <div
-                className="px-4 py-2 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
-                onClick={handleSubCategoryClick(subCategory.id, subCategory.path)}
-                role="button"
-              >
-                {subCategory.name}
-              </div>
-            </li>
-          ))}
+          {category.subCategories.map((subCategory) => {
+            const isActive = activeSection === subCategory.id;
+            return (
+              <li key={subCategory.id}>
+                <div
+                  className={`px-4 py-2 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer ${
+                    isActive ? 'bg-blue-100 text-blue-800 border-r-2 border-blue-500' : ''
+                  }`}
+                  onClick={handleSubCategoryClick(subCategory.id, subCategory.path)}
+                  role="button"
+                >
+                  {subCategory.name}
+                </div>
+              </li>
+            );
+          })}
         </ul>
       )}
     </li>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -15,9 +14,10 @@ import { toast } from "./ui/use-toast";
 
 interface AppSidebarProps {
   onItemClick: (modalName: string) => void;
+  activeSection?: string;
 }
 
-const AppSidebar: React.FC<AppSidebarProps> = ({ onItemClick }) => {
+const AppSidebar: React.FC<AppSidebarProps> = ({ onItemClick, activeSection }) => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,6 +35,11 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ onItemClick }) => {
         }
       }
     });
+
+    // Auto-expand Valuation if we're on the revenue page
+    if (currentPath === '/revenue') {
+      categoriesToExpand.push('valuation');
+    }
 
     if (categoriesToExpand.length > 0) {
       setExpandedCategories(prev => {
@@ -87,12 +92,8 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ onItemClick }) => {
       navigate(path);
       return;
     }
-    console.log("Opening modal for subcategory:", subCategoryId);
+    console.log("Calling onItemClick for subcategory:", subCategoryId);
     onItemClick(subCategoryId);
-    toast({
-      title: "Opening modal",
-      description: `Opening ${subCategoryId} modal`
-    });
   };
 
   return (
@@ -119,6 +120,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ onItemClick }) => {
               expandedCategories={expandedCategories}
               onCategoryClick={handleCategoryClick}
               onSubCategoryClick={handleSubCategoryClick}
+              activeSection={activeSection}
             />
             
             {/* Parking Lot section */}
