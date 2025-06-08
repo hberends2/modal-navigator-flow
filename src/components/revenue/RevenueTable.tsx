@@ -155,6 +155,39 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     }
   };
 
+  // Calculate Other Operated Revenue for forecast years
+  const calculateForecastOtherOperatedRevenue = (year: number, perRoomData: Record<number, string>) => {
+    const perRoom = parseFloat(perRoomData[year] || "0");
+    const occupiedRooms = getForecastOccupiedRoomsForYear(year);
+    return perRoom * occupiedRooms;
+  };
+
+  // Calculate Total Other Operated Revenue
+  const calculateTotalOtherOperatedRevenue = (year: number, isHistorical: boolean) => {
+    if (isHistorical) {
+      const fbRevenue = historicalData.fbRevenue[year] || 0;
+      const otherOperatedRevenue = historicalData.otherOperatedRevenue[year] || 0;
+      const miscellaneousRevenue = historicalData.miscellaneousRevenue[year] || 0;
+      const allocatedRevenue = historicalData.allocatedRevenue[year] || 0;
+      return fbRevenue + otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+    } else {
+      const fbRevenue = calculateForecastOtherOperatedRevenue(year, fbPerOccupiedRoom);
+      const otherOperatedRevenue = calculateForecastOtherOperatedRevenue(year, otherOperatedPerOccupiedRoom);
+      const miscellaneousRevenue = calculateForecastOtherOperatedRevenue(year, miscellaneousPerOccupiedRoom);
+      const allocatedRevenue = calculateForecastOtherOperatedRevenue(year, allocatedPerOccupiedRoom);
+      return fbRevenue + otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+    }
+  };
+
+  // Calculate Total Revenue
+  const calculateTotalRevenue = (year: number, isHistorical: boolean) => {
+    const roomsRevenue = isHistorical ? 
+      (historicalData.roomsRevenue[year] || 0) : 
+      getForecastRoomsRevenue(year);
+    const totalOtherOperatedRevenue = calculateTotalOtherOperatedRevenue(year, isHistorical);
+    return roomsRevenue + totalOtherOperatedRevenue;
+  };
+
   try {
     return (
       <div className="bg-white rounded-lg shadow-sm border p-6 mb-2 h-full overflow-hidden">
@@ -315,6 +348,32 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
                 formatCurrency={formatCurrency}
                 isIndented={true}
+              />
+
+              {/* Total Other Operated Revenue Row */}
+              <MetricRow
+                label={<span className="font-medium">Total Other Operated Revenue</span>}
+                historicalData={historicalYears.map(year => 
+                  formatCurrency(calculateTotalOtherOperatedRevenue(year, true))
+                )}
+                forecastData={forecastYears.map(year => 
+                  formatCurrency(calculateTotalOtherOperatedRevenue(year, false))
+                )}
+              />
+
+              {/* Total Revenue Row */}
+              <MetricRow
+                label={<span className="font-bold text-base">Total Revenue</span>}
+                historicalData={historicalYears.map(year => (
+                  <span className="font-bold text-base">
+                    {formatCurrency(calculateTotalRevenue(year, true))}
+                  </span>
+                ))}
+                forecastData={forecastYears.map(year => (
+                  <span className="font-bold text-base">
+                    {formatCurrency(calculateTotalRevenue(year, false))}
+                  </span>
+                ))}
               />
             </TableBody>
           </Table>

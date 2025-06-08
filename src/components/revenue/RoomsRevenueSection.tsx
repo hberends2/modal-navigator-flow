@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "./MetricRow";
 
@@ -29,9 +28,9 @@ const RoomsRevenueSection: React.FC<RoomsRevenueSectionProps> = ({
         isSectionHeader={true}
       />
 
-      {/* Rooms Revenue */}
+      {/* Total Rooms Revenue */}
       <MetricRow
-        label="Rooms Revenue"
+        label="Total Rooms Revenue"
         historicalData={historicalYears.map(year => formatCurrency(historicalData.roomsRevenue[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(getForecastRoomsRevenue(year)))}
       />
