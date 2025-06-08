@@ -10,6 +10,7 @@ import MiscellaneousSection from "./MiscellaneousSection";
 import AllocatedSection from "./AllocatedSection";
 import RevPARSection from "./RevPARSection";
 import ADRSection from "./ADRSection";
+import MetricRow from "./MetricRow";
 import { getHistoricalOccupiedRooms, getForecastOccupiedRooms, getHistoricalADR, getForecastADR } from "./revenueCalculations";
 
 interface RevenueTableProps {
@@ -227,7 +228,15 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 formatCurrency={formatCurrency}
               />
 
-              {/* Food & Beverage Section */}
+              {/* Other Operated Revenue Section Header */}
+              <MetricRow
+                label={<span className="font-bold text-gray-900">Other Operated Revenue</span>}
+                historicalData={historicalYears.map(() => "")}
+                forecastData={forecastYears.map(() => "")}
+                isSectionHeader={true}
+              />
+
+              {/* Food & Beverage Section (Indented) */}
               <FoodBeverageSection
                 roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
@@ -238,9 +247,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
                 getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
                 formatCurrency={formatCurrency}
+                isIndented={true}
               />
 
-              {/* Other Operated Section */}
+              {/* Other Operated Section (Indented) */}
               <OtherOperatedSection
                 roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
@@ -251,9 +261,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 handleOtherOperatedPerOccupiedRoomBlur={handleOtherOperatedPerOccupiedRoomBlur}
                 getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
                 formatCurrency={formatCurrency}
+                isIndented={true}
               />
 
-              {/* Miscellaneous Section */}
+              {/* Miscellaneous Section (Indented) */}
               <MiscellaneousSection
                 roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
@@ -264,9 +275,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 handleMiscellaneousPerOccupiedRoomBlur={handleMiscellaneousPerOccupiedRoomBlur}
                 getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
                 formatCurrency={formatCurrency}
+                isIndented={true}
               />
 
-              {/* Allocated Section */}
+              {/* Allocated Section (Indented) */}
               <AllocatedSection
                 roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
@@ -277,6 +289,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 handleAllocatedPerOccupiedRoomBlur={handleAllocatedPerOccupiedRoomBlur}
                 getForecastOccupiedRooms={getForecastOccupiedRoomsForYear}
                 formatCurrency={formatCurrency}
+                isIndented={true}
               />
             </TableBody>
           </Table>

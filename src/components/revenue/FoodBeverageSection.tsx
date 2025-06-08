@@ -15,6 +15,7 @@ interface FoodBeverageSectionProps {
   handleFbPerOccupiedRoomBlur: (year: number, value: string) => void;
   getForecastOccupiedRooms: (year: number) => number;
   formatCurrency: (value: number) => string;
+  isIndented?: boolean;
 }
 
 const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
@@ -26,7 +27,8 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
   handleFbPerOccupiedRoomChange,
   handleFbPerOccupiedRoomBlur,
   getForecastOccupiedRooms,
-  formatCurrency
+  formatCurrency,
+  isIndented = false
 }) => {
   // Calculate historical $ per occupied room values
   const getHistoricalPerOccupiedRoom = (year: number): string => {
@@ -55,11 +57,13 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
     return fbRevenue ? formatCurrency(fbRevenue) : "-";
   };
 
+  const indentClass = isIndented ? "&nbsp;&nbsp;&nbsp;" : "";
+
   return (
     <>
       {/* Food & Beverage Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900">Food & Beverage</span>}
+        label={<span className="font-bold text-gray-900" dangerouslySetInnerHTML={{__html: `${indentClass}Food & Beverage`}} />}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
@@ -67,7 +71,7 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
 
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label="$ / Occupied Room / Year"
+        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}$ / Occupied Room / Year`}} />}
         historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
@@ -81,7 +85,7 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
 
       {/* F&B Revenue Row */}
       <MetricRow
-        label="F&B Revenue"
+        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}F&B Revenue`}} />}
         historicalData={historicalYears.map(year => getHistoricalFbRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateFbRevenue(year)))}
       />

@@ -15,6 +15,7 @@ interface AllocatedSectionProps {
   handleAllocatedPerOccupiedRoomBlur: (year: number, value: string) => void;
   getForecastOccupiedRooms: (year: number) => number;
   formatCurrency: (value: number) => string;
+  isIndented?: boolean;
 }
 
 const AllocatedSection: React.FC<AllocatedSectionProps> = ({
@@ -26,7 +27,8 @@ const AllocatedSection: React.FC<AllocatedSectionProps> = ({
   handleAllocatedPerOccupiedRoomChange,
   handleAllocatedPerOccupiedRoomBlur,
   getForecastOccupiedRooms,
-  formatCurrency
+  formatCurrency,
+  isIndented = false
 }) => {
   // Calculate historical $ per occupied room values
   const getHistoricalPerOccupiedRoom = (year: number): string => {
@@ -55,11 +57,13 @@ const AllocatedSection: React.FC<AllocatedSectionProps> = ({
     return allocatedRevenue ? formatCurrency(allocatedRevenue) : "-";
   };
 
+  const indentClass = isIndented ? "&nbsp;&nbsp;&nbsp;" : "";
+
   return (
     <>
       {/* Allocated Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900">Allocated</span>}
+        label={<span className="font-bold text-gray-900" dangerouslySetInnerHTML={{__html: `${indentClass}Allocated`}} />}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
@@ -67,7 +71,7 @@ const AllocatedSection: React.FC<AllocatedSectionProps> = ({
 
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label="$ / Occupied Room / Year"
+        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}$ / Occupied Room / Year`}} />}
         historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
@@ -81,7 +85,7 @@ const AllocatedSection: React.FC<AllocatedSectionProps> = ({
 
       {/* Allocated Revenue Row */}
       <MetricRow
-        label="Allocated Revenue"
+        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}Allocated Revenue`}} />}
         historicalData={historicalYears.map(year => getHistoricalAllocatedRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateAllocatedRevenue(year)))}
       />

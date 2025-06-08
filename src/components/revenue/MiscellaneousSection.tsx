@@ -15,6 +15,7 @@ interface MiscellaneousSectionProps {
   handleMiscellaneousPerOccupiedRoomBlur: (year: number, value: string) => void;
   getForecastOccupiedRooms: (year: number) => number;
   formatCurrency: (value: number) => string;
+  isIndented?: boolean;
 }
 
 const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
@@ -26,7 +27,8 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
   handleMiscellaneousPerOccupiedRoomChange,
   handleMiscellaneousPerOccupiedRoomBlur,
   getForecastOccupiedRooms,
-  formatCurrency
+  formatCurrency,
+  isIndented = false
 }) => {
   // Calculate historical $ per occupied room values
   const getHistoricalPerOccupiedRoom = (year: number): string => {
@@ -55,11 +57,13 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
     return miscellaneousRevenue ? formatCurrency(miscellaneousRevenue) : "-";
   };
 
+  const indentClass = isIndented ? "&nbsp;&nbsp;&nbsp;" : "";
+
   return (
     <>
       {/* Miscellaneous Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900">Miscellaneous</span>}
+        label={<span className="font-bold text-gray-900" dangerouslySetInnerHTML={{__html: `${indentClass}Miscellaneous`}} />}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
@@ -67,7 +71,7 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
 
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label="$ / Occupied Room / Year"
+        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}$ / Occupied Room / Year`}} />}
         historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
@@ -81,7 +85,7 @@ const MiscellaneousSection: React.FC<MiscellaneousSectionProps> = ({
 
       {/* Miscellaneous Revenue Row */}
       <MetricRow
-        label="Miscellaneous Revenue"
+        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}Miscellaneous Revenue`}} />}
         historicalData={historicalYears.map(year => getHistoricalMiscellaneousRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateMiscellaneousRevenue(year)))}
       />

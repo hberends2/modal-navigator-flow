@@ -15,6 +15,7 @@ interface OtherOperatedSectionProps {
   handleOtherOperatedPerOccupiedRoomBlur: (year: number, value: string) => void;
   getForecastOccupiedRooms: (year: number) => number;
   formatCurrency: (value: number) => string;
+  isIndented?: boolean;
 }
 
 const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
@@ -26,7 +27,8 @@ const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
   handleOtherOperatedPerOccupiedRoomChange,
   handleOtherOperatedPerOccupiedRoomBlur,
   getForecastOccupiedRooms,
-  formatCurrency
+  formatCurrency,
+  isIndented = false
 }) => {
   // Calculate historical $ per occupied room values
   const getHistoricalPerOccupiedRoom = (year: number): string => {
@@ -55,11 +57,13 @@ const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
     return otherOperatedRevenue ? formatCurrency(otherOperatedRevenue) : "-";
   };
 
+  const indentClass = isIndented ? "&nbsp;&nbsp;&nbsp;" : "";
+
   return (
     <>
       {/* Other Operated Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900">Other Operated</span>}
+        label={<span className="font-bold text-gray-900" dangerouslySetInnerHTML={{__html: `${indentClass}Other Operated`}} />}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
@@ -67,7 +71,7 @@ const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
 
       {/* $ / Occupied Room / Year Row */}
       <MetricRow
-        label="$ / Occupied Room / Year"
+        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}$ / Occupied Room / Year`}} />}
         historicalData={historicalYears.map(year => getHistoricalPerOccupiedRoom(year))}
         forecastData={forecastYears.map(year => "")}
         isEditable={true}
@@ -81,7 +85,7 @@ const OtherOperatedSection: React.FC<OtherOperatedSectionProps> = ({
 
       {/* Other Operated Revenue Row */}
       <MetricRow
-        label="Other Operated Revenue"
+        label={<span dangerouslySetInnerHTML={{__html: `${indentClass}Other Operated Revenue`}} />}
         historicalData={historicalYears.map(year => getHistoricalOtherOperatedRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateOtherOperatedRevenue(year)))}
       />
