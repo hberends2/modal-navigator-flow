@@ -1,5 +1,5 @@
+
 import React from "react";
-import { Button } from "../components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import RevenueTable from "../components/revenue/RevenueTable";
 import KPICards from "../components/revenue/KPICards";
@@ -7,58 +7,67 @@ import TabbedSummary from "../components/revenue/TabbedSummary";
 import AppSidebar from "../components/AppSidebar";
 import { useRevenueCalculations } from "../hooks/useRevenueCalculations";
 import { useRevenueData } from "../hooks/useRevenueData";
-import { getAvailableRooms, calculateOccupancyFromYoY, getForecastRevpar, getForecastRoomsRevenue, getHistoricalADRForYear, getForecastADR, formatCurrency, formatPercent } from "../utils/revenueUtils";
+import { 
+  getAvailableRooms, 
+  calculateOccupancyFromYoY, 
+  calculateForecastADR, 
+  calculateRoomsRevenue, 
+  calculateRevpar,
+  calculateHistoricalADR,
+  formatCurrency, 
+  formatPercent 
+} from "../utils/calculationUtils";
 
 const Revenue = () => {
-  console.log('Revenue component rendering');
-  const roomsKeys = 108;
-
-  // Use custom hooks for state management and data
   const revenueCalculations = useRevenueCalculations();
-  const {
-    historicalData,
-    forecastYears,
-    historicalYears
-  } = useRevenueData(roomsKeys);
+  const { historicalData, forecastYears, historicalYears, roomsKeys } = useRevenueData();
 
-  // Helper functions that use the current state
-  const getAvailableRoomsForYear = (year: number) => getAvailableRooms(year, roomsKeys);
-  const calculateOccupancyFromYoYForYear = (year: number) => calculateOccupancyFromYoY(year, forecastYears, revenueCalculations.occupancyYoYGrowth, historicalData.occupancy[2024] || 0);
-  const getForecastADRForYear = (year: number) => getForecastADR(year, forecastYears, getHistoricalADRForYear(2024, historicalData.roomsRevenue[2024] || 0, roomsKeys, historicalData.occupancy[2024] || 0), revenueCalculations.adrGrowthType, revenueCalculations.flatAdrGrowth, revenueCalculations.yearlyAdrGrowth);
+  // Helper functions with proper error handling
+  const getAvailableRoomsForYear = (year: number) => getAvailableRooms(year);
+  
+  const calculateOccupancyFromYoYForYear = (year: number) => 
+    calculateOccupancyFromYoY(year, revenueCalculations.occupancyYoYGrowth, historicalData.occupancy[2024] || 0);
+  
+  const getForecastADRForYear = (year: number) => {
+    const baseADR = calculateHistoricalADR(
+      historicalData.roomsRevenue[2024] || 0, 
+      Math.round(getAvailableRooms(2024) * (historicalData.occupancy[2024] || 0) / 100)
+    );
+    return calculateForecastADR(
+      year, 
+      baseADR, 
+      revenueCalculations.adrGrowthType, 
+      revenueCalculations.flatAdrGrowth, 
+      revenueCalculations.yearlyAdrGrowth
+    );
+  };
+  
   const getForecastRoomsRevenueForYear = (year: number) => {
     const adr = getForecastADRForYear(year);
-    const occupancyValue = revenueCalculations.occupancyForecastMethod === "Occupancy" ? revenueCalculations.occupancyForecast[year] || "0" : calculateOccupancyFromYoYForYear(year).toString();
-    return getForecastRoomsRevenue(year, adr, roomsKeys, occupancyValue);
+    const occupancyValue = revenueCalculations.occupancyForecastMethod === "Occupancy" 
+      ? parseFloat(revenueCalculations.occupancyForecast[year] || "0")
+      : calculateOccupancyFromYoYForYear(year);
+    const occupiedRooms = Math.round(getAvailableRooms(year) * occupancyValue / 100);
+    return calculateRoomsRevenue(adr, occupiedRooms);
   };
+  
   const getForecastRevparForYear = (year: number) => {
     const roomsRevenue = getForecastRoomsRevenueForYear(year);
-    return getForecastRevpar(year, roomsRevenue, roomsKeys);
+    return calculateRevpar(roomsRevenue, getAvailableRooms(year));
   };
-  const getHistoricalADRForYearCalculated = (year: number) => getHistoricalADRForYear(year, historicalData.roomsRevenue[year] || 0, roomsKeys, historicalData.occupancy[year] || 0);
-  const getForecastADRForYearCalculated = (year: number) => {
-    return getForecastADRForYear(year);
+  
+  const getHistoricalADRForYearCalculated = (year: number) => {
+    const roomsRevenue = historicalData.roomsRevenue[year] || 0;
+    const occupiedRooms = Math.round(getAvailableRooms(year) * (historicalData.occupancy[year] || 0) / 100);
+    return calculateHistoricalADR(roomsRevenue, occupiedRooms);
   };
-  const handleSave = () => {
-    console.log("Saving revenue data:", {
-      adrGrowthType: revenueCalculations.adrGrowthType,
-      flatAdrGrowth: revenueCalculations.flatAdrGrowth,
-      yearlyAdrGrowth: revenueCalculations.yearlyAdrGrowth,
-      occupancyForecast: revenueCalculations.occupancyForecast,
-      occupancyForecastMethod: revenueCalculations.occupancyForecastMethod,
-      occupancyYoYGrowth: revenueCalculations.occupancyYoYGrowth,
-      fbPerOccupiedRoom: revenueCalculations.fbPerOccupiedRoom,
-      otherOperatedPerOccupiedRoom: revenueCalculations.otherOperatedPerOccupiedRoom,
-      miscellaneousPerOccupiedRoom: revenueCalculations.miscellaneousPerOccupiedRoom,
-      allocatedPerOccupiedRoom: revenueCalculations.allocatedPerOccupiedRoom
-    });
-    // TODO: Implement save functionality
-  };
+
   const handleItemClick = (modalName: string) => {
     console.log("Modal clicked:", modalName);
-    // TODO: Implement modal functionality
   };
-  console.log('About to render Revenue component');
-  return <SidebarProvider>
+
+  return (
+    <SidebarProvider>
       <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
         <AppSidebar onItemClick={handleItemClick} />
         <div className="flex-1 flex flex-col overflow-hidden">
@@ -66,10 +75,8 @@ const Revenue = () => {
             <SidebarTrigger />
           </div>
           <div className="p-6 flex-1 flex flex-col overflow-hidden">
-            {/* KPI Cards */}
             <KPICards />
 
-            {/* Tabbed Summary - Replaces FixedSummaryRows */}
             <div className="sticky top-0 z-10 bg-gray-50 pb-2">
               <TabbedSummary
                 roomsKeys={roomsKeys}
@@ -82,7 +89,7 @@ const Revenue = () => {
                 getAvailableRooms={getAvailableRoomsForYear}
                 getForecastRoomsRevenue={getForecastRoomsRevenueForYear}
                 getHistoricalADR={getHistoricalADRForYearCalculated}
-                getForecastADR={getForecastADRForYearCalculated}
+                getForecastADR={getForecastADRForYear}
                 getForecastRevpar={getForecastRevparForYear}
                 fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom}
                 otherOperatedPerOccupiedRoom={revenueCalculations.otherOperatedPerOccupiedRoom}
@@ -93,7 +100,6 @@ const Revenue = () => {
               />
             </div>
 
-            {/* Revenue Table - takes remaining space and has proper scrolling */}
             <div className="flex-1 min-h-0 overflow-hidden">
               <RevenueTable 
                 roomsKeys={roomsKeys} 
@@ -132,15 +138,11 @@ const Revenue = () => {
                 formatPercent={formatPercent} 
               />
             </div>
-
-            {/* Save Button */}
-            <div className="flex justify-end pt-4">
-              
-            </div>
           </div>
         </div>
       </div>
-    </SidebarProvider>;
+    </SidebarProvider>
+  );
 };
 
 export default Revenue;
