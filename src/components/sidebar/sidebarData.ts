@@ -1,18 +1,11 @@
 import { CategoryItem } from "./SidebarCategory";
 
-// Top-level categories for main navigation (kept simple without subcategories)
+// Top-level categories for main navigation (reordered as requested)
 export const mainNavCategories: CategoryItem[] = [
   {
     id: "summary",
     name: "Summary",
     path: "/under-construction"
-  },
-  {
-    id: "reports",
-    name: "Reports",
-    subCategories: [
-      { id: "occupancyReport", name: "Occupancy Report", path: "/subject-occupancy" }
-    ]
   },
   {
     id: "propertyDetails",
@@ -28,6 +21,13 @@ export const mainNavCategories: CategoryItem[] = [
     id: "valuation",
     name: "Valuation",
     path: "/revenue"
+  },
+  {
+    id: "reports",
+    name: "Reports",
+    subCategories: [
+      { id: "occupancyReport", name: "Occupancy Report", path: "/subject-occupancy" }
+    ]
   }
   // Department & Item Setup removed from sidebar
 ];
