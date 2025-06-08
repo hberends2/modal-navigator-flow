@@ -2,20 +2,38 @@
 import { useMemo } from 'react';
 import { REVENUE_CONFIG } from '../config/revenueConfig';
 import { HistoricalRevenueData } from '../types/revenue';
-import { getAvailableRooms, calculateRevpar } from '../utils/calculationUtils';
+import { getAvailableRooms, calculateRevpar, calculateOccupiedRooms } from '../utils/calculationUtils';
 
 export const useRevenueData = () => {
   const historicalData: HistoricalRevenueData = useMemo(() => {
+    // Base $ per occupied room data for departments
+    const departmentPerRoom = {
+      fb: { 2021: 52, 2022: 56, 2023: 58, 2024: 59 },
+      otherOperated: { 2021: 26, 2022: 28, 2023: 29, 2024: 30 },
+      miscellaneous: { 2021: 4, 2022: 5, 2023: 5, 2024: 5 },
+      allocated: { 2021: 9, 2022: 9, 2023: 10, 2024: 10 }
+    };
+
     const data: HistoricalRevenueData = {
       roomsRevenue: { 2021: 8765432, 2022: 9234567, 2023: 9876543, 2024: 10234567 },
-      fbRevenue: { 2021: 1500000, 2022: 1650000, 2023: 1750000, 2024: 1825000 },
-      otherOperatedRevenue: { 2021: 750000, 2022: 825000, 2023: 875000, 2024: 920000 },
-      miscellaneousRevenue: { 2021: 125000, 2022: 135000, 2023: 145000, 2024: 155000 },
-      allocatedRevenue: { 2021: 250000, 2022: 275000, 2023: 295000, 2024: 315000 },
+      fbRevenue: {},
+      otherOperatedRevenue: {},
+      miscellaneousRevenue: {},
+      allocatedRevenue: {},
       revpar: {},
       revparYoY: {},
       occupancy: { 2021: 72.5, 2022: 74.2, 2023: 76.8, 2024: 78.1 }
     };
+
+    // Calculate department revenues based on $ per occupied room * occupied rooms
+    REVENUE_CONFIG.HISTORICAL_YEARS.forEach(year => {
+      const occupiedRooms = calculateOccupiedRooms(year, data.occupancy[year]);
+      
+      data.fbRevenue[year] = departmentPerRoom.fb[year] * occupiedRooms;
+      data.otherOperatedRevenue[year] = departmentPerRoom.otherOperated[year] * occupiedRooms;
+      data.miscellaneousRevenue[year] = departmentPerRoom.miscellaneous[year] * occupiedRooms;
+      data.allocatedRevenue[year] = departmentPerRoom.allocated[year] * occupiedRooms;
+    });
 
     // Calculate RevPAR
     REVENUE_CONFIG.HISTORICAL_YEARS.forEach(year => {
@@ -41,8 +59,8 @@ export const useRevenueData = () => {
 
   return {
     historicalData,
-    forecastYears: REVENUE_CONFIG.FORECAST_YEARS,
-    historicalYears: REVENUE_CONFIG.HISTORICAL_YEARS,
+    forecastYears: [...REVENUE_CONFIG.FORECAST_YEARS],
+    historicalYears: [...REVENUE_CONFIG.HISTORICAL_YEARS],
     roomsKeys: REVENUE_CONFIG.ROOMS_KEYS
   };
 };
