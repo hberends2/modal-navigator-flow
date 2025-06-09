@@ -74,6 +74,7 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     setOccupancyForecastMethod,
     occupancyYoYGrowth: occupancyYoY.values,
     handleOccupancyYoYChange,
+    handleOccupancyYoYBlur: occupancyYoY.handlePercentageBlur,
     fbPerOccupiedRoom: fbPerRoom.values,
     handleFbPerOccupiedRoomChange: fbPerRoom.handleChange,
     handleFbPerOccupiedRoomBlur: fbPerRoom.handleIntegerBlur,
