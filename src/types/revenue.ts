@@ -30,6 +30,7 @@ export interface RevenueCalculationState extends RevenueCalculationInputs {
   handleOccupancyChange: (year: number, value: string) => void;
   setOccupancyForecastMethod: (value: string) => void;
   handleOccupancyYoYChange: (year: number, value: string) => void;
+  handleOccupancyYoYBlur: (year: number, value: string) => void;
   handleFbPerOccupiedRoomChange: (year: number, value: string) => void;
   handleFbPerOccupiedRoomBlur: (year: number, value: string) => void;
   handleOtherOperatedPerOccupiedRoomChange: (year: number, value: string) => void;
