@@ -98,6 +98,24 @@ const MetricRow: React.FC<MetricRowProps> = ({
               </TableCell>
             );
           }
+          if (isEditable && year && onEditableChange && onEditableBlur && editableData) {
+            return (
+              <TableCell key={`forecast-${index}`} className="text-center text-xs py-2 min-w-[80px]">
+                <div className="relative w-16 mx-auto">
+                  <Input
+                    type="text"
+                    value={editableData[year] || ""}
+                    onChange={(e) => handleInputChange(year, e.target.value)}
+                    onBlur={(e) => handleInputBlur(year, e.target.value)}
+                    className={`text-center text-xs h-6 py-0 text-right ${
+                      isFbInputRow ? 'text-blue-600 bg-yellow-50' : 'text-blue-600'
+                    } ${isYoYRow ? 'pr-4' : 'pr-1'}`}
+                  />
+                  {isYoYRow && <span className="absolute right-1 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">%</span>}
+                </div>
+              </TableCell>
+            );
+          }
           return (
             <TableCell key={`forecast-${index}`} className="text-center text-xs py-2 min-w-[80px]">
               {data}
