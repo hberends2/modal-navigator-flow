@@ -18,10 +18,5 @@ export default defineConfig(({ mode }) => ({
   },
   optimizeDeps: {
     exclude: ["lucide-react"]
-  },
-  esbuild: {
-    loader: "jsx",
-    include: /src\/.*\.[jt]sx?$/,
-    exclude: []
   }
 }));
