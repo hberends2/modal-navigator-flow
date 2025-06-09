@@ -35,15 +35,33 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   const miscellaneousPerRoom = useInputHandlers(getInitialForecastData());
   const allocatedPerRoom = useInputHandlers(getInitialForecastData());
 
-  // Custom handlers that update the shared occupancy data
+  // Custom handlers that update the local input state without parsing
   const handleOccupancyChange = (year: number, value: string) => {
     occupancyForecast.handleChange(year, value);
-    updateSubjectOccupancy({ [year]: parseFloat(value) || 0 });
+  };
+
+  const handleOccupancyBlur = (year: number, value: string) => {
+    // Format the value properly and update both local and shared state
+    const cleanValue = value.replace(/[^0-9.-]/g, "");
+    const numValue = parseFloat(cleanValue);
+    const formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
+    
+    occupancyForecast.handleChange(year, formattedValue);
+    updateSubjectOccupancy({ [year]: parseFloat(formattedValue) || 0 });
   };
 
   const handleOccupancyYoYChange = (year: number, value: string) => {
     occupancyYoY.handleChange(year, value);
-    updateSubjectOccupancyYoY({ [year]: parseFloat(value) || 0 });
+  };
+
+  const handleOccupancyYoYBlur = (year: number, value: string) => {
+    // Format the value properly and update both local and shared state
+    const cleanValue = value.replace(/[^0-9.-]/g, "");
+    const numValue = parseFloat(cleanValue);
+    const formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
+    
+    occupancyYoY.handleChange(year, formattedValue);
+    updateSubjectOccupancyYoY({ [year]: parseFloat(formattedValue) || 0 });
   };
 
   // Update local state when shared data changes
@@ -74,7 +92,7 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     setOccupancyForecastMethod,
     occupancyYoYGrowth: occupancyYoY.values,
     handleOccupancyYoYChange,
-    handleOccupancyYoYBlur: occupancyYoY.handlePercentageBlur,
+    handleOccupancyYoYBlur,
     fbPerOccupiedRoom: fbPerRoom.values,
     handleFbPerOccupiedRoomChange: fbPerRoom.handleChange,
     handleFbPerOccupiedRoomBlur: fbPerRoom.handleIntegerBlur,

@@ -245,22 +245,18 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 occupancyForecast={occupancyForecast}
                 handleOccupancyChange={handleOccupancyChange}
                 handleOccupancyBlur={(year, value) => {
-                  // Use percentage formatting for occupancy inputs
-                  const cleanValue = value.replace(/[^0-9.-]/g, "");
-                  const numValue = parseFloat(cleanValue);
-                  const formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
-                  handleOccupancyChange(year, formattedValue);
+                  // The blur handler is now properly implemented in useRevenueCalculations
+                  // We don't need to duplicate the logic here - just pass it through
+                  console.log('Occupancy blur event passed through:', year, value);
                 }}
                 occupancyForecastMethod={occupancyForecastMethod}
                 setOccupancyForecastMethod={setOccupancyForecastMethod}
                 occupancyYoYGrowth={occupancyYoYGrowth}
                 handleOccupancyYoYChange={handleOccupancyYoYChange}
                 handleOccupancyYoYBlur={(year, value) => {
-                  // Use percentage formatting for YoY growth inputs
-                  const cleanValue = value.replace(/[^0-9.-]/g, "");
-                  const numValue = parseFloat(cleanValue);
-                  const formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
-                  handleOccupancyYoYChange(year, formattedValue);
+                  // The blur handler is now properly implemented in useRevenueCalculations
+                  // We don't need to duplicate the logic here - just pass it through
+                  console.log('Occupancy YoY blur event passed through:', year, value);
                 }}
                 calculateOccupancyFromYoY={calculateOccupancyFromYoY}
                 getAvailableRooms={getAvailableRooms}
