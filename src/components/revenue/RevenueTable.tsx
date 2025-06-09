@@ -245,14 +245,22 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
                 occupancyForecast={occupancyForecast}
                 handleOccupancyChange={handleOccupancyChange}
                 handleOccupancyBlur={(year, value) => {
-                  console.log('Occupancy blur event:', year, value);
+                  // Use percentage formatting for occupancy inputs
+                  const cleanValue = value.replace(/[^0-9.-]/g, "");
+                  const numValue = parseFloat(cleanValue);
+                  const formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
+                  handleOccupancyChange(year, formattedValue);
                 }}
                 occupancyForecastMethod={occupancyForecastMethod}
                 setOccupancyForecastMethod={setOccupancyForecastMethod}
                 occupancyYoYGrowth={occupancyYoYGrowth}
                 handleOccupancyYoYChange={handleOccupancyYoYChange}
                 handleOccupancyYoYBlur={(year, value) => {
-                  console.log('Occupancy YoY blur event:', year, value);
+                  // Use percentage formatting for YoY growth inputs
+                  const cleanValue = value.replace(/[^0-9.-]/g, "");
+                  const numValue = parseFloat(cleanValue);
+                  const formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
+                  handleOccupancyYoYChange(year, formattedValue);
                 }}
                 calculateOccupancyFromYoY={calculateOccupancyFromYoY}
                 getAvailableRooms={getAvailableRooms}
