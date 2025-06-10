@@ -54,6 +54,7 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
                 getForecastADR={helpers.getForecastADRForYear}
                 getForecastRevpar={helpers.getForecastRevparForYear}
                 fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom}
+                resortFeePerOccupiedRoom={revenueCalculations.resortFeePerOccupiedRoom}
                 otherOperatedPerOccupiedRoom={revenueCalculations.otherOperatedPerOccupiedRoom}
                 miscellaneousPerOccupiedRoom={revenueCalculations.miscellaneousPerOccupiedRoom}
                 allocatedPerOccupiedRoom={revenueCalculations.allocatedPerOccupiedRoom}
