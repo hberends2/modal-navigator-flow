@@ -5,6 +5,7 @@ import ADRSection from "./ADRSection";
 import RevPARSection from "./RevPARSection";
 import RoomsRevenueSection from "./RoomsRevenueSection";
 import FoodBeverageSection from "./FoodBeverageSection";
+import ResortFeeSection from "./ResortFeeSection";
 import OtherOperatedSection from "./OtherOperatedSection";
 import MiscellaneousSection from "./MiscellaneousSection";
 import AllocatedSection from "./AllocatedSection";
@@ -35,6 +36,9 @@ interface RevenueTableSectionsProps {
   fbPerOccupiedRoom: Record<number, string>;
   handleFbPerOccupiedRoomChange: (year: number, value: string) => void;
   handleFbPerOccupiedRoomBlur: (year: number, value: string) => void;
+  resortFeePerOccupiedRoom: Record<number, string>;
+  handleResortFeePerOccupiedRoomChange: (year: number, value: string) => void;
+  handleResortFeePerOccupiedRoomBlur: (year: number, value: string) => void;
   otherOperatedPerOccupiedRoom: Record<number, string>;
   handleOtherOperatedPerOccupiedRoomChange: (year: number, value: string) => void;
   handleOtherOperatedPerOccupiedRoomBlur: (year: number, value: string) => void;
@@ -73,6 +77,9 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
   fbPerOccupiedRoom,
   handleFbPerOccupiedRoomChange,
   handleFbPerOccupiedRoomBlur,
+  resortFeePerOccupiedRoom,
+  handleResortFeePerOccupiedRoomChange,
+  handleResortFeePerOccupiedRoomBlur,
   otherOperatedPerOccupiedRoom,
   handleOtherOperatedPerOccupiedRoomChange,
   handleOtherOperatedPerOccupiedRoomBlur,
@@ -192,6 +199,20 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         fbPerOccupiedRoom={fbPerOccupiedRoom}
         handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
         handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
+        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
+        formatCurrency={formatCurrency}
+        isIndented={true}
+      />
+
+      {/* Resort Fee Section (Indented) */}
+      <ResortFeeSection
+        roomsKeys={roomsKeys}
+        historicalYears={historicalYears}
+        forecastYears={forecastYears}
+        historicalData={historicalData}
+        resortFeePerOccupiedRoom={resortFeePerOccupiedRoom}
+        handleResortFeePerOccupiedRoomChange={handleResortFeePerOccupiedRoomChange}
+        handleResortFeePerOccupiedRoomBlur={handleResortFeePerOccupiedRoomBlur}
         getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
         formatCurrency={formatCurrency}
         isIndented={true}

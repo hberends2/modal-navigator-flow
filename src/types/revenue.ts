@@ -3,6 +3,7 @@ export interface HistoricalRevenueData {
   roomsRevenue: Record<number, number>;
   occupancy: Record<number, number>;
   fbRevenue: Record<number, number>;
+  resortFeeRevenue: Record<number, number>;
   otherOperatedRevenue: Record<number, number>;
   miscellaneousRevenue: Record<number, number>;
   allocatedRevenue: Record<number, number>;
@@ -18,6 +19,7 @@ export interface RevenueCalculationInputs {
   occupancyForecastMethod: string;
   occupancyYoYGrowth: Record<number, string>;
   fbPerOccupiedRoom: Record<number, string>;
+  resortFeePerOccupiedRoom: Record<number, string>;
   otherOperatedPerOccupiedRoom: Record<number, string>;
   miscellaneousPerOccupiedRoom: Record<number, string>;
   allocatedPerOccupiedRoom: Record<number, string>;
@@ -33,6 +35,8 @@ export interface RevenueCalculationState extends RevenueCalculationInputs {
   handleOccupancyYoYBlur: (year: number, value: string) => void;
   handleFbPerOccupiedRoomChange: (year: number, value: string) => void;
   handleFbPerOccupiedRoomBlur: (year: number, value: string) => void;
+  handleResortFeePerOccupiedRoomChange: (year: number, value: string) => void;
+  handleResortFeePerOccupiedRoomBlur: (year: number, value: string) => void;
   handleOtherOperatedPerOccupiedRoomChange: (year: number, value: string) => void;
   handleOtherOperatedPerOccupiedRoomBlur: (year: number, value: string) => void;
   handleMiscellaneousPerOccupiedRoomChange: (year: number, value: string) => void;

@@ -13,6 +13,7 @@ interface RevenueTableProps {
     revparYoY: Record<number, number>;
     occupancy: Record<number, number>;
     fbRevenue: Record<number, number>;
+    resortFeeRevenue: Record<number, number>;
     otherOperatedRevenue: Record<number, number>;
     miscellaneousRevenue: Record<number, number>;
     allocatedRevenue: Record<number, number>;
@@ -36,6 +37,9 @@ interface RevenueTableProps {
   fbPerOccupiedRoom: Record<number, string>;
   handleFbPerOccupiedRoomChange: (year: number, value: string) => void;
   handleFbPerOccupiedRoomBlur: (year: number, value: string) => void;
+  resortFeePerOccupiedRoom: Record<number, string>;
+  handleResortFeePerOccupiedRoomChange: (year: number, value: string) => void;
+  handleResortFeePerOccupiedRoomBlur: (year: number, value: string) => void;
   otherOperatedPerOccupiedRoom: Record<number, string>;
   handleOtherOperatedPerOccupiedRoomChange: (year: number, value: string) => void;
   handleOtherOperatedPerOccupiedRoomBlur: (year: number, value: string) => void;
@@ -73,6 +77,9 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   fbPerOccupiedRoom = {},
   handleFbPerOccupiedRoomChange,
   handleFbPerOccupiedRoomBlur,
+  resortFeePerOccupiedRoom = {},
+  handleResortFeePerOccupiedRoomChange,
+  handleResortFeePerOccupiedRoomBlur,
   otherOperatedPerOccupiedRoom = {},
   handleOtherOperatedPerOccupiedRoomChange,
   handleOtherOperatedPerOccupiedRoomBlur,
@@ -117,6 +124,7 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
     calculateOccupancyFromYoY,
     getForecastRoomsRevenue,
     fbPerOccupiedRoom,
+    resortFeePerOccupiedRoom,
     otherOperatedPerOccupiedRoom,
     miscellaneousPerOccupiedRoom,
     allocatedPerOccupiedRoom
@@ -148,6 +156,9 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
         fbPerOccupiedRoom={fbPerOccupiedRoom}
         handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
         handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
+        resortFeePerOccupiedRoom={resortFeePerOccupiedRoom}
+        handleResortFeePerOccupiedRoomChange={handleResortFeePerOccupiedRoomChange}
+        handleResortFeePerOccupiedRoomBlur={handleResortFeePerOccupiedRoomBlur}
         otherOperatedPerOccupiedRoom={otherOperatedPerOccupiedRoom}
         handleOtherOperatedPerOccupiedRoomChange={handleOtherOperatedPerOccupiedRoomChange}
         handleOtherOperatedPerOccupiedRoomBlur={handleOtherOperatedPerOccupiedRoomBlur}

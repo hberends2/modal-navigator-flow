@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { REVENUE_CONFIG } from '../config/revenueConfig';
 import { RevenueCalculationState } from '../types/revenue';
@@ -31,6 +30,7 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   const occupancyYoY = useInputHandlers(initialOccupancyYoY);
   
   const fbPerRoom = useInputHandlers(getInitialForecastData());
+  const resortFeePerRoom = useInputHandlers(getInitialForecastData());
   const otherOperatedPerRoom = useInputHandlers(getInitialForecastData());
   const miscellaneousPerRoom = useInputHandlers(getInitialForecastData());
   const allocatedPerRoom = useInputHandlers(getInitialForecastData());
@@ -96,6 +96,9 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     fbPerOccupiedRoom: fbPerRoom.values,
     handleFbPerOccupiedRoomChange: fbPerRoom.handleChange,
     handleFbPerOccupiedRoomBlur: fbPerRoom.handleIntegerBlur,
+    resortFeePerOccupiedRoom: resortFeePerRoom.values,
+    handleResortFeePerOccupiedRoomChange: resortFeePerRoom.handleChange,
+    handleResortFeePerOccupiedRoomBlur: resortFeePerRoom.handleIntegerBlur,
     otherOperatedPerOccupiedRoom: otherOperatedPerRoom.values,
     handleOtherOperatedPerOccupiedRoomChange: otherOperatedPerRoom.handleChange,
     handleOtherOperatedPerOccupiedRoomBlur: otherOperatedPerRoom.handleIntegerBlur,

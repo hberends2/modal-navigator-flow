@@ -30,6 +30,9 @@ interface RevenueTableContainerProps {
   fbPerOccupiedRoom: Record<number, string>;
   handleFbPerOccupiedRoomChange: (year: number, value: string) => void;
   handleFbPerOccupiedRoomBlur: (year: number, value: string) => void;
+  resortFeePerOccupiedRoom: Record<number, string>;
+  handleResortFeePerOccupiedRoomChange: (year: number, value: string) => void;
+  handleResortFeePerOccupiedRoomBlur: (year: number, value: string) => void;
   otherOperatedPerOccupiedRoom: Record<number, string>;
   handleOtherOperatedPerOccupiedRoomChange: (year: number, value: string) => void;
   handleOtherOperatedPerOccupiedRoomBlur: (year: number, value: string) => void;
