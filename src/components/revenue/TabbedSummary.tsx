@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
@@ -10,6 +11,7 @@ interface TabbedSummaryProps {
     roomsRevenue: Record<number, number>;
     occupancy: Record<number, number>;
     fbRevenue: Record<number, number>;
+    resortFeeRevenue: Record<number, number>;
     otherOperatedRevenue: Record<number, number>;
     miscellaneousRevenue: Record<number, number>;
     allocatedRevenue: Record<number, number>;
@@ -23,6 +25,7 @@ interface TabbedSummaryProps {
   getForecastADR: (year: number) => number;
   getForecastRevpar: (year: number) => number;
   fbPerOccupiedRoom: Record<number, string>;
+  resortFeePerOccupiedRoom: Record<number, string>;
   otherOperatedPerOccupiedRoom: Record<number, string>;
   miscellaneousPerOccupiedRoom: Record<number, string>;
   allocatedPerOccupiedRoom: Record<number, string>;
@@ -44,6 +47,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
   getForecastADR,
   getForecastRevpar,
   fbPerOccupiedRoom,
+  resortFeePerOccupiedRoom,
   otherOperatedPerOccupiedRoom,
   miscellaneousPerOccupiedRoom,
   allocatedPerOccupiedRoom,
@@ -157,6 +161,16 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
           return formatCurrency(historicalData.fbRevenue[year] || 0);
         } else {
           return formatCurrency(calculateForecastRevenue(year, fbPerOccupiedRoom));
+        }
+      })
+    },
+    {
+      label: "Resort Fee Revenue",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(historicalData.resortFeeRevenue[year] || 0);
+        } else {
+          return formatCurrency(calculateForecastRevenue(year, resortFeePerOccupiedRoom));
         }
       })
     },
