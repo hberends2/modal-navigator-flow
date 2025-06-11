@@ -23,6 +23,13 @@ export interface RevenueCalculationInputs {
   otherOperatedPerOccupiedRoom: Record<number, string>;
   miscellaneousPerOccupiedRoom: Record<number, string>;
   allocatedPerOccupiedRoom: Record<number, string>;
+  expenseForecastMethod: string;
+  roomsExpenseInput: Record<number, string>;
+  fbExpenseInput: Record<number, string>;
+  resortFeeExpenseInput: Record<number, string>;
+  otherOperatedExpenseInput: Record<number, string>;
+  miscellaneousExpenseInput: Record<number, string>;
+  allocatedExpenseInput: Record<number, string>;
 }
 
 export interface RevenueCalculationState extends RevenueCalculationInputs {
@@ -43,4 +50,17 @@ export interface RevenueCalculationState extends RevenueCalculationInputs {
   handleMiscellaneousPerOccupiedRoomBlur: (year: number, value: string) => void;
   handleAllocatedPerOccupiedRoomChange: (year: number, value: string) => void;
   handleAllocatedPerOccupiedRoomBlur: (year: number, value: string) => void;
+  setExpenseForecastMethod: (value: string) => void;
+  handleRoomsExpenseChange: (year: number, value: string) => void;
+  handleRoomsExpenseBlur: (year: number, value: string) => void;
+  handleFbExpenseChange: (year: number, value: string) => void;
+  handleFbExpenseBlur: (year: number, value: string) => void;
+  handleResortFeeExpenseChange: (year: number, value: string) => void;
+  handleResortFeeExpenseBlur: (year: number, value: string) => void;
+  handleOtherOperatedExpenseChange: (year: number, value: string) => void;
+  handleOtherOperatedExpenseBlur: (year: number, value: string) => void;
+  handleMiscellaneousExpenseChange: (year: number, value: string) => void;
+  handleMiscellaneousExpenseBlur: (year: number, value: string) => void;
+  handleAllocatedExpenseChange: (year: number, value: string) => void;
+  handleAllocatedExpenseBlur: (year: number, value: string) => void;
 }

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { TableBody } from "../ui/table";
 import OccupancySection from "./OccupancySection";
@@ -9,6 +10,7 @@ import ResortFeeSection from "./ResortFeeSection";
 import OtherOperatedSection from "./OtherOperatedSection";
 import MiscellaneousSection from "./MiscellaneousSection";
 import AllocatedSection from "./AllocatedSection";
+import ExpenseSection from "./ExpenseSection";
 import MetricRow from "./MetricRow";
 import { CalculationHelpers } from "./RevenueTableHelpers";
 
@@ -51,6 +53,26 @@ interface RevenueTableSectionsProps {
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
   helpers: CalculationHelpers;
+  expenseForecastMethod: string;
+  setExpenseForecastMethod: (value: string) => void;
+  roomsExpenseInput: Record<number, string>;
+  handleRoomsExpenseChange: (year: number, value: string) => void;
+  handleRoomsExpenseBlur: (year: number, value: string) => void;
+  fbExpenseInput: Record<number, string>;
+  handleFbExpenseChange: (year: number, value: string) => void;
+  handleFbExpenseBlur: (year: number, value: string) => void;
+  resortFeeExpenseInput: Record<number, string>;
+  handleResortFeeExpenseChange: (year: number, value: string) => void;
+  handleResortFeeExpenseBlur: (year: number, value: string) => void;
+  otherOperatedExpenseInput: Record<number, string>;
+  handleOtherOperatedExpenseChange: (year: number, value: string) => void;
+  handleOtherOperatedExpenseBlur: (year: number, value: string) => void;
+  miscellaneousExpenseInput: Record<number, string>;
+  handleMiscellaneousExpenseChange: (year: number, value: string) => void;
+  handleMiscellaneousExpenseBlur: (year: number, value: string) => void;
+  allocatedExpenseInput: Record<number, string>;
+  handleAllocatedExpenseChange: (year: number, value: string) => void;
+  handleAllocatedExpenseBlur: (year: number, value: string) => void;
 }
 
 const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
@@ -91,7 +113,27 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
   handleAllocatedPerOccupiedRoomBlur,
   formatCurrency,
   formatPercent,
-  helpers
+  helpers,
+  expenseForecastMethod,
+  setExpenseForecastMethod,
+  roomsExpenseInput,
+  handleRoomsExpenseChange,
+  handleRoomsExpenseBlur,
+  fbExpenseInput,
+  handleFbExpenseChange,
+  handleFbExpenseBlur,
+  resortFeeExpenseInput,
+  handleResortFeeExpenseChange,
+  handleResortFeeExpenseBlur,
+  otherOperatedExpenseInput,
+  handleOtherOperatedExpenseChange,
+  handleOtherOperatedExpenseBlur,
+  miscellaneousExpenseInput,
+  handleMiscellaneousExpenseChange,
+  handleMiscellaneousExpenseBlur,
+  allocatedExpenseInput,
+  handleAllocatedExpenseChange,
+  handleAllocatedExpenseBlur
 }) => {
   return (
     <TableBody>
@@ -100,7 +142,6 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         <td colSpan={10} className="h-0 p-0"></td>
       </tr>
       
-      {/* Occupancy Section */}
       <OccupancySection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
@@ -125,12 +166,10 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         formatPercent={formatPercent}
       />
 
-      {/* Section anchor for ADR */}
       <tr id="adr-section" className="scroll-mt-4">
         <td colSpan={10} className="h-0 p-0"></td>
       </tr>
       
-      {/* ADR Section */}
       <ADRSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
@@ -150,12 +189,10 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         }}
       />
 
-      {/* Section anchor for RevPAR */}
       <tr id="revpar-section" className="scroll-mt-4">
         <td colSpan={10} className="h-0 p-0"></td>
       </tr>
       
-      {/* RevPAR Section */}
       <RevPARSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
@@ -163,12 +200,10 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         getForecastRevpar={getForecastRevpar}
       />
 
-      {/* Section anchor for Rooms Revenue */}
       <tr id="rooms-revenue-section" className="scroll-mt-4">
         <td colSpan={10} className="h-0 p-0"></td>
       </tr>
       
-      {/* Rooms Revenue Section */}
       <RoomsRevenueSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
@@ -177,12 +212,10 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         formatCurrency={formatCurrency}
       />
 
-      {/* Section anchor for Other Operated Revenue */}
       <tr id="other-operated-revenue-section" className="scroll-mt-4">
         <td colSpan={10} className="h-0 p-0"></td>
       </tr>
       
-      {/* Other Operated Revenue Section Header */}
       <MetricRow
         label={<span className="font-bold text-gray-900">Other Operated Revenue</span>}
         historicalData={historicalYears.map(() => "")}
@@ -190,7 +223,6 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         isSectionHeader={true}
       />
 
-      {/* Food & Beverage Section (Indented) */}
       <FoodBeverageSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -204,7 +236,6 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         isIndented={true}
       />
 
-      {/* Resort Fee Section (Indented) */}
       <ResortFeeSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -218,7 +249,6 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         isIndented={true}
       />
 
-      {/* Other Operated Section (Indented) */}
       <OtherOperatedSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -232,7 +262,6 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         isIndented={true}
       />
 
-      {/* Miscellaneous Section (Indented) */}
       <MiscellaneousSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -246,7 +275,6 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         isIndented={true}
       />
 
-      {/* Allocated Section (Indented) */}
       <AllocatedSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -260,7 +288,6 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         isIndented={true}
       />
 
-      {/* Total Other Operated Revenue Row */}
       <MetricRow
         label={<span className="font-medium">Total Other Operated Revenue</span>}
         historicalData={historicalYears.map(year => 
@@ -271,12 +298,10 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         )}
       />
 
-      {/* Section anchor for Total Revenue */}
       <tr id="total-revenue-section" className="scroll-mt-4">
         <td colSpan={10} className="h-0 p-0"></td>
       </tr>
 
-      {/* Total Revenue Row */}
       <MetricRow
         label={<span className="font-bold text-base">Total Revenue</span>}
         historicalData={historicalYears.map(year => (
@@ -289,6 +314,35 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
             {formatCurrency(helpers.calculateTotalRevenue(year, false))}
           </span>
         ))}
+      />
+
+      {/* Expense Section */}
+      <ExpenseSection
+        historicalYears={historicalYears}
+        forecastYears={forecastYears}
+        expenseForecastMethod={expenseForecastMethod}
+        setExpenseForecastMethod={setExpenseForecastMethod}
+        roomsExpenseInput={roomsExpenseInput}
+        handleRoomsExpenseChange={handleRoomsExpenseChange}
+        handleRoomsExpenseBlur={handleRoomsExpenseBlur}
+        fbExpenseInput={fbExpenseInput}
+        handleFbExpenseChange={handleFbExpenseChange}
+        handleFbExpenseBlur={handleFbExpenseBlur}
+        resortFeeExpenseInput={resortFeeExpenseInput}
+        handleResortFeeExpenseChange={handleResortFeeExpenseChange}
+        handleResortFeeExpenseBlur={handleResortFeeExpenseBlur}
+        otherOperatedExpenseInput={otherOperatedExpenseInput}
+        handleOtherOperatedExpenseChange={handleOtherOperatedExpenseChange}
+        handleOtherOperatedExpenseBlur={handleOtherOperatedExpenseBlur}
+        miscellaneousExpenseInput={miscellaneousExpenseInput}
+        handleMiscellaneousExpenseChange={handleMiscellaneousExpenseChange}
+        handleMiscellaneousExpenseBlur={handleMiscellaneousExpenseBlur}
+        allocatedExpenseInput={allocatedExpenseInput}
+        handleAllocatedExpenseChange={handleAllocatedExpenseChange}
+        handleAllocatedExpenseBlur={handleAllocatedExpenseBlur}
+        formatCurrency={formatCurrency}
+        formatPercent={formatPercent}
+        helpers={helpers}
       />
     </TableBody>
   );

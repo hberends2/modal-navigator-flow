@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { REVENUE_CONFIG } from '../config/revenueConfig';
 import { RevenueCalculationState } from '../types/revenue';
@@ -11,6 +12,7 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   const { data: occupancyData, updateSubjectOccupancy, updateSubjectOccupancyYoY } = useRevenueOccupancyData();
   const [adrGrowthType, setAdrGrowthType] = useState<string>("flat");
   const [occupancyForecastMethod, setOccupancyForecastMethod] = useState<string>("Occupancy");
+  const [expenseForecastMethod, setExpenseForecastMethod] = useState<string>("ADR");
 
   const flatAdr = useInputHandlers({ [0]: REVENUE_CONFIG.DEFAULT_GROWTH_RATES.ADR });
   const yearlyAdr = useInputHandlers(getInitialForecastData(REVENUE_CONFIG.DEFAULT_GROWTH_RATES.ADR));
@@ -34,6 +36,14 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   const otherOperatedPerRoom = useInputHandlers(getInitialForecastData());
   const miscellaneousPerRoom = useInputHandlers(getInitialForecastData());
   const allocatedPerRoom = useInputHandlers(getInitialForecastData());
+
+  // Expense inputs
+  const roomsExpenseInput = useInputHandlers(getInitialForecastData());
+  const fbExpenseInput = useInputHandlers(getInitialForecastData());
+  const resortFeeExpenseInput = useInputHandlers(getInitialForecastData());
+  const otherOperatedExpenseInput = useInputHandlers(getInitialForecastData());
+  const miscellaneousExpenseInput = useInputHandlers(getInitialForecastData());
+  const allocatedExpenseInput = useInputHandlers(getInitialForecastData());
 
   // Custom handlers that update the local input state without parsing
   const handleOccupancyChange = (year: number, value: string) => {
@@ -62,6 +72,23 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     
     occupancyYoY.handleChange(year, formattedValue);
     updateSubjectOccupancyYoY({ [year]: parseFloat(formattedValue) || 0 });
+  };
+
+  // Expense blur handlers based on forecast method
+  const handleExpenseBlur = (year: number, value: string, handler: any) => {
+    const cleanValue = value.replace(/[^0-9.-]/g, "");
+    const numValue = parseFloat(cleanValue);
+    
+    let formattedValue: string;
+    if (expenseForecastMethod === "ADR") {
+      // Integer format for ADR
+      formattedValue = isNaN(numValue) ? "0" : Math.round(numValue).toString();
+    } else {
+      // Percentage format with 1 decimal place
+      formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
+    }
+    
+    handler(year, formattedValue);
   };
 
   // Update local state when shared data changes
@@ -107,6 +134,26 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     handleMiscellaneousPerOccupiedRoomBlur: miscellaneousPerRoom.handleIntegerBlur,
     allocatedPerOccupiedRoom: allocatedPerRoom.values,
     handleAllocatedPerOccupiedRoomChange: allocatedPerRoom.handleChange,
-    handleAllocatedPerOccupiedRoomBlur: allocatedPerRoom.handleIntegerBlur
+    handleAllocatedPerOccupiedRoomBlur: allocatedPerRoom.handleIntegerBlur,
+    expenseForecastMethod,
+    setExpenseForecastMethod,
+    roomsExpenseInput: roomsExpenseInput.values,
+    handleRoomsExpenseChange: roomsExpenseInput.handleChange,
+    handleRoomsExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, roomsExpenseInput.handleChange),
+    fbExpenseInput: fbExpenseInput.values,
+    handleFbExpenseChange: fbExpenseInput.handleChange,
+    handleFbExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, fbExpenseInput.handleChange),
+    resortFeeExpenseInput: resortFeeExpenseInput.values,
+    handleResortFeeExpenseChange: resortFeeExpenseInput.handleChange,
+    handleResortFeeExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, resortFeeExpenseInput.handleChange),
+    otherOperatedExpenseInput: otherOperatedExpenseInput.values,
+    handleOtherOperatedExpenseChange: otherOperatedExpenseInput.handleChange,
+    handleOtherOperatedExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, otherOperatedExpenseInput.handleChange),
+    miscellaneousExpenseInput: miscellaneousExpenseInput.values,
+    handleMiscellaneousExpenseChange: miscellaneousExpenseInput.handleChange,
+    handleMiscellaneousExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, miscellaneousExpenseInput.handleChange),
+    allocatedExpenseInput: allocatedExpenseInput.values,
+    handleAllocatedExpenseChange: allocatedExpenseInput.handleChange,
+    handleAllocatedExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, allocatedExpenseInput.handleChange)
   };
 };
