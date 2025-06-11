@@ -1,6 +1,8 @@
 import React from "react";
 import MetricRow from "./MetricRow";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import ExpenseHeader from "./ExpenseHeader";
+import RoomsExpenseSection from "./RoomsExpenseSection";
+import OtherOperatedExpenseSection from "./OtherOperatedExpenseSection";
 
 interface ExpenseSectionProps {
   historicalYears: number[];
@@ -108,193 +110,52 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     return (historicalExpenseData.rooms[year] || 0) + getTotalHistoricalOtherOperatedExpense(year);
   };
 
-  const getInputSuffix = () => {
-    return expenseForecastMethod === "% of Revenue" ? "%" : "";
-  };
-
   return (
     <>
       {/* Expense Divider Row */}
-      <tr className="bg-gray-600">
-        <td colSpan={10} className="p-3">
-          <div className="flex items-center justify-between">
-            <span className="text-white font-bold text-sm">EXPENSES</span>
-            <div className="flex items-center space-x-2">
-              <span className="text-white text-xs font-medium">Forecast Method:</span>
-              <div className="w-40">
-                <Select value={expenseForecastMethod} onValueChange={setExpenseForecastMethod}>
-                  <SelectTrigger className="h-8 text-xs bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ADR">ADR</SelectItem>
-                    <SelectItem value="% of Revenue">% of Revenue</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-        </td>
-      </tr>
+      <ExpenseHeader 
+        expenseForecastMethod={expenseForecastMethod}
+        setExpenseForecastMethod={setExpenseForecastMethod}
+      />
 
       {/* Rooms Expense Section */}
-      <tr id="rooms-expense-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-
-      <MetricRow
-        label={<span className="font-bold text-gray-900">Rooms Expense</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-
-      <MetricRow
-        label="Rooms Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.rooms[year] || 0))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={roomsExpenseInput}
-        onEditableChange={handleRoomsExpenseChange}
-        onEditableBlur={handleRoomsExpenseBlur}
+      <RoomsExpenseSection
+        historicalYears={historicalYears}
         forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Rooms Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.rooms[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, roomsExpenseInput[year], 'rooms')))}
-        isIndented={true}
+        expenseForecastMethod={expenseForecastMethod}
+        roomsExpenseInput={roomsExpenseInput}
+        handleRoomsExpenseChange={handleRoomsExpenseChange}
+        handleRoomsExpenseBlur={handleRoomsExpenseBlur}
+        formatCurrency={formatCurrency}
+        calculateExpense={calculateExpense}
+        historicalExpenseData={historicalExpenseData}
       />
 
       {/* Other Operated Expense Section */}
-      <tr id="other-operated-expense-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-
-      <MetricRow
-        label={<span className="font-bold text-gray-900">Other Operated Expense</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-
-      {/* Food & Beverage Expense */}
-      <MetricRow
-        label="Food & Beverage Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.fb[year] || 0))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={fbExpenseInput}
-        onEditableChange={handleFbExpenseChange}
-        onEditableBlur={handleFbExpenseBlur}
+      <OtherOperatedExpenseSection
+        historicalYears={historicalYears}
         forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Food & Beverage Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.fb[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, fbExpenseInput[year], 'fb')))}
-        isIndented={true}
-      />
-
-      {/* Resort Fee Expense */}
-      <MetricRow
-        label="Resort Fee Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.resortFee[year] || 0))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={resortFeeExpenseInput}
-        onEditableChange={handleResortFeeExpenseChange}
-        onEditableBlur={handleResortFeeExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Resort Fee Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.resortFee[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, resortFeeExpenseInput[year], 'resortFee')))}
-        isIndented={true}
-      />
-
-      {/* Other Operated Expense */}
-      <MetricRow
-        label="Other Operated Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.otherOperated[year] || 0))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={otherOperatedExpenseInput}
-        onEditableChange={handleOtherOperatedExpenseChange}
-        onEditableBlur={handleOtherOperatedExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Other Operated Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.otherOperated[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, otherOperatedExpenseInput[year], 'otherOperated')))}
-        isIndented={true}
-      />
-
-      {/* Miscellaneous Expense */}
-      <MetricRow
-        label="Miscellaneous Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.miscellaneous[year] || 0))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={miscellaneousExpenseInput}
-        onEditableChange={handleMiscellaneousExpenseChange}
-        onEditableBlur={handleMiscellaneousExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Miscellaneous Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.miscellaneous[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, miscellaneousExpenseInput[year], 'miscellaneous')))}
-        isIndented={true}
-      />
-
-      {/* Allocated Expense */}
-      <MetricRow
-        label="Allocated Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.allocated[year] || 0))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={allocatedExpenseInput}
-        onEditableChange={handleAllocatedExpenseChange}
-        onEditableBlur={handleAllocatedExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Allocated Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.allocated[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, allocatedExpenseInput[year], 'allocated')))}
-        isIndented={true}
-      />
-
-      {/* Total Other Operated Expense Row */}
-      <MetricRow
-        label={<span className="font-medium">Total Other Operated Expense</span>}
-        historicalData={historicalYears.map(year => 
-          formatCurrency(getTotalHistoricalOtherOperatedExpense(year))
-        )}
-        forecastData={forecastYears.map(year => 
-          formatCurrency(calculateTotalOtherOperatedExpense(year))
-        )}
+        expenseForecastMethod={expenseForecastMethod}
+        fbExpenseInput={fbExpenseInput}
+        handleFbExpenseChange={handleFbExpenseChange}
+        handleFbExpenseBlur={handleFbExpenseBlur}
+        resortFeeExpenseInput={resortFeeExpenseInput}
+        handleResortFeeExpenseChange={handleResortFeeExpenseChange}
+        handleResortFeeExpenseBlur={handleResortFeeExpenseBlur}
+        otherOperatedExpenseInput={otherOperatedExpenseInput}
+        handleOtherOperatedExpenseChange={handleOtherOperatedExpenseChange}
+        handleOtherOperatedExpenseBlur={handleOtherOperatedExpenseBlur}
+        miscellaneousExpenseInput={miscellaneousExpenseInput}
+        handleMiscellaneousExpenseChange={handleMiscellaneousExpenseChange}
+        handleMiscellaneousExpenseBlur={handleMiscellaneousExpenseBlur}
+        allocatedExpenseInput={allocatedExpenseInput}
+        handleAllocatedExpenseChange={handleAllocatedExpenseChange}
+        handleAllocatedExpenseBlur={handleAllocatedExpenseBlur}
+        formatCurrency={formatCurrency}
+        calculateExpense={calculateExpense}
+        calculateTotalOtherOperatedExpense={calculateTotalOtherOperatedExpense}
+        getTotalHistoricalOtherOperatedExpense={getTotalHistoricalOtherOperatedExpense}
+        historicalExpenseData={historicalExpenseData}
       />
 
       {/* Total Expense Section */}
