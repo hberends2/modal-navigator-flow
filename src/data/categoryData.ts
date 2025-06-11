@@ -23,11 +23,6 @@ export interface PrimaryCategory {
 // Initialize mock data for Food & Beverage
 export const categories: PrimaryCategory[] = [
   {
-    id: "none",
-    name: "None",
-    subCategories: []
-  },
-  {
     id: "food-beverage",
     name: "Food & Beverage",
     subCategories: [
@@ -110,6 +105,11 @@ export const categories: PrimaryCategory[] = [
         ]
       }
     ]
+  },
+  {
+    id: "resort-fees",
+    name: "Resort Fees",
+    subCategories: []
   },
   {
     id: "other-operated",
@@ -339,6 +339,11 @@ export const categories: PrimaryCategory[] = [
         ]
       }
     ]
+  },
+  {
+    id: "none",
+    name: "None",
+    subCategories: []
   }
 ];
 

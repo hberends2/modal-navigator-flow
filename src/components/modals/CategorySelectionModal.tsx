@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import ModalWrapper from "../ui/ModalWrapper";
 import { Checkbox } from "../ui/checkbox";
@@ -105,16 +106,20 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
         // Only add the category itself, not its descendants
         newSelectedItems.add(categoryId);
         
-        // Expand this category
-        setExpandedCategories(prev => new Set([...prev, categoryId]));
+        // Expand this category if it has subcategories
+        if (categories.find(cat => cat.id === categoryId)?.subCategories.length > 0) {
+          setExpandedCategories(prev => new Set([...prev, categoryId]));
+        }
       } else {
         // Only remove the category itself, not its descendants
         newSelectedItems.delete(categoryId);
         
-        // Collapse this category
-        const newExpandedCategories = new Set(expandedCategories);
-        newExpandedCategories.delete(categoryId);
-        setExpandedCategories(newExpandedCategories);
+        // Collapse this category if it has subcategories
+        if (categories.find(cat => cat.id === categoryId)?.subCategories.length > 0) {
+          const newExpandedCategories = new Set(expandedCategories);
+          newExpandedCategories.delete(categoryId);
+          setExpandedCategories(newExpandedCategories);
+        }
       }
     }
     
@@ -242,8 +247,8 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                   // Disable all checkboxes except "none" when "none" is selected
                   disabled={isNoneSelected && category.id !== "none"}
                 />
-                {/* For "None" option, don't render the AccordionTrigger with chevron */}
-                {category.id === "none" ? (
+                {/* For "None" and "Resort Fees" options, don't render the AccordionTrigger with chevron */}
+                {(category.id === "none" || category.id === "resort-fees") ? (
                   <Label
                     htmlFor={`category-${category.id}`}
                     className="text-base font-medium cursor-pointer flex-1 py-0"
@@ -274,7 +279,7 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                 )}
               </div>
               
-              {category.id !== "none" && (
+              {(category.id !== "none" && category.id !== "resort-fees") && (
                 <AccordionContent className={isNoneSelected ? "opacity-50 pointer-events-none" : ""}>
                   <div className="mt-2 ml-6 space-y-1">
                     {/* Subcategories */}
