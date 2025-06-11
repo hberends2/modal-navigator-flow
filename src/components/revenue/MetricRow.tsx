@@ -1,3 +1,4 @@
+
 import React from "react";
 import { TableRow, TableCell } from "../ui/table";
 import { Input } from "../ui/input";
@@ -23,6 +24,7 @@ interface MetricRowProps {
   handleYearlyAdrBlur?: (year: number, value: string) => void;
   isUserInputRow?: boolean;
   isFbInputRow?: boolean;
+  isIndented?: boolean;
 }
 
 const MetricRow: React.FC<MetricRowProps> = ({
@@ -45,7 +47,8 @@ const MetricRow: React.FC<MetricRowProps> = ({
   handleYearlyAdrChange,
   handleYearlyAdrBlur,
   isUserInputRow = false,
-  isFbInputRow = false
+  isFbInputRow = false,
+  isIndented = false
 }) => {
   const handleInputChange = (year: number, value: string) => {
     if (onEditableChange) {
@@ -64,6 +67,14 @@ const MetricRow: React.FC<MetricRowProps> = ({
     if (isUserInputRow && isFbInputRow) return "bg-yellow-50"; // Pale yellow background for F&B input
     if (isUserInputRow) return "bg-yellow-50";
     return "";
+  };
+
+  const getLabelClassName = () => {
+    let baseClass = `p-2 bg-white sticky left-0 z-10 ${isSectionHeader ? 'font-bold' : ''}`;
+    if (isIndented) {
+      baseClass += " pl-6"; // Add left padding for indentation
+    }
+    return baseClass;
   };
 
   if (isTwoRowMetric) {
@@ -128,7 +139,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
 
   return (
     <TableRow className={getRowClassName()}>
-      <TableCell className={`p-2 bg-white sticky left-0 z-10 ${isSectionHeader ? 'font-bold' : ''}`}>
+      <TableCell className={getLabelClassName()}>
         <span className="text-xs">{label}</span>
       </TableCell>
       {historicalData.map((data, index) => (
