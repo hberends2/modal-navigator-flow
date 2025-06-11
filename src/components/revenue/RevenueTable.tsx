@@ -51,6 +51,26 @@ interface RevenueTableProps {
   handleAllocatedPerOccupiedRoomBlur: (year: number, value: string) => void;
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
+  expenseForecastMethod: string;
+  setExpenseForecastMethod: (value: string) => void;
+  roomsExpenseInput: Record<number, string>;
+  handleRoomsExpenseChange: (year: number, value: string) => void;
+  handleRoomsExpenseBlur: (year: number, value: string) => void;
+  fbExpenseInput: Record<number, string>;
+  handleFbExpenseChange: (year: number, value: string) => void;
+  handleFbExpenseBlur: (year: number, value: string) => void;
+  resortFeeExpenseInput: Record<number, string>;
+  handleResortFeeExpenseChange: (year: number, value: string) => void;
+  handleResortFeeExpenseBlur: (year: number, value: string) => void;
+  otherOperatedExpenseInput: Record<number, string>;
+  handleOtherOperatedExpenseChange: (year: number, value: string) => void;
+  handleOtherOperatedExpenseBlur: (year: number, value: string) => void;
+  miscellaneousExpenseInput: Record<number, string>;
+  handleMiscellaneousExpenseChange: (year: number, value: string) => void;
+  handleMiscellaneousExpenseBlur: (year: number, value: string) => void;
+  allocatedExpenseInput: Record<number, string>;
+  handleAllocatedExpenseChange: (year: number, value: string) => void;
+  handleAllocatedExpenseBlur: (year: number, value: string) => void;
 }
 
 const RevenueTable: React.FC<RevenueTableProps> = ({
@@ -90,7 +110,27 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   handleAllocatedPerOccupiedRoomChange,
   handleAllocatedPerOccupiedRoomBlur,
   formatCurrency,
-  formatPercent
+  formatPercent,
+  expenseForecastMethod,
+  setExpenseForecastMethod,
+  roomsExpenseInput,
+  handleRoomsExpenseChange,
+  handleRoomsExpenseBlur,
+  fbExpenseInput,
+  handleFbExpenseChange,
+  handleFbExpenseBlur,
+  resortFeeExpenseInput,
+  handleResortFeeExpenseChange,
+  handleResortFeeExpenseBlur,
+  otherOperatedExpenseInput,
+  handleOtherOperatedExpenseChange,
+  handleOtherOperatedExpenseBlur,
+  miscellaneousExpenseInput,
+  handleMiscellaneousExpenseChange,
+  handleMiscellaneousExpenseBlur,
+  allocatedExpenseInput,
+  handleAllocatedExpenseChange,
+  handleAllocatedExpenseBlur
 }) => {
   console.log('RevenueTable rendering with props:', {
     roomsKeys,
@@ -171,6 +211,26 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
         formatCurrency={formatCurrency}
         formatPercent={formatPercent}
         helpers={helpers}
+        expenseForecastMethod={expenseForecastMethod}
+        setExpenseForecastMethod={setExpenseForecastMethod}
+        roomsExpenseInput={roomsExpenseInput}
+        handleRoomsExpenseChange={handleRoomsExpenseChange}
+        handleRoomsExpenseBlur={handleRoomsExpenseBlur}
+        fbExpenseInput={fbExpenseInput}
+        handleFbExpenseChange={handleFbExpenseChange}
+        handleFbExpenseBlur={handleFbExpenseBlur}
+        resortFeeExpenseInput={resortFeeExpenseInput}
+        handleResortFeeExpenseChange={handleResortFeeExpenseChange}
+        handleResortFeeExpenseBlur={handleResortFeeExpenseBlur}
+        otherOperatedExpenseInput={otherOperatedExpenseInput}
+        handleOtherOperatedExpenseChange={handleOtherOperatedExpenseChange}
+        handleOtherOperatedExpenseBlur={handleOtherOperatedExpenseBlur}
+        miscellaneousExpenseInput={miscellaneousExpenseInput}
+        handleMiscellaneousExpenseChange={handleMiscellaneousExpenseChange}
+        handleMiscellaneousExpenseBlur={handleMiscellaneousExpenseBlur}
+        allocatedExpenseInput={allocatedExpenseInput}
+        handleAllocatedExpenseChange={handleAllocatedExpenseChange}
+        handleAllocatedExpenseBlur={handleAllocatedExpenseBlur}
       />
     );
   } catch (error) {

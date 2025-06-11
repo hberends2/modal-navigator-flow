@@ -45,6 +45,26 @@ interface RevenueTableContainerProps {
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
   helpers: CalculationHelpers;
+  expenseForecastMethod: string;
+  setExpenseForecastMethod: (value: string) => void;
+  roomsExpenseInput: Record<number, string>;
+  handleRoomsExpenseChange: (year: number, value: string) => void;
+  handleRoomsExpenseBlur: (year: number, value: string) => void;
+  fbExpenseInput: Record<number, string>;
+  handleFbExpenseChange: (year: number, value: string) => void;
+  handleFbExpenseBlur: (year: number, value: string) => void;
+  resortFeeExpenseInput: Record<number, string>;
+  handleResortFeeExpenseChange: (year: number, value: string) => void;
+  handleResortFeeExpenseBlur: (year: number, value: string) => void;
+  otherOperatedExpenseInput: Record<number, string>;
+  handleOtherOperatedExpenseChange: (year: number, value: string) => void;
+  handleOtherOperatedExpenseBlur: (year: number, value: string) => void;
+  miscellaneousExpenseInput: Record<number, string>;
+  handleMiscellaneousExpenseChange: (year: number, value: string) => void;
+  handleMiscellaneousExpenseBlur: (year: number, value: string) => void;
+  allocatedExpenseInput: Record<number, string>;
+  handleAllocatedExpenseChange: (year: number, value: string) => void;
+  handleAllocatedExpenseBlur: (year: number, value: string) => void;
 }
 
 const RevenueTableContainer: React.FC<RevenueTableContainerProps> = (props) => {
