@@ -44,7 +44,10 @@ export const useRevenueScrollManager = () => {
       'revpar-section': 'revpar-section',
       'rooms-revenue-section': 'rooms-revenue-section',
       'other-operated-revenue-section': 'other-operated-revenue-section',
-      'total-revenue-section': 'total-revenue-section'
+      'total-revenue-section': 'total-revenue-section',
+      'rooms-expense-section': 'rooms-expense-section',
+      'other-operated-expense-section': 'other-operated-expense-section',
+      'total-expense-section': 'total-expense-section'
     };
     
     if (sectionMappings[modalName]) {
@@ -67,7 +70,10 @@ export const useRevenueScrollManager = () => {
         'revpar-section',
         'rooms-revenue-section',
         'other-operated-revenue-section',
-        'total-revenue-section'
+        'total-revenue-section',
+        'rooms-expense-section',
+        'other-operated-expense-section',
+        'total-expense-section'
       ];
 
       let currentSection = null;

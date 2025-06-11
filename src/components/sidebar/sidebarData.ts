@@ -27,7 +27,10 @@ export const mainNavCategories: CategoryItem[] = [
       { id: "revpar-section", name: "RevPAR" },
       { id: "rooms-revenue-section", name: "Rooms Revenue" },
       { id: "other-operated-revenue-section", name: "Other Operated Revenue" },
-      { id: "total-revenue-section", name: "Total Revenue" }
+      { id: "total-revenue-section", name: "Total Revenue" },
+      { id: "rooms-expense-section", name: "Rooms Expense" },
+      { id: "other-operated-expense-section", name: "Other Operated Expense" },
+      { id: "total-expense-section", name: "Total Expense" }
     ]
   },
   {

@@ -79,24 +79,33 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     }
   };
 
-  const calculateTotalExpense = (year: number) => {
-    const roomsExpense = calculateExpense(year, roomsExpenseInput[year], 'rooms');
+  const calculateTotalOtherOperatedExpense = (year: number) => {
     const fbExpense = calculateExpense(year, fbExpenseInput[year], 'fb');
     const resortFeeExpense = calculateExpense(year, resortFeeExpenseInput[year], 'resortFee');
     const otherOperatedExpense = calculateExpense(year, otherOperatedExpenseInput[year], 'otherOperated');
     const miscellaneousExpense = calculateExpense(year, miscellaneousExpenseInput[year], 'miscellaneous');
     const allocatedExpense = calculateExpense(year, allocatedExpenseInput[year], 'allocated');
     
-    return roomsExpense + fbExpense + resortFeeExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
+    return fbExpense + resortFeeExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
   };
 
-  const getTotalHistoricalExpense = (year: number) => {
-    return (historicalExpenseData.rooms[year] || 0) +
-           (historicalExpenseData.fb[year] || 0) +
+  const calculateTotalExpense = (year: number) => {
+    const roomsExpense = calculateExpense(year, roomsExpenseInput[year], 'rooms');
+    const totalOtherOperatedExpense = calculateTotalOtherOperatedExpense(year);
+    
+    return roomsExpense + totalOtherOperatedExpense;
+  };
+
+  const getTotalHistoricalOtherOperatedExpense = (year: number) => {
+    return (historicalExpenseData.fb[year] || 0) +
            (historicalExpenseData.resortFee[year] || 0) +
            (historicalExpenseData.otherOperated[year] || 0) +
            (historicalExpenseData.miscellaneous[year] || 0) +
            (historicalExpenseData.allocated[year] || 0);
+  };
+
+  const getTotalHistoricalExpense = (year: number) => {
+    return (historicalExpenseData.rooms[year] || 0) + getTotalHistoricalOtherOperatedExpense(year);
   };
 
   const getInputSuffix = () => {
@@ -128,7 +137,18 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         </td>
       </tr>
 
-      {/* Rooms Expense */}
+      {/* Rooms Expense Section */}
+      <tr id="rooms-expense-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
+
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Rooms Expense</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+
       <MetricRow
         label="Rooms Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.rooms[year] || 0))}
@@ -140,11 +160,25 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         forecastYears={forecastYears}
         isYoYRow={expenseForecastMethod === "% of Revenue"}
         isUserInputRow={true}
+        isIndented={true}
       />
       <MetricRow
         label="Total Rooms Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.rooms[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, roomsExpenseInput[year], 'rooms')))}
+        isIndented={true}
+      />
+
+      {/* Other Operated Expense Section */}
+      <tr id="other-operated-expense-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
+
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Other Operated Expense</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
       />
 
       {/* Food & Beverage Expense */}
@@ -159,11 +193,13 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         forecastYears={forecastYears}
         isYoYRow={expenseForecastMethod === "% of Revenue"}
         isUserInputRow={true}
+        isIndented={true}
       />
       <MetricRow
         label="Total Food & Beverage Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.fb[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, fbExpenseInput[year], 'fb')))}
+        isIndented={true}
       />
 
       {/* Resort Fee Expense */}
@@ -178,11 +214,13 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         forecastYears={forecastYears}
         isYoYRow={expenseForecastMethod === "% of Revenue"}
         isUserInputRow={true}
+        isIndented={true}
       />
       <MetricRow
         label="Total Resort Fee Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.resortFee[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, resortFeeExpenseInput[year], 'resortFee')))}
+        isIndented={true}
       />
 
       {/* Other Operated Expense */}
@@ -197,11 +235,13 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         forecastYears={forecastYears}
         isYoYRow={expenseForecastMethod === "% of Revenue"}
         isUserInputRow={true}
+        isIndented={true}
       />
       <MetricRow
         label="Total Other Operated Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.otherOperated[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, otherOperatedExpenseInput[year], 'otherOperated')))}
+        isIndented={true}
       />
 
       {/* Miscellaneous Expense */}
@@ -216,11 +256,13 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         forecastYears={forecastYears}
         isYoYRow={expenseForecastMethod === "% of Revenue"}
         isUserInputRow={true}
+        isIndented={true}
       />
       <MetricRow
         label="Total Miscellaneous Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.miscellaneous[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, miscellaneousExpenseInput[year], 'miscellaneous')))}
+        isIndented={true}
       />
 
       {/* Allocated Expense */}
@@ -235,12 +277,30 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         forecastYears={forecastYears}
         isYoYRow={expenseForecastMethod === "% of Revenue"}
         isUserInputRow={true}
+        isIndented={true}
       />
       <MetricRow
         label="Total Allocated Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.allocated[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, allocatedExpenseInput[year], 'allocated')))}
+        isIndented={true}
       />
+
+      {/* Total Other Operated Expense Row */}
+      <MetricRow
+        label={<span className="font-medium">Total Other Operated Expense</span>}
+        historicalData={historicalYears.map(year => 
+          formatCurrency(getTotalHistoricalOtherOperatedExpense(year))
+        )}
+        forecastData={forecastYears.map(year => 
+          formatCurrency(calculateTotalOtherOperatedExpense(year))
+        )}
+      />
+
+      {/* Total Expense Section */}
+      <tr id="total-expense-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
 
       {/* Total Expense Row */}
       <MetricRow
