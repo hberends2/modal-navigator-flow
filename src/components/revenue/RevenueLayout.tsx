@@ -101,7 +101,27 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
                 handleAllocatedPerOccupiedRoomChange={revenueCalculations.handleAllocatedPerOccupiedRoomChange}
                 handleAllocatedPerOccupiedRoomBlur={revenueCalculations.handleAllocatedPerOccupiedRoomBlur}
                 formatCurrency={formatCurrency} 
-                formatPercent={formatPercent} 
+                formatPercent={formatPercent}
+                expenseForecastMethod={revenueCalculations.expenseForecastMethod}
+                setExpenseForecastMethod={revenueCalculations.setExpenseForecastMethod}
+                roomsExpenseInput={revenueCalculations.roomsExpenseInput}
+                handleRoomsExpenseChange={revenueCalculations.handleRoomsExpenseChange}
+                handleRoomsExpenseBlur={revenueCalculations.handleRoomsExpenseBlur}
+                fbExpenseInput={revenueCalculations.fbExpenseInput}
+                handleFbExpenseChange={revenueCalculations.handleFbExpenseChange}
+                handleFbExpenseBlur={revenueCalculations.handleFbExpenseBlur}
+                resortFeeExpenseInput={revenueCalculations.resortFeeExpenseInput}
+                handleResortFeeExpenseChange={revenueCalculations.handleResortFeeExpenseChange}
+                handleResortFeeExpenseBlur={revenueCalculations.handleResortFeeExpenseBlur}
+                otherOperatedExpenseInput={revenueCalculations.otherOperatedExpenseInput}
+                handleOtherOperatedExpenseChange={revenueCalculations.handleOtherOperatedExpenseChange}
+                handleOtherOperatedExpenseBlur={revenueCalculations.handleOtherOperatedExpenseBlur}
+                miscellaneousExpenseInput={revenueCalculations.miscellaneousExpenseInput}
+                handleMiscellaneousExpenseChange={revenueCalculations.handleMiscellaneousExpenseChange}
+                handleMiscellaneousExpenseBlur={revenueCalculations.handleMiscellaneousExpenseBlur}
+                allocatedExpenseInput={revenueCalculations.allocatedExpenseInput}
+                handleAllocatedExpenseChange={revenueCalculations.handleAllocatedExpenseChange}
+                handleAllocatedExpenseBlur={revenueCalculations.handleAllocatedExpenseBlur}
               />
             </div>
           </div>
