@@ -1,3 +1,4 @@
+
 import React from "react";
 import MetricRow from "./MetricRow";
 
@@ -21,10 +22,12 @@ interface OtherOperatedExpenseSectionProps {
   handleAllocatedExpenseChange: (year: number, value: string) => void;
   handleAllocatedExpenseBlur: (year: number, value: string) => void;
   formatCurrency: (value: number) => string;
+  formatPercent: (value: number, decimals?: number) => string;
   calculateExpense: (year: number, inputValue: string, expenseType: string) => number;
   calculateTotalOtherOperatedExpense: (year: number) => number;
   getTotalHistoricalOtherOperatedExpense: (year: number) => number;
   historicalExpenseData: any;
+  helpers: any;
 }
 
 const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = ({
@@ -47,11 +50,28 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
   handleAllocatedExpenseChange,
   handleAllocatedExpenseBlur,
   formatCurrency,
+  formatPercent,
   calculateExpense,
   calculateTotalOtherOperatedExpense,
   getTotalHistoricalOtherOperatedExpense,
-  historicalExpenseData
+  historicalExpenseData,
+  helpers
 }) => {
+  const getHistoricalExpenseData = (year: number, expenseType: string): string => {
+    const totalExpense = historicalExpenseData[expenseType][year] || 0;
+    
+    if (expenseForecastMethod === "ADR") {
+      const occupiedRooms = helpers.getHistoricalOccupiedRoomsForYear(year);
+      const perRoom = occupiedRooms > 0 ? totalExpense / occupiedRooms : 0;
+      return Math.round(perRoom).toString();
+    } else {
+      // % of Revenue
+      const totalRevenue = helpers.calculateTotalRevenue(year, true);
+      const percentage = totalRevenue > 0 ? (totalExpense / totalRevenue) * 100 : 0;
+      return percentage.toFixed(1);
+    }
+  };
+
   return (
     <>
       <tr id="other-operated-expense-section" className="scroll-mt-4">
@@ -78,8 +98,8 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
       />
 
       <MetricRow
-        label="Food & Beverage Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.fb[year] || 0))}
+        label={`Food & Beverage Expense (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'fb'))}
         forecastData={forecastYears.map(() => "")}
         isEditable={true}
         editableData={fbExpenseInput}
@@ -111,8 +131,8 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
       />
 
       <MetricRow
-        label="Resort Fee Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.resortFee[year] || 0))}
+        label={`Resort Fee Expense (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'resortFee'))}
         forecastData={forecastYears.map(() => "")}
         isEditable={true}
         editableData={resortFeeExpenseInput}
@@ -143,8 +163,8 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
       />
 
       <MetricRow
-        label="Other Operated Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.otherOperated[year] || 0))}
+        label={`Other Operated Expense (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'otherOperated'))}
         forecastData={forecastYears.map(() => "")}
         isEditable={true}
         editableData={otherOperatedExpenseInput}
@@ -175,8 +195,8 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
       />
 
       <MetricRow
-        label="Miscellaneous Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.miscellaneous[year] || 0))}
+        label={`Miscellaneous Expense (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'miscellaneous'))}
         forecastData={forecastYears.map(() => "")}
         isEditable={true}
         editableData={miscellaneousExpenseInput}
@@ -207,8 +227,8 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
       />
 
       <MetricRow
-        label="Allocated Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.allocated[year] || 0))}
+        label={`Allocated Expense (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'allocated'))}
         forecastData={forecastYears.map(() => "")}
         isEditable={true}
         editableData={allocatedExpenseInput}

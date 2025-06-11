@@ -127,8 +127,10 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         handleRoomsExpenseChange={handleRoomsExpenseChange}
         handleRoomsExpenseBlur={handleRoomsExpenseBlur}
         formatCurrency={formatCurrency}
+        formatPercent={formatPercent}
         calculateExpense={calculateExpense}
         historicalExpenseData={historicalExpenseData}
+        helpers={helpers}
       />
 
       {/* Other Operated Expense Section */}
@@ -152,10 +154,12 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         handleAllocatedExpenseChange={handleAllocatedExpenseChange}
         handleAllocatedExpenseBlur={handleAllocatedExpenseBlur}
         formatCurrency={formatCurrency}
+        formatPercent={formatPercent}
         calculateExpense={calculateExpense}
         calculateTotalOtherOperatedExpense={calculateTotalOtherOperatedExpense}
         getTotalHistoricalOtherOperatedExpense={getTotalHistoricalOtherOperatedExpense}
         historicalExpenseData={historicalExpenseData}
+        helpers={helpers}
       />
 
       {/* Total Expense Section */}
