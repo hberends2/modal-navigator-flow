@@ -53,10 +53,10 @@ const PropertyTable: React.FC<PropertyTableProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {properties.map((property) => (
+            {properties.map((property, index) => (
               <TableRow key={property.id}>
                 <TableCell>{property.strCode}</TableCell>
-                <TableCell>{property.name}</TableCell>
+                <TableCell>{`Comp ${index + 1}`}</TableCell>
                 <TableCell>{property.city}</TableCell>
                 <TableCell>{property.state}</TableCell>
                 <TableCell>{property.zipCode}</TableCell>
