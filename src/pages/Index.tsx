@@ -214,7 +214,7 @@ const Index = () => {
       <div className="flex-1 p-6 overflow-auto">
         {activeModal === null && !showCategorySelectionModal && (
           <div className="text-center mt-20">
-            <h1 className="text-3xl font-bold text-gray-700">InnVestAI Dashboard</h1>
+            <h1 className="text-3xl font-bold text-gray-700">Create a New Deal</h1>
             <p className="text-lg text-gray-500 mt-4">Select an option from the sidebar to get started</p>
           </div>
         )}
