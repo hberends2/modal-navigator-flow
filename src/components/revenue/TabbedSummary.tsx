@@ -122,8 +122,21 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
     }
   ];
 
-  // Revenue metrics
+  // Revenue metrics - add Subject Property Occupancy at the top
   const revenueMetrics = [
+    {
+      label: "Subject Property Occupancy",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatPercent(historicalData.occupancy[year] || 0);
+        } else {
+          const occupancyValue = occupancyForecastMethod === "Occupancy" 
+            ? parseFloat(occupancyForecast[year] || "0")
+            : calculateOccupancyFromYoY(year);
+          return formatPercent(occupancyValue);
+        }
+      })
+    },
     {
       label: "Subject Property ADR",
       data: allYears.map(year => {
