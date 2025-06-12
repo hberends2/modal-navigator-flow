@@ -1,7 +1,9 @@
+
 import React, { useState } from "react";
 import ModalWrapper from "../ui/ModalWrapper";
 import FormField from "../ui/FormField";
 import Dropdown from "../ui/Dropdown";
+import ThumbnailUpload from "../ui/ThumbnailUpload";
 
 interface PropertyDetailsModalProps {
   onClose: () => void;
@@ -26,6 +28,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
 
   const [propertyTypeOption, setPropertyTypeOption] = useState("");
   const [statusOption, setStatusOption] = useState("");
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
   // Property type options
   const propertyTypeOptions = [
@@ -53,6 +56,10 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
       ...formData,
       [field]: value,
     });
+  };
+
+  const handleThumbnailChange = (file: File | null) => {
+    setThumbnailFile(file);
   };
 
   const handleSave = () => {
@@ -84,6 +91,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
       ...formData,
       propertyType: propertyTypeOption,
       status: statusOption,
+      thumbnail: thumbnailFile,
     });
     
     onClose();
@@ -205,6 +213,11 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
           type="text"
           value={formData.versionName}
           onChange={(value) => handleInputChange("versionName", value)}
+        />
+
+        <ThumbnailUpload
+          onFileSelect={handleThumbnailChange}
+          value={thumbnailFile}
         />
       </div>
     </ModalWrapper>
