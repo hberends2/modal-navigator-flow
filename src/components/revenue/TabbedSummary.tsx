@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
@@ -31,6 +32,13 @@ interface TabbedSummaryProps {
   allocatedPerOccupiedRoom: Record<number, string>;
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
+}
+
+interface MetricRow {
+  label: string | React.ReactNode;
+  data: string[];
+  isCollapsible?: boolean;
+  isSubcategory?: boolean;
 }
 
 const TabbedSummary: React.FC<TabbedSummaryProps> = ({
@@ -106,7 +114,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
   const allYears = [...historicalYears, ...forecastYears];
 
   // Occupancy metrics
-  const occupancyMetrics = [
+  const occupancyMetrics: MetricRow[] = [
     {
       label: "Rooms/Keys",
       data: allYears.map(() => roomsKeys.toLocaleString())
@@ -141,7 +149,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
   ];
 
   // Revenue metrics - restructured with collapsible Total Other Operated Revenue
-  const revenueMetrics = [
+  const revenueMetrics: MetricRow[] = [
     {
       label: "Subject Property Occupancy",
       data: allYears.map(year => {
@@ -205,7 +213,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
   ];
 
   // Subcategory metrics (shown when expanded)
-  const subcategoryMetrics = [
+  const subcategoryMetrics: MetricRow[] = [
     {
       label: "Food & Beverage Revenue",
       data: allYears.map(year => {
@@ -263,7 +271,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
     }
   ];
 
-  const renderTable = (metrics: typeof occupancyMetrics) => (
+  const renderTable = (metrics: MetricRow[]) => (
     <div className="bg-white rounded-lg shadow-sm border">
       <Table>
         <TableHeader>
