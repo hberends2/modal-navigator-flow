@@ -1,7 +1,7 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface TabbedSummaryProps {
   roomsKeys: number;
@@ -55,6 +55,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
   formatPercent
 }) => {
   const [activeTab, setActiveTab] = useState("occupancy");
+  const [isOtherOperatedExpanded, setIsOtherOperatedExpanded] = useState(false);
 
   // Helper functions
   const getHistoricalOccupiedRooms = (year: number) => {
@@ -83,6 +84,23 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
     const perRoom = parseFloat(perRoomData[year] || "0");
     const occupiedRooms = getForecastOccupiedRooms(year);
     return perRoom * occupiedRooms;
+  };
+
+  // Calculate total other operated revenue for a given year
+  const calculateTotalOtherOperatedRevenue = (year: number) => {
+    if (historicalYears.includes(year)) {
+      return (historicalData.fbRevenue[year] || 0) +
+             (historicalData.resortFeeRevenue[year] || 0) +
+             (historicalData.otherOperatedRevenue[year] || 0) +
+             (historicalData.miscellaneousRevenue[year] || 0) +
+             (historicalData.allocatedRevenue[year] || 0);
+    } else {
+      return calculateForecastRevenue(year, fbPerOccupiedRoom) +
+             calculateForecastRevenue(year, resortFeePerOccupiedRoom) +
+             calculateForecastRevenue(year, otherOperatedPerOccupiedRoom) +
+             calculateForecastRevenue(year, miscellaneousPerOccupiedRoom) +
+             calculateForecastRevenue(year, allocatedPerOccupiedRoom);
+    }
   };
 
   const allYears = [...historicalYears, ...forecastYears];
@@ -122,7 +140,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
     }
   ];
 
-  // Revenue metrics - add Subject Property Occupancy at the top
+  // Revenue metrics - restructured with collapsible Total Other Operated Revenue
   const revenueMetrics = [
     {
       label: "Subject Property Occupancy",
@@ -168,6 +186,27 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
       })
     },
     {
+      label: (
+        <div 
+          className="flex items-center cursor-pointer"
+          onClick={() => setIsOtherOperatedExpanded(!isOtherOperatedExpanded)}
+        >
+          {isOtherOperatedExpanded ? (
+            <ChevronDown className="h-3 w-3 mr-1" />
+          ) : (
+            <ChevronRight className="h-3 w-3 mr-1" />
+          )}
+          Total Other Operated Revenue
+        </div>
+      ),
+      data: allYears.map(year => formatCurrency(calculateTotalOtherOperatedRevenue(year))),
+      isCollapsible: true
+    }
+  ];
+
+  // Subcategory metrics (shown when expanded)
+  const subcategoryMetrics = [
+    {
       label: "Food & Beverage Revenue",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
@@ -175,7 +214,8 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
         } else {
           return formatCurrency(calculateForecastRevenue(year, fbPerOccupiedRoom));
         }
-      })
+      }),
+      isSubcategory: true
     },
     {
       label: "Resort Fee Revenue",
@@ -185,7 +225,8 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
         } else {
           return formatCurrency(calculateForecastRevenue(year, resortFeePerOccupiedRoom));
         }
-      })
+      }),
+      isSubcategory: true
     },
     {
       label: "Other Operated Revenue",
@@ -195,7 +236,8 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
         } else {
           return formatCurrency(calculateForecastRevenue(year, otherOperatedPerOccupiedRoom));
         }
-      })
+      }),
+      isSubcategory: true
     },
     {
       label: "Miscellaneous Revenue",
@@ -205,7 +247,8 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
         } else {
           return formatCurrency(calculateForecastRevenue(year, miscellaneousPerOccupiedRoom));
         }
-      })
+      }),
+      isSubcategory: true
     },
     {
       label: "Allocated Revenue",
@@ -215,7 +258,8 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
         } else {
           return formatCurrency(calculateForecastRevenue(year, allocatedPerOccupiedRoom));
         }
-      })
+      }),
+      isSubcategory: true
     }
   ];
 
@@ -240,7 +284,27 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
         <TableBody>
           {metrics.map((metric, index) => (
             <TableRow key={index} className="h-6">
-              <TableCell className="font-medium text-xs py-0.5">{metric.label}</TableCell>
+              <TableCell className={`font-medium text-xs py-0.5 ${metric.isSubcategory ? 'pl-6' : ''}`}>
+                {metric.label}
+              </TableCell>
+              {metric.data.map((value, yearIndex) => {
+                const isHistorical = yearIndex < historicalYears.length;
+                return (
+                  <TableCell 
+                    key={yearIndex} 
+                    className={`text-center text-xs py-0.5 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
+                  >
+                    {value}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          ))}
+          {activeTab === "revenue" && isOtherOperatedExpanded && subcategoryMetrics.map((metric, index) => (
+            <TableRow key={`sub-${index}`} className="h-6">
+              <TableCell className="font-medium text-xs py-0.5 pl-6">
+                {metric.label}
+              </TableCell>
               {metric.data.map((value, yearIndex) => {
                 const isHistorical = yearIndex < historicalYears.length;
                 return (
