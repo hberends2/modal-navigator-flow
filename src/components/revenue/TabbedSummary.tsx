@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
@@ -279,12 +277,12 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
           <TableRow>
             <TableHead className="w-64 font-semibold text-xs">Metric</TableHead>
             {historicalYears.map(year => (
-              <TableHead key={year} className="text-center font-semibold bg-blue-50 text-xs">
+              <TableHead key={year} className="text-center font-semibold bg-blue-50 text-xs w-24">
                 {year}
               </TableHead>
             ))}
             {forecastYears.map(year => (
-              <TableHead key={year} className="text-center font-semibold bg-green-50 text-xs">
+              <TableHead key={year} className="text-center font-semibold bg-green-50 text-xs w-24">
                 {year}
               </TableHead>
             ))}
@@ -301,7 +299,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
                 return (
                   <TableCell 
                     key={yearIndex} 
-                    className={`text-center text-xs py-0.5 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
+                    className={`text-center text-xs py-0.5 w-24 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
                   >
                     {value}
                   </TableCell>
@@ -319,7 +317,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
                 return (
                   <TableCell 
                     key={yearIndex} 
-                    className={`text-center text-xs py-0.5 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
+                    className={`text-center text-xs py-0.5 w-24 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
                   >
                     {value}
                   </TableCell>
@@ -353,4 +351,3 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
 };
 
 export default TabbedSummary;
-
