@@ -1,4 +1,5 @@
 
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
@@ -276,7 +277,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-48 font-semibold text-xs">Metric</TableHead>
+            <TableHead className="w-64 font-semibold text-xs">Metric</TableHead>
             {historicalYears.map(year => (
               <TableHead key={year} className="text-center font-semibold bg-blue-50 text-xs">
                 {year}
@@ -292,7 +293,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
         <TableBody>
           {metrics.map((metric, index) => (
             <TableRow key={index} className="h-6">
-              <TableCell className={`font-medium text-xs py-0.5 ${metric.isSubcategory ? 'pl-6' : ''}`}>
+              <TableCell className={`font-medium text-xs py-0.5 ${metric.isSubcategory ? 'pl-8' : ''}`}>
                 {metric.label}
               </TableCell>
               {metric.data.map((value, yearIndex) => {
@@ -310,7 +311,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
           ))}
           {activeTab === "revenue" && isOtherOperatedExpanded && subcategoryMetrics.map((metric, index) => (
             <TableRow key={`sub-${index}`} className="h-6">
-              <TableCell className="font-medium text-xs py-0.5 pl-6">
+              <TableCell className="font-medium text-xs py-0.5 pl-8">
                 {metric.label}
               </TableCell>
               {metric.data.map((value, yearIndex) => {
@@ -352,3 +353,4 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = ({
 };
 
 export default TabbedSummary;
+
