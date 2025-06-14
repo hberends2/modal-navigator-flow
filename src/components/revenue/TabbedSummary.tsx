@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import SummaryTable from "./TabbedSummary/SummaryTable";
-import { createOccupancyMetrics, createRevenueMetrics, createExpenseMetrics, createSubcategoryMetrics } from "./TabbedSummary/metrics";
+import { createOccupancyMetrics, createRevenueMetrics, createExpenseMetrics, createSubcategoryMetrics, createExpenseSubcategoryMetrics } from "./TabbedSummary/metrics";
 import { TabbedSummaryProps } from "./TabbedSummary/types";
 
 const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
@@ -17,6 +17,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
   const revenueMetrics = createRevenueMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded);
   const expenseMetrics = createExpenseMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded);
   const subcategoryMetrics = createSubcategoryMetrics(props, allYears);
+  const expenseSubcategoryMetrics = createExpenseSubcategoryMetrics(props, allYears);
 
   return (
     <div className="mb-6">
@@ -56,7 +57,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
             forecastYears={forecastYears}
             activeTab={activeTab}
             isOtherOperatedExpanded={isOtherOperatedExpanded}
-            subcategoryMetrics={subcategoryMetrics}
+            subcategoryMetrics={expenseSubcategoryMetrics}
           />
         </TabsContent>
       </Tabs>
