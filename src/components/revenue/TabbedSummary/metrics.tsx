@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { MetricRow, TabbedSummaryProps } from './types';
@@ -150,7 +149,12 @@ export const createExpenseMetrics = (
     resortFee: { 2021: 150000, 2022: 160000, 2023: 170000, 2024: 175000 },
     otherOperated: { 2021: 800000, 2022: 850000, 2023: 900000, 2024: 920000 },
     miscellaneous: { 2021: 100000, 2022: 105000, 2023: 110000, 2024: 115000 },
-    allocated: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 }
+    allocated: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 },
+    propertyOperations: { 2021: 1500000, 2022: 1575000, 2023: 1650000, 2024: 1700000 },
+    administrativeGeneral: { 2021: 900000, 2022: 945000, 2023: 990000, 2024: 1020000 },
+    infoTechServices: { 2021: 300000, 2022: 315000, 2023: 330000, 2024: 340000 },
+    salesMarketing: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 },
+    utilities: { 2021: 750000, 2022: 787500, 2023: 825000, 2024: 850000 }
   };
 
   const calculateForecastExpense = (year: number, expenseType: string) => {
@@ -173,6 +177,32 @@ export const createExpenseMetrics = (
              calculateForecastExpense(year, 'miscellaneous') +
              calculateForecastExpense(year, 'allocated');
     }
+  };
+
+  const calculateTotalAdditionalExpenses = (year: number) => {
+    if (historicalYears.includes(year)) {
+      return (historicalExpenseData.propertyOperations[year] || 0) +
+             (historicalExpenseData.administrativeGeneral[year] || 0) +
+             (historicalExpenseData.infoTechServices[year] || 0) +
+             (historicalExpenseData.salesMarketing[year] || 0) +
+             (historicalExpenseData.utilities[year] || 0);
+    } else {
+      return calculateForecastExpense(year, 'propertyOperations') +
+             calculateForecastExpense(year, 'administrativeGeneral') +
+             calculateForecastExpense(year, 'infoTechServices') +
+             calculateForecastExpense(year, 'salesMarketing') +
+             calculateForecastExpense(year, 'utilities');
+    }
+  };
+
+  const calculateTotalExpense = (year: number) => {
+    const roomsExpense = historicalYears.includes(year) 
+      ? (historicalExpenseData.rooms[year] || 0)
+      : calculateForecastExpense(year, 'rooms');
+    const totalOtherOperatedExpense = calculateTotalOtherOperatedExpense(year);
+    const totalAdditionalExpenses = calculateTotalAdditionalExpenses(year);
+    
+    return roomsExpense + totalOtherOperatedExpense + totalAdditionalExpenses;
   };
 
   return [
@@ -235,6 +265,60 @@ export const createExpenseMetrics = (
       ),
       data: allYears.map(year => formatCurrency(calculateTotalOtherOperatedExpense(year))),
       isCollapsible: true
+    },
+    {
+      label: "Property Operations & Maintenance",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(historicalExpenseData.propertyOperations[year] || 0);
+        } else {
+          return formatCurrency(calculateForecastExpense(year, 'propertyOperations'));
+        }
+      })
+    },
+    {
+      label: "Administrative & General",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(historicalExpenseData.administrativeGeneral[year] || 0);
+        } else {
+          return formatCurrency(calculateForecastExpense(year, 'administrativeGeneral'));
+        }
+      })
+    },
+    {
+      label: "Info & Tech Services",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(historicalExpenseData.infoTechServices[year] || 0);
+        } else {
+          return formatCurrency(calculateForecastExpense(year, 'infoTechServices'));
+        }
+      })
+    },
+    {
+      label: "Sales & Marketing",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(historicalExpenseData.salesMarketing[year] || 0);
+        } else {
+          return formatCurrency(calculateForecastExpense(year, 'salesMarketing'));
+        }
+      })
+    },
+    {
+      label: "Utilities",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(historicalExpenseData.utilities[year] || 0);
+        } else {
+          return formatCurrency(calculateForecastExpense(year, 'utilities'));
+        }
+      })
+    },
+    {
+      label: "Total Expense",
+      data: allYears.map(year => formatCurrency(calculateTotalExpense(year)))
     }
   ];
 };
