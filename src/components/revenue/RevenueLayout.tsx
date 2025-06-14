@@ -137,6 +137,9 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
                 utilitiesExpenseInput={revenueCalculations.utilitiesExpenseInput}
                 handleUtilitiesExpenseChange={revenueCalculations.handleUtilitiesExpenseChange}
                 handleUtilitiesExpenseBlur={revenueCalculations.handleUtilitiesExpenseBlur}
+                nonOperatingExpenseInput={revenueCalculations.nonOperatingExpenseInput}
+                handleNonOperatingExpenseChange={revenueCalculations.handleNonOperatingExpenseChange}
+                handleNonOperatingExpenseBlur={revenueCalculations.handleNonOperatingExpenseBlur}
               />
             </div>
           </div>

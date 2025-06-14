@@ -1,4 +1,3 @@
-
 import React from "react";
 import { TableBody } from "../ui/table";
 import OccupancySection from "./OccupancySection";
@@ -88,6 +87,9 @@ interface RevenueTableSectionsProps {
   utilitiesExpenseInput: Record<number, string>;
   handleUtilitiesExpenseChange: (year: number, value: string) => void;
   handleUtilitiesExpenseBlur: (year: number, value: string) => void;
+  nonOperatingExpenseInput: Record<number, string>;
+  handleNonOperatingExpenseChange: (year: number, value: string) => void;
+  handleNonOperatingExpenseBlur: (year: number, value: string) => void;
 }
 
 const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
@@ -163,7 +165,10 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
   handleSalesMarketingExpenseBlur,
   utilitiesExpenseInput,
   handleUtilitiesExpenseChange,
-  handleUtilitiesExpenseBlur
+  handleUtilitiesExpenseBlur,
+  nonOperatingExpenseInput,
+  handleNonOperatingExpenseChange,
+  handleNonOperatingExpenseBlur
 }) => {
   return (
     <TableBody>
@@ -346,7 +351,7 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         ))}
       />
 
-      {/* Expense Section */}
+      {/* Expense Section with all required props including non-operating */}
       <ExpenseSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
@@ -385,6 +390,9 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         utilitiesExpenseInput={utilitiesExpenseInput}
         handleUtilitiesExpenseChange={handleUtilitiesExpenseChange}
         handleUtilitiesExpenseBlur={handleUtilitiesExpenseBlur}
+        nonOperatingExpenseInput={nonOperatingExpenseInput}
+        handleNonOperatingExpenseChange={handleNonOperatingExpenseChange}
+        handleNonOperatingExpenseBlur={handleNonOperatingExpenseBlur}
         formatCurrency={formatCurrency}
         formatPercent={formatPercent}
         helpers={helpers}

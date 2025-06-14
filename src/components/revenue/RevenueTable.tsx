@@ -1,4 +1,3 @@
-
 import React from "react";
 import RevenueTableContainer from "./RevenueTableContainer";
 import { createCalculationHelpers } from "./RevenueTableHelpers";
@@ -86,6 +85,9 @@ interface RevenueTableProps {
   utilitiesExpenseInput: Record<number, string>;
   handleUtilitiesExpenseChange: (year: number, value: string) => void;
   handleUtilitiesExpenseBlur: (year: number, value: string) => void;
+  nonOperatingExpenseInput: Record<number, string>;
+  handleNonOperatingExpenseChange: (year: number, value: string) => void;
+  handleNonOperatingExpenseBlur: (year: number, value: string) => void;
 }
 
 const RevenueTable: React.FC<RevenueTableProps> = ({
@@ -160,7 +162,10 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
   handleSalesMarketingExpenseBlur,
   utilitiesExpenseInput,
   handleUtilitiesExpenseChange,
-  handleUtilitiesExpenseBlur
+  handleUtilitiesExpenseBlur,
+  nonOperatingExpenseInput,
+  handleNonOperatingExpenseChange,
+  handleNonOperatingExpenseBlur
 }) => {
   console.log('RevenueTable rendering with props:', {
     roomsKeys,
@@ -276,6 +281,9 @@ const RevenueTable: React.FC<RevenueTableProps> = ({
         utilitiesExpenseInput={utilitiesExpenseInput}
         handleUtilitiesExpenseChange={handleUtilitiesExpenseChange}
         handleUtilitiesExpenseBlur={handleUtilitiesExpenseBlur}
+        nonOperatingExpenseInput={nonOperatingExpenseInput}
+        handleNonOperatingExpenseChange={handleNonOperatingExpenseChange}
+        handleNonOperatingExpenseBlur={handleNonOperatingExpenseBlur}
       />
     );
   } catch (error) {
