@@ -3,6 +3,7 @@ import MetricRow from "./MetricRow";
 import ExpenseHeader from "./ExpenseHeader";
 import RoomsExpenseSection from "./RoomsExpenseSection";
 import OtherOperatedExpenseSection from "./OtherOperatedExpenseSection";
+import UndistributedExpensesSection from "./UndistributedExpensesSection";
 
 interface ExpenseSectionProps {
   historicalYears: number[];
@@ -233,128 +234,31 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         helpers={helpers}
       />
 
-      {/* Undistributed Expenses Section Header */}
-      <MetricRow
-        label={<span className="font-bold text-gray-900">Undistributed Expenses</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-
-      {/* Property Operations & Maintenance Section */}
-      <MetricRow
-        label={`Property Operations & Maintenance (${expenseForecastMethod})`}
-        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'propertyOperations'))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={propertyOperationsExpenseInput}
-        onEditableChange={handlePropertyOperationsExpenseChange}
-        onEditableBlur={handlePropertyOperationsExpenseBlur}
+      {/* Undistributed Expenses Section */}
+      <UndistributedExpensesSection
+        historicalYears={historicalYears}
         forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Property Operations & Maintenance"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.propertyOperations[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, propertyOperationsExpenseInput[year], 'propertyOperations')))}
-        isIndented={true}
-      />
-
-      {/* Administrative & General Section */}
-      <MetricRow
-        label={`Administrative & General (${expenseForecastMethod})`}
-        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'administrativeGeneral'))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={administrativeGeneralExpenseInput}
-        onEditableChange={handleAdministrativeGeneralExpenseChange}
-        onEditableBlur={handleAdministrativeGeneralExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Administrative & General"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.administrativeGeneral[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, administrativeGeneralExpenseInput[year], 'administrativeGeneral')))}
-        isIndented={true}
-      />
-
-      {/* Info & Tech Services Section */}
-      <MetricRow
-        label={`Info & Tech Services (${expenseForecastMethod})`}
-        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'infoTechServices'))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={infoTechServicesExpenseInput}
-        onEditableChange={handleInfoTechServicesExpenseChange}
-        onEditableBlur={handleInfoTechServicesExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Info & Tech Services"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.infoTechServices[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, infoTechServicesExpenseInput[year], 'infoTechServices')))}
-        isIndented={true}
-      />
-
-      {/* Sales & Marketing Section */}
-      <MetricRow
-        label={`Sales & Marketing (${expenseForecastMethod})`}
-        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'salesMarketing'))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={salesMarketingExpenseInput}
-        onEditableChange={handleSalesMarketingExpenseChange}
-        onEditableBlur={handleSalesMarketingExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Sales & Marketing"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.salesMarketing[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, salesMarketingExpenseInput[year], 'salesMarketing')))}
-        isIndented={true}
-      />
-
-      {/* Utilities Section */}
-      <MetricRow
-        label={`Utilities (${expenseForecastMethod})`}
-        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'utilities'))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={utilitiesExpenseInput}
-        onEditableChange={handleUtilitiesExpenseChange}
-        onEditableBlur={handleUtilitiesExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Utilities"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.utilities[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, utilitiesExpenseInput[year], 'utilities')))}
-        isIndented={true}
-      />
-
-      {/* Total Undistributed Expense Row */}
-      <MetricRow
-        label={<span className="font-medium">Total Undistributed Expense</span>}
-        historicalData={historicalYears.map(year => 
-          formatCurrency(calculateTotalUndistributedExpenses(year))
-        )}
-        forecastData={forecastYears.map(year => 
-          formatCurrency(calculateTotalUndistributedExpenses(year))
-        )}
+        expenseForecastMethod={expenseForecastMethod}
+        propertyOperationsExpenseInput={propertyOperationsExpenseInput}
+        handlePropertyOperationsExpenseChange={handlePropertyOperationsExpenseChange}
+        handlePropertyOperationsExpenseBlur={handlePropertyOperationsExpenseBlur}
+        administrativeGeneralExpenseInput={administrativeGeneralExpenseInput}
+        handleAdministrativeGeneralExpenseChange={handleAdministrativeGeneralExpenseChange}
+        handleAdministrativeGeneralExpenseBlur={handleAdministrativeGeneralExpenseBlur}
+        infoTechServicesExpenseInput={infoTechServicesExpenseInput}
+        handleInfoTechServicesExpenseChange={handleInfoTechServicesExpenseChange}
+        handleInfoTechServicesExpenseBlur={handleInfoTechServicesExpenseBlur}
+        salesMarketingExpenseInput={salesMarketingExpenseInput}
+        handleSalesMarketingExpenseChange={handleSalesMarketingExpenseChange}
+        handleSalesMarketingExpenseBlur={handleSalesMarketingExpenseBlur}
+        utilitiesExpenseInput={utilitiesExpenseInput}
+        handleUtilitiesExpenseChange={handleUtilitiesExpenseChange}
+        handleUtilitiesExpenseBlur={handleUtilitiesExpenseBlur}
+        formatCurrency={formatCurrency}
+        calculateExpense={calculateExpense}
+        calculateTotalUndistributedExpenses={calculateTotalUndistributedExpenses}
+        historicalExpenseData={historicalExpenseData}
+        getHistoricalExpenseData={getHistoricalExpenseData}
       />
 
       {/* Total Expense Section */}
