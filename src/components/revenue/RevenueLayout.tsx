@@ -122,6 +122,21 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
                 allocatedExpenseInput={revenueCalculations.allocatedExpenseInput}
                 handleAllocatedExpenseChange={revenueCalculations.handleAllocatedExpenseChange}
                 handleAllocatedExpenseBlur={revenueCalculations.handleAllocatedExpenseBlur}
+                propertyOperationsExpenseInput={revenueCalculations.propertyOperationsExpenseInput}
+                handlePropertyOperationsExpenseChange={revenueCalculations.handlePropertyOperationsExpenseChange}
+                handlePropertyOperationsExpenseBlur={revenueCalculations.handlePropertyOperationsExpenseBlur}
+                administrativeGeneralExpenseInput={revenueCalculations.administrativeGeneralExpenseInput}
+                handleAdministrativeGeneralExpenseChange={revenueCalculations.handleAdministrativeGeneralExpenseChange}
+                handleAdministrativeGeneralExpenseBlur={revenueCalculations.handleAdministrativeGeneralExpenseBlur}
+                infoTechServicesExpenseInput={revenueCalculations.infoTechServicesExpenseInput}
+                handleInfoTechServicesExpenseChange={revenueCalculations.handleInfoTechServicesExpenseChange}
+                handleInfoTechServicesExpenseBlur={revenueCalculations.handleInfoTechServicesExpenseBlur}
+                salesMarketingExpenseInput={revenueCalculations.salesMarketingExpenseInput}
+                handleSalesMarketingExpenseChange={revenueCalculations.handleSalesMarketingExpenseChange}
+                handleSalesMarketingExpenseBlur={revenueCalculations.handleSalesMarketingExpenseBlur}
+                utilitiesExpenseInput={revenueCalculations.utilitiesExpenseInput}
+                handleUtilitiesExpenseChange={revenueCalculations.handleUtilitiesExpenseChange}
+                handleUtilitiesExpenseBlur={revenueCalculations.handleUtilitiesExpenseBlur}
               />
             </div>
           </div>
