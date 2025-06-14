@@ -1,3 +1,4 @@
+
 import React from "react";
 import MetricRow from "./MetricRow";
 import ExpenseHeader from "./ExpenseHeader";
@@ -66,7 +67,12 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     resortFee: { 2021: 150000, 2022: 160000, 2023: 170000, 2024: 175000 },
     otherOperated: { 2021: 800000, 2022: 850000, 2023: 900000, 2024: 920000 },
     miscellaneous: { 2021: 100000, 2022: 105000, 2023: 110000, 2024: 115000 },
-    allocated: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 }
+    allocated: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 },
+    propertyOperations: { 2021: 1500000, 2022: 1575000, 2023: 1650000, 2024: 1700000 },
+    administrativeGeneral: { 2021: 900000, 2022: 945000, 2023: 990000, 2024: 1020000 },
+    infoTechServices: { 2021: 300000, 2022: 315000, 2023: 330000, 2024: 340000 },
+    salesMarketing: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 },
+    utilities: { 2021: 750000, 2022: 787500, 2023: 825000, 2024: 850000 }
   };
 
   const calculateExpense = (year: number, inputValue: string, expenseType: string) => {
@@ -91,11 +97,25 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     return fbExpense + resortFeeExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
   };
 
+  const calculateTotalAdditionalExpenses = (year: number) => {
+    if (historicalYears.includes(year)) {
+      return (historicalExpenseData.propertyOperations[year] || 0) +
+             (historicalExpenseData.administrativeGeneral[year] || 0) +
+             (historicalExpenseData.infoTechServices[year] || 0) +
+             (historicalExpenseData.salesMarketing[year] || 0) +
+             (historicalExpenseData.utilities[year] || 0);
+    } else {
+      // For forecast years, we would need inputs for these - for now returning 0
+      return 0;
+    }
+  };
+
   const calculateTotalExpense = (year: number) => {
     const roomsExpense = calculateExpense(year, roomsExpenseInput[year], 'rooms');
     const totalOtherOperatedExpense = calculateTotalOtherOperatedExpense(year);
+    const totalAdditionalExpenses = calculateTotalAdditionalExpenses(year);
     
-    return roomsExpense + totalOtherOperatedExpense;
+    return roomsExpense + totalOtherOperatedExpense + totalAdditionalExpenses;
   };
 
   const getTotalHistoricalOtherOperatedExpense = (year: number) => {
@@ -107,7 +127,9 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   };
 
   const getTotalHistoricalExpense = (year: number) => {
-    return (historicalExpenseData.rooms[year] || 0) + getTotalHistoricalOtherOperatedExpense(year);
+    return (historicalExpenseData.rooms[year] || 0) + 
+           getTotalHistoricalOtherOperatedExpense(year) +
+           calculateTotalAdditionalExpenses(year);
   };
 
   return (
@@ -160,6 +182,61 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         getTotalHistoricalOtherOperatedExpense={getTotalHistoricalOtherOperatedExpense}
         historicalExpenseData={historicalExpenseData}
         helpers={helpers}
+      />
+
+      {/* Property Operations & Maintenance */}
+      <MetricRow
+        label={<span>Property Operations & Maintenance</span>}
+        historicalData={historicalYears.map(year => 
+          formatCurrency(historicalExpenseData.propertyOperations[year] || 0)
+        )}
+        forecastData={forecastYears.map(() => 
+          formatCurrency(0) // For now, returning 0 - would need input controls
+        )}
+      />
+
+      {/* Administrative & General */}
+      <MetricRow
+        label={<span>Administrative & General</span>}
+        historicalData={historicalYears.map(year => 
+          formatCurrency(historicalExpenseData.administrativeGeneral[year] || 0)
+        )}
+        forecastData={forecastYears.map(() => 
+          formatCurrency(0) // For now, returning 0 - would need input controls
+        )}
+      />
+
+      {/* Info & Tech Services */}
+      <MetricRow
+        label={<span>Info & Tech Services</span>}
+        historicalData={historicalYears.map(year => 
+          formatCurrency(historicalExpenseData.infoTechServices[year] || 0)
+        )}
+        forecastData={forecastYears.map(() => 
+          formatCurrency(0) // For now, returning 0 - would need input controls
+        )}
+      />
+
+      {/* Sales & Marketing */}
+      <MetricRow
+        label={<span>Sales & Marketing</span>}
+        historicalData={historicalYears.map(year => 
+          formatCurrency(historicalExpenseData.salesMarketing[year] || 0)
+        )}
+        forecastData={forecastYears.map(() => 
+          formatCurrency(0) // For now, returning 0 - would need input controls
+        )}
+      />
+
+      {/* Utilities */}
+      <MetricRow
+        label={<span>Utilities</span>}
+        historicalData={historicalYears.map(year => 
+          formatCurrency(historicalExpenseData.utilities[year] || 0)
+        )}
+        forecastData={forecastYears.map(() => 
+          formatCurrency(0) // For now, returning 0 - would need input controls
+        )}
       />
 
       {/* Total Expense Section */}
