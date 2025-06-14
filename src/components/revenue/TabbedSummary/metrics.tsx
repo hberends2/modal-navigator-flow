@@ -136,7 +136,10 @@ export const createExpenseMetrics = (
   const { 
     historicalYears, 
     formatPercent, 
-    formatCurrency
+    formatCurrency,
+    getHistoricalADR, 
+    getForecastADR, 
+    getForecastRevpar
   } = props;
   const helpers = createHelpers(props);
 
@@ -183,6 +186,26 @@ export const createExpenseMetrics = (
             ? parseFloat(props.occupancyForecast[year] || "0")
             : props.calculateOccupancyFromYoY(year);
           return formatPercent(occupancyValue);
+        }
+      })
+    },
+    {
+      label: "Subject Property ADR",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(getHistoricalADR(year));
+        } else {
+          return formatCurrency(getForecastADR(year));
+        }
+      })
+    },
+    {
+      label: "Subject Property RevPAR",
+      data: allYears.map(year => {
+        if (historicalYears.includes(year)) {
+          return formatCurrency(helpers.getHistoricalRevpar(year));
+        } else {
+          return formatCurrency(getForecastRevpar(year));
         }
       })
     },
