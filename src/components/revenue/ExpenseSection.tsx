@@ -28,6 +28,21 @@ interface ExpenseSectionProps {
   allocatedExpenseInput: Record<number, string>;
   handleAllocatedExpenseChange: (year: number, value: string) => void;
   handleAllocatedExpenseBlur: (year: number, value: string) => void;
+  propertyOperationsExpenseInput: Record<number, string>;
+  handlePropertyOperationsExpenseChange: (year: number, value: string) => void;
+  handlePropertyOperationsExpenseBlur: (year: number, value: string) => void;
+  administrativeGeneralExpenseInput: Record<number, string>;
+  handleAdministrativeGeneralExpenseChange: (year: number, value: string) => void;
+  handleAdministrativeGeneralExpenseBlur: (year: number, value: string) => void;
+  infoTechServicesExpenseInput: Record<number, string>;
+  handleInfoTechServicesExpenseChange: (year: number, value: string) => void;
+  handleInfoTechServicesExpenseBlur: (year: number, value: string) => void;
+  salesMarketingExpenseInput: Record<number, string>;
+  handleSalesMarketingExpenseChange: (year: number, value: string) => void;
+  handleSalesMarketingExpenseBlur: (year: number, value: string) => void;
+  utilitiesExpenseInput: Record<number, string>;
+  handleUtilitiesExpenseChange: (year: number, value: string) => void;
+  handleUtilitiesExpenseBlur: (year: number, value: string) => void;
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
   helpers: any;
@@ -56,6 +71,21 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   allocatedExpenseInput,
   handleAllocatedExpenseChange,
   handleAllocatedExpenseBlur,
+  propertyOperationsExpenseInput,
+  handlePropertyOperationsExpenseChange,
+  handlePropertyOperationsExpenseBlur,
+  administrativeGeneralExpenseInput,
+  handleAdministrativeGeneralExpenseChange,
+  handleAdministrativeGeneralExpenseBlur,
+  infoTechServicesExpenseInput,
+  handleInfoTechServicesExpenseChange,
+  handleInfoTechServicesExpenseBlur,
+  salesMarketingExpenseInput,
+  handleSalesMarketingExpenseChange,
+  handleSalesMarketingExpenseBlur,
+  utilitiesExpenseInput,
+  handleUtilitiesExpenseChange,
+  handleUtilitiesExpenseBlur,
   formatCurrency,
   formatPercent,
   helpers
@@ -87,6 +117,21 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     }
   };
 
+  const getHistoricalExpenseData = (year: number, expenseType: string): string => {
+    const totalExpense = historicalExpenseData[expenseType][year] || 0;
+    
+    if (expenseForecastMethod === "ADR") {
+      const occupiedRooms = helpers.getHistoricalOccupiedRoomsForYear(year);
+      const perRoom = occupiedRooms > 0 ? totalExpense / occupiedRooms : 0;
+      return Math.round(perRoom).toString();
+    } else {
+      // % of Revenue
+      const totalRevenue = helpers.calculateTotalRevenue(year, true);
+      const percentage = totalRevenue > 0 ? (totalExpense / totalRevenue) * 100 : 0;
+      return percentage.toFixed(1);
+    }
+  };
+
   const calculateTotalOtherOperatedExpense = (year: number) => {
     const fbExpense = calculateExpense(year, fbExpenseInput[year], 'fb');
     const resortFeeExpense = calculateExpense(year, resortFeeExpenseInput[year], 'resortFee');
@@ -105,8 +150,13 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
              (historicalExpenseData.salesMarketing[year] || 0) +
              (historicalExpenseData.utilities[year] || 0);
     } else {
-      // For forecast years, we would need inputs for these - for now returning 0
-      return 0;
+      const propertyOperationsExpense = calculateExpense(year, propertyOperationsExpenseInput[year], 'propertyOperations');
+      const administrativeGeneralExpense = calculateExpense(year, administrativeGeneralExpenseInput[year], 'administrativeGeneral');
+      const infoTechServicesExpense = calculateExpense(year, infoTechServicesExpenseInput[year], 'infoTechServices');
+      const salesMarketingExpense = calculateExpense(year, salesMarketingExpenseInput[year], 'salesMarketing');
+      const utilitiesExpense = calculateExpense(year, utilitiesExpenseInput[year], 'utilities');
+      
+      return propertyOperationsExpense + administrativeGeneralExpense + infoTechServicesExpense + salesMarketingExpense + utilitiesExpense;
     }
   };
 
@@ -184,59 +234,139 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         helpers={helpers}
       />
 
-      {/* Property Operations & Maintenance */}
+      {/* Property Operations & Maintenance Section */}
       <MetricRow
-        label={<span>Property Operations & Maintenance</span>}
-        historicalData={historicalYears.map(year => 
-          formatCurrency(historicalExpenseData.propertyOperations[year] || 0)
-        )}
-        forecastData={forecastYears.map(() => 
-          formatCurrency(0) // For now, returning 0 - would need input controls
-        )}
+        label={<span className="font-bold text-gray-900">Property Operations & Maintenance</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+      <MetricRow
+        label={`Property Operations & Maintenance (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'propertyOperations'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={propertyOperationsExpenseInput}
+        onEditableChange={handlePropertyOperationsExpenseChange}
+        onEditableBlur={handlePropertyOperationsExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+      <MetricRow
+        label="Total Property Operations & Maintenance"
+        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.propertyOperations[year] || 0))}
+        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, propertyOperationsExpenseInput[year], 'propertyOperations')))}
+        isIndented={true}
       />
 
-      {/* Administrative & General */}
+      {/* Administrative & General Section */}
       <MetricRow
-        label={<span>Administrative & General</span>}
-        historicalData={historicalYears.map(year => 
-          formatCurrency(historicalExpenseData.administrativeGeneral[year] || 0)
-        )}
-        forecastData={forecastYears.map(() => 
-          formatCurrency(0) // For now, returning 0 - would need input controls
-        )}
+        label={<span className="font-bold text-gray-900">Administrative & General</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+      <MetricRow
+        label={`Administrative & General (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'administrativeGeneral'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={administrativeGeneralExpenseInput}
+        onEditableChange={handleAdministrativeGeneralExpenseChange}
+        onEditableBlur={handleAdministrativeGeneralExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+      <MetricRow
+        label="Total Administrative & General"
+        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.administrativeGeneral[year] || 0))}
+        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, administrativeGeneralExpenseInput[year], 'administrativeGeneral')))}
+        isIndented={true}
       />
 
-      {/* Info & Tech Services */}
+      {/* Info & Tech Services Section */}
       <MetricRow
-        label={<span>Info & Tech Services</span>}
-        historicalData={historicalYears.map(year => 
-          formatCurrency(historicalExpenseData.infoTechServices[year] || 0)
-        )}
-        forecastData={forecastYears.map(() => 
-          formatCurrency(0) // For now, returning 0 - would need input controls
-        )}
+        label={<span className="font-bold text-gray-900">Info & Tech Services</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+      <MetricRow
+        label={`Info & Tech Services (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'infoTechServices'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={infoTechServicesExpenseInput}
+        onEditableChange={handleInfoTechServicesExpenseChange}
+        onEditableBlur={handleInfoTechServicesExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+      <MetricRow
+        label="Total Info & Tech Services"
+        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.infoTechServices[year] || 0))}
+        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, infoTechServicesExpenseInput[year], 'infoTechServices')))}
+        isIndented={true}
       />
 
-      {/* Sales & Marketing */}
+      {/* Sales & Marketing Section */}
       <MetricRow
-        label={<span>Sales & Marketing</span>}
-        historicalData={historicalYears.map(year => 
-          formatCurrency(historicalExpenseData.salesMarketing[year] || 0)
-        )}
-        forecastData={forecastYears.map(() => 
-          formatCurrency(0) // For now, returning 0 - would need input controls
-        )}
+        label={<span className="font-bold text-gray-900">Sales & Marketing</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+      <MetricRow
+        label={`Sales & Marketing (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'salesMarketing'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={salesMarketingExpenseInput}
+        onEditableChange={handleSalesMarketingExpenseChange}
+        onEditableBlur={handleSalesMarketingExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+      <MetricRow
+        label="Total Sales & Marketing"
+        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.salesMarketing[year] || 0))}
+        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, salesMarketingExpenseInput[year], 'salesMarketing')))}
+        isIndented={true}
       />
 
-      {/* Utilities */}
+      {/* Utilities Section */}
       <MetricRow
-        label={<span>Utilities</span>}
-        historicalData={historicalYears.map(year => 
-          formatCurrency(historicalExpenseData.utilities[year] || 0)
-        )}
-        forecastData={forecastYears.map(() => 
-          formatCurrency(0) // For now, returning 0 - would need input controls
-        )}
+        label={<span className="font-bold text-gray-900">Utilities</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+      <MetricRow
+        label={`Utilities (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'utilities'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={utilitiesExpenseInput}
+        onEditableChange={handleUtilitiesExpenseChange}
+        onEditableBlur={handleUtilitiesExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+      <MetricRow
+        label="Total Utilities"
+        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.utilities[year] || 0))}
+        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, utilitiesExpenseInput[year], 'utilities')))}
+        isIndented={true}
       />
 
       {/* Total Expense Section */}

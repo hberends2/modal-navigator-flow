@@ -73,6 +73,21 @@ interface RevenueTableSectionsProps {
   allocatedExpenseInput: Record<number, string>;
   handleAllocatedExpenseChange: (year: number, value: string) => void;
   handleAllocatedExpenseBlur: (year: number, value: string) => void;
+  propertyOperationsExpenseInput: Record<number, string>;
+  handlePropertyOperationsExpenseChange: (year: number, value: string) => void;
+  handlePropertyOperationsExpenseBlur: (year: number, value: string) => void;
+  administrativeGeneralExpenseInput: Record<number, string>;
+  handleAdministrativeGeneralExpenseChange: (year: number, value: string) => void;
+  handleAdministrativeGeneralExpenseBlur: (year: number, value: string) => void;
+  infoTechServicesExpenseInput: Record<number, string>;
+  handleInfoTechServicesExpenseChange: (year: number, value: string) => void;
+  handleInfoTechServicesExpenseBlur: (year: number, value: string) => void;
+  salesMarketingExpenseInput: Record<number, string>;
+  handleSalesMarketingExpenseChange: (year: number, value: string) => void;
+  handleSalesMarketingExpenseBlur: (year: number, value: string) => void;
+  utilitiesExpenseInput: Record<number, string>;
+  handleUtilitiesExpenseChange: (year: number, value: string) => void;
+  handleUtilitiesExpenseBlur: (year: number, value: string) => void;
 }
 
 const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
@@ -133,7 +148,22 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
   handleMiscellaneousExpenseBlur,
   allocatedExpenseInput,
   handleAllocatedExpenseChange,
-  handleAllocatedExpenseBlur
+  handleAllocatedExpenseBlur,
+  propertyOperationsExpenseInput,
+  handlePropertyOperationsExpenseChange,
+  handlePropertyOperationsExpenseBlur,
+  administrativeGeneralExpenseInput,
+  handleAdministrativeGeneralExpenseChange,
+  handleAdministrativeGeneralExpenseBlur,
+  infoTechServicesExpenseInput,
+  handleInfoTechServicesExpenseChange,
+  handleInfoTechServicesExpenseBlur,
+  salesMarketingExpenseInput,
+  handleSalesMarketingExpenseChange,
+  handleSalesMarketingExpenseBlur,
+  utilitiesExpenseInput,
+  handleUtilitiesExpenseChange,
+  handleUtilitiesExpenseBlur
 }) => {
   return (
     <TableBody>
@@ -340,6 +370,21 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
         allocatedExpenseInput={allocatedExpenseInput}
         handleAllocatedExpenseChange={handleAllocatedExpenseChange}
         handleAllocatedExpenseBlur={handleAllocatedExpenseBlur}
+        propertyOperationsExpenseInput={propertyOperationsExpenseInput}
+        handlePropertyOperationsExpenseChange={handlePropertyOperationsExpenseChange}
+        handlePropertyOperationsExpenseBlur={handlePropertyOperationsExpenseBlur}
+        administrativeGeneralExpenseInput={administrativeGeneralExpenseInput}
+        handleAdministrativeGeneralExpenseChange={handleAdministrativeGeneralExpenseChange}
+        handleAdministrativeGeneralExpenseBlur={handleAdministrativeGeneralExpenseBlur}
+        infoTechServicesExpenseInput={infoTechServicesExpenseInput}
+        handleInfoTechServicesExpenseChange={handleInfoTechServicesExpenseChange}
+        handleInfoTechServicesExpenseBlur={handleInfoTechServicesExpenseBlur}
+        salesMarketingExpenseInput={salesMarketingExpenseInput}
+        handleSalesMarketingExpenseChange={handleSalesMarketingExpenseChange}
+        handleSalesMarketingExpenseBlur={handleSalesMarketingExpenseBlur}
+        utilitiesExpenseInput={utilitiesExpenseInput}
+        handleUtilitiesExpenseChange={handleUtilitiesExpenseChange}
+        handleUtilitiesExpenseBlur={handleUtilitiesExpenseBlur}
         formatCurrency={formatCurrency}
         formatPercent={formatPercent}
         helpers={helpers}

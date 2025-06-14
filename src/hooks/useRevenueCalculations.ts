@@ -45,6 +45,13 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   const miscellaneousExpenseInput = useInputHandlers(getInitialForecastData());
   const allocatedExpenseInput = useInputHandlers(getInitialForecastData());
 
+  // New expense inputs for the five additional sections
+  const propertyOperationsExpenseInput = useInputHandlers(getInitialForecastData());
+  const administrativeGeneralExpenseInput = useInputHandlers(getInitialForecastData());
+  const infoTechServicesExpenseInput = useInputHandlers(getInitialForecastData());
+  const salesMarketingExpenseInput = useInputHandlers(getInitialForecastData());
+  const utilitiesExpenseInput = useInputHandlers(getInitialForecastData());
+
   // Custom handlers that update the local input state without parsing
   const handleOccupancyChange = (year: number, value: string) => {
     occupancyForecast.handleChange(year, value);
@@ -154,6 +161,22 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     handleMiscellaneousExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, miscellaneousExpenseInput.handleChange),
     allocatedExpenseInput: allocatedExpenseInput.values,
     handleAllocatedExpenseChange: allocatedExpenseInput.handleChange,
-    handleAllocatedExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, allocatedExpenseInput.handleChange)
+    handleAllocatedExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, allocatedExpenseInput.handleChange),
+    // New expense handlers
+    propertyOperationsExpenseInput: propertyOperationsExpenseInput.values,
+    handlePropertyOperationsExpenseChange: propertyOperationsExpenseInput.handleChange,
+    handlePropertyOperationsExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, propertyOperationsExpenseInput.handleChange),
+    administrativeGeneralExpenseInput: administrativeGeneralExpenseInput.values,
+    handleAdministrativeGeneralExpenseChange: administrativeGeneralExpenseInput.handleChange,
+    handleAdministrativeGeneralExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, administrativeGeneralExpenseInput.handleChange),
+    infoTechServicesExpenseInput: infoTechServicesExpenseInput.values,
+    handleInfoTechServicesExpenseChange: infoTechServicesExpenseInput.handleChange,
+    handleInfoTechServicesExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, infoTechServicesExpenseInput.handleChange),
+    salesMarketingExpenseInput: salesMarketingExpenseInput.values,
+    handleSalesMarketingExpenseChange: salesMarketingExpenseInput.handleChange,
+    handleSalesMarketingExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, salesMarketingExpenseInput.handleChange),
+    utilitiesExpenseInput: utilitiesExpenseInput.values,
+    handleUtilitiesExpenseChange: utilitiesExpenseInput.handleChange,
+    handleUtilitiesExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, utilitiesExpenseInput.handleChange)
   };
 };

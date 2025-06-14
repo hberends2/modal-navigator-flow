@@ -30,6 +30,11 @@ export interface RevenueCalculationInputs {
   otherOperatedExpenseInput: Record<number, string>;
   miscellaneousExpenseInput: Record<number, string>;
   allocatedExpenseInput: Record<number, string>;
+  propertyOperationsExpenseInput: Record<number, string>;
+  administrativeGeneralExpenseInput: Record<number, string>;
+  infoTechServicesExpenseInput: Record<number, string>;
+  salesMarketingExpenseInput: Record<number, string>;
+  utilitiesExpenseInput: Record<number, string>;
 }
 
 export interface RevenueCalculationState extends RevenueCalculationInputs {
@@ -63,4 +68,14 @@ export interface RevenueCalculationState extends RevenueCalculationInputs {
   handleMiscellaneousExpenseBlur: (year: number, value: string) => void;
   handleAllocatedExpenseChange: (year: number, value: string) => void;
   handleAllocatedExpenseBlur: (year: number, value: string) => void;
+  handlePropertyOperationsExpenseChange: (year: number, value: string) => void;
+  handlePropertyOperationsExpenseBlur: (year: number, value: string) => void;
+  handleAdministrativeGeneralExpenseChange: (year: number, value: string) => void;
+  handleAdministrativeGeneralExpenseBlur: (year: number, value: string) => void;
+  handleInfoTechServicesExpenseChange: (year: number, value: string) => void;
+  handleInfoTechServicesExpenseBlur: (year: number, value: string) => void;
+  handleSalesMarketingExpenseChange: (year: number, value: string) => void;
+  handleSalesMarketingExpenseBlur: (year: number, value: string) => void;
+  handleUtilitiesExpenseChange: (year: number, value: string) => void;
+  handleUtilitiesExpenseBlur: (year: number, value: string) => void;
 }
