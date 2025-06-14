@@ -20,6 +20,61 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
   isOtherOperatedExpanded,
   subcategoryMetrics
 }) => {
+  // Function to render all rows including subcategories in the correct position
+  const renderTableRows = () => {
+    const rows: React.ReactNode[] = [];
+    
+    metrics.forEach((metric, index) => {
+      // Add the main metric row
+      rows.push(
+        <TableRow key={index} className="h-6">
+          <TableCell className={`font-medium text-xs py-0.5 ${metric.isSubcategory ? 'pl-8' : ''}`}>
+            {metric.label}
+          </TableCell>
+          {metric.data.map((value, yearIndex) => {
+            const isHistorical = yearIndex < historicalYears.length;
+            return (
+              <TableCell 
+                key={yearIndex} 
+                className={`text-center text-xs py-0.5 w-20 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
+              >
+                {value}
+              </TableCell>
+            );
+          })}
+        </TableRow>
+      );
+      
+      // If this is the collapsible "Total Other Operated" row and it's expanded, add subcategories
+      if (metric.isCollapsible && isOtherOperatedExpanded && 
+          ((activeTab === "revenue" && typeof metric.label === 'object') || 
+           (activeTab === "expense" && typeof metric.label === 'object'))) {
+        subcategoryMetrics.forEach((subMetric, subIndex) => {
+          rows.push(
+            <TableRow key={`sub-${subIndex}`} className="h-6">
+              <TableCell className="font-medium text-xs py-0.5 pl-8">
+                {subMetric.label}
+              </TableCell>
+              {subMetric.data.map((value, yearIndex) => {
+                const isHistorical = yearIndex < historicalYears.length;
+                return (
+                  <TableCell 
+                    key={yearIndex} 
+                    className={`text-center text-xs py-0.5 w-20 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
+                  >
+                    {value}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          );
+        });
+      }
+    });
+    
+    return rows;
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm border">
       <Table>
@@ -39,42 +94,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {metrics.map((metric, index) => (
-            <TableRow key={index} className="h-6">
-              <TableCell className={`font-medium text-xs py-0.5 ${metric.isSubcategory ? 'pl-8' : ''}`}>
-                {metric.label}
-              </TableCell>
-              {metric.data.map((value, yearIndex) => {
-                const isHistorical = yearIndex < historicalYears.length;
-                return (
-                  <TableCell 
-                    key={yearIndex} 
-                    className={`text-center text-xs py-0.5 w-20 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
-                  >
-                    {value}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
-          {(activeTab === "revenue" || activeTab === "expense") && isOtherOperatedExpanded && subcategoryMetrics.map((metric, index) => (
-            <TableRow key={`sub-${index}`} className="h-6">
-              <TableCell className="font-medium text-xs py-0.5 pl-8">
-                {metric.label}
-              </TableCell>
-              {metric.data.map((value, yearIndex) => {
-                const isHistorical = yearIndex < historicalYears.length;
-                return (
-                  <TableCell 
-                    key={yearIndex} 
-                    className={`text-center text-xs py-0.5 w-20 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
-                  >
-                    {value}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
+          {renderTableRows()}
         </TableBody>
       </Table>
     </div>
