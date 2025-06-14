@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import SummaryTable from "./TabbedSummary/SummaryTable";
-import { createOccupancyMetrics, createRevenueMetrics, createSubcategoryMetrics } from "./TabbedSummary/metrics";
+import { createOccupancyMetrics, createRevenueMetrics, createExpenseMetrics, createSubcategoryMetrics } from "./TabbedSummary/metrics";
 import { TabbedSummaryProps } from "./TabbedSummary/types";
 
 const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
@@ -15,6 +15,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
   // Create metrics for each tab
   const occupancyMetrics = createOccupancyMetrics(props, allYears);
   const revenueMetrics = createRevenueMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded);
+  const expenseMetrics = createExpenseMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded);
   const subcategoryMetrics = createSubcategoryMetrics(props, allYears);
 
   return (
@@ -23,6 +24,7 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
         <TabsList className="mb-0">
           <TabsTrigger value="occupancy">Occupancy</TabsTrigger>
           <TabsTrigger value="revenue">Revenue</TabsTrigger>
+          <TabsTrigger value="expense">Expense</TabsTrigger>
         </TabsList>
         
         <TabsContent value="occupancy" className="mt-0">
@@ -39,6 +41,17 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
         <TabsContent value="revenue" className="mt-0">
           <SummaryTable
             metrics={revenueMetrics}
+            historicalYears={historicalYears}
+            forecastYears={forecastYears}
+            activeTab={activeTab}
+            isOtherOperatedExpanded={isOtherOperatedExpanded}
+            subcategoryMetrics={subcategoryMetrics}
+          />
+        </TabsContent>
+        
+        <TabsContent value="expense" className="mt-0">
+          <SummaryTable
+            metrics={expenseMetrics}
             historicalYears={historicalYears}
             forecastYears={forecastYears}
             activeTab={activeTab}

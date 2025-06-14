@@ -25,14 +25,14 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-64 font-semibold text-xs">Metric</TableHead>
+            <TableHead className="w-80 font-semibold text-xs">Metric</TableHead>
             {historicalYears.map(year => (
-              <TableHead key={year} className="text-center font-semibold bg-blue-50 text-xs w-24">
+              <TableHead key={year} className="text-center font-semibold bg-blue-50 text-xs w-20">
                 {year}
               </TableHead>
             ))}
             {forecastYears.map(year => (
-              <TableHead key={year} className="text-center font-semibold bg-green-50 text-xs w-24">
+              <TableHead key={year} className="text-center font-semibold bg-green-50 text-xs w-20">
                 {year}
               </TableHead>
             ))}
@@ -49,7 +49,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
                 return (
                   <TableCell 
                     key={yearIndex} 
-                    className={`text-center text-xs py-0.5 w-24 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
+                    className={`text-center text-xs py-0.5 w-20 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
                   >
                     {value}
                   </TableCell>
@@ -57,7 +57,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
               })}
             </TableRow>
           ))}
-          {activeTab === "revenue" && isOtherOperatedExpanded && subcategoryMetrics.map((metric, index) => (
+          {(activeTab === "revenue" || activeTab === "expense") && isOtherOperatedExpanded && subcategoryMetrics.map((metric, index) => (
             <TableRow key={`sub-${index}`} className="h-6">
               <TableCell className="font-medium text-xs py-0.5 pl-8">
                 {metric.label}
@@ -67,7 +67,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
                 return (
                   <TableCell 
                     key={yearIndex} 
-                    className={`text-center text-xs py-0.5 w-24 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
+                    className={`text-center text-xs py-0.5 w-20 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
                   >
                     {value}
                   </TableCell>
