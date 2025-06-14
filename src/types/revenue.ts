@@ -1,4 +1,3 @@
-
 export interface HistoricalRevenueData {
   roomsRevenue: Record<number, number>;
   occupancy: Record<number, number>;
@@ -35,6 +34,7 @@ export interface RevenueCalculationInputs {
   infoTechServicesExpenseInput: Record<number, string>;
   salesMarketingExpenseInput: Record<number, string>;
   utilitiesExpenseInput: Record<number, string>;
+  nonOperatingExpenseInput: Record<number, string>;
 }
 
 export interface RevenueCalculationState extends RevenueCalculationInputs {
@@ -78,4 +78,6 @@ export interface RevenueCalculationState extends RevenueCalculationInputs {
   handleSalesMarketingExpenseBlur: (year: number, value: string) => void;
   handleUtilitiesExpenseChange: (year: number, value: string) => void;
   handleUtilitiesExpenseBlur: (year: number, value: string) => void;
+  handleNonOperatingExpenseChange: (year: number, value: string) => void;
+  handleNonOperatingExpenseBlur: (year: number, value: string) => void;
 }

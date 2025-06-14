@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Table } from "../ui/table";
 import { ScrollArea } from "../ui/scroll-area";
@@ -80,6 +79,9 @@ interface RevenueTableContainerProps {
   utilitiesExpenseInput: Record<number, string>;
   handleUtilitiesExpenseChange: (year: number, value: string) => void;
   handleUtilitiesExpenseBlur: (year: number, value: string) => void;
+  nonOperatingExpenseInput: Record<number, string>;
+  handleNonOperatingExpenseChange: (year: number, value: string) => void;
+  handleNonOperatingExpenseBlur: (year: number, value: string) => void;
 }
 
 const RevenueTableContainer: React.FC<RevenueTableContainerProps> = (props) => {

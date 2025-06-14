@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { REVENUE_CONFIG } from '../config/revenueConfig';
 import { RevenueCalculationState } from '../types/revenue';
@@ -51,6 +50,9 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   const infoTechServicesExpenseInput = useInputHandlers(getInitialForecastData());
   const salesMarketingExpenseInput = useInputHandlers(getInitialForecastData());
   const utilitiesExpenseInput = useInputHandlers(getInitialForecastData());
+
+  // New expense input for non-operating
+  const nonOperatingExpenseInput = useInputHandlers(getInitialForecastData());
 
   // Custom handlers that update the local input state without parsing
   const handleOccupancyChange = (year: number, value: string) => {
@@ -177,6 +179,10 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     handleSalesMarketingExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, salesMarketingExpenseInput.handleChange),
     utilitiesExpenseInput: utilitiesExpenseInput.values,
     handleUtilitiesExpenseChange: utilitiesExpenseInput.handleChange,
-    handleUtilitiesExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, utilitiesExpenseInput.handleChange)
+    handleUtilitiesExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, utilitiesExpenseInput.handleChange),
+    // New non-operating expense handlers
+    nonOperatingExpenseInput: nonOperatingExpenseInput.values,
+    handleNonOperatingExpenseChange: nonOperatingExpenseInput.handleChange,
+    handleNonOperatingExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, nonOperatingExpenseInput.handleChange)
   };
 };

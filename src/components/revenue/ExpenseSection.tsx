@@ -4,6 +4,7 @@ import ExpenseHeader from "./ExpenseHeader";
 import RoomsExpenseSection from "./RoomsExpenseSection";
 import OtherOperatedExpenseSection from "./OtherOperatedExpenseSection";
 import UndistributedExpensesSection from "./UndistributedExpensesSection";
+import NonOperatingExpensesSection from "./NonOperatingExpensesSection";
 
 interface ExpenseSectionProps {
   historicalYears: number[];
@@ -46,6 +47,9 @@ interface ExpenseSectionProps {
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
   helpers: any;
+  nonOperatingExpenseInput: Record<number, string>;
+  handleNonOperatingExpenseChange: (year: number, value: string) => void;
+  handleNonOperatingExpenseBlur: (year: number, value: string) => void;
 }
 
 const ExpenseSection: React.FC<ExpenseSectionProps> = ({
@@ -88,7 +92,10 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   handleUtilitiesExpenseBlur,
   formatCurrency,
   formatPercent,
-  helpers
+  helpers,
+  nonOperatingExpenseInput,
+  handleNonOperatingExpenseChange,
+  handleNonOperatingExpenseBlur
 }) => {
   // Hard-coded historical expense data
   const historicalExpenseData = {
@@ -102,7 +109,8 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     administrativeGeneral: { 2021: 900000, 2022: 945000, 2023: 990000, 2024: 1020000 },
     infoTechServices: { 2021: 300000, 2022: 315000, 2023: 330000, 2024: 340000 },
     salesMarketing: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 },
-    utilities: { 2021: 750000, 2022: 787500, 2023: 825000, 2024: 850000 }
+    utilities: { 2021: 750000, 2022: 787500, 2023: 825000, 2024: 850000 },
+    nonOperating: { 2021: 200000, 2022: 210000, 2023: 220000, 2024: 230000 }
   };
 
   const calculateExpense = (year: number, inputValue: string, expenseType: string) => {
@@ -160,12 +168,21 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     }
   };
 
+  const calculateTotalNonOperatingExpenses = (year: number) => {
+    if (historicalYears.includes(year)) {
+      return historicalExpenseData.nonOperating[year] || 0;
+    } else {
+      return calculateExpense(year, nonOperatingExpenseInput[year], 'nonOperating');
+    }
+  };
+
   const calculateTotalExpense = (year: number) => {
     const roomsExpense = calculateExpense(year, roomsExpenseInput[year], 'rooms');
     const totalOtherOperatedExpense = calculateTotalOtherOperatedExpense(year);
     const totalUndistributedExpenses = calculateTotalUndistributedExpenses(year);
+    const totalNonOperatingExpenses = calculateTotalNonOperatingExpenses(year);
     
-    return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpenses;
+    return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpenses + totalNonOperatingExpenses;
   };
 
   const getTotalHistoricalOtherOperatedExpense = (year: number) => {
@@ -179,7 +196,8 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   const getTotalHistoricalExpense = (year: number) => {
     return (historicalExpenseData.rooms[year] || 0) + 
            getTotalHistoricalOtherOperatedExpense(year) +
-           calculateTotalUndistributedExpenses(year);
+           calculateTotalUndistributedExpenses(year) +
+           (historicalExpenseData.nonOperating[year] || 0);
   };
 
   return (
@@ -257,6 +275,20 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         formatCurrency={formatCurrency}
         calculateExpense={calculateExpense}
         calculateTotalUndistributedExpenses={calculateTotalUndistributedExpenses}
+        historicalExpenseData={historicalExpenseData}
+        getHistoricalExpenseData={getHistoricalExpenseData}
+      />
+
+      {/* Non-Operating Expenses Section */}
+      <NonOperatingExpensesSection
+        historicalYears={historicalYears}
+        forecastYears={forecastYears}
+        expenseForecastMethod={expenseForecastMethod}
+        nonOperatingExpenseInput={nonOperatingExpenseInput}
+        handleNonOperatingExpenseChange={handleNonOperatingExpenseChange}
+        handleNonOperatingExpenseBlur={handleNonOperatingExpenseBlur}
+        formatCurrency={formatCurrency}
+        calculateExpense={calculateExpense}
         historicalExpenseData={historicalExpenseData}
         getHistoricalExpenseData={getHistoricalExpenseData}
       />
