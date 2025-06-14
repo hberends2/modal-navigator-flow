@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "./MetricRow";
 import ExpenseHeader from "./ExpenseHeader";
@@ -142,7 +141,7 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     return fbExpense + resortFeeExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
   };
 
-  const calculateTotalAdditionalExpenses = (year: number) => {
+  const calculateTotalUndistributedExpenses = (year: number) => {
     if (historicalYears.includes(year)) {
       return (historicalExpenseData.propertyOperations[year] || 0) +
              (historicalExpenseData.administrativeGeneral[year] || 0) +
@@ -163,9 +162,9 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   const calculateTotalExpense = (year: number) => {
     const roomsExpense = calculateExpense(year, roomsExpenseInput[year], 'rooms');
     const totalOtherOperatedExpense = calculateTotalOtherOperatedExpense(year);
-    const totalAdditionalExpenses = calculateTotalAdditionalExpenses(year);
+    const totalUndistributedExpenses = calculateTotalUndistributedExpenses(year);
     
-    return roomsExpense + totalOtherOperatedExpense + totalAdditionalExpenses;
+    return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpenses;
   };
 
   const getTotalHistoricalOtherOperatedExpense = (year: number) => {
@@ -179,7 +178,7 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   const getTotalHistoricalExpense = (year: number) => {
     return (historicalExpenseData.rooms[year] || 0) + 
            getTotalHistoricalOtherOperatedExpense(year) +
-           calculateTotalAdditionalExpenses(year);
+           calculateTotalUndistributedExpenses(year);
   };
 
   return (
@@ -234,13 +233,15 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         helpers={helpers}
       />
 
-      {/* Property Operations & Maintenance Section */}
+      {/* Undistributed Expenses Section Header */}
       <MetricRow
-        label={<span className="font-bold text-gray-900">Property Operations & Maintenance</span>}
+        label={<span className="font-bold text-gray-900">Undistributed Expenses</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
       />
+
+      {/* Property Operations & Maintenance Section */}
       <MetricRow
         label={`Property Operations & Maintenance (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'propertyOperations'))}
@@ -263,12 +264,6 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
       {/* Administrative & General Section */}
       <MetricRow
-        label={<span className="font-bold text-gray-900">Administrative & General</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-      <MetricRow
         label={`Administrative & General (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'administrativeGeneral'))}
         forecastData={forecastYears.map(() => "")}
@@ -289,12 +284,6 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
       />
 
       {/* Info & Tech Services Section */}
-      <MetricRow
-        label={<span className="font-bold text-gray-900">Info & Tech Services</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
       <MetricRow
         label={`Info & Tech Services (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'infoTechServices'))}
@@ -317,12 +306,6 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
       {/* Sales & Marketing Section */}
       <MetricRow
-        label={<span className="font-bold text-gray-900">Sales & Marketing</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-      <MetricRow
         label={`Sales & Marketing (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'salesMarketing'))}
         forecastData={forecastYears.map(() => "")}
@@ -344,12 +327,6 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
       {/* Utilities Section */}
       <MetricRow
-        label={<span className="font-bold text-gray-900">Utilities</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-      <MetricRow
         label={`Utilities (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'utilities'))}
         forecastData={forecastYears.map(() => "")}
@@ -367,6 +344,17 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.utilities[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, utilitiesExpenseInput[year], 'utilities')))}
         isIndented={true}
+      />
+
+      {/* Total Undistributed Expense Row */}
+      <MetricRow
+        label={<span className="font-medium">Total Undistributed Expense</span>}
+        historicalData={historicalYears.map(year => 
+          formatCurrency(calculateTotalUndistributedExpenses(year))
+        )}
+        forecastData={forecastYears.map(year => 
+          formatCurrency(calculateTotalUndistributedExpenses(year))
+        )}
       />
 
       {/* Total Expense Section */}
