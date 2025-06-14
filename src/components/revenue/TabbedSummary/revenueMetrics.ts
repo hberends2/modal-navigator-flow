@@ -66,18 +66,16 @@ export const createRevenueMetrics = (
       })
     },
     {
-      label: (
-        <div 
-          className="flex items-center cursor-pointer"
-          onClick={() => setIsOtherOperatedExpanded(!isOtherOperatedExpanded)}
-        >
-          {isOtherOperatedExpanded ? (
-            <ChevronDown className="h-3 w-3 mr-1" />
-          ) : (
-            <ChevronRight className="h-3 w-3 mr-1" />
-          )}
-          Total Other Operated Revenue
-        </div>
+      label: React.createElement(
+        'div', 
+        { 
+          className: "flex items-center cursor-pointer",
+          onClick: () => setIsOtherOperatedExpanded(!isOtherOperatedExpanded)
+        },
+        isOtherOperatedExpanded ? 
+          React.createElement(ChevronDown, { className: "h-3 w-3 mr-1" }) :
+          React.createElement(ChevronRight, { className: "h-3 w-3 mr-1" }),
+        "Total Other Operated Revenue"
       ),
       data: allYears.map(year => formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year))),
       isCollapsible: true
