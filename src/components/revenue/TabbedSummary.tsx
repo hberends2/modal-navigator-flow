@@ -12,12 +12,18 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
   const { historicalYears, forecastYears } = props;
   const allYears = [...historicalYears, ...forecastYears];
 
+  console.log('TabbedSummary rendering with activeTab:', activeTab);
+  console.log('All years:', allYears);
+
   // Create metrics for each tab
   const occupancyMetrics = createOccupancyMetrics(props, allYears);
   const revenueMetrics = createRevenueMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded);
   const expenseMetrics = createExpenseMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded);
   const subcategoryMetrics = createSubcategoryMetrics(props, allYears);
   const expenseSubcategoryMetrics = createExpenseSubcategoryMetrics(props, allYears);
+
+  console.log('Expense metrics count:', expenseMetrics.length);
+  console.log('Expense metrics labels:', expenseMetrics.map(m => m.label));
 
   return (
     <div className="mb-6">
