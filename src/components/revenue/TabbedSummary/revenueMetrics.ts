@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { MetricRow, TabbedSummaryProps } from './types';
@@ -79,6 +78,17 @@ export const createRevenueMetrics = (
       ),
       data: allYears.map(year => formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year))),
       isCollapsible: true
+    },
+    {
+      label: React.createElement('span', { className: 'font-bold' }, 'Total Revenue'),
+      data: allYears.map(year => {
+        const isHistorical = historicalYears.includes(year);
+        return React.createElement(
+          'span',
+          { className: 'font-bold' },
+          formatCurrency(props.helpers.calculateTotalRevenue(year, isHistorical))
+        );
+      })
     }
   ];
 };
