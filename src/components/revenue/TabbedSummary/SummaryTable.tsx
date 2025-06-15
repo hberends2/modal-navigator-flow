@@ -34,11 +34,13 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
         return;
       }
 
-      // Add the main metric row with proper indentation
+      // Add the main metric row with proper indentation and section header styling
       const isIndented = metric.isSubcategory || metric.isUndistributedSubcategory;
+      const isSectionHeader = metric.isSectionHeader;
+      
       rows.push(
-        <TableRow key={index} className="h-6">
-          <TableCell className={`font-medium text-xs py-0.5 ${isIndented ? 'pl-8' : ''}`}>
+        <TableRow key={index} className={`h-6 ${isSectionHeader ? 'bg-gray-100 border-t-2 border-gray-300' : ''}`}>
+          <TableCell className={`font-medium text-xs py-0.5 ${isIndented ? 'pl-8' : ''} ${isSectionHeader ? 'font-bold' : ''}`}>
             {metric.label}
           </TableCell>
           {metric.data.map((value, yearIndex) => {
@@ -46,7 +48,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
             return (
               <TableCell 
                 key={yearIndex} 
-                className={`text-center text-xs py-0.5 w-20 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'}`}
+                className={`text-center text-xs py-0.5 w-20 ${isHistorical ? 'bg-blue-25' : 'bg-green-25'} ${isSectionHeader ? 'bg-gray-100' : ''}`}
               >
                 {value}
               </TableCell>

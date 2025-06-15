@@ -164,6 +164,13 @@ export const createExpenseMetrics = (
       isCollapsible: true,
       isUndistributed: true
     },
+    // Property Operations & Maintenance section header
+    {
+      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Property Operations & Maintenance"),
+      data: allYears.map(() => ""),
+      isUndistributedSubcategory: true,
+      isSectionHeader: true
+    },
     {
       label: "Property Operations & Maintenance",
       data: allYears.map(year => {
@@ -174,6 +181,13 @@ export const createExpenseMetrics = (
         }
       }),
       isUndistributedSubcategory: true
+    },
+    // Administrative & General section header
+    {
+      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Administrative & General"),
+      data: allYears.map(() => ""),
+      isUndistributedSubcategory: true,
+      isSectionHeader: true
     },
     {
       label: "Administrative & General",
@@ -186,6 +200,13 @@ export const createExpenseMetrics = (
       }),
       isUndistributedSubcategory: true
     },
+    // Info & Tech Services section header
+    {
+      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Info & Tech Services"),
+      data: allYears.map(() => ""),
+      isUndistributedSubcategory: true,
+      isSectionHeader: true
+    },
     {
       label: "Info & Tech Services",
       data: allYears.map(year => {
@@ -197,6 +218,13 @@ export const createExpenseMetrics = (
       }),
       isUndistributedSubcategory: true
     },
+    // Sales & Marketing section header
+    {
+      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Sales & Marketing"),
+      data: allYears.map(() => ""),
+      isUndistributedSubcategory: true,
+      isSectionHeader: true
+    },
     {
       label: "Sales & Marketing",
       data: allYears.map(year => {
@@ -207,6 +235,13 @@ export const createExpenseMetrics = (
         }
       }),
       isUndistributedSubcategory: true
+    },
+    // Utilities section header
+    {
+      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Utilities"),
+      data: allYears.map(() => ""),
+      isUndistributedSubcategory: true,
+      isSectionHeader: true
     },
     {
       label: "Utilities",
