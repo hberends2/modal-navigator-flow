@@ -54,7 +54,7 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
   getHistoricalExpenseData
 }) => {
   return (
-    <>
+    <div id="undistributed-expenses-section">
       {/* Undistributed Expenses Section Header */}
       <MetricRow
         label={<span className="font-bold text-gray-900">Undistributed Expenses</span>}
@@ -218,7 +218,7 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
           formatCurrency(calculateTotalUndistributedExpenses(year))
         )}
       />
-    </>
+    </div>
   );
 };
 
