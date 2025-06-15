@@ -1,16 +1,10 @@
+
 import React from "react";
 import { TableBody } from "../ui/table";
-import OccupancySection from "./OccupancySection";
-import ADRSection from "./ADRSection";
-import RevPARSection from "./RevPARSection";
-import RoomsRevenueSection from "./RoomsRevenueSection";
-import FoodBeverageSection from "./FoodBeverageSection";
-import ResortFeeSection from "./ResortFeeSection";
-import OtherOperatedSection from "./OtherOperatedSection";
-import MiscellaneousSection from "./MiscellaneousSection";
-import AllocatedSection from "./AllocatedSection";
-import ExpenseSection from "./ExpenseSection";
-import MetricRow from "./MetricRow";
+import RevenueMetricsSection from "./sections/RevenueMetricsSection";
+import OtherOperatedRevenueSection from "./sections/OtherOperatedRevenueSection";
+import TotalRevenueSection from "./sections/TotalRevenueSection";
+import ExpenseSectionContainer from "./sections/ExpenseSectionContainer";
 import { CalculationHelpers } from "./RevenueTableHelpers";
 
 interface RevenueTableSectionsProps {
@@ -92,310 +86,110 @@ interface RevenueTableSectionsProps {
   handleNonOperatingExpenseBlur: (year: number, value: string) => void;
 }
 
-const RevenueTableSections: React.FC<RevenueTableSectionsProps> = ({
-  historicalYears,
-  forecastYears,
-  roomsKeys,
-  historicalData,
-  occupancyForecast,
-  handleOccupancyChange,
-  occupancyForecastMethod,
-  setOccupancyForecastMethod,
-  occupancyYoYGrowth,
-  handleOccupancyYoYChange,
-  calculateOccupancyFromYoY,
-  getAvailableRooms,
-  adrGrowthType,
-  setAdrGrowthType,
-  flatAdrGrowth,
-  setFlatAdrGrowth,
-  yearlyAdrGrowth,
-  handleYearlyAdrChange,
-  getForecastRevpar,
-  getForecastRoomsRevenue,
-  fbPerOccupiedRoom,
-  handleFbPerOccupiedRoomChange,
-  handleFbPerOccupiedRoomBlur,
-  resortFeePerOccupiedRoom,
-  handleResortFeePerOccupiedRoomChange,
-  handleResortFeePerOccupiedRoomBlur,
-  otherOperatedPerOccupiedRoom,
-  handleOtherOperatedPerOccupiedRoomChange,
-  handleOtherOperatedPerOccupiedRoomBlur,
-  miscellaneousPerOccupiedRoom,
-  handleMiscellaneousPerOccupiedRoomChange,
-  handleMiscellaneousPerOccupiedRoomBlur,
-  allocatedPerOccupiedRoom,
-  handleAllocatedPerOccupiedRoomChange,
-  handleAllocatedPerOccupiedRoomBlur,
-  formatCurrency,
-  formatPercent,
-  helpers,
-  expenseForecastMethod,
-  setExpenseForecastMethod,
-  roomsExpenseInput,
-  handleRoomsExpenseChange,
-  handleRoomsExpenseBlur,
-  fbExpenseInput,
-  handleFbExpenseChange,
-  handleFbExpenseBlur,
-  resortFeeExpenseInput,
-  handleResortFeeExpenseChange,
-  handleResortFeeExpenseBlur,
-  otherOperatedExpenseInput,
-  handleOtherOperatedExpenseChange,
-  handleOtherOperatedExpenseBlur,
-  miscellaneousExpenseInput,
-  handleMiscellaneousExpenseChange,
-  handleMiscellaneousExpenseBlur,
-  allocatedExpenseInput,
-  handleAllocatedExpenseChange,
-  handleAllocatedExpenseBlur,
-  propertyOperationsExpenseInput,
-  handlePropertyOperationsExpenseChange,
-  handlePropertyOperationsExpenseBlur,
-  administrativeGeneralExpenseInput,
-  handleAdministrativeGeneralExpenseChange,
-  handleAdministrativeGeneralExpenseBlur,
-  infoTechServicesExpenseInput,
-  handleInfoTechServicesExpenseChange,
-  handleInfoTechServicesExpenseBlur,
-  salesMarketingExpenseInput,
-  handleSalesMarketingExpenseChange,
-  handleSalesMarketingExpenseBlur,
-  utilitiesExpenseInput,
-  handleUtilitiesExpenseChange,
-  handleUtilitiesExpenseBlur,
-  nonOperatingExpenseInput,
-  handleNonOperatingExpenseChange,
-  handleNonOperatingExpenseBlur
-}) => {
+const RevenueTableSections: React.FC<RevenueTableSectionsProps> = (props) => {
   return (
     <TableBody>
-      {/* Section anchor for Occupancy */}
-      <tr id="occupancy-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-      
-      <OccupancySection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        roomsKeys={roomsKeys}
-        historicalData={historicalData}
-        occupancyForecast={occupancyForecast}
-        handleOccupancyChange={handleOccupancyChange}
-        handleOccupancyBlur={(year, value) => {
-          console.log('Occupancy blur event passed through:', year, value);
-        }}
-        occupancyForecastMethod={occupancyForecastMethod}
-        setOccupancyForecastMethod={setOccupancyForecastMethod}
-        occupancyYoYGrowth={occupancyYoYGrowth}
-        handleOccupancyYoYChange={handleOccupancyYoYChange}
-        handleOccupancyYoYBlur={(year, value) => {
-          console.log('Occupancy YoY blur event passed through:', year, value);
-        }}
-        calculateOccupancyFromYoY={calculateOccupancyFromYoY}
-        getAvailableRooms={getAvailableRooms}
-        getHistoricalOccupiedRooms={helpers.getHistoricalOccupiedRoomsForYear}
-        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
-        formatPercent={formatPercent}
+      <RevenueMetricsSection
+        historicalYears={props.historicalYears}
+        forecastYears={props.forecastYears}
+        roomsKeys={props.roomsKeys}
+        historicalData={props.historicalData}
+        occupancyForecast={props.occupancyForecast}
+        handleOccupancyChange={props.handleOccupancyChange}
+        occupancyForecastMethod={props.occupancyForecastMethod}
+        setOccupancyForecastMethod={props.setOccupancyForecastMethod}
+        occupancyYoYGrowth={props.occupancyYoYGrowth}
+        handleOccupancyYoYChange={props.handleOccupancyYoYChange}
+        calculateOccupancyFromYoY={props.calculateOccupancyFromYoY}
+        getAvailableRooms={props.getAvailableRooms}
+        adrGrowthType={props.adrGrowthType}
+        setAdrGrowthType={props.setAdrGrowthType}
+        flatAdrGrowth={props.flatAdrGrowth}
+        setFlatAdrGrowth={props.setFlatAdrGrowth}
+        yearlyAdrGrowth={props.yearlyAdrGrowth}
+        handleYearlyAdrChange={props.handleYearlyAdrChange}
+        getForecastRevpar={props.getForecastRevpar}
+        getForecastRoomsRevenue={props.getForecastRoomsRevenue}
+        formatCurrency={props.formatCurrency}
+        formatPercent={props.formatPercent}
+        helpers={props.helpers}
       />
 
-      <tr id="adr-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-      
-      <ADRSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        getHistoricalADR={helpers.getHistoricalADRForYear}
-        getForecastADR={helpers.getForecastADRForYear}
-        adrGrowthType={adrGrowthType}
-        setAdrGrowthType={setAdrGrowthType}
-        flatAdrGrowth={flatAdrGrowth}
-        setFlatAdrGrowth={setFlatAdrGrowth}
-        handleFlatAdrBlur={(value) => {
-          console.log('Flat ADR blur event:', value);
-        }}
-        yearlyAdrGrowth={yearlyAdrGrowth}
-        handleYearlyAdrChange={handleYearlyAdrChange}
-        handleYearlyAdrBlur={(year, value) => {
-          console.log('Yearly ADR blur event:', year, value);
-        }}
+      <OtherOperatedRevenueSection
+        historicalYears={props.historicalYears}
+        forecastYears={props.forecastYears}
+        roomsKeys={props.roomsKeys}
+        historicalData={props.historicalData}
+        fbPerOccupiedRoom={props.fbPerOccupiedRoom}
+        handleFbPerOccupiedRoomChange={props.handleFbPerOccupiedRoomChange}
+        handleFbPerOccupiedRoomBlur={props.handleFbPerOccupiedRoomBlur}
+        resortFeePerOccupiedRoom={props.resortFeePerOccupiedRoom}
+        handleResortFeePerOccupiedRoomChange={props.handleResortFeePerOccupiedRoomChange}
+        handleResortFeePerOccupiedRoomBlur={props.handleResortFeePerOccupiedRoomBlur}
+        otherOperatedPerOccupiedRoom={props.otherOperatedPerOccupiedRoom}
+        handleOtherOperatedPerOccupiedRoomChange={props.handleOtherOperatedPerOccupiedRoomChange}
+        handleOtherOperatedPerOccupiedRoomBlur={props.handleOtherOperatedPerOccupiedRoomBlur}
+        miscellaneousPerOccupiedRoom={props.miscellaneousPerOccupiedRoom}
+        handleMiscellaneousPerOccupiedRoomChange={props.handleMiscellaneousPerOccupiedRoomChange}
+        handleMiscellaneousPerOccupiedRoomBlur={props.handleMiscellaneousPerOccupiedRoomBlur}
+        allocatedPerOccupiedRoom={props.allocatedPerOccupiedRoom}
+        handleAllocatedPerOccupiedRoomChange={props.handleAllocatedPerOccupiedRoomChange}
+        handleAllocatedPerOccupiedRoomBlur={props.handleAllocatedPerOccupiedRoomBlur}
+        formatCurrency={props.formatCurrency}
+        helpers={props.helpers}
       />
 
-      <tr id="revpar-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-      
-      <RevPARSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        getForecastRevpar={getForecastRevpar}
+      <TotalRevenueSection
+        historicalYears={props.historicalYears}
+        forecastYears={props.forecastYears}
+        formatCurrency={props.formatCurrency}
+        helpers={props.helpers}
       />
 
-      <tr id="rooms-revenue-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-      
-      <RoomsRevenueSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        getForecastRoomsRevenue={getForecastRoomsRevenue}
-        formatCurrency={formatCurrency}
-      />
-
-      <tr id="other-operated-revenue-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-      
-      <MetricRow
-        label={<span className="font-bold text-gray-900">Other Operated Revenue</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-
-      <FoodBeverageSection
-        roomsKeys={roomsKeys}
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        fbPerOccupiedRoom={fbPerOccupiedRoom}
-        handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
-        handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
-        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
-        formatCurrency={formatCurrency}
-        isIndented={true}
-      />
-
-      <ResortFeeSection
-        roomsKeys={roomsKeys}
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        resortFeePerOccupiedRoom={resortFeePerOccupiedRoom}
-        handleResortFeePerOccupiedRoomChange={handleResortFeePerOccupiedRoomChange}
-        handleResortFeePerOccupiedRoomBlur={handleResortFeePerOccupiedRoomBlur}
-        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
-        formatCurrency={formatCurrency}
-        isIndented={true}
-      />
-
-      <OtherOperatedSection
-        roomsKeys={roomsKeys}
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        otherOperatedPerOccupiedRoom={otherOperatedPerOccupiedRoom}
-        handleOtherOperatedPerOccupiedRoomChange={handleOtherOperatedPerOccupiedRoomChange}
-        handleOtherOperatedPerOccupiedRoomBlur={handleOtherOperatedPerOccupiedRoomBlur}
-        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
-        formatCurrency={formatCurrency}
-        isIndented={true}
-      />
-
-      <MiscellaneousSection
-        roomsKeys={roomsKeys}
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        miscellaneousPerOccupiedRoom={miscellaneousPerOccupiedRoom}
-        handleMiscellaneousPerOccupiedRoomChange={handleMiscellaneousPerOccupiedRoomChange}
-        handleMiscellaneousPerOccupiedRoomBlur={handleMiscellaneousPerOccupiedRoomBlur}
-        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
-        formatCurrency={formatCurrency}
-        isIndented={true}
-      />
-
-      <AllocatedSection
-        roomsKeys={roomsKeys}
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        allocatedPerOccupiedRoom={allocatedPerOccupiedRoom}
-        handleAllocatedPerOccupiedRoomChange={handleAllocatedPerOccupiedRoomChange}
-        handleAllocatedPerOccupiedRoomBlur={handleAllocatedPerOccupiedRoomBlur}
-        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
-        formatCurrency={formatCurrency}
-        isIndented={true}
-      />
-
-      <MetricRow
-        label={<span className="font-medium">Total Other Operated Revenue</span>}
-        historicalData={historicalYears.map(year => 
-          formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year, true))
-        )}
-        forecastData={forecastYears.map(year => 
-          formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year, false))
-        )}
-      />
-
-      <tr id="total-revenue-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-
-      <MetricRow
-        label={<span className="font-bold text-base">Total Revenue</span>}
-        historicalData={historicalYears.map(year => (
-          <span className="font-bold text-base">
-            {formatCurrency(helpers.calculateTotalRevenue(year, true))}
-          </span>
-        ))}
-        forecastData={forecastYears.map(year => (
-          <span className="font-bold text-base">
-            {formatCurrency(helpers.calculateTotalRevenue(year, false))}
-          </span>
-        ))}
-      />
-
-      {/* Expense Section with all required props including non-operating */}
-      <ExpenseSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        expenseForecastMethod={expenseForecastMethod}
-        setExpenseForecastMethod={setExpenseForecastMethod}
-        roomsExpenseInput={roomsExpenseInput}
-        handleRoomsExpenseChange={handleRoomsExpenseChange}
-        handleRoomsExpenseBlur={handleRoomsExpenseBlur}
-        fbExpenseInput={fbExpenseInput}
-        handleFbExpenseChange={handleFbExpenseChange}
-        handleFbExpenseBlur={handleFbExpenseBlur}
-        resortFeeExpenseInput={resortFeeExpenseInput}
-        handleResortFeeExpenseChange={handleResortFeeExpenseChange}
-        handleResortFeeExpenseBlur={handleResortFeeExpenseBlur}
-        otherOperatedExpenseInput={otherOperatedExpenseInput}
-        handleOtherOperatedExpenseChange={handleOtherOperatedExpenseChange}
-        handleOtherOperatedExpenseBlur={handleOtherOperatedExpenseBlur}
-        miscellaneousExpenseInput={miscellaneousExpenseInput}
-        handleMiscellaneousExpenseChange={handleMiscellaneousExpenseChange}
-        handleMiscellaneousExpenseBlur={handleMiscellaneousExpenseBlur}
-        allocatedExpenseInput={allocatedExpenseInput}
-        handleAllocatedExpenseChange={handleAllocatedExpenseChange}
-        handleAllocatedExpenseBlur={handleAllocatedExpenseBlur}
-        propertyOperationsExpenseInput={propertyOperationsExpenseInput}
-        handlePropertyOperationsExpenseChange={handlePropertyOperationsExpenseChange}
-        handlePropertyOperationsExpenseBlur={handlePropertyOperationsExpenseBlur}
-        administrativeGeneralExpenseInput={administrativeGeneralExpenseInput}
-        handleAdministrativeGeneralExpenseChange={handleAdministrativeGeneralExpenseChange}
-        handleAdministrativeGeneralExpenseBlur={handleAdministrativeGeneralExpenseBlur}
-        infoTechServicesExpenseInput={infoTechServicesExpenseInput}
-        handleInfoTechServicesExpenseChange={handleInfoTechServicesExpenseChange}
-        handleInfoTechServicesExpenseBlur={handleInfoTechServicesExpenseBlur}
-        salesMarketingExpenseInput={salesMarketingExpenseInput}
-        handleSalesMarketingExpenseChange={handleSalesMarketingExpenseChange}
-        handleSalesMarketingExpenseBlur={handleSalesMarketingExpenseBlur}
-        utilitiesExpenseInput={utilitiesExpenseInput}
-        handleUtilitiesExpenseChange={handleUtilitiesExpenseChange}
-        handleUtilitiesExpenseBlur={handleUtilitiesExpenseBlur}
-        nonOperatingExpenseInput={nonOperatingExpenseInput}
-        handleNonOperatingExpenseChange={handleNonOperatingExpenseChange}
-        handleNonOperatingExpenseBlur={handleNonOperatingExpenseBlur}
-        formatCurrency={formatCurrency}
-        formatPercent={formatPercent}
-        helpers={helpers}
+      <ExpenseSectionContainer
+        historicalYears={props.historicalYears}
+        forecastYears={props.forecastYears}
+        expenseForecastMethod={props.expenseForecastMethod}
+        setExpenseForecastMethod={props.setExpenseForecastMethod}
+        roomsExpenseInput={props.roomsExpenseInput}
+        handleRoomsExpenseChange={props.handleRoomsExpenseChange}
+        handleRoomsExpenseBlur={props.handleRoomsExpenseBlur}
+        fbExpenseInput={props.fbExpenseInput}
+        handleFbExpenseChange={props.handleFbExpenseChange}
+        handleFbExpenseBlur={props.handleFbExpenseBlur}
+        resortFeeExpenseInput={props.resortFeeExpenseInput}
+        handleResortFeeExpenseChange={props.handleResortFeeExpenseChange}
+        handleResortFeeExpenseBlur={props.handleResortFeeExpenseBlur}
+        otherOperatedExpenseInput={props.otherOperatedExpenseInput}
+        handleOtherOperatedExpenseChange={props.handleOtherOperatedExpenseChange}
+        handleOtherOperatedExpenseBlur={props.handleOtherOperatedExpenseBlur}
+        miscellaneousExpenseInput={props.miscellaneousExpenseInput}
+        handleMiscellaneousExpenseChange={props.handleMiscellaneousExpenseChange}
+        handleMiscellaneousExpenseBlur={props.handleMiscellaneousExpenseBlur}
+        allocatedExpenseInput={props.allocatedExpenseInput}
+        handleAllocatedExpenseChange={props.handleAllocatedExpenseChange}
+        handleAllocatedExpenseBlur={props.handleAllocatedExpenseBlur}
+        propertyOperationsExpenseInput={props.propertyOperationsExpenseInput}
+        handlePropertyOperationsExpenseChange={props.handlePropertyOperationsExpenseChange}
+        handlePropertyOperationsExpenseBlur={props.handlePropertyOperationsExpenseBlur}
+        administrativeGeneralExpenseInput={props.administrativeGeneralExpenseInput}
+        handleAdministrativeGeneralExpenseChange={props.handleAdministrativeGeneralExpenseChange}
+        handleAdministrativeGeneralExpenseBlur={props.handleAdministrativeGeneralExpenseBlur}
+        infoTechServicesExpenseInput={props.infoTechServicesExpenseInput}
+        handleInfoTechServicesExpenseChange={props.handleInfoTechServicesExpenseChange}
+        handleInfoTechServicesExpenseBlur={props.handleInfoTechServicesExpenseBlur}
+        salesMarketingExpenseInput={props.salesMarketingExpenseInput}
+        handleSalesMarketingExpenseChange={props.handleSalesMarketingExpenseChange}
+        handleSalesMarketingExpenseBlur={props.handleSalesMarketingExpenseBlur}
+        utilitiesExpenseInput={props.utilitiesExpenseInput}
+        handleUtilitiesExpenseChange={props.handleUtilitiesExpenseChange}
+        handleUtilitiesExpenseBlur={props.handleUtilitiesExpenseBlur}
+        nonOperatingExpenseInput={props.nonOperatingExpenseInput}
+        handleNonOperatingExpenseChange={props.handleNonOperatingExpenseChange}
+        handleNonOperatingExpenseBlur={props.handleNonOperatingExpenseBlur}
+        formatCurrency={props.formatCurrency}
+        formatPercent={props.formatPercent}
+        helpers={props.helpers}
       />
     </TableBody>
   );
