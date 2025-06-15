@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "./MetricRow";
 
@@ -36,9 +35,11 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
   };
 
   return (
-    <div id="non-operating-expenses-section">
+    <>
       {/* Non-Operating Expenses Section Header */}
       <MetricRow
+        id="non-operating-expenses-section"
+        className="scroll-mt-4"
         label={<span className="font-bold text-gray-900">Non-Operating</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
@@ -70,7 +71,7 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
           formatCurrency(calculateTotalNonOperatingExpenses(year))
         )}
       />
-    </div>
+    </>
   );
 };
 

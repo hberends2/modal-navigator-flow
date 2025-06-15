@@ -1,7 +1,7 @@
-
 import React from "react";
 import { TableRow, TableCell } from "../ui/table";
 import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
 
 interface MetricRowProps {
   label: React.ReactNode;
@@ -25,6 +25,8 @@ interface MetricRowProps {
   isUserInputRow?: boolean;
   isFbInputRow?: boolean;
   isIndented?: boolean;
+  id?: string;
+  className?: string;
 }
 
 const MetricRow: React.FC<MetricRowProps> = ({
@@ -48,7 +50,9 @@ const MetricRow: React.FC<MetricRowProps> = ({
   handleYearlyAdrBlur,
   isUserInputRow = false,
   isFbInputRow = false,
-  isIndented = false
+  isIndented = false,
+  id,
+  className,
 }) => {
   const handleInputChange = (year: number, value: string) => {
     if (onEditableChange) {
@@ -79,7 +83,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
 
   if (isTwoRowMetric) {
     return (
-      <TableRow className={getRowClassName()}>
+      <TableRow id={id} className={cn(getRowClassName(), className)}>
         <TableCell className="p-2 align-top bg-white sticky left-0 z-10">
           <div className="flex flex-col justify-center h-full space-y-1">
             <div className="text-xs font-medium">{metricText}</div>
@@ -138,7 +142,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
   }
 
   return (
-    <TableRow className={getRowClassName()}>
+    <TableRow id={id} className={cn(getRowClassName(), className)}>
       <TableCell className={getLabelClassName()}>
         <span className="text-xs">{label}</span>
       </TableCell>

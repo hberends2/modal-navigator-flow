@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "./MetricRow";
 
@@ -54,9 +53,11 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
   getHistoricalExpenseData
 }) => {
   return (
-    <div id="undistributed-expenses-section">
+    <>
       {/* Undistributed Expenses Section Header */}
       <MetricRow
+        id="undistributed-expenses-section"
+        className="scroll-mt-4"
         label={<span className="font-bold text-gray-900">Undistributed Expenses</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
@@ -218,7 +219,7 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
           formatCurrency(calculateTotalUndistributedExpenses(year))
         )}
       />
-    </div>
+    </>
   );
 };
 
