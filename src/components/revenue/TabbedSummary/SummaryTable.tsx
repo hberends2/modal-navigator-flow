@@ -29,11 +29,6 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
     const rows: React.ReactNode[] = [];
     
     metrics.forEach((metric, index) => {
-      // Skip undistributed subcategories if they're not expanded
-      if (metric.isUndistributedSubcategory && !isUndistributedExpanded) {
-        return;
-      }
-
       // Add the main metric row with proper indentation
       const isIndented = metric.isSubcategory || metric.isUndistributedSubcategory;
       
