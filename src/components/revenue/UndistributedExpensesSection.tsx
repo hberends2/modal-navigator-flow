@@ -63,7 +63,15 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         isSectionHeader={true}
       />
 
-      {/* Property Operations & Maintenance Section */}
+      {/* Property Operations & Maintenance Section Header */}
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Property Operations & Maintenance</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+
+      {/* Property Operations & Maintenance Input/Data Rows */}
       <MetricRow
         label={`Property Operations & Maintenance (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'propertyOperations'))}
@@ -84,7 +92,15 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         isIndented={true}
       />
 
-      {/* Administrative & General Section */}
+      {/* Administrative & General Section Header */}
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Administrative & General</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+
+      {/* Administrative & General Input/Data Rows */}
       <MetricRow
         label={`Administrative & General (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'administrativeGeneral'))}
@@ -105,7 +121,15 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         isIndented={true}
       />
 
-      {/* Info & Tech Services Section */}
+      {/* Info & Tech Services Section Header */}
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Info & Tech Services</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+
+      {/* Info & Tech Services Input/Data Rows */}
       <MetricRow
         label={`Info & Tech Services (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'infoTechServices'))}
@@ -126,7 +150,15 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         isIndented={true}
       />
 
-      {/* Sales & Marketing Section */}
+      {/* Sales & Marketing Section Header */}
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Sales & Marketing</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+
+      {/* Sales & Marketing Input/Data Rows */}
       <MetricRow
         label={`Sales & Marketing (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'salesMarketing'))}
@@ -147,7 +179,15 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         isIndented={true}
       />
 
-      {/* Utilities Section */}
+      {/* Utilities Section Header */}
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Utilities</span>}
+        historicalData={historicalYears.map(() => "")}
+        forecastData={forecastYears.map(() => "")}
+        isSectionHeader={true}
+      />
+
+      {/* Utilities Input/Data Rows */}
       <MetricRow
         label={`Utilities (${expenseForecastMethod})`}
         historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'utilities'))}
