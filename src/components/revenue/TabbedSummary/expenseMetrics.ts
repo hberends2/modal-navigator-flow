@@ -11,7 +11,7 @@ const historicalExpenseData = {
   resortFee: { 2021: 150000, 2022: 160000, 2023: 170000, 2024: 175000 },
   otherOperated: { 2021: 800000, 2022: 850000, 2023: 900000, 2024: 920000 },
   miscellaneous: { 2021: 100000, 2022: 105000, 2023: 110000, 2024: 115000 },
-  allocated: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 },
+  allocated: { 2021: 600000, 2022: 630000, 2623: 660000, 2024: 680000 },
   propertyOperations: { 2021: 1500000, 2022: 1575000, 2023: 1650000, 2024: 1700000 },
   administrativeGeneral: { 2021: 900000, 2022: 945000, 2023: 990000, 2024: 1020000 },
   infoTechServices: { 2021: 300000, 2022: 315000, 2023: 330000, 2024: 340000 },
@@ -164,13 +164,6 @@ export const createExpenseMetrics = (
       isCollapsible: true,
       isUndistributed: true
     },
-    // Property Operations & Maintenance section header
-    {
-      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Property Operations & Maintenance"),
-      data: allYears.map(() => ""),
-      isUndistributedSubcategory: true,
-      isSectionHeader: true
-    },
     {
       label: "Property Operations & Maintenance",
       data: allYears.map(year => {
@@ -181,13 +174,6 @@ export const createExpenseMetrics = (
         }
       }),
       isUndistributedSubcategory: true
-    },
-    // Administrative & General section header
-    {
-      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Administrative & General"),
-      data: allYears.map(() => ""),
-      isUndistributedSubcategory: true,
-      isSectionHeader: true
     },
     {
       label: "Administrative & General",
@@ -200,13 +186,6 @@ export const createExpenseMetrics = (
       }),
       isUndistributedSubcategory: true
     },
-    // Info & Tech Services section header
-    {
-      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Info & Tech Services"),
-      data: allYears.map(() => ""),
-      isUndistributedSubcategory: true,
-      isSectionHeader: true
-    },
     {
       label: "Info & Tech Services",
       data: allYears.map(year => {
@@ -218,13 +197,6 @@ export const createExpenseMetrics = (
       }),
       isUndistributedSubcategory: true
     },
-    // Sales & Marketing section header
-    {
-      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Sales & Marketing"),
-      data: allYears.map(() => ""),
-      isUndistributedSubcategory: true,
-      isSectionHeader: true
-    },
     {
       label: "Sales & Marketing",
       data: allYears.map(year => {
@@ -235,13 +207,6 @@ export const createExpenseMetrics = (
         }
       }),
       isUndistributedSubcategory: true
-    },
-    // Utilities section header
-    {
-      label: React.createElement('span', { className: "font-bold text-gray-900" }, "Utilities"),
-      data: allYears.map(() => ""),
-      isUndistributedSubcategory: true,
-      isSectionHeader: true
     },
     {
       label: "Utilities",

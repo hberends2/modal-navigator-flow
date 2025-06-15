@@ -1,3 +1,4 @@
+
 import React from "react";
 
 export interface MetricRow {
@@ -7,7 +8,6 @@ export interface MetricRow {
   isCollapsible?: boolean;
   isUndistributed?: boolean;
   isUndistributedSubcategory?: boolean;
-  isSectionHeader?: boolean;
 }
 
 export interface TabbedSummaryProps {
