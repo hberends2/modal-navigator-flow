@@ -47,6 +47,8 @@ export const useRevenueScrollManager = () => {
       'total-revenue-section': 'total-revenue-section',
       'rooms-expense-section': 'rooms-expense-section',
       'other-operated-expense-section': 'other-operated-expense-section',
+      'undistributed-expense-section': 'undistributed-expense-section',
+      'non-operating-expense-section': 'non-operating-expense-section',
       'total-expense-section': 'total-expense-section'
     };
     
@@ -73,6 +75,8 @@ export const useRevenueScrollManager = () => {
         'total-revenue-section',
         'rooms-expense-section',
         'other-operated-expense-section',
+        'undistributed-expense-section',
+        'non-operating-expense-section',
         'total-expense-section'
       ];
 
