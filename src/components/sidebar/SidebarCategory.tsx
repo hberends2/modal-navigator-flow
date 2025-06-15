@@ -1,17 +1,12 @@
+
 import React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
-
-interface SubCategory {
-  id: string;
-  name: string;
-  path?: string;
-}
 
 export interface CategoryItem {
   id: string;
   name: string;
   path?: string;
-  subCategories?: SubCategory[];
+  subCategories?: CategoryItem[];
 }
 
 interface SidebarCategoryProps {
@@ -20,6 +15,7 @@ interface SidebarCategoryProps {
   onCategoryClick: (category: CategoryItem) => void;
   onSubCategoryClick: (subCategoryId: string, path?: string) => void;
   activeSection?: string;
+  level?: number;
 }
 
 const SidebarCategory: React.FC<SidebarCategoryProps> = ({
@@ -27,62 +23,66 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
   expandedCategories,
   onCategoryClick,
   onSubCategoryClick,
-  activeSection
+  activeSection,
+  level = 0,
 }) => {
   const isExpanded = expandedCategories.includes(category.id);
+  const hasSubCategories = category.subCategories && category.subCategories.length > 0;
 
-  const handleCategoryClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    console.log("SidebarCategory - category clicked:", category.id);
-    onCategoryClick(category);
-  };
-
-  const handleSubCategoryClick = (subCategoryId: string, path?: string) => (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Log the path value to debug
-    console.log("SidebarCategory - subcategory clicked:", subCategoryId, "with path:", path);
-    onSubCategoryClick(subCategoryId, path);
+
+    // Leaf nodes in submenus are handled by onSubCategoryClick to scroll.
+    // All other clicks are handled by onCategoryClick for navigation or toggling.
+    if (!hasSubCategories && level > 0) {
+      onSubCategoryClick(category.id, category.path);
+    } else {
+      onCategoryClick(category);
+    }
   };
+
+  const isActive = activeSection === category.id;
+  const paddingLeft = `${1 + level}rem`;
 
   return (
     <li className="mb-1">
       <div
-        className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-200 transition-colors cursor-pointer"
-        onClick={handleCategoryClick}
+        className={`flex items-center pr-4 transition-colors cursor-pointer
+          ${level === 0 ? 'py-3 text-gray-800' : 'py-2 text-gray-700'}
+          hover:bg-gray-200
+          ${isActive && !hasSubCategories ? 'bg-blue-100 text-blue-800 border-r-2 border-blue-500' : ''}
+        `}
+        style={{ paddingLeft }}
+        onClick={handleClick}
         role="button"
         aria-expanded={isExpanded}
       >
-        {category.subCategories ? (
+        {hasSubCategories ? (
           isExpanded ? (
-            <ChevronDown className="h-4 w-4 mr-2" />
+            <ChevronDown className="h-4 w-4 mr-2 shrink-0" />
           ) : (
-            <ChevronRight className="h-4 w-4 mr-2" />
+            <ChevronRight className="h-4 w-4 mr-2 shrink-0" />
           )
         ) : (
-          <span className="w-4 mr-2"></span>
+          <span className="w-4 mr-2 shrink-0" />
         )}
-        <span className="font-medium">{category.name}</span>
+        <span className={level === 0 ? 'font-medium' : ''}>{category.name}</span>
       </div>
-      
-      {category.subCategories && isExpanded && (
-        <ul className="pl-8 bg-gray-50">
-          {category.subCategories.map((subCategory) => {
-            const isActive = activeSection === subCategory.id;
-            return (
-              <li key={subCategory.id}>
-                <div
-                  className={`px-4 py-2 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer ${
-                    isActive ? 'bg-blue-100 text-blue-800 border-r-2 border-blue-500' : ''
-                  }`}
-                  onClick={handleSubCategoryClick(subCategory.id, subCategory.path)}
-                  role="button"
-                >
-                  {subCategory.name}
-                </div>
-              </li>
-            );
-          })}
+
+      {hasSubCategories && isExpanded && (
+        <ul className="bg-gray-50">
+          {category.subCategories.map((subCategory) => (
+            <SidebarCategory
+              key={subCategory.id}
+              category={subCategory}
+              expandedCategories={expandedCategories}
+              onCategoryClick={onCategoryClick}
+              onSubCategoryClick={onSubCategoryClick}
+              activeSection={activeSection}
+              level={level + 1}
+            />
+          ))}
         </ul>
       )}
     </li>

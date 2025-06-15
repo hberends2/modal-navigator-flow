@@ -65,23 +65,22 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ onItemClick, activeSection }) =
 
   const handleCategoryClick = (category: CategoryItem) => {
     console.log("Category clicked:", category);
-    
+
     if (category.path) {
       console.log("Navigating to path:", category.path);
       navigate(category.path);
-      return;
     }
-    
-    if (!category.subCategories) {
+
+    if (category.subCategories && category.subCategories.length > 0) {
+      console.log("Category has subcategories, toggling:", category.id);
+      toggleCategory(category.id);
+    } else if (!category.path) {
       console.log("Opening modal for category:", category.id);
       onItemClick(category.id);
       toast({
         title: "Opening modal",
-        description: `Opening ${category.name} modal`
+        description: `Opening ${category.name} modal`,
       });
-    } else {
-      console.log("Category has subcategories, toggling:", category.id);
-      toggleCategory(category.id);
     }
   };
 

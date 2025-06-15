@@ -1,4 +1,3 @@
-
 import { CategoryItem } from "./SidebarCategory";
 
 // Top-level categories for main navigation (reordered to move Summary below Reports)
@@ -19,17 +18,29 @@ export const mainNavCategories: CategoryItem[] = [
     path: "/revenue",
     subCategories: [
       { id: "occupancy-section", name: "Occupancy" },
-      { id: "adr-section", name: "ADR" },
-      { id: "revpar-section", name: "RevPAR" },
-      { id: "rooms-revenue-section", name: "Rooms Revenue" },
-      { id: "other-operated-revenue-section", name: "Other Operated Revenue" },
-      { id: "total-revenue-section", name: "Total Revenue" },
-      { id: "rooms-expense-section", name: "Rooms Expense" },
-      { id: "other-operated-expense-section", name: "Other Operated Expense" },
-      { id: "undistributed-expenses-section", name: "Undistributed Expense" },
-      { id: "non-operating-expenses-section", name: "Non-Operating Expense" },
-      { id: "total-expense-section", name: "Total Expense" }
-    ]
+      {
+        id: "revenue-group",
+        name: "Revenue",
+        subCategories: [
+          { id: "adr-section", name: "ADR" },
+          { id: "revpar-section", name: "RevPAR" },
+          { id: "rooms-revenue-section", name: "Rooms Revenue" },
+          { id: "other-operated-revenue-section", name: "Other Operated Revenue" },
+          { id: "total-revenue-section", name: "Total Revenue" },
+        ],
+      },
+      {
+        id: "expense-group",
+        name: "Expense",
+        subCategories: [
+          { id: "rooms-expense-section", name: "Rooms Expense" },
+          { id: "other-operated-expense-section", name: "Other Operated Expense" },
+          { id: "undistributed-expenses-section", name: "Undistributed Expense" },
+          { id: "non-operating-expenses-section", name: "Non-Operating Expense" },
+          { id: "total-expense-section", name: "Total Expense" },
+        ],
+      },
+    ],
   },
   {
     id: "reports",

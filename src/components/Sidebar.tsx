@@ -57,29 +57,28 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
 
   const handleCategoryClick = (category: CategoryItem) => {
     console.log("Category clicked:", category);
-    
+
     if (category.path) {
       // If the category has a direct path, navigate to it
       console.log("Navigating to path:", category.path);
       navigate(category.path);
-      return;
     }
-    
-    if (!category.subCategories || category.subCategories.length === 0) {
+
+    if (category.subCategories && category.subCategories.length > 0) {
+      console.log("Category has subcategories, toggling:", category.id);
+      toggleCategory(category.id);
+    } else if (!category.path) {
       // If no subcategories and no path, open the modal
       console.log("Opening modal for category:", category.id);
       onItemClick(category.id);
-      
+
       // Only show toast for modals that actually exist
       if (category.id !== "departmentSelection") {
         toast({
           title: "Opening modal",
-          description: `Opening ${category.name} modal`
+          description: `Opening ${category.name} modal`,
         });
       }
-    } else {
-      console.log("Category has subcategories, toggling:", category.id);
-      toggleCategory(category.id);
     }
   };
 
