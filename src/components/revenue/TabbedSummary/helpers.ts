@@ -1,4 +1,3 @@
-
 import { TabbedSummaryProps } from './types';
 
 export const createHelpers = (props: TabbedSummaryProps) => {
@@ -54,11 +53,23 @@ export const createHelpers = (props: TabbedSummaryProps) => {
     }
   };
 
+  const calculateTotalRevenue = (year: number) => {
+    const totalOtherOperated = calculateTotalOtherOperatedRevenue(year);
+    if (historicalYears.includes(year)) {
+      const roomsRevenue = historicalData.roomsRevenue[year] || 0;
+      return roomsRevenue + totalOtherOperated;
+    } else {
+      const roomsRevenue = props.getForecastRoomsRevenue(year);
+      return roomsRevenue + totalOtherOperated;
+    }
+  };
+
   return {
     getHistoricalOccupiedRooms,
     getForecastOccupiedRooms,
     getHistoricalRevpar,
     calculateForecastRevenue,
-    calculateTotalOtherOperatedRevenue
+    calculateTotalOtherOperatedRevenue,
+    calculateTotalRevenue
   };
 };

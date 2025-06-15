@@ -82,11 +82,10 @@ export const createRevenueMetrics = (
     {
       label: React.createElement('span', { className: 'font-bold' }, 'Total Revenue'),
       data: allYears.map(year => {
-        const isHistorical = historicalYears.includes(year);
         return React.createElement(
           'span',
           { className: 'font-bold' },
-          formatCurrency(props.helpers.calculateTotalRevenue(year, isHistorical))
+          formatCurrency(helpers.calculateTotalRevenue(year))
         );
       })
     }
