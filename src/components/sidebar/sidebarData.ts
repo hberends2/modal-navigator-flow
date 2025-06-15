@@ -26,8 +26,8 @@ export const mainNavCategories: CategoryItem[] = [
       { id: "total-revenue-section", name: "Total Revenue" },
       { id: "rooms-expense-section", name: "Rooms Expense" },
       { id: "other-operated-expense-section", name: "Other Operated Expense" },
-      { id: "undistributed-expense-section", name: "Undistributed Expense" },
-      { id: "non-operating-expense-section", name: "Non-Operating Expense" },
+      { id: "undistributed-expenses-section", name: "Undistributed Expense" },
+      { id: "non-operating-expenses-section", name: "Non-Operating Expense" },
       { id: "total-expense-section", name: "Total Expense" }
     ]
   },
