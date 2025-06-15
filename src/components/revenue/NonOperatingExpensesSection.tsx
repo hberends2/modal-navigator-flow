@@ -36,7 +36,7 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
   };
 
   return (
-    <div id="non-operating-expenses-section">
+    <>
       {/* Non-Operating Expenses Section Header */}
       <MetricRow
         label={<span className="font-bold text-gray-900">Non-Operating</span>}
@@ -70,7 +70,7 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
           formatCurrency(calculateTotalNonOperatingExpenses(year))
         )}
       />
-    </div>
+    </>
   );
 };
 
