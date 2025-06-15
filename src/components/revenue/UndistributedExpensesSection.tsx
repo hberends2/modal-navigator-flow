@@ -6,11 +6,24 @@ interface UndistributedExpensesSectionProps {
   historicalYears: number[];
   forecastYears: number[];
   expenseForecastMethod: string;
-  undistributedExpenseInput: Record<number, string>;
-  handleUndistributedExpenseChange: (year: number, value: string) => void;
-  handleUndistributedExpenseBlur: (year: number, value: string) => void;
+  propertyOperationsExpenseInput: Record<number, string>;
+  handlePropertyOperationsExpenseChange: (year: number, value: string) => void;
+  handlePropertyOperationsExpenseBlur: (year: number, value: string) => void;
+  administrativeGeneralExpenseInput: Record<number, string>;
+  handleAdministrativeGeneralExpenseChange: (year: number, value: string) => void;
+  handleAdministrativeGeneralExpenseBlur: (year: number, value: string) => void;
+  infoTechServicesExpenseInput: Record<number, string>;
+  handleInfoTechServicesExpenseChange: (year: number, value: string) => void;
+  handleInfoTechServicesExpenseBlur: (year: number, value: string) => void;
+  salesMarketingExpenseInput: Record<number, string>;
+  handleSalesMarketingExpenseChange: (year: number, value: string) => void;
+  handleSalesMarketingExpenseBlur: (year: number, value: string) => void;
+  utilitiesExpenseInput: Record<number, string>;
+  handleUtilitiesExpenseChange: (year: number, value: string) => void;
+  handleUtilitiesExpenseBlur: (year: number, value: string) => void;
   formatCurrency: (value: number) => string;
   calculateExpense: (year: number, inputValue: string, expenseType: string) => number;
+  calculateTotalUndistributedExpenses: (year: number) => number;
   historicalExpenseData: any;
   getHistoricalExpenseData: (year: number, expenseType: string) => string;
 }
@@ -19,26 +32,27 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
   historicalYears,
   forecastYears,
   expenseForecastMethod,
-  undistributedExpenseInput,
-  handleUndistributedExpenseChange,
-  handleUndistributedExpenseBlur,
+  propertyOperationsExpenseInput,
+  handlePropertyOperationsExpenseChange,
+  handlePropertyOperationsExpenseBlur,
+  administrativeGeneralExpenseInput,
+  handleAdministrativeGeneralExpenseChange,
+  handleAdministrativeGeneralExpenseBlur,
+  infoTechServicesExpenseInput,
+  handleInfoTechServicesExpenseChange,
+  handleInfoTechServicesExpenseBlur,
+  salesMarketingExpenseInput,
+  handleSalesMarketingExpenseChange,
+  handleSalesMarketingExpenseBlur,
+  utilitiesExpenseInput,
+  handleUtilitiesExpenseChange,
+  handleUtilitiesExpenseBlur,
   formatCurrency,
   calculateExpense,
+  calculateTotalUndistributedExpenses,
   historicalExpenseData,
   getHistoricalExpenseData
 }) => {
-  const calculateTotalUndistributedExpenses = (year: number) => {
-    if (historicalYears.includes(year)) {
-      return (historicalExpenseData.propertyOperations?.[year] || 0) +
-             (historicalExpenseData.administrativeGeneral?.[year] || 0) +
-             (historicalExpenseData.infoTechServices?.[year] || 0) +
-             (historicalExpenseData.salesMarketing?.[year] || 0) +
-             (historicalExpenseData.utilities?.[year] || 0);
-    } else {
-      return calculateExpense(year, undistributedExpenseInput[year], 'undistributed');
-    }
-  };
-
   return (
     <div id="undistributed-expenses-section">
       {/* Undistributed Expenses Section Header */}
@@ -49,15 +63,75 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         isSectionHeader={true}
       />
 
-      {/* Undistributed Expense Input Row */}
+      {/* Property Operations Input Row */}
       <MetricRow
-        label={`Undistributed (${expenseForecastMethod})`}
-        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'undistributed'))}
+        label={`Property Operations (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'propertyOperations'))}
         forecastData={forecastYears.map(() => "")}
         isEditable={true}
-        editableData={undistributedExpenseInput}
-        onEditableChange={handleUndistributedExpenseChange}
-        onEditableBlur={handleUndistributedExpenseBlur}
+        editableData={propertyOperationsExpenseInput}
+        onEditableChange={handlePropertyOperationsExpenseChange}
+        onEditableBlur={handlePropertyOperationsExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+
+      {/* Administrative & General Input Row */}
+      <MetricRow
+        label={`Administrative & General (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'administrativeGeneral'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={administrativeGeneralExpenseInput}
+        onEditableChange={handleAdministrativeGeneralExpenseChange}
+        onEditableBlur={handleAdministrativeGeneralExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+
+      {/* Info Tech Services Input Row */}
+      <MetricRow
+        label={`Info Tech Services (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'infoTechServices'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={infoTechServicesExpenseInput}
+        onEditableChange={handleInfoTechServicesExpenseChange}
+        onEditableBlur={handleInfoTechServicesExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+
+      {/* Sales & Marketing Input Row */}
+      <MetricRow
+        label={`Sales & Marketing (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'salesMarketing'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={salesMarketingExpenseInput}
+        onEditableChange={handleSalesMarketingExpenseChange}
+        onEditableBlur={handleSalesMarketingExpenseBlur}
+        forecastYears={forecastYears}
+        isYoYRow={expenseForecastMethod === "% of Revenue"}
+        isUserInputRow={true}
+        isIndented={true}
+      />
+
+      {/* Utilities Input Row */}
+      <MetricRow
+        label={`Utilities (${expenseForecastMethod})`}
+        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'utilities'))}
+        forecastData={forecastYears.map(() => "")}
+        isEditable={true}
+        editableData={utilitiesExpenseInput}
+        onEditableChange={handleUtilitiesExpenseChange}
+        onEditableBlur={handleUtilitiesExpenseBlur}
         forecastYears={forecastYears}
         isYoYRow={expenseForecastMethod === "% of Revenue"}
         isUserInputRow={true}
