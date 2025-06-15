@@ -115,8 +115,14 @@ export const createExpenseMetrics = (
       })
     },
     {
-      label: "Total Expense",
-      data: allYears.map(year => formatCurrency(calculateTotalExpense(year, historicalYears)))
+      label: React.createElement('span', { className: 'font-bold' }, 'Total Expense'),
+      data: allYears.map(year => 
+        React.createElement(
+          'span',
+          { className: 'font-bold' },
+          formatCurrency(calculateTotalExpense(year, historicalYears))
+        )
+      )
     }
   ];
 };
