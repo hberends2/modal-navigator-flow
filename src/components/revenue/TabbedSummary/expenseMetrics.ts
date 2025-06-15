@@ -42,40 +42,42 @@ const calculateTotalOtherOperatedExpense = (year: number, historicalYears: numbe
   }
 };
 
+const calculateTotalUndistributedExpense = (year: number, historicalYears: number[]) => {
+  if (historicalYears.includes(year)) {
+    return (historicalExpenseData.propertyOperations[year] || 0) +
+           (historicalExpenseData.administrativeGeneral[year] || 0) +
+           (historicalExpenseData.infoTechServices[year] || 0) +
+           (historicalExpenseData.salesMarketing[year] || 0) +
+           (historicalExpenseData.utilities[year] || 0);
+  } else {
+    return calculateForecastExpense(year, 'propertyOperations') +
+           calculateForecastExpense(year, 'administrativeGeneral') +
+           calculateForecastExpense(year, 'infoTechServices') +
+           calculateForecastExpense(year, 'salesMarketing') +
+           calculateForecastExpense(year, 'utilities');
+  }
+};
+
 const calculateTotalExpense = (year: number, historicalYears: number[]) => {
   const roomsExpense = historicalYears.includes(year) 
     ? (historicalExpenseData.rooms[year] || 0)
     : calculateForecastExpense(year, 'rooms');
   const totalOtherOperatedExpense = calculateTotalOtherOperatedExpense(year, historicalYears);
-  const propertyOperations = historicalYears.includes(year) 
-    ? (historicalExpenseData.propertyOperations[year] || 0)
-    : calculateForecastExpense(year, 'propertyOperations');
-  const administrativeGeneral = historicalYears.includes(year) 
-    ? (historicalExpenseData.administrativeGeneral[year] || 0)
-    : calculateForecastExpense(year, 'administrativeGeneral');
-  const infoTechServices = historicalYears.includes(year) 
-    ? (historicalExpenseData.infoTechServices[year] || 0)
-    : calculateForecastExpense(year, 'infoTechServices');
-  const salesMarketing = historicalYears.includes(year) 
-    ? (historicalExpenseData.salesMarketing[year] || 0)
-    : calculateForecastExpense(year, 'salesMarketing');
-  const utilities = historicalYears.includes(year) 
-    ? (historicalExpenseData.utilities[year] || 0)
-    : calculateForecastExpense(year, 'utilities');
+  const totalUndistributedExpense = calculateTotalUndistributedExpense(year, historicalYears);
   const nonOperating = historicalYears.includes(year) 
     ? (historicalExpenseData.nonOperating[year] || 0)
     : calculateForecastExpense(year, 'nonOperating');
   
-  return roomsExpense + totalOtherOperatedExpense + propertyOperations + 
-         administrativeGeneral + infoTechServices + salesMarketing + 
-         utilities + nonOperating;
+  return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpense + nonOperating;
 };
 
 export const createExpenseMetrics = (
   props: TabbedSummaryProps,
   allYears: number[],
   isOtherOperatedExpanded: boolean,
-  setIsOtherOperatedExpanded: (expanded: boolean) => void
+  setIsOtherOperatedExpanded: (expanded: boolean) => void,
+  isUndistributedExpanded: boolean,
+  setIsUndistributedExpanded: (expanded: boolean) => void
 ): MetricRow[] => {
   const { 
     historicalYears, 
@@ -147,6 +149,22 @@ export const createExpenseMetrics = (
       isCollapsible: true
     },
     {
+      label: React.createElement(
+        'div', 
+        { 
+          className: "flex items-center cursor-pointer",
+          onClick: () => setIsUndistributedExpanded(!isUndistributedExpanded)
+        },
+        isUndistributedExpanded ? 
+          React.createElement(ChevronDown, { className: "h-3 w-3 mr-1" }) :
+          React.createElement(ChevronRight, { className: "h-3 w-3 mr-1" }),
+        "Total Undistributed Expense"
+      ),
+      data: allYears.map(year => formatCurrency(calculateTotalUndistributedExpense(year, historicalYears))),
+      isCollapsible: true,
+      isUndistributed: true
+    },
+    {
       label: "Property Operations & Maintenance",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
@@ -154,7 +172,8 @@ export const createExpenseMetrics = (
         } else {
           return formatCurrency(calculateForecastExpense(year, 'propertyOperations'));
         }
-      })
+      }),
+      isUndistributedSubcategory: true
     },
     {
       label: "Administrative & General",
@@ -164,7 +183,8 @@ export const createExpenseMetrics = (
         } else {
           return formatCurrency(calculateForecastExpense(year, 'administrativeGeneral'));
         }
-      })
+      }),
+      isUndistributedSubcategory: true
     },
     {
       label: "Info & Tech Services",
@@ -174,7 +194,8 @@ export const createExpenseMetrics = (
         } else {
           return formatCurrency(calculateForecastExpense(year, 'infoTechServices'));
         }
-      })
+      }),
+      isUndistributedSubcategory: true
     },
     {
       label: "Sales & Marketing",
@@ -184,7 +205,8 @@ export const createExpenseMetrics = (
         } else {
           return formatCurrency(calculateForecastExpense(year, 'salesMarketing'));
         }
-      })
+      }),
+      isUndistributedSubcategory: true
     },
     {
       label: "Utilities",
@@ -194,7 +216,8 @@ export const createExpenseMetrics = (
         } else {
           return formatCurrency(calculateForecastExpense(year, 'utilities'));
         }
-      })
+      }),
+      isUndistributedSubcategory: true
     },
     {
       label: "Non-Operating",
