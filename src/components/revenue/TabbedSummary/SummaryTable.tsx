@@ -110,7 +110,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
     <div className="bg-white rounded-lg shadow-sm border">
       <Table>
         <TableHeader className="sticky top-0 z-20 bg-white">
-          {/* Period Headers - matching main table structure */}
+          {/* Period Headers - matching Valuation table structure exactly */}
           <TableRow className="border-b-2 border-gray-300">
             <TableHead className="w-48 px-2 bg-white sticky left-0 z-30"></TableHead>
             <TableHead className="text-center bg-blue-50 px-1 font-semibold text-sm" colSpan={historicalYears.length}>
@@ -120,7 +120,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({
               Forecast
             </TableHead>
           </TableRow>
-          {/* Year Headers - matching main table structure */}
+          {/* Year Headers - matching Valuation table structure exactly */}
           <TableRow className="border-b border-gray-200">
             <TableHead className="w-48 px-2 bg-white sticky left-0 z-30 font-semibold text-xs">
               Metric
