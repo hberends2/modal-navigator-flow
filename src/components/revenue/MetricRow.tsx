@@ -75,7 +75,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
   };
 
   const getLabelClassName = () => {
-    let baseClass = `px-2 py-1 bg-white sticky left-0 z-10 ${isSectionHeader ? 'font-bold' : ''}`;
+    let baseClass = `px-2 py-1 bg-white sticky left-0 z-10 w-48 ${isSectionHeader ? 'font-bold' : ''}`;
     if (isIndented) {
       baseClass += " pl-6"; // Add left padding for indentation
     }
@@ -85,14 +85,14 @@ const MetricRow: React.FC<MetricRowProps> = ({
   if (isTwoRowMetric) {
     return (
       <TableRow id={id} className={cn(getRowClassName(), className)}>
-        <TableCell className="px-2 py-1 align-top bg-white sticky left-0 z-10">
+        <TableCell className="px-2 py-1 align-top bg-white sticky left-0 z-10 w-48">
           <div className="flex flex-col justify-center h-full space-y-1">
             <div className="text-xs font-medium">{metricText}</div>
             {controls && <div className="flex items-center">{controls}</div>}
           </div>
         </TableCell>
         {historicalData.map((data, index) => (
-          <TableCell key={`hist-${index}`} className="text-center text-xs py-1 min-w-[80px]">
+          <TableCell key={`hist-${index}`} className="text-center text-xs py-1 px-1 min-w-[80px]">
             {data}
           </TableCell>
         ))}
@@ -100,7 +100,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
           const year = forecastYears[index];
           if (isGrowthRow && adrGrowthType === "yearly" && year && handleYearlyAdrChange && handleYearlyAdrBlur && yearlyAdrGrowth) {
             return (
-              <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 min-w-[80px]">
+              <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 px-1 min-w-[80px]">
                 <div className="relative w-16 mx-auto">
                   <Input
                     type="text"
@@ -116,7 +116,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
           }
           if (isEditable && year && onEditableChange && onEditableBlur && editableData) {
             return (
-              <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 min-w-[80px]">
+              <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 px-1 min-w-[80px]">
                 <div className="relative w-16 mx-auto">
                   <Input
                     type="text"
@@ -133,7 +133,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
             );
           }
           return (
-            <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 min-w-[80px]">
+            <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 px-1 min-w-[80px]">
               {data}
             </TableCell>
           );
@@ -148,7 +148,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
         <span className="text-xs">{label}</span>
       </TableCell>
       {historicalData.map((data, index) => (
-        <TableCell key={`hist-${index}`} className="text-center text-xs py-1 min-w-[80px]">
+        <TableCell key={`hist-${index}`} className="text-center text-xs py-1 px-1 min-w-[80px]">
           {data}
         </TableCell>
       ))}
@@ -156,7 +156,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
         const year = forecastYears[index];
         if (isEditable && year && onEditableChange && onEditableBlur && editableData) {
           return (
-            <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 min-w-[80px]">
+            <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 px-1 min-w-[80px]">
               <div className="relative w-16 mx-auto">
                 <Input
                   type="text"
@@ -173,7 +173,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
           );
         }
         return (
-          <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 min-w-[80px]">
+          <TableCell key={`forecast-${index}`} className="text-center text-xs py-1 px-1 min-w-[80px]">
             {data}
           </TableCell>
         );
