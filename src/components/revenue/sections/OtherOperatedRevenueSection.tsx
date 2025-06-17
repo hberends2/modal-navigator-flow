@@ -62,12 +62,15 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
       </tr>
       
       <MetricRow
-        label={<span className="font-bold text-gray-900">Other Operated Revenue</span>}
+        label={<span className="font-bold text-gray-900">Other Revenue</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
       />
 
+      <tr id="food-beverage-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <FoodBeverageSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -94,6 +97,9 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
         isIndented={true}
       />
 
+      <tr id="other-operated-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <OtherOperatedSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -107,6 +113,9 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
         isIndented={true}
       />
 
+      <tr id="miscellaneous-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <MiscellaneousSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -120,6 +129,9 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
         isIndented={true}
       />
 
+      <tr id="allocated-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <AllocatedSection
         roomsKeys={roomsKeys}
         historicalYears={historicalYears}
@@ -134,7 +146,7 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
       />
 
       <MetricRow
-        label={<span className="font-medium">Total Other Operated Revenue</span>}
+        label={<span className="font-medium">Total Other Revenue</span>}
         historicalData={historicalYears.map(year => 
           formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year, true))
         )}

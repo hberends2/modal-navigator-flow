@@ -1,3 +1,4 @@
+
 import { CategoryItem } from "./SidebarCategory";
 
 // Top-level categories for main navigation (reordered to move Summary below Reports)
@@ -25,7 +26,16 @@ export const mainNavCategories: CategoryItem[] = [
           { id: "adr-section", name: "ADR" },
           { id: "revpar-section", name: "RevPAR" },
           { id: "rooms-revenue-section", name: "Rooms Revenue" },
-          { id: "other-operated-revenue-section", name: "Other Operated Revenue" },
+          {
+            id: "other-revenue-group",
+            name: "Other Revenue",
+            subCategories: [
+              { id: "food-beverage-section", name: "Food & Beverage" },
+              { id: "other-operated-section", name: "Other Operated" },
+              { id: "miscellaneous-section", name: "Miscellaneous" },
+              { id: "allocated-section", name: "Allocated" },
+            ],
+          },
           { id: "total-revenue-section", name: "Total Revenue" },
         ],
       },
