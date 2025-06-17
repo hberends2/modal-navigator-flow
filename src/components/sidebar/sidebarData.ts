@@ -44,7 +44,16 @@ export const mainNavCategories: CategoryItem[] = [
         name: "Expense",
         subCategories: [
           { id: "rooms-expense-section", name: "Rooms Expense" },
-          { id: "other-operated-expense-section", name: "Other Operated Expense" },
+          {
+            id: "other-expense-group",
+            name: "Other Expense",
+            subCategories: [
+              { id: "food-beverage-expense-section", name: "Food & Beverage" },
+              { id: "other-operated-expense-section", name: "Other Operated" },
+              { id: "miscellaneous-expense-section", name: "Miscellaneous" },
+              { id: "allocated-expense-section", name: "Allocated" },
+            ],
+          },
           { id: "undistributed-expenses-section", name: "Undistributed Expense" },
           { id: "non-operating-expenses-section", name: "Non-Operating Expense" },
           { id: "total-expense-section", name: "Total Expense" },

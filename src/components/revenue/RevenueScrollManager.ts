@@ -49,7 +49,10 @@ export const useRevenueScrollManager = () => {
       'allocated-section': 'allocated-section',
       'total-revenue-section': 'total-revenue-section',
       'rooms-expense-section': 'rooms-expense-section',
+      'food-beverage-expense-section': 'food-beverage-expense-section',
       'other-operated-expense-section': 'other-operated-expense-section',
+      'miscellaneous-expense-section': 'miscellaneous-expense-section',
+      'allocated-expense-section': 'allocated-expense-section',
       'undistributed-expenses-section': 'undistributed-expenses-section',
       'non-operating-expenses-section': 'non-operating-expenses-section',
       'total-expense-section': 'total-expense-section'
@@ -80,7 +83,10 @@ export const useRevenueScrollManager = () => {
         'allocated-section',
         'total-revenue-section',
         'rooms-expense-section',
+        'food-beverage-expense-section',
         'other-operated-expense-section',
+        'miscellaneous-expense-section',
+        'allocated-expense-section',
         'undistributed-expenses-section',
         'non-operating-expenses-section',
         'total-expense-section'
