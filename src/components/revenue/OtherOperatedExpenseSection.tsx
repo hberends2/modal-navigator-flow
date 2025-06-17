@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "./MetricRow";
 
@@ -79,7 +78,7 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
       </tr>
 
       <MetricRow
-        label={<span className="font-bold text-gray-900">Other Operated Expense</span>}
+        label={<span className="font-bold text-gray-900">Other Expense</span>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
