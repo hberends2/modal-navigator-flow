@@ -291,6 +291,7 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         calculateExpense={calculateExpense}
         historicalExpenseData={historicalExpenseData}
         getHistoricalExpenseData={getHistoricalExpenseData}
+        helpers={helpers}
       />
 
       {/* Total Expense Section */}
