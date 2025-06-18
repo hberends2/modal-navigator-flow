@@ -89,11 +89,7 @@ export const categories: PrimaryCategory[] = [
       {
         id: "resort-fees",
         name: "Resort Fees",
-        lineItems: [
-          { id: "resort-fee-basic", name: "Basic Resort Fee" },
-          { id: "resort-fee-premium", name: "Premium Resort Fee" },
-          { id: "resort-fee-seasonal", name: "Seasonal Resort Fee" }
-        ]
+        lineItems: []
       },
       {
         id: "miscellaneous-income-expense",
