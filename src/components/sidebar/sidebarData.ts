@@ -1,4 +1,3 @@
-
 import { CategoryItem } from "./SidebarCategory";
 
 // Top-level categories for main navigation (reordered to move Summary below Reports)
@@ -65,7 +64,16 @@ export const mainNavCategories: CategoryItem[] = [
               { id: "utilities-expense-section", name: "Utilities" },
             ],
           },
-          { id: "non-operating-expenses-section", name: "Non-Operating Expense" },
+          {
+            id: "non-operating-expense-group",
+            name: "Non-Operating Expense",
+            subCategories: [
+              { id: "management-fees-section", name: "Management Fees" },
+              { id: "real-estate-taxes-section", name: "Real Estate Taxes" },
+              { id: "insurance-section", name: "Insurance" },
+              { id: "other-non-operating-section", name: "Other" },
+            ],
+          },
           { id: "total-expense-section", name: "Total Expense" },
         ],
       },
