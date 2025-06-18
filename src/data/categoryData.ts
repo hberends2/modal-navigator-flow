@@ -1,16 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
 
-// Interfaces for our category data structure
 export interface LineItem {
   id: string;
   name: string;
-  parentId: string; // Reference to parent subcategory
 }
 
 export interface SubCategory {
   id: string;
   name: string;
-  parentId: string; // Reference to parent primary category
   lineItems: LineItem[];
 }
 
@@ -20,271 +16,68 @@ export interface PrimaryCategory {
   subCategories: SubCategory[];
 }
 
-// Initialize mock data for Food & Beverage
 export const categories: PrimaryCategory[] = [
   {
     id: "food-beverage",
     name: "Food & Beverage",
     subCategories: [
       {
-        id: "banquets-catering-av",
-        name: "Banquets & Catering and AV",
-        parentId: "food-beverage",
+        id: "restaurant",
+        name: "Restaurant",
         lineItems: [
-          {
-            id: "audio-visual",
-            name: "Audio Visual",
-            parentId: "banquets-catering-av",
-          },
-          {
-            id: "banquets",
-            name: "Banquets",
-            parentId: "banquets-catering-av",
-          },
-          {
-            id: "catering",
-            name: "Catering",
-            parentId: "banquets-catering-av",
-          }
+          { id: "fine-dining", name: "Fine Dining" },
+          { id: "casual-dining", name: "Casual Dining" },
+          { id: "quick-service", name: "Quick Service" }
         ]
       },
       {
-        id: "kitchen",
-        name: "Kitchen",
-        parentId: "food-beverage",
+        id: "bar-lounge",
+        name: "Bar/Lounge",
         lineItems: [
-          {
-            id: "food-prep",
-            name: "Food Preparation",
-            parentId: "kitchen",
-          },
-          {
-            id: "kitchen-equipment",
-            name: "Kitchen Equipment",
-            parentId: "kitchen",
-          }
+          { id: "cocktail-bar", name: "Cocktail Bar" },
+          { id: "sports-bar", name: "Sports Bar" },
+          { id: "wine-bar", name: "Wine Bar" }
         ]
       },
       {
-        id: "minor-fb",
-        name: "Minor F&B",
-        parentId: "food-beverage",
+        id: "room-service",
+        name: "Room Service",
         lineItems: [
-          {
-            id: "coffee-shop",
-            name: "Coffee Shop",
-            parentId: "minor-fb",
-          },
-          {
-            id: "mini-bar",
-            name: "Mini Bar",
-            parentId: "minor-fb",
-          }
-        ]
-      },
-      {
-        id: "outlets",
-        name: "Outlets",
-        parentId: "food-beverage",
-        lineItems: [
-          {
-            id: "bar",
-            name: "Bar",
-            parentId: "outlets",
-          },
-          {
-            id: "lounge",
-            name: "Lounge",
-            parentId: "outlets",
-          },
-          {
-            id: "restaurant",
-            name: "Restaurant",
-            parentId: "outlets",
-          }
+          { id: "24-hour-service", name: "24-Hour Service" },
+          { id: "limited-hours", name: "Limited Hours" }
         ]
       }
     ]
-  },
-  {
-    id: "resort-fees",
-    name: "Resort Fees",
-    subCategories: []
   },
   {
     id: "other-operated",
     name: "Other Operated",
     subCategories: [
       {
-        id: "casino",
-        name: "Casino",
-        parentId: "other-operated",
+        id: "spa-wellness",
+        name: "Spa & Wellness",
         lineItems: [
-          {
-            id: "casino-ops",
-            name: "Casino",
-            parentId: "casino",
-          }
-        ]
-      },
-      {
-        id: "farms-vineyards",
-        name: "Farms and Vineyards",
-        parentId: "other-operated",
-        lineItems: [
-          {
-            id: "vineyard",
-            name: "Vineyard",
-            parentId: "farms-vineyards",
-          }
-        ]
-      },
-      {
-        id: "golf",
-        name: "Golf",
-        parentId: "other-operated",
-        lineItems: [
-          {
-            id: "golf-ops",
-            name: "Golf",
-            parentId: "golf",
-          },
-          {
-            id: "golf-pro-shop",
-            name: "Golf Pro Shop",
-            parentId: "golf",
-          }
-        ]
-      },
-      {
-        id: "marina",
-        name: "Marina",
-        parentId: "other-operated",
-        lineItems: [
-          {
-            id: "marina-ops",
-            name: "Marina",
-            parentId: "marina",
-          }
-        ]
-      },
-      {
-        id: "membership",
-        name: "Membership",
-        parentId: "other-operated",
-        lineItems: [
-          {
-            id: "membership-services",
-            name: "Membership Services",
-            parentId: "membership",
-          }
-        ]
-      },
-      {
-        id: "minor-operated-departments",
-        name: "Minor Operated Departments",
-        parentId: "other-operated",
-        lineItems: [
-          {
-            id: "other-minor-ops",
-            name: "Other Minor Ops",
-            parentId: "minor-operated-departments",
-          },
-          {
-            id: "telecommunications",
-            name: "Telecommunications",
-            parentId: "minor-operated-departments",
-          }
-        ]
-      },
-      {
-        id: "parking-transportation",
-        name: "Parking and Transportation",
-        parentId: "other-operated",
-        lineItems: [
-          {
-            id: "parking-garage",
-            name: "Parking/Garage",
-            parentId: "parking-transportation",
-          },
-          {
-            id: "transportation",
-            name: "Transportation",
-            parentId: "parking-transportation",
-          }
-        ]
-      },
-      {
-        id: "racquet-court-sports",
-        name: "Racquet and Court Sports",
-        parentId: "other-operated",
-        lineItems: [
-          {
-            id: "tennis-pickleball",
-            name: "Tennis and Pickleball",
-            parentId: "racquet-court-sports",
-          }
+          { id: "full-service-spa", name: "Full Service Spa" },
+          { id: "fitness-center", name: "Fitness Center" },
+          { id: "wellness-programs", name: "Wellness Programs" }
         ]
       },
       {
         id: "recreation",
         name: "Recreation",
-        parentId: "other-operated",
         lineItems: [
-          {
-            id: "activity-center",
-            name: "Activity Center",
-            parentId: "recreation",
-          },
-          {
-            id: "central-recreation",
-            name: "Central Recreation",
-            parentId: "recreation",
-          },
-          {
-            id: "kids-club",
-            name: "Kids Club",
-            parentId: "recreation",
-          }
+          { id: "golf-course", name: "Golf Course" },
+          { id: "tennis-courts", name: "Tennis Courts" },
+          { id: "swimming-pools", name: "Swimming Pools" }
         ]
       },
       {
         id: "retail",
         name: "Retail",
-        parentId: "other-operated",
         lineItems: [
-          {
-            id: "gift-shop",
-            name: "Gift Shop",
-            parentId: "retail",
-          }
-        ]
-      },
-      {
-        id: "spa-fitness",
-        name: "Spa and Fitness",
-        parentId: "other-operated",
-        lineItems: [
-          {
-            id: "fitness-center",
-            name: "Fitness Center",
-            parentId: "spa-fitness",
-          },
-          {
-            id: "health-club",
-            name: "Health Club",
-            parentId: "spa-fitness",
-          },
-          {
-            id: "salon",
-            name: "Salon",
-            parentId: "spa-fitness",
-          },
-          {
-            id: "spa",
-            name: "Spa",
-            parentId: "spa-fitness",
-          }
+          { id: "gift-shop", name: "Gift Shop" },
+          { id: "convenience-store", name: "Convenience Store" },
+          { id: "boutique", name: "Boutique" }
         ]
       }
     ]
@@ -294,15 +87,21 @@ export const categories: PrimaryCategory[] = [
     name: "Miscellaneous",
     subCategories: [
       {
-        id: "misc-income-expense",
-        name: "Miscellaneous Income/Expense",
-        parentId: "miscellaneous",
+        id: "resort-fees",
+        name: "Resort Fees",
         lineItems: [
-          {
-            id: "misc-income-expense-item",
-            name: "Miscellaneous Income/Expense",
-            parentId: "misc-income-expense",
-          }
+          { id: "resort-fee-basic", name: "Basic Resort Fee" },
+          { id: "resort-fee-premium", name: "Premium Resort Fee" },
+          { id: "resort-fee-seasonal", name: "Seasonal Resort Fee" }
+        ]
+      },
+      {
+        id: "miscellaneous-income-expense",
+        name: "Miscellaneous Income/Expense",
+        lineItems: [
+          { id: "parking-fees", name: "Parking Fees" },
+          { id: "service-charges", name: "Service Charges" },
+          { id: "other-income", name: "Other Income" }
         ]
       }
     ]
@@ -312,30 +111,30 @@ export const categories: PrimaryCategory[] = [
     name: "Allocated",
     subCategories: [
       {
-        id: "allocated-expenses",
-        name: "Allocated",
-        parentId: "allocated",
+        id: "property-operations",
+        name: "Property Operations & Maintenance",
         lineItems: [
-          {
-            id: "employee-dining",
-            name: "Employee Dining",
-            parentId: "allocated-expenses",
-          },
-          {
-            id: "in-house-laundry",
-            name: "In House Laundry",
-            parentId: "allocated-expenses",
-          },
-          {
-            id: "other-allocated",
-            name: "Other Allocated",
-            parentId: "allocated-expenses",
-          },
-          {
-            id: "payroll-benefits",
-            name: "Payroll Tax and Employee Benefits",
-            parentId: "allocated-expenses",
-          }
+          { id: "maintenance-repairs", name: "Maintenance & Repairs" },
+          { id: "housekeeping", name: "Housekeeping" },
+          { id: "grounds-maintenance", name: "Grounds Maintenance" }
+        ]
+      },
+      {
+        id: "administrative-general",
+        name: "Administrative & General",
+        lineItems: [
+          { id: "front-office", name: "Front Office" },
+          { id: "accounting", name: "Accounting" },
+          { id: "human-resources", name: "Human Resources" }
+        ]
+      },
+      {
+        id: "sales-marketing",
+        name: "Sales & Marketing",
+        lineItems: [
+          { id: "advertising", name: "Advertising" },
+          { id: "promotions", name: "Promotions" },
+          { id: "sales-team", name: "Sales Team" }
         ]
       }
     ]
@@ -347,70 +146,39 @@ export const categories: PrimaryCategory[] = [
   }
 ];
 
-// Helper functions for category operations
-export const generateId = (): string => {
-  return uuidv4();
+// Helper function to get all descendant IDs (subcategories and line items) for a given category
+export const getAllDescendantIds = (categoryId: string): string[] => {
+  const category = categories.find(cat => cat.id === categoryId);
+  if (!category) return [];
+  
+  const descendants: string[] = [];
+  
+  category.subCategories.forEach(subCat => {
+    descendants.push(subCat.id);
+    subCat.lineItems.forEach(lineItem => {
+      descendants.push(lineItem.id);
+    });
+  });
+  
+  return descendants;
 };
 
-export const getAllDescendantIds = (
-  categoryId: string, 
-  categories: PrimaryCategory[]
-): string[] => {
-  // Find the primary category
-  const primaryCategory = categories.find(cat => cat.id === categoryId);
-  if (primaryCategory) {
-    // Get all subcategory IDs
-    const subCategoryIds = primaryCategory.subCategories.map(sub => sub.id);
-    
-    // Get all line item IDs
-    const lineItemIds = primaryCategory.subCategories.flatMap(sub => 
-      sub.lineItems.map(item => item.id)
-    );
-    
-    // Return all IDs
-    return [categoryId, ...subCategoryIds, ...lineItemIds];
-  }
-  
-  // Check if it's a subcategory
-  for (const primary of categories) {
-    const subCategory = primary.subCategories.find(sub => sub.id === categoryId);
-    if (subCategory) {
-      // Get all line item IDs
-      const lineItemIds = subCategory.lineItems.map(item => item.id);
-      
-      // Return all IDs
-      return [categoryId, ...lineItemIds];
-    }
-  }
-  
-  // If it's just a line item, return only its ID
-  return [categoryId];
-};
-
-export const getParentIds = (
-  itemId: string, 
-  categories: PrimaryCategory[]
-): string[] => {
-  // Check if it's a line item
-  for (const primary of categories) {
-    for (const sub of primary.subCategories) {
-      const lineItem = sub.lineItems.find(item => item.id === itemId);
-      if (lineItem) {
-        // Return subcategory and primary category IDs
-        return [sub.id, primary.id];
+// Helper function to get parent IDs for a given item ID
+export const getParentIds = (itemId: string): string[] => {
+  for (const category of categories) {
+    for (const subCategory of category.subCategories) {
+      for (const lineItem of subCategory.lineItems) {
+        if (lineItem.id === itemId) {
+          return [subCategory.id, category.id];
+        }
+      }
+      if (subCategory.id === itemId) {
+        return [category.id];
       }
     }
-  }
-  
-  // Check if it's a subcategory
-  for (const primary of categories) {
-    const subCategory = primary.subCategories.find(sub => sub.id === itemId);
-    if (subCategory) {
-      // Return primary category ID
-      return [primary.id];
+    if (category.id === itemId) {
+      return [];
     }
   }
-  
-  // If it's a primary category, return empty array
   return [];
 };
