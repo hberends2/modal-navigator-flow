@@ -53,6 +53,11 @@ export const useRevenueScrollManager = () => {
       'other-operated-expense-section': 'other-operated-expense-item-section',
       'miscellaneous-expense-section': 'miscellaneous-expense-section',
       'allocated-expense-section': 'allocated-expense-section',
+      'property-operations-expense-section': 'property-operations-expense-section',
+      'administrative-general-expense-section': 'administrative-general-expense-section',
+      'info-tech-services-expense-section': 'info-tech-services-expense-section',
+      'sales-marketing-expense-section': 'sales-marketing-expense-section',
+      'utilities-expense-section': 'utilities-expense-section',
       'undistributed-expenses-section': 'undistributed-expenses-section',
       'non-operating-expenses-section': 'non-operating-expenses-section',
       'total-expense-section': 'total-expense-section'
@@ -87,6 +92,11 @@ export const useRevenueScrollManager = () => {
         'other-operated-expense-item-section',
         'miscellaneous-expense-section',
         'allocated-expense-section',
+        'property-operations-expense-section',
+        'administrative-general-expense-section',
+        'info-tech-services-expense-section',
+        'sales-marketing-expense-section',
+        'utilities-expense-section',
         'undistributed-expenses-section',
         'non-operating-expenses-section',
         'total-expense-section'

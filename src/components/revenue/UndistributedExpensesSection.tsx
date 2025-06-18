@@ -76,6 +76,9 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         isSectionHeader={true}
       />
 
+      <tr id="property-operations-expense-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <ExpenseSubSection
         title="Property Operations & Maintenance"
         expenseType="propertyOperations"
@@ -85,6 +88,9 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         {...commonProps}
       />
 
+      <tr id="administrative-general-expense-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <ExpenseSubSection
         title="Administrative & General"
         expenseType="administrativeGeneral"
@@ -94,6 +100,9 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         {...commonProps}
       />
 
+      <tr id="info-tech-services-expense-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <ExpenseSubSection
         title="Info & Tech Services"
         expenseType="infoTechServices"
@@ -103,6 +112,9 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         {...commonProps}
       />
 
+      <tr id="sales-marketing-expense-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <ExpenseSubSection
         title="Sales & Marketing"
         expenseType="salesMarketing"
@@ -112,6 +124,9 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
         {...commonProps}
       />
 
+      <tr id="utilities-expense-section" className="scroll-mt-4">
+        <td colSpan={10} className="h-0 p-0"></td>
+      </tr>
       <ExpenseSubSection
         title="Utilities"
         expenseType="utilities"

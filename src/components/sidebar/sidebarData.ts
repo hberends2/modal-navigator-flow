@@ -54,7 +54,17 @@ export const mainNavCategories: CategoryItem[] = [
               { id: "allocated-expense-section", name: "Allocated" },
             ],
           },
-          { id: "undistributed-expenses-section", name: "Undistributed Expense" },
+          {
+            id: "undistributed-expense-group",
+            name: "Undistributed Expense",
+            subCategories: [
+              { id: "property-operations-expense-section", name: "Property Operations & Maintenance" },
+              { id: "administrative-general-expense-section", name: "Administrative & General" },
+              { id: "info-tech-services-expense-section", name: "Info & Tech Services" },
+              { id: "sales-marketing-expense-section", name: "Sales & Marketing" },
+              { id: "utilities-expense-section", name: "Utilities" },
+            ],
+          },
           { id: "non-operating-expenses-section", name: "Non-Operating Expense" },
           { id: "total-expense-section", name: "Total Expense" },
         ],
