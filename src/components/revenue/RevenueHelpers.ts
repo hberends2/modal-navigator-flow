@@ -16,20 +16,35 @@ export const createRevenueHelpers = (revenueCalculations: any, historicalData: a
   const getForecastRoomsRevenueForYear = (year: number) => {
     const { adrGrowthType, flatAdrGrowth, yearlyAdrGrowth } = revenueCalculations;
   
-    let adr;
+    // Calculate the historical ADR from the previous year
+    const previousYear = year - 1;
+    const previousYearRoomsRevenue = historicalData.roomsRevenue[previousYear] || 0;
+    const previousYearOccupancy = historicalData.occupancy[previousYear] || 0;
+    const previousYearAvailableRooms = getAvailableRooms(previousYear);
+    const previousYearOccupiedRooms = (previousYearOccupancy / 100) * previousYearAvailableRooms;
+    
+    // Calculate historical ADR properly: rooms revenue / occupied rooms
+    const historicalADR = previousYearOccupiedRooms > 0 ? previousYearRoomsRevenue / previousYearOccupiedRooms : 0;
+  
+    // Apply growth rate to the ADR, not to total revenue
+    let forecastADR;
     if (adrGrowthType === "flat") {
-      adr = historicalData.roomsRevenue[year - 1] * (1 + (parseFloat(flatAdrGrowth) / 100));
+      const growthRate = parseFloat(flatAdrGrowth) / 100 || 0;
+      forecastADR = historicalADR * (1 + growthRate);
     } else {
-      adr = historicalData.roomsRevenue[year - 1] * (1 + (parseFloat(yearlyAdrGrowth[year]) / 100));
+      const growthRate = parseFloat(yearlyAdrGrowth[year]) / 100 || 0;
+      forecastADR = historicalADR * (1 + growthRate);
     }
   
+    // Calculate forecast occupied rooms
     const availableRooms = getAvailableRooms(year);
     const occupancyValue = revenueCalculations.occupancyForecastMethod === "Occupancy"
       ? parseFloat(revenueCalculations.occupancyForecast[year] || "0")
       : calculateOccupancyFromYoYForYear(year);
     const occupiedRooms = (occupancyValue / 100) * availableRooms;
   
-    return adr * occupiedRooms;
+    // Calculate rooms revenue: ADR × occupied rooms
+    return forecastADR * occupiedRooms;
   };
 
   const getHistoricalADRForYearCalculated = (year: number) => {
