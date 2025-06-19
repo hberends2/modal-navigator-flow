@@ -27,13 +27,13 @@ const EBITDASection: React.FC<EBITDASectionProps> = ({
 
       {/* EBITDA Row */}
       <MetricRow
-        label={<span className="font-bold text-base">EBITDA</span>}
+        label={<span className="font-bold text-sm">EBITDA</span>}
         historicalData={historicalYears.map(year => {
           const totalRevenue = helpers.calculateTotalRevenue(year, true);
           const totalExpense = getTotalHistoricalExpense(year);
           const ebitda = totalRevenue - totalExpense;
           return (
-            <span className="font-bold text-base">
+            <span className="font-bold text-sm">
               {formatCurrency(ebitda)}
             </span>
           );
@@ -43,7 +43,7 @@ const EBITDASection: React.FC<EBITDASectionProps> = ({
           const totalExpense = calculateTotalExpense(year);
           const ebitda = totalRevenue - totalExpense;
           return (
-            <span className="font-bold text-base">
+            <span className="font-bold text-sm">
               {formatCurrency(ebitda)}
             </span>
           );

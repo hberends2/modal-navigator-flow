@@ -43,7 +43,7 @@ const NetOperatingIncomeSection: React.FC<NetOperatingIncomeSectionProps> = ({
 
       {/* Net Operating Income Row */}
       <MetricRow
-        label={<span className="font-bold text-base">Net Operating Income</span>}
+        label={<span className="font-bold text-sm">Net Operating Income</span>}
         historicalData={historicalYears.map(year => {
           const totalRevenue = helpers.calculateTotalRevenue(year, true);
           const totalExpense = getTotalHistoricalExpense(year);
@@ -51,7 +51,7 @@ const NetOperatingIncomeSection: React.FC<NetOperatingIncomeSectionProps> = ({
           const reserve = getReserveForReplacement(year, true);
           const noi = ebitda - reserve;
           return (
-            <span className="font-bold text-base">
+            <span className="font-bold text-sm">
               {formatCurrency(noi)}
             </span>
           );
@@ -63,7 +63,7 @@ const NetOperatingIncomeSection: React.FC<NetOperatingIncomeSectionProps> = ({
           const reserve = getReserveForReplacement(year, false);
           const noi = ebitda - reserve;
           return (
-            <span className="font-bold text-base">
+            <span className="font-bold text-sm">
               {formatCurrency(noi)}
             </span>
           );

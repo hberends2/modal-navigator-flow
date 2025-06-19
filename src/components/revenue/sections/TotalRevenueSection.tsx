@@ -23,14 +23,14 @@ const TotalRevenueSection: React.FC<TotalRevenueSectionProps> = ({
       </tr>
 
       <MetricRow
-        label={<span className="font-bold text-base">Total Revenue</span>}
+        label={<span className="font-bold text-sm">Total Revenue</span>}
         historicalData={historicalYears.map(year => (
-          <span className="font-bold text-base">
+          <span className="font-bold text-sm">
             {formatCurrency(helpers.calculateTotalRevenue(year, true))}
           </span>
         ))}
         forecastData={forecastYears.map(year => (
-          <span className="font-bold text-base">
+          <span className="font-bold text-sm">
             {formatCurrency(helpers.calculateTotalRevenue(year, false))}
           </span>
         ))}
