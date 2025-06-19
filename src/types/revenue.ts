@@ -75,9 +75,19 @@ export interface RevenueCalculationState {
   utilitiesExpenseInput: Record<number, string>;
   handleUtilitiesExpenseChange: (year: number, value: string) => void;
   handleUtilitiesExpenseBlur: (year: number, value: string) => void;
-  nonOperatingExpenseInput: Record<number, string>;
-  handleNonOperatingExpenseChange: (year: number, value: string) => void;
-  handleNonOperatingExpenseBlur: (year: number, value: string) => void;
+  // Individual non-operating expense inputs
+  managementFeesExpenseInput: Record<number, string>;
+  handleManagementFeesExpenseChange: (year: number, value: string) => void;
+  handleManagementFeesExpenseBlur: (year: number, value: string) => void;
+  realEstateTaxesExpenseInput: Record<number, string>;
+  handleRealEstateTaxesExpenseChange: (year: number, value: string) => void;
+  handleRealEstateTaxesExpenseBlur: (year: number, value: string) => void;
+  insuranceExpenseInput: Record<number, string>;
+  handleInsuranceExpenseChange: (year: number, value: string) => void;
+  handleInsuranceExpenseBlur: (year: number, value: string) => void;
+  otherNonOpExpenseInput: Record<number, string>;
+  handleOtherNonOpExpenseChange: (year: number, value: string) => void;
+  handleOtherNonOpExpenseBlur: (year: number, value: string) => void;
   reserveForReplacementInput: Record<number, string>;
   handleReserveForReplacementChange: (year: number, value: string) => void;
   handleReserveForReplacementBlur: (year: number, value: string) => void;

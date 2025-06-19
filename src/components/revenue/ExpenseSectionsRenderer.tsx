@@ -46,9 +46,19 @@ interface ExpenseSectionsRendererProps {
   utilitiesExpenseInput: Record<number, string>;
   handleUtilitiesExpenseChange: (year: number, value: string) => void;
   handleUtilitiesExpenseBlur: (year: number, value: string) => void;
-  nonOperatingExpenseInput: Record<number, string>;
-  handleNonOperatingExpenseChange: (year: number, value: string) => void;
-  handleNonOperatingExpenseBlur: (year: number, value: string) => void;
+  // Individual non-operating expense inputs
+  managementFeesExpenseInput: Record<number, string>;
+  handleManagementFeesExpenseChange: (year: number, value: string) => void;
+  handleManagementFeesExpenseBlur: (year: number, value: string) => void;
+  realEstateTaxesExpenseInput: Record<number, string>;
+  handleRealEstateTaxesExpenseChange: (year: number, value: string) => void;
+  handleRealEstateTaxesExpenseBlur: (year: number, value: string) => void;
+  insuranceExpenseInput: Record<number, string>;
+  handleInsuranceExpenseChange: (year: number, value: string) => void;
+  handleInsuranceExpenseBlur: (year: number, value: string) => void;
+  otherNonOpExpenseInput: Record<number, string>;
+  handleOtherNonOpExpenseChange: (year: number, value: string) => void;
+  handleOtherNonOpExpenseBlur: (year: number, value: string) => void;
   reserveForReplacementInput: Record<number, string>;
   handleReserveForReplacementChange: (year: number, value: string) => void;
   handleReserveForReplacementBlur: (year: number, value: string) => void;
@@ -91,9 +101,18 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = ({
   utilitiesExpenseInput,
   handleUtilitiesExpenseChange,
   handleUtilitiesExpenseBlur,
-  nonOperatingExpenseInput,
-  handleNonOperatingExpenseChange,
-  handleNonOperatingExpenseBlur,
+  managementFeesExpenseInput,
+  handleManagementFeesExpenseChange,
+  handleManagementFeesExpenseBlur,
+  realEstateTaxesExpenseInput,
+  handleRealEstateTaxesExpenseChange,
+  handleRealEstateTaxesExpenseBlur,
+  insuranceExpenseInput,
+  handleInsuranceExpenseChange,
+  handleInsuranceExpenseBlur,
+  otherNonOpExpenseInput,
+  handleOtherNonOpExpenseChange,
+  handleOtherNonOpExpenseBlur,
   reserveForReplacementInput,
   handleReserveForReplacementChange,
   handleReserveForReplacementBlur,
@@ -196,13 +215,22 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = ({
         historicalYears={historicalYears}
         forecastYears={forecastYears}
         expenseForecastMethod={expenseForecastMethod}
-        nonOperatingExpenseInput={nonOperatingExpenseInput}
-        handleNonOperatingExpenseChange={handleNonOperatingExpenseChange}
-        handleNonOperatingExpenseBlur={handleNonOperatingExpenseBlur}
+        managementFeesExpenseInput={managementFeesExpenseInput}
+        handleManagementFeesExpenseChange={handleManagementFeesExpenseChange}
+        handleManagementFeesExpenseBlur={handleManagementFeesExpenseBlur}
+        realEstateTaxesExpenseInput={realEstateTaxesExpenseInput}
+        handleRealEstateTaxesExpenseChange={handleRealEstateTaxesExpenseChange}
+        handleRealEstateTaxesExpenseBlur={handleRealEstateTaxesExpenseBlur}
+        insuranceExpenseInput={insuranceExpenseInput}
+        handleInsuranceExpenseChange={handleInsuranceExpenseChange}
+        handleInsuranceExpenseBlur={handleInsuranceExpenseBlur}
+        otherNonOpExpenseInput={otherNonOpExpenseInput}
+        handleOtherNonOpExpenseChange={handleOtherNonOpExpenseChange}
+        handleOtherNonOpExpenseBlur={handleOtherNonOpExpenseBlur}
         formatCurrency={formatCurrency}
-        calculateExpense={calculations.calculateExpense}
+        calculateNonOpExpense={calculations.calculateNonOpExpense}
         historicalExpenseData={historicalExpenseData}
-        getHistoricalExpenseData={calculations.getHistoricalExpenseData}
+        getHistoricalNonOpExpenseData={calculations.getHistoricalNonOpExpenseData}
         helpers={helpers}
       />
 

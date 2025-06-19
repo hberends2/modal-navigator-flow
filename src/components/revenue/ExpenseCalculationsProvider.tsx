@@ -30,7 +30,11 @@ interface ExpenseCalculationsProviderProps {
   infoTechServicesExpenseInput: Record<number, string>;
   salesMarketingExpenseInput: Record<number, string>;
   utilitiesExpenseInput: Record<number, string>;
-  nonOperatingExpenseInput: Record<number, string>;
+  // Individual non-operating expense inputs
+  managementFeesExpenseInput: Record<number, string>;
+  realEstateTaxesExpenseInput: Record<number, string>;
+  insuranceExpenseInput: Record<number, string>;
+  otherNonOpExpenseInput: Record<number, string>;
 }
 
 export const ExpenseCalculationsProvider: React.FC<ExpenseCalculationsProviderProps> = ({
@@ -48,7 +52,10 @@ export const ExpenseCalculationsProvider: React.FC<ExpenseCalculationsProviderPr
   infoTechServicesExpenseInput,
   salesMarketingExpenseInput,
   utilitiesExpenseInput,
-  nonOperatingExpenseInput
+  managementFeesExpenseInput,
+  realEstateTaxesExpenseInput,
+  insuranceExpenseInput,
+  otherNonOpExpenseInput
 }) => {
   const { getFinancialSummary, calculateAndSaveFinancialSummary } = useDatabase();
 
@@ -72,7 +79,12 @@ export const ExpenseCalculationsProvider: React.FC<ExpenseCalculationsProviderPr
       salesMarketingExpenseInput,
       utilitiesExpenseInput
     });
-    const totalNonOperatingExpenses = calculations.calculateTotalNonOperatingExpenses(year, historicalYears, nonOperatingExpenseInput);
+    const totalNonOperatingExpenses = calculations.calculateTotalNonOperatingExpenses(year, historicalYears, {
+      managementFeesExpenseInput,
+      realEstateTaxesExpenseInput,
+      insuranceExpenseInput,
+      otherNonOpExpenseInput
+    });
     
     return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpenses + totalNonOperatingExpenses;
   };
@@ -87,7 +99,12 @@ export const ExpenseCalculationsProvider: React.FC<ExpenseCalculationsProviderPr
              salesMarketingExpenseInput,
              utilitiesExpenseInput
            }) +
-           (historicalExpenseData.nonOperating[year] || 0);
+           calculations.calculateTotalNonOperatingExpenses(year, historicalYears, {
+             managementFeesExpenseInput,
+             realEstateTaxesExpenseInput,
+             insuranceExpenseInput,
+             otherNonOpExpenseInput
+           });
   };
 
   const calculateGrossOperatingProfit = (year: number) => {
