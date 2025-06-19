@@ -1,4 +1,3 @@
-
 export const createExpenseCalculations = (
   historicalExpenseData: any,
   expenseForecastMethod: string,
@@ -37,12 +36,21 @@ export const createExpenseCalculations = (
     miscellaneousExpenseInput: Record<number, string>;
     allocatedExpenseInput: Record<number, string>;
   }) => {
-    const fbExpense = calculateExpense(year, expenseInputs.fbExpenseInput[year], 'fb');
-    const otherOperatedExpense = calculateExpense(year, expenseInputs.otherOperatedExpenseInput[year], 'otherOperated');
-    const miscellaneousExpense = calculateExpense(year, expenseInputs.miscellaneousExpenseInput[year], 'miscellaneous');
-    const allocatedExpense = calculateExpense(year, expenseInputs.allocatedExpenseInput[year], 'allocated');
-    
-    return fbExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
+    // Check if this is a historical year - if so, use historical data directly
+    if (historicalExpenseData.fb[year] !== undefined) {
+      return (historicalExpenseData.fb[year] || 0) +
+             (historicalExpenseData.otherOperated[year] || 0) +
+             (historicalExpenseData.miscellaneous[year] || 0) +
+             (historicalExpenseData.allocated[year] || 0);
+    } else {
+      // For forecast years, calculate from inputs
+      const fbExpense = calculateExpense(year, expenseInputs.fbExpenseInput[year], 'fb');
+      const otherOperatedExpense = calculateExpense(year, expenseInputs.otherOperatedExpenseInput[year], 'otherOperated');
+      const miscellaneousExpense = calculateExpense(year, expenseInputs.miscellaneousExpenseInput[year], 'miscellaneous');
+      const allocatedExpense = calculateExpense(year, expenseInputs.allocatedExpenseInput[year], 'allocated');
+      
+      return fbExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
+    }
   };
 
   const calculateTotalUndistributedExpenses = (year: number, historicalYears: number[], expenseInputs: {
