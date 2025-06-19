@@ -1,4 +1,3 @@
-
 import React from "react";
 import ExpenseSection from "../ExpenseSection";
 import { CalculationHelpers } from "../RevenueTableHelpers";
@@ -38,9 +37,19 @@ interface ExpenseSectionContainerProps {
   utilitiesExpenseInput: Record<number, string>;
   handleUtilitiesExpenseChange: (year: number, value: string) => void;
   handleUtilitiesExpenseBlur: (year: number, value: string) => void;
-  nonOperatingExpenseInput: Record<number, string>;
-  handleNonOperatingExpenseChange: (year: number, value: string) => void;
-  handleNonOperatingExpenseBlur: (year: number, value: string) => void;
+  // Individual non-operating expense inputs
+  managementFeesExpenseInput: Record<number, string>;
+  handleManagementFeesExpenseChange: (year: number, value: string) => void;
+  handleManagementFeesExpenseBlur: (year: number, value: string) => void;
+  realEstateTaxesExpenseInput: Record<number, string>;
+  handleRealEstateTaxesExpenseChange: (year: number, value: string) => void;
+  handleRealEstateTaxesExpenseBlur: (year: number, value: string) => void;
+  insuranceExpenseInput: Record<number, string>;
+  handleInsuranceExpenseChange: (year: number, value: string) => void;
+  handleInsuranceExpenseBlur: (year: number, value: string) => void;
+  otherNonOpExpenseInput: Record<number, string>;
+  handleOtherNonOpExpenseChange: (year: number, value: string) => void;
+  handleOtherNonOpExpenseBlur: (year: number, value: string) => void;
   reserveForReplacementInput: Record<number, string>;
   handleReserveForReplacementChange: (year: number, value: string) => void;
   handleReserveForReplacementBlur: (year: number, value: string) => void;
@@ -86,9 +95,18 @@ const ExpenseSectionContainer: React.FC<ExpenseSectionContainerProps> = (props) 
       utilitiesExpenseInput={props.utilitiesExpenseInput}
       handleUtilitiesExpenseChange={props.handleUtilitiesExpenseChange}
       handleUtilitiesExpenseBlur={props.handleUtilitiesExpenseBlur}
-      nonOperatingExpenseInput={props.nonOperatingExpenseInput}
-      handleNonOperatingExpenseChange={props.handleNonOperatingExpenseChange}
-      handleNonOperatingExpenseBlur={props.handleNonOperatingExpenseBlur}
+      managementFeesExpenseInput={props.managementFeesExpenseInput}
+      handleManagementFeesExpenseChange={props.handleManagementFeesExpenseChange}
+      handleManagementFeesExpenseBlur={props.handleManagementFeesExpenseBlur}
+      realEstateTaxesExpenseInput={props.realEstateTaxesExpenseInput}
+      handleRealEstateTaxesExpenseChange={props.handleRealEstateTaxesExpenseChange}
+      handleRealEstateTaxesExpenseBlur={props.handleRealEstateTaxesExpenseBlur}
+      insuranceExpenseInput={props.insuranceExpenseInput}
+      handleInsuranceExpenseChange={props.handleInsuranceExpenseChange}
+      handleInsuranceExpenseBlur={props.handleInsuranceExpenseBlur}
+      otherNonOpExpenseInput={props.otherNonOpExpenseInput}
+      handleOtherNonOpExpenseChange={props.handleOtherNonOpExpenseChange}
+      handleOtherNonOpExpenseBlur={props.handleOtherNonOpExpenseBlur}
       reserveForReplacementInput={props.reserveForReplacementInput}
       handleReserveForReplacementChange={props.handleReserveForReplacementChange}
       handleReserveForReplacementBlur={props.handleReserveForReplacementBlur}
