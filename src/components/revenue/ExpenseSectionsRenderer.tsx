@@ -1,3 +1,4 @@
+
 import React from "react";
 import RoomsExpenseSection from "./RoomsExpenseSection";
 import OtherOperatedExpenseSection from "./OtherOperatedExpenseSection";
@@ -5,6 +6,7 @@ import UndistributedExpensesSection from "./UndistributedExpensesSection";
 import NonOperatingExpensesSection from "./NonOperatingExpensesSection";
 import TotalExpenseSection from "./TotalExpenseSection";
 import GrossOperatingProfitSection from "./GrossOperatingProfitSection";
+import EBITDASection from "./EBITDASection";
 import { historicalExpenseData } from "./ExpenseData";
 import { useExpenseCalculations } from "./ExpenseCalculationsProvider";
 
@@ -114,7 +116,6 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = ({
         helpers={helpers}
       />
 
-      {/* Other Operated Expense Section */}
       <OtherOperatedExpenseSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
@@ -145,7 +146,6 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = ({
         helpers={helpers}
       />
 
-      {/* Undistributed Expenses Section */}
       <UndistributedExpensesSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
@@ -178,14 +178,12 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = ({
         getHistoricalExpenseData={calculations.getHistoricalExpenseData}
       />
 
-      {/* Gross Operating Profit Row */}
       <GrossOperatingProfitSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
         formatCurrency={formatCurrency}
       />
 
-      {/* Non-Operating Expenses Section */}
       <NonOperatingExpensesSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
@@ -200,13 +198,20 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = ({
         helpers={helpers}
       />
 
-      {/* Total Expense Section */}
       <TotalExpenseSection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
         formatCurrency={formatCurrency}
         calculateTotalExpense={calculateTotalExpense}
         getTotalHistoricalExpense={getTotalHistoricalExpense}
+      />
+
+      {/* EBITDA Section - at the very bottom */}
+      <EBITDASection
+        historicalYears={historicalYears}
+        forecastYears={forecastYears}
+        formatCurrency={formatCurrency}
+        helpers={helpers}
       />
     </>
   );
