@@ -7,7 +7,10 @@ export const createExpenseCalculations = (
   const calculateExpense = (year: number, inputValue: string, expenseType: string) => {
     const input = parseFloat(inputValue || "0");
     if (expenseForecastMethod === "POR") {
-      const occupiedRooms = helpers.getForecastOccupiedRoomsForYear(year);
+      // Use the correct helper function name
+      const occupiedRooms = helpers.getForecastOccupiedRooms ? 
+        helpers.getForecastOccupiedRooms(year) : 
+        helpers.getForecastOccupiedRoomsForYear(year);
       return input * occupiedRooms;
     } else {
       // % of Revenue
@@ -27,7 +30,10 @@ export const createExpenseCalculations = (
     const totalExpense = historicalExpenseData[expenseType][year] || 0;
     
     if (expenseForecastMethod === "POR") {
-      const occupiedRooms = helpers.getHistoricalOccupiedRoomsForYear(year);
+      // Use the correct helper function name
+      const occupiedRooms = helpers.getHistoricalOccupiedRooms ? 
+        helpers.getHistoricalOccupiedRooms(year) : 
+        helpers.getHistoricalOccupiedRoomsForYear(year);
       const perRoom = occupiedRooms > 0 ? totalExpense / occupiedRooms : 0;
       return Math.round(perRoom).toString();
     } else {
