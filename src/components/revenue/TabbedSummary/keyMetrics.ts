@@ -3,52 +3,56 @@ import React from 'react';
 import { TabbedSummaryProps, MetricRow } from './types';
 
 export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], mainHelpers: any): MetricRow[] => {
-  const { historicalYears, forecastYears, formatCurrency, formatPercent, calculateTotalExpense, calculateGrossOperatingProfit } = props;
+  const { 
+    historicalYears, 
+    forecastYears, 
+    formatCurrency, 
+    formatPercent, 
+    calculateTotalExpense, 
+    calculateGrossOperatingProfit,
+    historicalData,
+    occupancyForecast,
+    occupancyForecastMethod,
+    calculateOccupancyFromYoY,
+    getHistoricalADR,
+    getForecastADR,
+    getForecastRevpar
+  } = props;
 
   const metrics: MetricRow[] = [
-    // Standard first three rows (same as Revenue and Expense tabs)
+    // Use existing occupancy data directly
     {
       label: "Subject Property Occupancy",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
-          return formatPercent(props.historicalData.occupancy[year] || 0, 1);
+          return formatPercent(historicalData.occupancy[year] || 0, 1);
         } else {
-          const occupancyValue = props.occupancyForecastMethod === "Occupancy" 
-            ? props.occupancyForecast[year] || "0"
-            : props.calculateOccupancyFromYoY(year).toString();
-          return formatPercent(parseFloat(occupancyValue), 1);
+          const occupancyValue = occupancyForecastMethod === "Occupancy" 
+            ? parseFloat(occupancyForecast[year] || "0")
+            : calculateOccupancyFromYoY(year);
+          return formatPercent(occupancyValue, 1);
         }
       })
     },
+    // Use existing ADR functions directly
     {
       label: "Subject Property ADR",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
-          const occupiedRooms = mainHelpers.getHistoricalOccupiedRoomsForYear(year);
-          const roomsRevenue = props.historicalData.roomsRevenue[year] || 0;
-          const adr = occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
-          return formatCurrency(adr);
+          return formatCurrency(getHistoricalADR(year));
         } else {
-          const forecastRevenue = props.getForecastRoomsRevenue(year);
-          const occupiedRooms = mainHelpers.getForecastOccupiedRoomsForYear(year);
-          const adr = occupiedRooms > 0 ? forecastRevenue / occupiedRooms : 0;
-          return formatCurrency(adr);
+          return formatCurrency(getForecastADR(year));
         }
       })
     },
+    // Use existing RevPAR data and functions directly
     {
       label: "Subject Property RevPAR",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
-          const roomsRevenue = props.historicalData.roomsRevenue[year] || 0;
-          const availableRooms = props.getAvailableRooms(year);
-          const revpar = availableRooms > 0 ? roomsRevenue / availableRooms : 0;
-          return formatCurrency(revpar);
+          return formatCurrency(historicalData.revpar[year] || 0);
         } else {
-          const forecastRevenue = props.getForecastRoomsRevenue(year);
-          const availableRooms = props.getAvailableRooms(year);
-          const revpar = availableRooms > 0 ? forecastRevenue / availableRooms : 0;
-          return formatCurrency(revpar);
+          return formatCurrency(getForecastRevpar(year));
         }
       })
     },

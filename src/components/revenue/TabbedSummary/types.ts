@@ -1,10 +1,14 @@
 
 export interface MetricRow {
-  label: string;
-  data: string[];
+  label: string | React.ReactNode;
+  data: (string | React.ReactNode)[];
   isExpanded?: boolean;
   onToggle?: () => void;
   indent?: boolean;
+  isSubcategory?: boolean;
+  isUndistributedSubcategory?: boolean;
+  isCollapsible?: boolean;
+  isUndistributed?: boolean;
 }
 
 export interface TabbedSummaryProps {
