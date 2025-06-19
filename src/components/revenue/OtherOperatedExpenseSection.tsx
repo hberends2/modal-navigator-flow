@@ -8,9 +8,6 @@ interface OtherOperatedExpenseSectionProps {
   fbExpenseInput: Record<number, string>;
   handleFbExpenseChange: (year: number, value: string) => void;
   handleFbExpenseBlur: (year: number, value: string) => void;
-  resortFeeExpenseInput: Record<number, string>;
-  handleResortFeeExpenseChange: (year: number, value: string) => void;
-  handleResortFeeExpenseBlur: (year: number, value: string) => void;
   otherOperatedExpenseInput: Record<number, string>;
   handleOtherOperatedExpenseChange: (year: number, value: string) => void;
   handleOtherOperatedExpenseBlur: (year: number, value: string) => void;
@@ -36,9 +33,6 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
   fbExpenseInput,
   handleFbExpenseChange,
   handleFbExpenseBlur,
-  resortFeeExpenseInput,
-  handleResortFeeExpenseChange,
-  handleResortFeeExpenseBlur,
   otherOperatedExpenseInput,
   handleOtherOperatedExpenseChange,
   handleOtherOperatedExpenseBlur,
@@ -114,38 +108,6 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
         label="Total Food & Beverage Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.fb[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, fbExpenseInput[year], 'fb')))}
-        isIndented={true}
-      />
-
-      {/* Resort Fee Expense */}
-      <tr id="resort-fee-expense-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-
-      <MetricRow
-        label={<span className="font-bold text-gray-900">Resort Fee Expense</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-
-      <MetricRow
-        label={`Resort Fee Expense (${expenseForecastMethod})`}
-        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'resortFee'))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={resortFeeExpenseInput}
-        onEditableChange={handleResortFeeExpenseChange}
-        onEditableBlur={handleResortFeeExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Resort Fee Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.resortFee[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, resortFeeExpenseInput[year], 'resortFee')))}
         isIndented={true}
       />
 

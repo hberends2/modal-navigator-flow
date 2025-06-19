@@ -107,7 +107,6 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     const roomsExpense = calculations.calculateExpense(year, roomsExpenseInput[year], 'rooms');
     const totalOtherOperatedExpense = calculations.calculateTotalOtherOperatedExpense(year, {
       fbExpenseInput,
-      resortFeeExpenseInput,
       otherOperatedExpenseInput,
       miscellaneousExpenseInput,
       allocatedExpenseInput
@@ -168,9 +167,9 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         fbExpenseInput={fbExpenseInput}
         handleFbExpenseChange={handleFbExpenseChange}
         handleFbExpenseBlur={handleFbExpenseBlur}
-        resortFeeExpenseInput={resortFeeExpenseInput}
-        handleResortFeeExpenseChange={handleResortFeeExpenseChange}
-        handleResortFeeExpenseBlur={handleResortFeeExpenseBlur}
+        resortFeeExpenseInput={{}}
+        handleResortFeeExpenseChange={() => {}}
+        handleResortFeeExpenseBlur={() => {}}
         otherOperatedExpenseInput={otherOperatedExpenseInput}
         handleOtherOperatedExpenseChange={handleOtherOperatedExpenseChange}
         handleOtherOperatedExpenseBlur={handleOtherOperatedExpenseBlur}
@@ -185,7 +184,6 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         calculateExpense={calculations.calculateExpense}
         calculateTotalOtherOperatedExpense={(year: number) => calculations.calculateTotalOtherOperatedExpense(year, {
           fbExpenseInput,
-          resortFeeExpenseInput,
           otherOperatedExpenseInput,
           miscellaneousExpenseInput,
           allocatedExpenseInput

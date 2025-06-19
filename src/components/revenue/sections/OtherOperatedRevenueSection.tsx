@@ -2,7 +2,6 @@
 import React from "react";
 import MetricRow from "../MetricRow";
 import FoodBeverageSection from "../FoodBeverageSection";
-import ResortFeeSection from "../ResortFeeSection";
 import OtherOperatedSection from "../OtherOperatedSection";
 import MiscellaneousSection from "../MiscellaneousSection";
 import AllocatedSection from "../AllocatedSection";
@@ -40,9 +39,6 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
   fbPerOccupiedRoom,
   handleFbPerOccupiedRoomChange,
   handleFbPerOccupiedRoomBlur,
-  resortFeePerOccupiedRoom,
-  handleResortFeePerOccupiedRoomChange,
-  handleResortFeePerOccupiedRoomBlur,
   otherOperatedPerOccupiedRoom,
   handleOtherOperatedPerOccupiedRoomChange,
   handleOtherOperatedPerOccupiedRoomBlur,
@@ -79,19 +75,6 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
         fbPerOccupiedRoom={fbPerOccupiedRoom}
         handleFbPerOccupiedRoomChange={handleFbPerOccupiedRoomChange}
         handleFbPerOccupiedRoomBlur={handleFbPerOccupiedRoomBlur}
-        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
-        formatCurrency={formatCurrency}
-        isIndented={true}
-      />
-
-      <ResortFeeSection
-        roomsKeys={roomsKeys}
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        resortFeePerOccupiedRoom={resortFeePerOccupiedRoom}
-        handleResortFeePerOccupiedRoomChange={handleResortFeePerOccupiedRoomChange}
-        handleResortFeePerOccupiedRoomBlur={handleResortFeePerOccupiedRoomBlur}
         getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
         formatCurrency={formatCurrency}
         isIndented={true}

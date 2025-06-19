@@ -1,3 +1,4 @@
+
 import { useMemo } from 'react';
 import { REVENUE_CONFIG } from '../config/revenueConfig';
 import { HistoricalRevenueData } from '../types/revenue';
@@ -11,7 +12,6 @@ export const useRevenueData = () => {
     // Base $ per occupied room data for departments
     const departmentPerRoom = {
       fb: { 2021: 52, 2022: 56, 2023: 58, 2024: 59 },
-      resortFee: { 2021: 25, 2022: 27, 2023: 28, 2024: 29 },
       otherOperated: { 2021: 26, 2022: 28, 2023: 29, 2024: 30 },
       miscellaneous: { 2021: 4, 2022: 5, 2023: 5, 2024: 5 },
       allocated: { 2021: 9, 2022: 9, 2023: 10, 2024: 10 }
@@ -34,10 +34,12 @@ export const useRevenueData = () => {
       const occupiedRooms = calculateOccupiedRooms(year, data.occupancy[year]);
       
       data.fbRevenue[year] = departmentPerRoom.fb[year] * occupiedRooms;
-      data.resortFeeRevenue[year] = departmentPerRoom.resortFee[year] * occupiedRooms;
       data.otherOperatedRevenue[year] = departmentPerRoom.otherOperated[year] * occupiedRooms;
       data.miscellaneousRevenue[year] = departmentPerRoom.miscellaneous[year] * occupiedRooms;
       data.allocatedRevenue[year] = departmentPerRoom.allocated[year] * occupiedRooms;
+      
+      // Set resort fee revenue to 0 since it's been removed
+      data.resortFeeRevenue[year] = 0;
     });
 
     // Calculate RevPAR

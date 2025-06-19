@@ -33,18 +33,16 @@ export const createExpenseCalculations = (
 
   const calculateTotalOtherOperatedExpense = (year: number, expenseInputs: {
     fbExpenseInput: Record<number, string>;
-    resortFeeExpenseInput: Record<number, string>;
     otherOperatedExpenseInput: Record<number, string>;
     miscellaneousExpenseInput: Record<number, string>;
     allocatedExpenseInput: Record<number, string>;
   }) => {
     const fbExpense = calculateExpense(year, expenseInputs.fbExpenseInput[year], 'fb');
-    const resortFeeExpense = calculateExpense(year, expenseInputs.resortFeeExpenseInput[year], 'resortFee');
     const otherOperatedExpense = calculateExpense(year, expenseInputs.otherOperatedExpenseInput[year], 'otherOperated');
     const miscellaneousExpense = calculateExpense(year, expenseInputs.miscellaneousExpenseInput[year], 'miscellaneous');
     const allocatedExpense = calculateExpense(year, expenseInputs.allocatedExpenseInput[year], 'allocated');
     
-    return fbExpense + resortFeeExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
+    return fbExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
   };
 
   const calculateTotalUndistributedExpenses = (year: number, historicalYears: number[], expenseInputs: {
@@ -81,7 +79,6 @@ export const createExpenseCalculations = (
 
   const getTotalHistoricalOtherOperatedExpense = (year: number) => {
     return (historicalExpenseData.fb[year] || 0) +
-           (historicalExpenseData.resortFee[year] || 0) +
            (historicalExpenseData.otherOperated[year] || 0) +
            (historicalExpenseData.miscellaneous[year] || 0) +
            (historicalExpenseData.allocated[year] || 0);
