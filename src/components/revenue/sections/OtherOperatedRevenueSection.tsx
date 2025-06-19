@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "../MetricRow";
 import FoodBeverageSection from "../FoodBeverageSection";
@@ -129,12 +128,16 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
       />
 
       <MetricRow
-        label={<span className="font-medium">Total Other Revenue</span>}
+        label={<span className="font-bold italic">Total Other Revenue</span>}
         historicalData={historicalYears.map(year => 
-          formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year, true))
+          <span className="font-bold italic">
+            {formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year, true))}
+          </span>
         )}
         forecastData={forecastYears.map(year => 
-          formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year, false))
+          <span className="font-bold italic">
+            {formatCurrency(helpers.calculateTotalOtherOperatedRevenue(year, false))}
+          </span>
         )}
       />
     </>

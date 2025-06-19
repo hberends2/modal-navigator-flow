@@ -18,9 +18,17 @@ const GrossOperatingProfitSection: React.FC<GrossOperatingProfitSectionProps> = 
 
   return (
     <MetricRow
-      label={<span className="font-bold text-gray-900">Gross Operating Profit</span>}
-      historicalData={historicalYears.map(year => formatCurrency(calculateGrossOperatingProfit(year)))}
-      forecastData={forecastYears.map(year => formatCurrency(calculateGrossOperatingProfit(year)))}
+      label={<span className="font-bold text-sm">Gross Operating Profit</span>}
+      historicalData={historicalYears.map(year => (
+        <span className="font-bold text-sm">
+          {formatCurrency(calculateGrossOperatingProfit(year))}
+        </span>
+      ))}
+      forecastData={forecastYears.map(year => (
+        <span className="font-bold text-sm">
+          {formatCurrency(calculateGrossOperatingProfit(year))}
+        </span>
+      ))}
       className="border-t border-gray-200"
     />
   );

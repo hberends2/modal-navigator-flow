@@ -209,12 +209,12 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
 
       {/* Total Other Operated Expense Row */}
       <MetricRow
-        label={<span className="font-medium">Total Other Operated Expense</span>}
+        label={<span className="font-bold italic">Total Other Expense</span>}
         historicalData={historicalYears.map(year => 
-          formatCurrency(getTotalHistoricalOtherOperatedExpense(year))
+          <span className="font-bold italic">{formatCurrency(getTotalHistoricalOtherOperatedExpense(year))}</span>
         )}
         forecastData={forecastYears.map(year => 
-          formatCurrency(calculateTotalOtherOperatedExpense(year))
+          <span className="font-bold italic">{formatCurrency(calculateTotalOtherOperatedExpense(year))}</span>
         )}
       />
     </>
