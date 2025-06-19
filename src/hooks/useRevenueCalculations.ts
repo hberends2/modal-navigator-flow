@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { REVENUE_CONFIG } from '../config/revenueConfig';
 import { RevenueCalculationState } from '../types/revenue';
@@ -54,6 +55,9 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   // New expense input for non-operating
   const nonOperatingExpenseInput = useInputHandlers(getInitialForecastData());
 
+  // New Reserve for Replacement input
+  const reserveForReplacementInput = useInputHandlers(getInitialForecastData());
+
   // Custom handlers that update the local input state without parsing
   const handleOccupancyChange = (year: number, value: string) => {
     occupancyForecast.handleChange(year, value);
@@ -98,6 +102,18 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     }
     
     handler(year, formattedValue);
+  };
+
+  // Reserve for Replacement handlers
+  const handleReserveForReplacementChange = (year: number, value: string) => {
+    reserveForReplacementInput.handleChange(year, value);
+  };
+
+  const handleReserveForReplacementBlur = (year: number, value: string) => {
+    const cleanValue = value.replace(/[^0-9.-]/g, "");
+    const numValue = parseFloat(cleanValue);
+    const formattedValue = isNaN(numValue) ? "0" : Math.round(numValue).toString();
+    reserveForReplacementInput.handleChange(year, formattedValue);
   };
 
   // Update local state when shared data changes
@@ -183,6 +199,10 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     // New non-operating expense handlers
     nonOperatingExpenseInput: nonOperatingExpenseInput.values,
     handleNonOperatingExpenseChange: nonOperatingExpenseInput.handleChange,
-    handleNonOperatingExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, nonOperatingExpenseInput.handleChange)
+    handleNonOperatingExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, nonOperatingExpenseInput.handleChange),
+    // New Reserve for Replacement handlers
+    reserveForReplacementInput: reserveForReplacementInput.values,
+    handleReserveForReplacementChange,
+    handleReserveForReplacementBlur
   };
 };

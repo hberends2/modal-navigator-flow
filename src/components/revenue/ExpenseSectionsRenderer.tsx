@@ -7,6 +7,8 @@ import NonOperatingExpensesSection from "./NonOperatingExpensesSection";
 import TotalExpenseSection from "./TotalExpenseSection";
 import GrossOperatingProfitSection from "./GrossOperatingProfitSection";
 import EBITDASection from "./EBITDASection";
+import ReserveForReplacementSection from "./ReserveForReplacementSection";
+import NetOperatingIncomeSection from "./NetOperatingIncomeSection";
 import { historicalExpenseData } from "./ExpenseData";
 import { useExpenseCalculations } from "./ExpenseCalculationsProvider";
 
@@ -47,6 +49,9 @@ interface ExpenseSectionsRendererProps {
   nonOperatingExpenseInput: Record<number, string>;
   handleNonOperatingExpenseChange: (year: number, value: string) => void;
   handleNonOperatingExpenseBlur: (year: number, value: string) => void;
+  reserveForReplacementInput: Record<number, string>;
+  handleReserveForReplacementChange: (year: number, value: string) => void;
+  handleReserveForReplacementBlur: (year: number, value: string) => void;
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
   helpers: any;
@@ -89,6 +94,9 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = ({
   nonOperatingExpenseInput,
   handleNonOperatingExpenseChange,
   handleNonOperatingExpenseBlur,
+  reserveForReplacementInput,
+  handleReserveForReplacementChange,
+  handleReserveForReplacementBlur,
   formatCurrency,
   formatPercent,
   helpers
@@ -206,10 +214,29 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = ({
         getTotalHistoricalExpense={getTotalHistoricalExpense}
       />
 
-      {/* EBITDA Section - at the very bottom */}
+      {/* EBITDA Section */}
       <EBITDASection
         historicalYears={historicalYears}
         forecastYears={forecastYears}
+        formatCurrency={formatCurrency}
+        helpers={helpers}
+      />
+
+      {/* Reserve for Replacement Section */}
+      <ReserveForReplacementSection
+        historicalYears={historicalYears}
+        forecastYears={forecastYears}
+        reserveForReplacementInput={reserveForReplacementInput}
+        handleReserveForReplacementChange={handleReserveForReplacementChange}
+        handleReserveForReplacementBlur={handleReserveForReplacementBlur}
+        formatCurrency={formatCurrency}
+      />
+
+      {/* Net Operating Income Section - at the very bottom */}
+      <NetOperatingIncomeSection
+        historicalYears={historicalYears}
+        forecastYears={forecastYears}
+        reserveForReplacementInput={reserveForReplacementInput}
         formatCurrency={formatCurrency}
         helpers={helpers}
       />
