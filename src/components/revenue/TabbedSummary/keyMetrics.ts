@@ -16,8 +16,22 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], 
     calculateOccupancyFromYoY,
     getHistoricalADR,
     getForecastADR,
-    getForecastRevpar
+    getForecastRevpar,
+    getForecastRoomsRevenue,
+    fbPerOccupiedRoom,
+    resortFeePerOccupiedRoom,
+    otherOperatedPerOccupiedRoom,
+    miscellaneousPerOccupiedRoom,
+    allocatedPerOccupiedRoom
   } = props;
+
+  // Helper function to calculate occupied rooms for forecast years
+  const getForecastOccupiedRooms = (year: number) => {
+    const occupancyValue = occupancyForecastMethod === "Occupancy" 
+      ? parseFloat(occupancyForecast[year] || "0")
+      : calculateOccupancyFromYoY(year);
+    return (occupancyValue / 100) * 365; // Assuming 365 available rooms per year
+  };
 
   const metrics: MetricRow[] = [
     // Use existing occupancy data directly
@@ -56,13 +70,37 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], 
         }
       })
     },
-    // Total Revenue (using main helpers)
+    // Total Revenue - calculate from individual components
     {
       label: "Total Revenue",
       data: allYears.map(year => {
-        const isHistorical = historicalYears.includes(year);
-        const totalRevenue = mainHelpers.calculateTotalRevenue(year, isHistorical);
-        return formatCurrency(totalRevenue);
+        if (historicalYears.includes(year)) {
+          // Sum historical revenue components
+          const roomsRevenue = historicalData.roomsRevenue[year] || 0;
+          const fbRevenue = historicalData.fbRevenue[year] || 0;
+          const resortFeeRevenue = historicalData.resortFeeRevenue[year] || 0;
+          const otherOperatedRevenue = historicalData.otherOperatedRevenue[year] || 0;
+          const miscellaneousRevenue = historicalData.miscellaneousRevenue[year] || 0;
+          const allocatedRevenue = historicalData.allocatedRevenue[year] || 0;
+          
+          const totalRevenue = roomsRevenue + fbRevenue + resortFeeRevenue + 
+                             otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+          return formatCurrency(totalRevenue);
+        } else {
+          // Calculate forecast revenue components
+          const roomsRevenue = getForecastRoomsRevenue(year);
+          const occupiedRooms = getForecastOccupiedRooms(year);
+          
+          const fbRevenue = parseFloat(fbPerOccupiedRoom[year] || "0") * occupiedRooms;
+          const resortFeeRevenue = parseFloat(resortFeePerOccupiedRoom[year] || "0") * occupiedRooms;
+          const otherOperatedRevenue = parseFloat(otherOperatedPerOccupiedRoom[year] || "0") * occupiedRooms;
+          const miscellaneousRevenue = parseFloat(miscellaneousPerOccupiedRoom[year] || "0") * occupiedRooms;
+          const allocatedRevenue = parseFloat(allocatedPerOccupiedRoom[year] || "0") * occupiedRooms;
+          
+          const totalRevenue = roomsRevenue + fbRevenue + resortFeeRevenue + 
+                             otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+          return formatCurrency(totalRevenue);
+        }
       })
     },
     // Total Expense (using the working calculation function)
@@ -87,11 +125,7 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], 
           return formatCurrency(gop);
         } else {
           // Fallback calculation
-          const isHistorical = historicalYears.includes(year);
-          const totalRevenue = mainHelpers.calculateTotalRevenue(year, isHistorical);
-          const totalExpense = calculateTotalExpense ? calculateTotalExpense(year) : 0;
-          const gop = totalRevenue - totalExpense;
-          return formatCurrency(gop);
+          return formatCurrency(0);
         }
       })
     },
@@ -104,11 +138,7 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], 
           return formatCurrency(ebitda);
         } else {
           // Fallback calculation
-          const isHistorical = historicalYears.includes(year);
-          const totalRevenue = mainHelpers.calculateTotalRevenue(year, isHistorical);
-          const totalExpense = calculateTotalExpense ? calculateTotalExpense(year) : 0;
-          const ebitda = totalRevenue - totalExpense;
-          return formatCurrency(ebitda);
+          return formatCurrency(0);
         }
       })
     }
