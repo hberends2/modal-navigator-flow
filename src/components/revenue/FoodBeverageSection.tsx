@@ -1,3 +1,4 @@
+
 import React from "react";
 import MetricRow from "./MetricRow";
 import { getHistoricalOccupiedRooms, calculateHistoricalPerOccupiedRoom } from "../../utils/revenueUtils";
@@ -83,9 +84,9 @@ const FoodBeverageSection: React.FC<FoodBeverageSectionProps> = ({
         isFbInputRow={true}
       />
 
-      {/* F&B Revenue Row */}
+      {/* Food & Beverage Revenue Row */}
       <MetricRow
-        label={`${indentPrefix}F&B Revenue`}
+        label={`${indentPrefix}Food & Beverage Revenue`}
         historicalData={historicalYears.map(year => getHistoricalFbRevenue(year))}
         forecastData={forecastYears.map(year => formatCurrency(calculateFbRevenue(year)))}
       />
