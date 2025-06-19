@@ -13,27 +13,37 @@ export const createRevenueHelpers = (revenueCalculations: any, historicalData: a
     return previousYearOccupancy + previousYearOccupancy * occupancyGrowth;
   };
 
+  // Helper function to get previous year's ADR (historical or forecast)
+  const getPreviousYearADR = (year: number): number => {
+    const previousYear = year - 1;
+    
+    // If previous year is historical (has data in historicalData)
+    if (historicalData.roomsRevenue[previousYear] && historicalData.occupancy[previousYear]) {
+      const previousYearRoomsRevenue = historicalData.roomsRevenue[previousYear];
+      const previousYearOccupancy = historicalData.occupancy[previousYear];
+      const previousYearAvailableRooms = getAvailableRooms(previousYear);
+      const previousYearOccupiedRooms = (previousYearOccupancy / 100) * previousYearAvailableRooms;
+      return previousYearOccupiedRooms > 0 ? previousYearRoomsRevenue / previousYearOccupiedRooms : 0;
+    } else {
+      // Previous year is forecast, calculate its ADR recursively
+      return getForecastADRForYear(previousYear);
+    }
+  };
+
   const getForecastRoomsRevenueForYear = (year: number) => {
     const { adrGrowthType, flatAdrGrowth, yearlyAdrGrowth } = revenueCalculations;
   
-    // Calculate the historical ADR from the previous year
-    const previousYear = year - 1;
-    const previousYearRoomsRevenue = historicalData.roomsRevenue[previousYear] || 0;
-    const previousYearOccupancy = historicalData.occupancy[previousYear] || 0;
-    const previousYearAvailableRooms = getAvailableRooms(previousYear);
-    const previousYearOccupiedRooms = (previousYearOccupancy / 100) * previousYearAvailableRooms;
+    // Get the previous year's ADR (whether historical or forecast)
+    const previousYearADR = getPreviousYearADR(year);
     
-    // Calculate historical ADR properly: rooms revenue / occupied rooms
-    const historicalADR = previousYearOccupiedRooms > 0 ? previousYearRoomsRevenue / previousYearOccupiedRooms : 0;
-  
-    // Apply growth rate to the ADR, not to total revenue
+    // Apply growth rate to the ADR: Current Year ADR = Previous Year ADR * (1 + YoY Growth Rate)
     let forecastADR;
     if (adrGrowthType === "flat") {
       const growthRate = parseFloat(flatAdrGrowth) / 100 || 0;
-      forecastADR = historicalADR * (1 + growthRate);
+      forecastADR = previousYearADR * (1 + growthRate);
     } else {
       const growthRate = parseFloat(yearlyAdrGrowth[year]) / 100 || 0;
-      forecastADR = historicalADR * (1 + growthRate);
+      forecastADR = previousYearADR * (1 + growthRate);
     }
   
     // Calculate forecast occupied rooms
@@ -53,13 +63,19 @@ export const createRevenueHelpers = (revenueCalculations: any, historicalData: a
   };
 
   const getForecastADRForYear = (year: number) => {
-    const roomsRevenue = getForecastRoomsRevenueForYear(year);
-    const availableRooms = getAvailableRooms(year);
-    const occupancyValue = revenueCalculations.occupancyForecastMethod === "Occupancy"
-      ? parseFloat(revenueCalculations.occupancyForecast[year] || "0")
-      : calculateOccupancyFromYoYForYear(year);
-    const occupiedRooms = (occupancyValue / 100) * availableRooms;
-    return occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
+    const { adrGrowthType, flatAdrGrowth, yearlyAdrGrowth } = revenueCalculations;
+    
+    // Get the previous year's ADR (whether historical or forecast)
+    const previousYearADR = getPreviousYearADR(year);
+    
+    // Apply growth rate: Current Year ADR = Previous Year ADR * (1 + YoY Growth Rate)
+    if (adrGrowthType === "flat") {
+      const growthRate = parseFloat(flatAdrGrowth) / 100 || 0;
+      return previousYearADR * (1 + growthRate);
+    } else {
+      const growthRate = parseFloat(yearlyAdrGrowth[year]) / 100 || 0;
+      return previousYearADR * (1 + growthRate);
+    }
   };
 
   const getForecastRevparForYear = (year: number) => {
