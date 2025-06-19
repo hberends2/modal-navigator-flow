@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useMemo } from "react";
 import { historicalExpenseData } from "./ExpenseData";
 import { createExpenseCalculations } from "./ExpenseCalculations";
@@ -65,28 +64,50 @@ export const ExpenseCalculationsProvider: React.FC<ExpenseCalculationsProviderPr
   );
 
   const calculateTotalExpense = (year: number) => {
-    const roomsExpense = calculations.calculateExpense(year, roomsExpenseInput[year], 'rooms');
-    const totalOtherOperatedExpense = calculations.calculateTotalOtherOperatedExpense(year, {
-      fbExpenseInput,
-      otherOperatedExpenseInput,
-      miscellaneousExpenseInput,
-      allocatedExpenseInput
-    });
-    const totalUndistributedExpenses = calculations.calculateTotalUndistributedExpenses(year, historicalYears, {
-      propertyOperationsExpenseInput,
-      administrativeGeneralExpenseInput,
-      infoTechServicesExpenseInput,
-      salesMarketingExpenseInput,
-      utilitiesExpenseInput
-    });
-    const totalNonOperatingExpenses = calculations.calculateTotalNonOperatingExpenses(year, historicalYears, {
-      managementFeesExpenseInput,
-      realEstateTaxesExpenseInput,
-      insuranceExpenseInput,
-      otherNonOpExpenseInput
-    });
-    
-    return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpenses + totalNonOperatingExpenses;
+    // Check if this is a historical year - use historical data directly
+    if (historicalYears.includes(year)) {
+      const roomsExpense = historicalExpenseData.rooms[year] || 0;
+      const totalOtherOperatedExpense = calculations.getTotalHistoricalOtherOperatedExpense(year);
+      const totalUndistributedExpenses = calculations.calculateTotalUndistributedExpenses(year, historicalYears, {
+        propertyOperationsExpenseInput,
+        administrativeGeneralExpenseInput,
+        infoTechServicesExpenseInput,
+        salesMarketingExpenseInput,
+        utilitiesExpenseInput
+      });
+      const totalNonOperatingExpenses = calculations.calculateTotalNonOperatingExpenses(year, historicalYears, {
+        managementFeesExpenseInput,
+        realEstateTaxesExpenseInput,
+        insuranceExpenseInput,
+        otherNonOpExpenseInput
+      });
+      
+      return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpenses + totalNonOperatingExpenses;
+    } else {
+      // For forecast years, calculate from inputs
+      const roomsExpense = calculations.calculateExpense(year, roomsExpenseInput[year], 'rooms');
+      const totalOtherOperatedExpense = calculations.calculateTotalOtherOperatedExpense(year, {
+        fbExpenseInput,
+        otherOperatedExpenseInput,
+        miscellaneousExpenseInput,
+        allocatedExpenseInput
+      });
+      const totalUndistributedExpenses = calculations.calculateTotalUndistributedExpenses(year, historicalYears, {
+        propertyOperationsExpenseInput,
+        administrativeGeneralExpenseInput,
+        infoTechServicesExpenseInput,
+        salesMarketingExpenseInput,
+        utilitiesExpenseInput
+      });
+      const totalNonOperatingExpenses = calculations.calculateTotalNonOperatingExpenses(year, historicalYears, {
+        managementFeesExpenseInput,
+        realEstateTaxesExpenseInput,
+        insuranceExpenseInput,
+        otherNonOpExpenseInput
+      });
+      
+      return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpenses + totalNonOperatingExpenses;
+    }
   };
 
   const getTotalHistoricalExpense = (year: number) => {
