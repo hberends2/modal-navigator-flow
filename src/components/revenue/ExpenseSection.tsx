@@ -20,9 +20,6 @@ interface ExpenseSectionProps {
   fbExpenseInput: Record<number, string>;
   handleFbExpenseChange: (year: number, value: string) => void;
   handleFbExpenseBlur: (year: number, value: string) => void;
-  resortFeeExpenseInput: Record<number, string>;
-  handleResortFeeExpenseChange: (year: number, value: string) => void;
-  handleResortFeeExpenseBlur: (year: number, value: string) => void;
   otherOperatedExpenseInput: Record<number, string>;
   handleOtherOperatedExpenseChange: (year: number, value: string) => void;
   handleOtherOperatedExpenseBlur: (year: number, value: string) => void;
@@ -66,9 +63,6 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   fbExpenseInput,
   handleFbExpenseChange,
   handleFbExpenseBlur,
-  resortFeeExpenseInput,
-  handleResortFeeExpenseChange,
-  handleResortFeeExpenseBlur,
   otherOperatedExpenseInput,
   handleOtherOperatedExpenseChange,
   handleOtherOperatedExpenseBlur,
@@ -167,9 +161,6 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         fbExpenseInput={fbExpenseInput}
         handleFbExpenseChange={handleFbExpenseChange}
         handleFbExpenseBlur={handleFbExpenseBlur}
-        resortFeeExpenseInput={{}}
-        handleResortFeeExpenseChange={() => {}}
-        handleResortFeeExpenseBlur={() => {}}
         otherOperatedExpenseInput={otherOperatedExpenseInput}
         handleOtherOperatedExpenseChange={handleOtherOperatedExpenseChange}
         handleOtherOperatedExpenseBlur={handleOtherOperatedExpenseBlur}
