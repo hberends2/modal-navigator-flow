@@ -41,6 +41,9 @@ interface ExpenseSectionContainerProps {
   nonOperatingExpenseInput: Record<number, string>;
   handleNonOperatingExpenseChange: (year: number, value: string) => void;
   handleNonOperatingExpenseBlur: (year: number, value: string) => void;
+  reserveForReplacementInput: Record<number, string>;
+  handleReserveForReplacementChange: (year: number, value: string) => void;
+  handleReserveForReplacementBlur: (year: number, value: string) => void;
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
   helpers: CalculationHelpers;
@@ -86,6 +89,9 @@ const ExpenseSectionContainer: React.FC<ExpenseSectionContainerProps> = (props) 
       nonOperatingExpenseInput={props.nonOperatingExpenseInput}
       handleNonOperatingExpenseChange={props.handleNonOperatingExpenseChange}
       handleNonOperatingExpenseBlur={props.handleNonOperatingExpenseBlur}
+      reserveForReplacementInput={props.reserveForReplacementInput}
+      handleReserveForReplacementChange={props.handleReserveForReplacementChange}
+      handleReserveForReplacementBlur={props.handleReserveForReplacementBlur}
       formatCurrency={props.formatCurrency}
       formatPercent={props.formatPercent}
       helpers={props.helpers}

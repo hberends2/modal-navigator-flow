@@ -59,6 +59,9 @@ const RevenueTableRenderer: React.FC<RevenueTableRendererProps> = (props) => {
         miscellaneousPerOccupiedRoom={miscellaneousPerOccupiedRoom}
         allocatedPerOccupiedRoom={allocatedPerOccupiedRoom}
         helpers={helpers}
+        reserveForReplacementInput={props.reserveForReplacementInput}
+        handleReserveForReplacementChange={props.handleReserveForReplacementChange}
+        handleReserveForReplacementBlur={props.handleReserveForReplacementBlur}
       />
     );
   } catch (error) {
