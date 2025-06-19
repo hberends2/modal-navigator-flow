@@ -135,7 +135,12 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   const calculateGrossOperatingProfit = (year: number) => {
     const isHistorical = historicalYears.includes(year);
     const totalRevenue = helpers.calculateTotalRevenue(year, isHistorical);
-    const roomsExpense = calculations.calculateExpense(year, roomsExpenseInput[year], 'rooms');
+    
+    // Fix: Use historical data for historical years, calculated values for forecast years
+    const roomsExpense = isHistorical 
+      ? (historicalExpenseData.rooms[year] || 0)
+      : calculations.calculateExpense(year, roomsExpenseInput[year], 'rooms');
+    
     const totalOtherOperatedExpense = calculations.calculateTotalOtherOperatedExpense(year, {
       fbExpenseInput,
       otherOperatedExpenseInput,
