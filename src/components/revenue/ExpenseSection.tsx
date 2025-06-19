@@ -1,15 +1,8 @@
 
-
 import React from "react";
-import MetricRow from "./MetricRow";
 import ExpenseHeader from "./ExpenseHeader";
-import RoomsExpenseSection from "./RoomsExpenseSection";
-import OtherOperatedExpenseSection from "./OtherOperatedExpenseSection";
-import UndistributedExpensesSection from "./UndistributedExpensesSection";
-import NonOperatingExpensesSection from "./NonOperatingExpensesSection";
-import TotalExpenseSection from "./TotalExpenseSection";
-import { historicalExpenseData } from "./ExpenseData";
-import { createExpenseCalculations } from "./ExpenseCalculations";
+import { ExpenseCalculationsProvider } from "./ExpenseCalculationsProvider";
+import ExpenseSectionsRenderer from "./ExpenseSectionsRenderer";
 
 interface ExpenseSectionProps {
   historicalYears: number[];
@@ -54,231 +47,76 @@ interface ExpenseSectionProps {
   handleNonOperatingExpenseBlur: (year: number, value: string) => void;
 }
 
-const ExpenseSection: React.FC<ExpenseSectionProps> = ({
-  historicalYears,
-  forecastYears,
-  expenseForecastMethod,
-  setExpenseForecastMethod,
-  roomsExpenseInput,
-  handleRoomsExpenseChange,
-  handleRoomsExpenseBlur,
-  fbExpenseInput,
-  handleFbExpenseChange,
-  handleFbExpenseBlur,
-  otherOperatedExpenseInput,
-  handleOtherOperatedExpenseChange,
-  handleOtherOperatedExpenseBlur,
-  miscellaneousExpenseInput,
-  handleMiscellaneousExpenseChange,
-  handleMiscellaneousExpenseBlur,
-  allocatedExpenseInput,
-  handleAllocatedExpenseChange,
-  handleAllocatedExpenseBlur,
-  propertyOperationsExpenseInput,
-  handlePropertyOperationsExpenseChange,
-  handlePropertyOperationsExpenseBlur,
-  administrativeGeneralExpenseInput,
-  handleAdministrativeGeneralExpenseChange,
-  handleAdministrativeGeneralExpenseBlur,
-  infoTechServicesExpenseInput,
-  handleInfoTechServicesExpenseChange,
-  handleInfoTechServicesExpenseBlur,
-  salesMarketingExpenseInput,
-  handleSalesMarketingExpenseChange,
-  handleSalesMarketingExpenseBlur,
-  utilitiesExpenseInput,
-  handleUtilitiesExpenseChange,
-  handleUtilitiesExpenseBlur,
-  formatCurrency,
-  formatPercent,
-  helpers,
-  nonOperatingExpenseInput,
-  handleNonOperatingExpenseChange,
-  handleNonOperatingExpenseBlur
-}) => {
-  // Create expense calculations
-  const calculations = createExpenseCalculations(historicalExpenseData, expenseForecastMethod, helpers);
-
-  const calculateTotalExpense = (year: number) => {
-    const roomsExpense = calculations.calculateExpense(year, roomsExpenseInput[year], 'rooms');
-    const totalOtherOperatedExpense = calculations.calculateTotalOtherOperatedExpense(year, {
-      fbExpenseInput,
-      otherOperatedExpenseInput,
-      miscellaneousExpenseInput,
-      allocatedExpenseInput
-    });
-    const totalUndistributedExpenses = calculations.calculateTotalUndistributedExpenses(year, historicalYears, {
-      propertyOperationsExpenseInput,
-      administrativeGeneralExpenseInput,
-      infoTechServicesExpenseInput,
-      salesMarketingExpenseInput,
-      utilitiesExpenseInput
-    });
-    const totalNonOperatingExpenses = calculations.calculateTotalNonOperatingExpenses(year, historicalYears, nonOperatingExpenseInput);
-    
-    return roomsExpense + totalOtherOperatedExpense + totalUndistributedExpenses + totalNonOperatingExpenses;
-  };
-
-  const getTotalHistoricalExpense = (year: number) => {
-    return (historicalExpenseData.rooms[year] || 0) + 
-           calculations.getTotalHistoricalOtherOperatedExpense(year) +
-           calculations.calculateTotalUndistributedExpenses(year, historicalYears, {
-             propertyOperationsExpenseInput,
-             administrativeGeneralExpenseInput,
-             infoTechServicesExpenseInput,
-             salesMarketingExpenseInput,
-             utilitiesExpenseInput
-           }) +
-           (historicalExpenseData.nonOperating[year] || 0);
-  };
-
-  const calculateGrossOperatingProfit = (year: number) => {
-    const isHistorical = historicalYears.includes(year);
-    const totalRevenue = helpers.calculateTotalRevenue(year, isHistorical);
-    
-    // Fix: Use historical data for historical years, calculated values for forecast years
-    const roomsExpense = isHistorical 
-      ? (historicalExpenseData.rooms[year] || 0)
-      : calculations.calculateExpense(year, roomsExpenseInput[year], 'rooms');
-    
-    const totalOtherOperatedExpense = calculations.calculateTotalOtherOperatedExpense(year, {
-      fbExpenseInput,
-      otherOperatedExpenseInput,
-      miscellaneousExpenseInput,
-      allocatedExpenseInput
-    });
-    const totalUndistributedExpenses = calculations.calculateTotalUndistributedExpenses(year, historicalYears, {
-      propertyOperationsExpenseInput,
-      administrativeGeneralExpenseInput,
-      infoTechServicesExpenseInput,
-      salesMarketingExpenseInput,
-      utilitiesExpenseInput
-    });
-    
-    return totalRevenue - roomsExpense - totalOtherOperatedExpense - totalUndistributedExpenses;
-  };
-
+const ExpenseSection: React.FC<ExpenseSectionProps> = (props) => {
   return (
     <>
       {/* Expense Divider Row */}
       <ExpenseHeader 
-        expenseForecastMethod={expenseForecastMethod}
-        setExpenseForecastMethod={setExpenseForecastMethod}
+        expenseForecastMethod={props.expenseForecastMethod}
+        setExpenseForecastMethod={props.setExpenseForecastMethod}
       />
 
-      {/* Rooms Expense Section */}
-      <RoomsExpenseSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        expenseForecastMethod={expenseForecastMethod}
-        roomsExpenseInput={roomsExpenseInput}
-        handleRoomsExpenseChange={handleRoomsExpenseChange}
-        handleRoomsExpenseBlur={handleRoomsExpenseBlur}
-        formatCurrency={formatCurrency}
-        formatPercent={formatPercent}
-        calculateExpense={calculations.calculateExpense}
-        historicalExpenseData={historicalExpenseData}
-        helpers={helpers}
-      />
-
-      {/* Other Operated Expense Section */}
-      <OtherOperatedExpenseSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        expenseForecastMethod={expenseForecastMethod}
-        fbExpenseInput={fbExpenseInput}
-        handleFbExpenseChange={handleFbExpenseChange}
-        handleFbExpenseBlur={handleFbExpenseBlur}
-        otherOperatedExpenseInput={otherOperatedExpenseInput}
-        handleOtherOperatedExpenseChange={handleOtherOperatedExpenseChange}
-        handleOtherOperatedExpenseBlur={handleOtherOperatedExpenseBlur}
-        miscellaneousExpenseInput={miscellaneousExpenseInput}
-        handleMiscellaneousExpenseChange={handleMiscellaneousExpenseChange}
-        handleMiscellaneousExpenseBlur={handleMiscellaneousExpenseBlur}
-        allocatedExpenseInput={allocatedExpenseInput}
-        handleAllocatedExpenseChange={handleAllocatedExpenseChange}
-        handleAllocatedExpenseBlur={handleAllocatedExpenseBlur}
-        formatCurrency={formatCurrency}
-        formatPercent={formatPercent}
-        calculateExpense={calculations.calculateExpense}
-        calculateTotalOtherOperatedExpense={(year: number) => calculations.calculateTotalOtherOperatedExpense(year, {
-          fbExpenseInput,
-          otherOperatedExpenseInput,
-          miscellaneousExpenseInput,
-          allocatedExpenseInput
-        })}
-        getTotalHistoricalOtherOperatedExpense={calculations.getTotalHistoricalOtherOperatedExpense}
-        historicalExpenseData={historicalExpenseData}
-        helpers={helpers}
-      />
-
-      {/* Undistributed Expenses Section */}
-      <UndistributedExpensesSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        expenseForecastMethod={expenseForecastMethod}
-        propertyOperationsExpenseInput={propertyOperationsExpenseInput}
-        handlePropertyOperationsExpenseChange={handlePropertyOperationsExpenseChange}
-        handlePropertyOperationsExpenseBlur={handlePropertyOperationsExpenseBlur}
-        administrativeGeneralExpenseInput={administrativeGeneralExpenseInput}
-        handleAdministrativeGeneralExpenseChange={handleAdministrativeGeneralExpenseChange}
-        handleAdministrativeGeneralExpenseBlur={handleAdministrativeGeneralExpenseBlur}
-        infoTechServicesExpenseInput={infoTechServicesExpenseInput}
-        handleInfoTechServicesExpenseChange={handleInfoTechServicesExpenseChange}
-        handleInfoTechServicesExpenseBlur={handleInfoTechServicesExpenseBlur}
-        salesMarketingExpenseInput={salesMarketingExpenseInput}
-        handleSalesMarketingExpenseChange={handleSalesMarketingExpenseChange}
-        handleSalesMarketingExpenseBlur={handleSalesMarketingExpenseBlur}
-        utilitiesExpenseInput={utilitiesExpenseInput}
-        handleUtilitiesExpenseChange={handleUtilitiesExpenseChange}
-        handleUtilitiesExpenseBlur={handleUtilitiesExpenseBlur}
-        formatCurrency={formatCurrency}
-        calculateExpense={calculations.calculateExpense}
-        calculateTotalUndistributedExpenses={(year: number) => calculations.calculateTotalUndistributedExpenses(year, historicalYears, {
-          propertyOperationsExpenseInput,
-          administrativeGeneralExpenseInput,
-          infoTechServicesExpenseInput,
-          salesMarketingExpenseInput,
-          utilitiesExpenseInput
-        })}
-        historicalExpenseData={historicalExpenseData}
-        getHistoricalExpenseData={calculations.getHistoricalExpenseData}
-      />
-
-      {/* Gross Operating Profit Row */}
-      <MetricRow
-        label={<span className="font-bold text-gray-900">Gross Operating Profit</span>}
-        historicalData={historicalYears.map(year => formatCurrency(calculateGrossOperatingProfit(year)))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateGrossOperatingProfit(year)))}
-        className="border-t border-gray-200"
-      />
-
-      {/* Non-Operating Expenses Section */}
-      <NonOperatingExpensesSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        expenseForecastMethod={expenseForecastMethod}
-        nonOperatingExpenseInput={nonOperatingExpenseInput}
-        handleNonOperatingExpenseChange={handleNonOperatingExpenseChange}
-        handleNonOperatingExpenseBlur={handleNonOperatingExpenseBlur}
-        formatCurrency={formatCurrency}
-        calculateExpense={calculations.calculateExpense}
-        historicalExpenseData={historicalExpenseData}
-        getHistoricalExpenseData={calculations.getHistoricalExpenseData}
-        helpers={helpers}
-      />
-
-      {/* Total Expense Section */}
-      <TotalExpenseSection
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        formatCurrency={formatCurrency}
-        calculateTotalExpense={calculateTotalExpense}
-        getTotalHistoricalExpense={getTotalHistoricalExpense}
-      />
+      {/* Expense Calculations Provider wraps all sections */}
+      <ExpenseCalculationsProvider
+        expenseForecastMethod={props.expenseForecastMethod}
+        helpers={props.helpers}
+        historicalYears={props.historicalYears}
+        roomsExpenseInput={props.roomsExpenseInput}
+        fbExpenseInput={props.fbExpenseInput}
+        otherOperatedExpenseInput={props.otherOperatedExpenseInput}
+        miscellaneousExpenseInput={props.miscellaneousExpenseInput}
+        allocatedExpenseInput={props.allocatedExpenseInput}
+        propertyOperationsExpenseInput={props.propertyOperationsExpenseInput}
+        administrativeGeneralExpenseInput={props.administrativeGeneralExpenseInput}
+        infoTechServicesExpenseInput={props.infoTechServicesExpenseInput}
+        salesMarketingExpenseInput={props.salesMarketingExpenseInput}
+        utilitiesExpenseInput={props.utilitiesExpenseInput}
+        nonOperatingExpenseInput={props.nonOperatingExpenseInput}
+      >
+        <ExpenseSectionsRenderer
+          historicalYears={props.historicalYears}
+          forecastYears={props.forecastYears}
+          expenseForecastMethod={props.expenseForecastMethod}
+          roomsExpenseInput={props.roomsExpenseInput}
+          handleRoomsExpenseChange={props.handleRoomsExpenseChange}
+          handleRoomsExpenseBlur={props.handleRoomsExpenseBlur}
+          fbExpenseInput={props.fbExpenseInput}
+          handleFbExpenseChange={props.handleFbExpenseChange}
+          handleFbExpenseBlur={props.handleFbExpenseBlur}
+          otherOperatedExpenseInput={props.otherOperatedExpenseInput}
+          handleOtherOperatedExpenseChange={props.handleOtherOperatedExpenseChange}
+          handleOtherOperatedExpenseBlur={props.handleOtherOperatedExpenseBlur}
+          miscellaneousExpenseInput={props.miscellaneousExpenseInput}
+          handleMiscellaneousExpenseChange={props.handleMiscellaneousExpenseChange}
+          handleMiscellaneousExpenseBlur={props.handleMiscellaneousExpenseBlur}
+          allocatedExpenseInput={props.allocatedExpenseInput}
+          handleAllocatedExpenseChange={props.handleAllocatedExpenseChange}
+          handleAllocatedExpenseBlur={props.handleAllocatedExpenseBlur}
+          propertyOperationsExpenseInput={props.propertyOperationsExpenseInput}
+          handlePropertyOperationsExpenseChange={props.handlePropertyOperationsExpenseChange}
+          handlePropertyOperationsExpenseBlur={props.handlePropertyOperationsExpenseBlur}
+          administrativeGeneralExpenseInput={props.administrativeGeneralExpenseInput}
+          handleAdministrativeGeneralExpenseChange={props.handleAdministrativeGeneralExpenseChange}
+          handleAdministrativeGeneralExpenseBlur={props.handleAdministrativeGeneralExpenseBlur}
+          infoTechServicesExpenseInput={props.infoTechServicesExpenseInput}
+          handleInfoTechServicesExpenseChange={props.handleInfoTechServicesExpenseChange}
+          handleInfoTechServicesExpenseBlur={props.handleInfoTechServicesExpenseBlur}
+          salesMarketingExpenseInput={props.salesMarketingExpenseInput}
+          handleSalesMarketingExpenseChange={props.handleSalesMarketingExpenseChange}
+          handleSalesMarketingExpenseBlur={props.handleSalesMarketingExpenseBlur}
+          utilitiesExpenseInput={props.utilitiesExpenseInput}
+          handleUtilitiesExpenseChange={props.handleUtilitiesExpenseChange}
+          handleUtilitiesExpenseBlur={props.handleUtilitiesExpenseBlur}
+          nonOperatingExpenseInput={props.nonOperatingExpenseInput}
+          handleNonOperatingExpenseChange={props.handleNonOperatingExpenseChange}
+          handleNonOperatingExpenseBlur={props.handleNonOperatingExpenseBlur}
+          formatCurrency={props.formatCurrency}
+          formatPercent={props.formatPercent}
+          helpers={props.helpers}
+        />
+      </ExpenseCalculationsProvider>
     </>
   );
 };
 
 export default ExpenseSection;
-
