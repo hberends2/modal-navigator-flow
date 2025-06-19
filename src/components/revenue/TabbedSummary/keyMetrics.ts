@@ -2,16 +2,9 @@
 import React from 'react';
 import { TabbedSummaryProps, MetricRow } from './types';
 import { createHelpers } from './helpers';
-import { historicalExpenseData } from './expenseData';
-import { 
-  calculateForecastExpense, 
-  calculateTotalOtherOperatedExpense, 
-  calculateTotalUndistributedExpense, 
-  calculateTotalExpense 
-} from './expenseCalculations';
 
 export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]): MetricRow[] => {
-  const { historicalYears, forecastYears, formatCurrency, formatPercent } = props;
+  const { historicalYears, forecastYears, formatCurrency, formatPercent, calculateTotalExpense, calculateGrossOperatingProfit } = props;
   const helpers = createHelpers(props);
 
   const metrics: MetricRow[] = [
@@ -66,32 +59,49 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
         return formatCurrency(totalRevenue);
       })
     },
-    // Total Expense (same as Expense tab)
+    // Total Expense (using the working calculation function)
     {
       label: "Total Expense",
       data: allYears.map(year => {
-        const totalExpense = calculateTotalExpense(year, historicalYears);
-        return formatCurrency(totalExpense);
+        if (calculateTotalExpense) {
+          const totalExpense = calculateTotalExpense(year);
+          return formatCurrency(totalExpense);
+        } else {
+          // Fallback if function is not available
+          return formatCurrency(0);
+        }
       })
     },
-    // Gross Operating Profit (Total Revenue - Total Expense)
+    // Gross Operating Profit (using the working calculation function)
     {
       label: "Gross Operating Profit",
       data: allYears.map(year => {
-        const totalRevenue = helpers.calculateTotalRevenue(year);
-        const totalExpense = calculateTotalExpense(year, historicalYears);
-        const gop = totalRevenue - totalExpense;
-        return formatCurrency(gop);
+        if (calculateGrossOperatingProfit) {
+          const gop = calculateGrossOperatingProfit(year);
+          return formatCurrency(gop);
+        } else {
+          // Fallback calculation
+          const totalRevenue = helpers.calculateTotalRevenue(year);
+          const totalExpense = calculateTotalExpense ? calculateTotalExpense(year) : 0;
+          const gop = totalRevenue - totalExpense;
+          return formatCurrency(gop);
+        }
       })
     },
-    // EBITDA (for now, same as GOP - can be refined later if needed)
+    // EBITDA (same as GOP in this context based on the Valuation table)
     {
       label: "EBITDA",
       data: allYears.map(year => {
-        const totalRevenue = helpers.calculateTotalRevenue(year);
-        const totalExpense = calculateTotalExpense(year, historicalYears);
-        const ebitda = totalRevenue - totalExpense;
-        return formatCurrency(ebitda);
+        if (calculateGrossOperatingProfit) {
+          const ebitda = calculateGrossOperatingProfit(year);
+          return formatCurrency(ebitda);
+        } else {
+          // Fallback calculation
+          const totalRevenue = helpers.calculateTotalRevenue(year);
+          const totalExpense = calculateTotalExpense ? calculateTotalExpense(year) : 0;
+          const ebitda = totalRevenue - totalExpense;
+          return formatCurrency(ebitda);
+        }
       })
     }
   ];
