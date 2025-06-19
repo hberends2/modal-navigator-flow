@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TabbedSummaryProps, MetricRow } from './types';
 
@@ -33,6 +32,35 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
       : calculateOccupancyFromYoY(year);
     const availableRooms = getAvailableRooms(year);
     return (occupancyValue / 100) * availableRooms;
+  };
+
+  // Helper function to calculate total revenue for a given year
+  const calculateTotalRevenueForYear = (year: number) => {
+    if (historicalYears.includes(year)) {
+      // Sum historical revenue components
+      const roomsRevenue = historicalData.roomsRevenue[year] || 0;
+      const fbRevenue = historicalData.fbRevenue[year] || 0;
+      const resortFeeRevenue = historicalData.resortFeeRevenue[year] || 0;
+      const otherOperatedRevenue = historicalData.otherOperatedRevenue[year] || 0;
+      const miscellaneousRevenue = historicalData.miscellaneousRevenue[year] || 0;
+      const allocatedRevenue = historicalData.allocatedRevenue[year] || 0;
+      
+      return roomsRevenue + fbRevenue + resortFeeRevenue + 
+             otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+    } else {
+      // Calculate forecast revenue components
+      const roomsRevenue = getForecastRoomsRevenue(year);
+      const occupiedRooms = getForecastOccupiedRooms(year);
+      
+      const fbRevenue = parseFloat(fbPerOccupiedRoom[year] || "0") * occupiedRooms;
+      const resortFeeRevenue = parseFloat(resortFeePerOccupiedRoom[year] || "0") * occupiedRooms;
+      const otherOperatedRevenue = parseFloat(otherOperatedPerOccupiedRoom[year] || "0") * occupiedRooms;
+      const miscellaneousRevenue = parseFloat(miscellaneousPerOccupiedRoom[year] || "0") * occupiedRooms;
+      const allocatedRevenue = parseFloat(allocatedPerOccupiedRoom[year] || "0") * occupiedRooms;
+      
+      return roomsRevenue + fbRevenue + resortFeeRevenue + 
+             otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+    }
   };
 
   const metrics: MetricRow[] = [
@@ -76,33 +104,8 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
     {
       label: "Total Revenue",
       data: allYears.map(year => {
-        if (historicalYears.includes(year)) {
-          // Sum historical revenue components
-          const roomsRevenue = historicalData.roomsRevenue[year] || 0;
-          const fbRevenue = historicalData.fbRevenue[year] || 0;
-          const resortFeeRevenue = historicalData.resortFeeRevenue[year] || 0;
-          const otherOperatedRevenue = historicalData.otherOperatedRevenue[year] || 0;
-          const miscellaneousRevenue = historicalData.miscellaneousRevenue[year] || 0;
-          const allocatedRevenue = historicalData.allocatedRevenue[year] || 0;
-          
-          const totalRevenue = roomsRevenue + fbRevenue + resortFeeRevenue + 
-                             otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
-          return formatCurrency(totalRevenue);
-        } else {
-          // Calculate forecast revenue components
-          const roomsRevenue = getForecastRoomsRevenue(year);
-          const occupiedRooms = getForecastOccupiedRooms(year);
-          
-          const fbRevenue = parseFloat(fbPerOccupiedRoom[year] || "0") * occupiedRooms;
-          const resortFeeRevenue = parseFloat(resortFeePerOccupiedRoom[year] || "0") * occupiedRooms;
-          const otherOperatedRevenue = parseFloat(otherOperatedPerOccupiedRoom[year] || "0") * occupiedRooms;
-          const miscellaneousRevenue = parseFloat(miscellaneousPerOccupiedRoom[year] || "0") * occupiedRooms;
-          const allocatedRevenue = parseFloat(allocatedPerOccupiedRoom[year] || "0") * occupiedRooms;
-          
-          const totalRevenue = roomsRevenue + fbRevenue + resortFeeRevenue + 
-                             otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
-          return formatCurrency(totalRevenue);
-        }
+        const totalRevenue = calculateTotalRevenueForYear(year);
+        return formatCurrency(totalRevenue);
       })
     },
     // Total Expense - only use the prop function if available
@@ -129,12 +132,14 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
         }
       })
     },
-    // EBITDA - same as GOP in this context based on the Valuation table
+    // EBITDA - Fixed to use Total Revenue - Total Expense
     {
       label: "EBITDA",
       data: allYears.map(year => {
-        if (calculateGrossOperatingProfit) {
-          const ebitda = calculateGrossOperatingProfit(year);
+        if (calculateTotalExpense) {
+          const totalRevenue = calculateTotalRevenueForYear(year);
+          const totalExpense = calculateTotalExpense(year);
+          const ebitda = totalRevenue - totalExpense;
           return formatCurrency(ebitda);
         } else {
           return "N/A";
