@@ -1,11 +1,9 @@
 
 import React from 'react';
 import { TabbedSummaryProps, MetricRow } from './types';
-import { createHelpers } from './helpers';
 
-export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]): MetricRow[] => {
+export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], mainHelpers: any): MetricRow[] => {
   const { historicalYears, forecastYears, formatCurrency, formatPercent, calculateTotalExpense, calculateGrossOperatingProfit } = props;
-  const helpers = createHelpers(props);
 
   const metrics: MetricRow[] = [
     // Standard first three rows (same as Revenue and Expense tabs)
@@ -26,13 +24,13 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
       label: "Subject Property ADR",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
-          const occupiedRooms = helpers.getHistoricalOccupiedRooms(year);
+          const occupiedRooms = mainHelpers.getHistoricalOccupiedRoomsForYear(year);
           const roomsRevenue = props.historicalData.roomsRevenue[year] || 0;
           const adr = occupiedRooms > 0 ? roomsRevenue / occupiedRooms : 0;
           return formatCurrency(adr);
         } else {
           const forecastRevenue = props.getForecastRoomsRevenue(year);
-          const occupiedRooms = helpers.getForecastOccupiedRooms(year);
+          const occupiedRooms = mainHelpers.getForecastOccupiedRoomsForYear(year);
           const adr = occupiedRooms > 0 ? forecastRevenue / occupiedRooms : 0;
           return formatCurrency(adr);
         }
@@ -42,7 +40,10 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
       label: "Subject Property RevPAR",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
-          return formatCurrency(helpers.getHistoricalRevpar(year));
+          const roomsRevenue = props.historicalData.roomsRevenue[year] || 0;
+          const availableRooms = props.getAvailableRooms(year);
+          const revpar = availableRooms > 0 ? roomsRevenue / availableRooms : 0;
+          return formatCurrency(revpar);
         } else {
           const forecastRevenue = props.getForecastRoomsRevenue(year);
           const availableRooms = props.getAvailableRooms(year);
@@ -51,11 +52,12 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
         }
       })
     },
-    // Total Revenue (same as Revenue tab)
+    // Total Revenue (using main helpers)
     {
       label: "Total Revenue",
       data: allYears.map(year => {
-        const totalRevenue = helpers.calculateTotalRevenue(year);
+        const isHistorical = historicalYears.includes(year);
+        const totalRevenue = mainHelpers.calculateTotalRevenue(year, isHistorical);
         return formatCurrency(totalRevenue);
       })
     },
@@ -81,7 +83,8 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
           return formatCurrency(gop);
         } else {
           // Fallback calculation
-          const totalRevenue = helpers.calculateTotalRevenue(year);
+          const isHistorical = historicalYears.includes(year);
+          const totalRevenue = mainHelpers.calculateTotalRevenue(year, isHistorical);
           const totalExpense = calculateTotalExpense ? calculateTotalExpense(year) : 0;
           const gop = totalRevenue - totalExpense;
           return formatCurrency(gop);
@@ -97,7 +100,8 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
           return formatCurrency(ebitda);
         } else {
           // Fallback calculation
-          const totalRevenue = helpers.calculateTotalRevenue(year);
+          const isHistorical = historicalYears.includes(year);
+          const totalRevenue = mainHelpers.calculateTotalRevenue(year, isHistorical);
           const totalExpense = calculateTotalExpense ? calculateTotalExpense(year) : 0;
           const ebitda = totalRevenue - totalExpense;
           return formatCurrency(ebitda);

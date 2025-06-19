@@ -1,13 +1,10 @@
 
-import React from "react";
-
 export interface MetricRow {
-  label: React.ReactNode;
-  data: (string | number | React.ReactNode)[];
-  isCollapsible?: boolean;
-  isSubcategory?: boolean;
-  isUndistributed?: boolean;
-  isUndistributedSubcategory?: boolean;
+  label: string;
+  data: string[];
+  isExpanded?: boolean;
+  onToggle?: () => void;
+  indent?: boolean;
 }
 
 export interface TabbedSummaryProps {
@@ -30,7 +27,7 @@ export interface TabbedSummaryProps {
   allocatedPerOccupiedRoom: Record<number, string>;
   formatCurrency: (value: number) => string;
   formatPercent: (value: number, decimals?: number) => string;
-  // Add expense calculation functions
   calculateTotalExpense?: (year: number) => number;
   calculateGrossOperatingProfit?: (year: number) => number;
+  helpers?: any; // Add helpers to the props interface
 }

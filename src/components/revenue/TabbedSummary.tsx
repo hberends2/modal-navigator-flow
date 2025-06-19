@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import SummaryTable from "./TabbedSummary/SummaryTable";
@@ -10,14 +9,14 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
   const [isOtherOperatedExpanded, setIsOtherOperatedExpanded] = useState(false);
   const [isUndistributedExpanded, setIsUndistributedExpanded] = useState(false);
 
-  const { historicalYears, forecastYears } = props;
+  const { historicalYears, forecastYears, helpers } = props;
   const allYears = [...historicalYears, ...forecastYears];
 
   console.log('TabbedSummary rendering with activeTab:', activeTab);
   console.log('All years:', allYears);
 
-  // Create metrics for each tab
-  const keyMetrics = createKeyMetrics(props, allYears);
+  // Create metrics for each tab - pass the main helpers instead of creating new ones
+  const keyMetrics = createKeyMetrics(props, allYears, helpers);
   const occupancyMetrics = createOccupancyMetrics(props, allYears);
   const revenueMetrics = createRevenueMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded);
   const expenseMetrics = createExpenseMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded, isUndistributedExpanded, setIsUndistributedExpanded);

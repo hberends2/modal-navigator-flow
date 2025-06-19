@@ -78,6 +78,7 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
                 allocatedPerOccupiedRoom={revenueCalculations.allocatedPerOccupiedRoom}
                 formatCurrency={formatCurrency}
                 formatPercent={formatPercent}
+                helpers={helpers} // Pass the main helpers
               />
             </ExpenseCalculationsProvider>
 
