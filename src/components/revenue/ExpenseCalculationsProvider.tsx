@@ -2,12 +2,15 @@
 import React, { createContext, useContext, useMemo } from "react";
 import { historicalExpenseData } from "./ExpenseData";
 import { createExpenseCalculations } from "./ExpenseCalculations";
+import { useDatabase } from "../../hooks/useDatabase";
 
 interface ExpenseCalculationsContextType {
   calculations: ReturnType<typeof createExpenseCalculations>;
   calculateTotalExpense: (year: number) => number;
   getTotalHistoricalExpense: (year: number) => number;
   calculateGrossOperatingProfit: (year: number) => number;
+  getPreCalculatedGOP: (year: number) => Promise<number | null>;
+  saveFinancialSummary: (year: number, revenueData: any, expenseData: any) => Promise<void>;
 }
 
 const ExpenseCalculationsContext = createContext<ExpenseCalculationsContextType | null>(null);
@@ -47,6 +50,8 @@ export const ExpenseCalculationsProvider: React.FC<ExpenseCalculationsProviderPr
   utilitiesExpenseInput,
   nonOperatingExpenseInput
 }) => {
+  const { getFinancialSummary, calculateAndSaveFinancialSummary } = useDatabase();
+
   const calculations = useMemo(() => 
     createExpenseCalculations(historicalExpenseData, expenseForecastMethod, helpers),
     [expenseForecastMethod, helpers]
@@ -110,11 +115,32 @@ export const ExpenseCalculationsProvider: React.FC<ExpenseCalculationsProviderPr
     return totalRevenue - roomsExpense - totalOtherOperatedExpense - totalUndistributedExpenses;
   };
 
+  const getPreCalculatedGOP = async (year: number): Promise<number | null> => {
+    try {
+      // Use a default property ID for now - in a real app this would come from context
+      const summary = await getFinancialSummary('default-property', year);
+      return summary?.gross_operating_profit || null;
+    } catch (error) {
+      console.error('Error fetching pre-calculated GOP:', error);
+      return null;
+    }
+  };
+
+  const saveFinancialSummary = async (year: number, revenueData: any, expenseData: any) => {
+    try {
+      await calculateAndSaveFinancialSummary('default-property', year, revenueData, expenseData);
+    } catch (error) {
+      console.error('Error saving financial summary:', error);
+    }
+  };
+
   const contextValue = {
     calculations,
     calculateTotalExpense,
     getTotalHistoricalExpense,
-    calculateGrossOperatingProfit
+    calculateGrossOperatingProfit,
+    getPreCalculatedGOP,
+    saveFinancialSummary
   };
 
   return (

@@ -134,7 +134,7 @@ CREATE TABLE Operating_Revenue (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Department Expense table
+-- Department Expense table with totals
 CREATE TABLE Dept_Expense (
     id SERIAL PRIMARY KEY,
     property_id INTEGER NOT NULL REFERENCES Property_Details(id) ON DELETE CASCADE,
@@ -147,6 +147,9 @@ CREATE TABLE Dept_Expense (
     roomExp_pctRoomRev NUMERIC(10, 2),
     roomExpAmt INTEGER,
     roomExpPOR INTEGER,
+    -- New total fields
+    total_rooms_expense NUMERIC(12, 2),
+    total_other_operated_expense NUMERIC(12, 2),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -164,7 +167,7 @@ CREATE TABLE Fees (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Undistributed Expense table
+-- Undistributed Expense table with totals
 CREATE TABLE Undist_Expense (
     id SERIAL PRIMARY KEY,
     property_id INTEGER NOT NULL REFERENCES Property_Details(id) ON DELETE CASCADE,
@@ -182,6 +185,8 @@ CREATE TABLE Undist_Expense (
     saleMktgExpPAR INTEGER,
     utilPAR INTEGER,
     utilPOR INTEGER,
+    -- New total field
+    total_undistributed_expense NUMERIC(12, 2),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -212,6 +217,23 @@ CREATE TABLE FFE_Reserve (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- New Financial Summary table for pre-calculated totals
+CREATE TABLE Financial_Summary (
+    id SERIAL PRIMARY KEY,
+    property_id INTEGER NOT NULL REFERENCES Property_Details(id) ON DELETE CASCADE,
+    year INTEGER NOT NULL,
+    total_revenue NUMERIC(12, 2),
+    total_rooms_expense NUMERIC(12, 2),
+    total_other_operated_expense NUMERIC(12, 2),
+    total_undistributed_expense NUMERIC(12, 2),
+    total_non_operating_expense NUMERIC(12, 2),
+    gross_operating_profit NUMERIC(12, 2),
+    net_operating_income NUMERIC(12, 2),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(property_id, year)
+);
+
 ---------------------------------------
 -- Indexes for Performance Optimization
 ---------------------------------------
@@ -238,6 +260,11 @@ CREATE INDEX idx_undistexp_property ON Undist_Expense(property_id);
 CREATE INDEX idx_nonopexp_property ON NonOp_Expense(property_id);
 CREATE INDEX idx_ffereserve_property ON FFE_Reserve(property_id);
 
+-- Financial Summary indexes
+CREATE INDEX idx_financial_summary_property ON Financial_Summary(property_id);
+CREATE INDEX idx_financial_summary_year ON Financial_Summary(year);
+CREATE INDEX idx_financial_summary_property_year ON Financial_Summary(property_id, year);
+
 -- Add CASCADE DELETE to ensure data integrity
 ALTER TABLE Acquisition DROP CONSTRAINT IF EXISTS acquisition_property_id_fkey;
 ALTER TABLE Acquisition ADD CONSTRAINT acquisition_property_id_fkey 
@@ -250,3 +277,4 @@ ALTER TABLE Financing ADD CONSTRAINT financing_property_id_fkey
 -- Additional helpful indexes for frequent query patterns
 CREATE INDEX idx_property_city_state ON Property_Details(city, state);
 CREATE INDEX idx_property_type ON Property_Details(propType);
+

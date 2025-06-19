@@ -1,34 +1,35 @@
 
-// This file now provides mock database functionality using localStorage
-// instead of connecting to Supabase
+// Simple localStorage-based client for development
+// This will be replaced with actual Supabase integration
 
-// Helper to get data from localStorage with type safety
+export const STORAGE_KEYS = {
+  PROPERTIES: 'properties',
+  OCCUPANCY_DATA: 'occupancy_data',
+  FINANCIAL_SUMMARIES: 'financial_summaries'
+} as const;
+
 export const getLocalData = <T>(key: string, defaultValue: T): T => {
   try {
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : defaultValue;
-  } catch (e) {
-    console.error(`Error retrieving data for key ${key}:`, e);
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : defaultValue;
+  } catch (error) {
+    console.error(`Error reading from localStorage key ${key}:`, error);
     return defaultValue;
   }
 };
 
-// Helper to save data to localStorage
-export const setLocalData = (key: string, data: any): void => {
+export const setLocalData = <T>(key: string, value: T): void => {
   try {
-    localStorage.setItem(key, JSON.stringify(data));
-  } catch (e) {
-    console.error(`Error saving data for key ${key}:`, e);
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Error writing to localStorage key ${key}:`, error);
   }
 };
 
-// Constants for storage keys
-export const STORAGE_KEYS = {
-  PROPERTIES: 'app_properties',
-  OCCUPANCY_DATA: 'app_occupancy_data'
-};
-
-// No longer need Supabase credentials
-export const hasValidSupabaseCredentials = () => {
-  return true; // Always return true since we're not using Supabase
+export const removeLocalData = (key: string): void => {
+  try {
+    localStorage.removeItem(key);
+  } catch (error) {
+    console.error(`Error removing from localStorage key ${key}:`, error);
+  }
 };
