@@ -1,4 +1,16 @@
 
+export interface HistoricalRevenueData {
+  roomsRevenue: Record<number, number>;
+  revpar: Record<number, number>;
+  revparYoY: Record<number, number>;
+  occupancy: Record<number, number>;
+  fbRevenue: Record<number, number>;
+  resortFeeRevenue: Record<number, number>;
+  otherOperatedRevenue: Record<number, number>;
+  miscellaneousRevenue: Record<number, number>;
+  allocatedRevenue: Record<number, number>;
+}
+
 export interface RevenueCalculationState {
   adrGrowthType: string;
   setAdrGrowthType: (value: string) => void;
