@@ -2,6 +2,13 @@
 import React from 'react';
 import { TabbedSummaryProps, MetricRow } from './types';
 import { createHelpers } from './helpers';
+import { historicalExpenseData } from './expenseData';
+import { 
+  calculateForecastExpense, 
+  calculateTotalOtherOperatedExpense, 
+  calculateTotalUndistributedExpense, 
+  calculateTotalExpense 
+} from './expenseCalculations';
 
 export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]): MetricRow[] => {
   const { historicalYears, forecastYears, formatCurrency, formatPercent } = props;
@@ -51,7 +58,7 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
         }
       })
     },
-    // Use existing pre-calculated data from Valuation table
+    // Total Revenue (same as Revenue tab)
     {
       label: "Total Revenue",
       data: allYears.map(year => {
@@ -59,40 +66,32 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
         return formatCurrency(totalRevenue);
       })
     },
+    // Total Expense (same as Expense tab)
     {
       label: "Total Expense",
       data: allYears.map(year => {
-        // Use the existing calculateTotalExpense function from ExpenseCalculationsProvider
-        if (props.calculateTotalExpense) {
-          const totalExpense = props.calculateTotalExpense(year);
-          return formatCurrency(totalExpense);
-        }
-        return formatCurrency(0);
+        const totalExpense = calculateTotalExpense(year, historicalYears);
+        return formatCurrency(totalExpense);
       })
     },
+    // Gross Operating Profit (Total Revenue - Total Expense)
     {
       label: "Gross Operating Profit",
       data: allYears.map(year => {
-        // Use the existing calculateGrossOperatingProfit function from ExpenseCalculationsProvider
-        if (props.calculateGrossOperatingProfit) {
-          const gop = props.calculateGrossOperatingProfit(year);
-          return formatCurrency(gop);
-        }
-        return formatCurrency(0);
+        const totalRevenue = helpers.calculateTotalRevenue(year);
+        const totalExpense = calculateTotalExpense(year, historicalYears);
+        const gop = totalRevenue - totalExpense;
+        return formatCurrency(gop);
       })
     },
+    // EBITDA (for now, same as GOP - can be refined later if needed)
     {
       label: "EBITDA",
       data: allYears.map(year => {
-        // EBITDA = Gross Operating Profit - Non-Operating Expenses
-        // Use the existing calculation functions
-        if (props.calculateGrossOperatingProfit && props.calculateTotalExpense) {
-          const gop = props.calculateGrossOperatingProfit(year);
-          // For EBITDA, we need GOP minus non-operating expenses
-          // For now, using GOP as EBITDA since the exact calculation depends on your specific requirements
-          return formatCurrency(gop);
-        }
-        return formatCurrency(0);
+        const totalRevenue = helpers.calculateTotalRevenue(year);
+        const totalExpense = calculateTotalExpense(year, historicalYears);
+        const ebitda = totalRevenue - totalExpense;
+        return formatCurrency(ebitda);
       })
     }
   ];
