@@ -3,7 +3,6 @@ import React from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import RevenueTable from "./RevenueTable";
 import TabbedSummary from "./TabbedSummary";
-import { CalculationHelpers } from "./RevenueTableHelpers";
 import { RevenueCalculationState } from "../../types/revenue";
 
 interface RevenueLayoutProps {
@@ -28,10 +27,10 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
   helpers
 }) => {
   return (
-    <div className="flex flex-col h-full bg-gray-50">
+    <div className="flex flex-col h-full bg-gray-50 w-full">
       <div className="flex-1 overflow-hidden">
         <ScrollArea className="h-full">
-          <div className="p-6 space-y-1.5">
+          <div className="p-6 space-y-0.75">
             <TabbedSummary
               historicalYears={historicalYears}
               forecastYears={forecastYears}
