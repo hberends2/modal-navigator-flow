@@ -1,4 +1,5 @@
 
+
 import React from "react";
 import MetricRow from "./MetricRow";
 import ExpenseHeader from "./ExpenseHeader";
@@ -134,6 +135,7 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   const calculateGrossOperatingProfit = (year: number) => {
     const isHistorical = historicalYears.includes(year);
     const totalRevenue = helpers.calculateTotalRevenue(year, isHistorical);
+    const roomsExpense = calculations.calculateExpense(year, roomsExpenseInput[year], 'rooms');
     const totalOtherOperatedExpense = calculations.calculateTotalOtherOperatedExpense(year, {
       fbExpenseInput,
       otherOperatedExpenseInput,
@@ -148,7 +150,7 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
       utilitiesExpenseInput
     });
     
-    return totalRevenue - totalOtherOperatedExpense - totalUndistributedExpenses;
+    return totalRevenue - roomsExpense - totalOtherOperatedExpense - totalUndistributedExpenses;
   };
 
   return (
@@ -274,3 +276,4 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 };
 
 export default ExpenseSection;
+
