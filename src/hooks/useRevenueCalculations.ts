@@ -52,8 +52,11 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   const salesMarketingExpenseInput = useInputHandlers(getInitialForecastData());
   const utilitiesExpenseInput = useInputHandlers(getInitialForecastData());
 
-  // New expense input for non-operating
-  const nonOperatingExpenseInput = useInputHandlers(getInitialForecastData());
+  // New individual non-operating expense inputs (all % of Revenue)
+  const managementFeesExpenseInput = useInputHandlers(getInitialForecastData("0.0"));
+  const realEstateTaxesExpenseInput = useInputHandlers(getInitialForecastData("0.0"));
+  const insuranceExpenseInput = useInputHandlers(getInitialForecastData("0.0"));
+  const otherNonOpExpenseInput = useInputHandlers(getInitialForecastData("0.0"));
 
   // New Reserve for Replacement input
   const reserveForReplacementInput = useInputHandlers(getInitialForecastData());
@@ -101,6 +104,14 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
       formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
     }
     
+    handler(year, formattedValue);
+  };
+
+  // Non-operating expense blur handlers (always percentage)
+  const handleNonOpExpenseBlur = (year: number, value: string, handler: any) => {
+    const cleanValue = value.replace(/[^0-9.-]/g, "");
+    const numValue = parseFloat(cleanValue);
+    const formattedValue = isNaN(numValue) ? "0.0" : numValue.toFixed(1);
     handler(year, formattedValue);
   };
 
@@ -196,10 +207,19 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     utilitiesExpenseInput: utilitiesExpenseInput.values,
     handleUtilitiesExpenseChange: utilitiesExpenseInput.handleChange,
     handleUtilitiesExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, utilitiesExpenseInput.handleChange),
-    // New non-operating expense handlers
-    nonOperatingExpenseInput: nonOperatingExpenseInput.values,
-    handleNonOperatingExpenseChange: nonOperatingExpenseInput.handleChange,
-    handleNonOperatingExpenseBlur: (year: number, value: string) => handleExpenseBlur(year, value, nonOperatingExpenseInput.handleChange),
+    // New individual non-operating expense handlers
+    managementFeesExpenseInput: managementFeesExpenseInput.values,
+    handleManagementFeesExpenseChange: managementFeesExpenseInput.handleChange,
+    handleManagementFeesExpenseBlur: (year: number, value: string) => handleNonOpExpenseBlur(year, value, managementFeesExpenseInput.handleChange),
+    realEstateTaxesExpenseInput: realEstateTaxesExpenseInput.values,
+    handleRealEstateTaxesExpenseChange: realEstateTaxesExpenseInput.handleChange,
+    handleRealEstateTaxesExpenseBlur: (year: number, value: string) => handleNonOpExpenseBlur(year, value, realEstateTaxesExpenseInput.handleChange),
+    insuranceExpenseInput: insuranceExpenseInput.values,
+    handleInsuranceExpenseChange: insuranceExpenseInput.handleChange,
+    handleInsuranceExpenseBlur: (year: number, value: string) => handleNonOpExpenseBlur(year, value, insuranceExpenseInput.handleChange),
+    otherNonOpExpenseInput: otherNonOpExpenseInput.values,
+    handleOtherNonOpExpenseChange: otherNonOpExpenseInput.handleChange,
+    handleOtherNonOpExpenseBlur: (year: number, value: string) => handleNonOpExpenseBlur(year, value, otherNonOpExpenseInput.handleChange),
     // New Reserve for Replacement handlers
     reserveForReplacementInput: reserveForReplacementInput.values,
     handleReserveForReplacementChange,

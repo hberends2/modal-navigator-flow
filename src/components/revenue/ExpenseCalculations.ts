@@ -1,3 +1,4 @@
+
 export const createExpenseCalculations = (
   historicalExpenseData: any,
   expenseForecastMethod: string,
@@ -15,6 +16,13 @@ export const createExpenseCalculations = (
     }
   };
 
+  // New function for non-operating expenses (always % of Revenue)
+  const calculateNonOpExpense = (year: number, inputValue: string) => {
+    const input = parseFloat(inputValue || "0");
+    const totalRevenue = helpers.calculateTotalRevenue(year, false);
+    return (input / 100) * totalRevenue;
+  };
+
   const getHistoricalExpenseData = (year: number, expenseType: string): string => {
     const totalExpense = historicalExpenseData[expenseType][year] || 0;
     
@@ -28,6 +36,14 @@ export const createExpenseCalculations = (
       const percentage = totalRevenue > 0 ? (totalExpense / totalRevenue) * 100 : 0;
       return percentage.toFixed(1);
     }
+  };
+
+  // New function for historical non-operating expenses (always % of Revenue)
+  const getHistoricalNonOpExpenseData = (year: number, expenseType: string): string => {
+    const totalExpense = historicalExpenseData[expenseType][year] || 0;
+    const totalRevenue = helpers.calculateTotalRevenue(year, true);
+    const percentage = totalRevenue > 0 ? (totalExpense / totalRevenue) * 100 : 0;
+    return percentage.toFixed(1);
   };
 
   const calculateTotalOtherOperatedExpense = (year: number, expenseInputs: {
@@ -77,11 +93,24 @@ export const createExpenseCalculations = (
     }
   };
 
-  const calculateTotalNonOperatingExpenses = (year: number, historicalYears: number[], nonOperatingExpenseInput: Record<number, string>) => {
+  const calculateTotalNonOperatingExpenses = (year: number, historicalYears: number[], nonOpExpenseInputs: {
+    managementFeesExpenseInput: Record<number, string>;
+    realEstateTaxesExpenseInput: Record<number, string>;
+    insuranceExpenseInput: Record<number, string>;
+    otherNonOpExpenseInput: Record<number, string>;
+  }) => {
     if (historicalYears.includes(year)) {
-      return historicalExpenseData.nonOperating[year] || 0;
+      return (historicalExpenseData.managementFees[year] || 0) +
+             (historicalExpenseData.realEstateTaxes[year] || 0) +
+             (historicalExpenseData.insurance[year] || 0) +
+             (historicalExpenseData.otherNonOp[year] || 0);
     } else {
-      return calculateExpense(year, nonOperatingExpenseInput[year], 'nonOperating');
+      const managementFeesExpense = calculateNonOpExpense(year, nonOpExpenseInputs.managementFeesExpenseInput[year]);
+      const realEstateTaxesExpense = calculateNonOpExpense(year, nonOpExpenseInputs.realEstateTaxesExpenseInput[year]);
+      const insuranceExpense = calculateNonOpExpense(year, nonOpExpenseInputs.insuranceExpenseInput[year]);
+      const otherNonOpExpense = calculateNonOpExpense(year, nonOpExpenseInputs.otherNonOpExpenseInput[year]);
+      
+      return managementFeesExpense + realEstateTaxesExpense + insuranceExpense + otherNonOpExpense;
     }
   };
 
@@ -94,7 +123,9 @@ export const createExpenseCalculations = (
 
   return {
     calculateExpense,
+    calculateNonOpExpense,
     getHistoricalExpenseData,
+    getHistoricalNonOpExpenseData,
     calculateTotalOtherOperatedExpense,
     calculateTotalUndistributedExpenses,
     calculateTotalNonOperatingExpenses,
