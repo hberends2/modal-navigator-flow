@@ -1,4 +1,3 @@
-
 import React from "react";
 import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import RevenueTable from "./RevenueTable";
@@ -6,6 +5,7 @@ import KPICards from "./KPICards";
 import TabbedSummary from "./TabbedSummary";
 import AppSidebar from "../AppSidebar";
 import { formatCurrency, formatPercent } from "../../utils/calculationUtils";
+import { ExpenseCalculationsProvider, useExpenseCalculations } from "./ExpenseCalculationsProvider";
 
 interface RevenueLayoutProps {
   activeSection: string | null;
@@ -39,8 +39,26 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
           <div className="p-6 flex-1 flex flex-col overflow-hidden">
             <KPICards />
 
-            <div className="sticky top-0 z-10 bg-gray-50 pb-0">
-              <TabbedSummary
+            <ExpenseCalculationsProvider
+              expenseForecastMethod={revenueCalculations.expenseForecastMethod}
+              helpers={helpers}
+              historicalYears={historicalYears}
+              roomsExpenseInput={revenueCalculations.roomsExpenseInput}
+              fbExpenseInput={revenueCalculations.fbExpenseInput}
+              otherOperatedExpenseInput={revenueCalculations.otherOperatedExpenseInput}
+              miscellaneousExpenseInput={revenueCalculations.miscellaneousExpenseInput}
+              allocatedExpenseInput={revenueCalculations.allocatedExpenseInput}
+              propertyOperationsExpenseInput={revenueCalculations.propertyOperationsExpenseInput}
+              administrativeGeneralExpenseInput={revenueCalculations.administrativeGeneralExpenseInput}
+              infoTechServicesExpenseInput={revenueCalculations.infoTechServicesExpenseInput}
+              salesMarketingExpenseInput={revenueCalculations.salesMarketingExpenseInput}
+              utilitiesExpenseInput={revenueCalculations.utilitiesExpenseInput}
+              managementFeesExpenseInput={revenueCalculations.managementFeesExpenseInput}
+              realEstateTaxesExpenseInput={revenueCalculations.realEstateTaxesExpenseInput}
+              insuranceExpenseInput={revenueCalculations.insuranceExpenseInput}
+              otherNonOpExpenseInput={revenueCalculations.otherNonOpExpenseInput}
+            >
+              <TabbedSummaryWithExpenseCalculations
                 roomsKeys={roomsKeys}
                 historicalYears={historicalYears}
                 forecastYears={forecastYears}
@@ -61,7 +79,7 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
                 formatCurrency={formatCurrency}
                 formatPercent={formatPercent}
               />
-            </div>
+            </ExpenseCalculationsProvider>
 
             <div className="flex-1 min-h-0 overflow-hidden">
               <RevenueTable 
@@ -158,6 +176,21 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
         </div>
       </div>
     </SidebarProvider>
+  );
+};
+
+// Create a wrapper component that uses the expense calculations context
+const TabbedSummaryWithExpenseCalculations: React.FC<any> = (props) => {
+  const { calculateTotalExpense, calculateGrossOperatingProfit } = useExpenseCalculations();
+  
+  return (
+    <div className="sticky top-0 z-10 bg-gray-50 pb-0">
+      <TabbedSummary
+        {...props}
+        calculateTotalExpense={calculateTotalExpense}
+        calculateGrossOperatingProfit={calculateGrossOperatingProfit}
+      />
+    </div>
   );
 };
 

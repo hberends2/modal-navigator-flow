@@ -62,24 +62,36 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
     {
       label: "Total Expense",
       data: allYears.map(year => {
-        // TODO: Replace with actual pre-calculated data from Valuation table
-        // For now, use placeholder values until the Valuation table data is accessible
+        // Use the existing calculateTotalExpense function from ExpenseCalculationsProvider
+        if (props.calculateTotalExpense) {
+          const totalExpense = props.calculateTotalExpense(year);
+          return formatCurrency(totalExpense);
+        }
         return formatCurrency(0);
       })
     },
     {
       label: "Gross Operating Profit",
       data: allYears.map(year => {
-        // TODO: Replace with actual pre-calculated data from Valuation table
-        // For now, use placeholder values until the Valuation table data is accessible
+        // Use the existing calculateGrossOperatingProfit function from ExpenseCalculationsProvider
+        if (props.calculateGrossOperatingProfit) {
+          const gop = props.calculateGrossOperatingProfit(year);
+          return formatCurrency(gop);
+        }
         return formatCurrency(0);
       })
     },
     {
       label: "EBITDA",
       data: allYears.map(year => {
-        // TODO: Replace with actual pre-calculated data from Valuation table
-        // For now, use placeholder values until the Valuation table data is accessible
+        // EBITDA = Gross Operating Profit - Non-Operating Expenses
+        // Use the existing calculation functions
+        if (props.calculateGrossOperatingProfit && props.calculateTotalExpense) {
+          const gop = props.calculateGrossOperatingProfit(year);
+          // For EBITDA, we need GOP minus non-operating expenses
+          // For now, using GOP as EBITDA since the exact calculation depends on your specific requirements
+          return formatCurrency(gop);
+        }
         return formatCurrency(0);
       })
     }
