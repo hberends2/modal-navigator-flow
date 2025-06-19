@@ -1,4 +1,3 @@
-
 import React from "react";
 import MetricRow from "./MetricRow";
 import ExpenseSubSection from "./ExpenseSubSection";
@@ -138,12 +137,16 @@ const UndistributedExpensesSection: React.FC<UndistributedExpensesSectionProps> 
 
       {/* Total Undistributed Expense Row */}
       <MetricRow
-        label={<span className="font-medium">Total Undistributed Expense</span>}
+        label={<span className="font-bold italic">Total Undistributed Expense</span>}
         historicalData={historicalYears.map(year => 
-          formatCurrency(calculateTotalUndistributedExpenses(year))
+          <span className="font-bold italic">
+            {formatCurrency(calculateTotalUndistributedExpenses(year))}
+          </span>
         )}
         forecastData={forecastYears.map(year => 
-          formatCurrency(calculateTotalUndistributedExpenses(year))
+          <span className="font-bold italic">
+            {formatCurrency(calculateTotalUndistributedExpenses(year))}
+          </span>
         )}
       />
     </>

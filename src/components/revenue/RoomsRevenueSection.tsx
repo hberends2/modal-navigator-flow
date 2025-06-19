@@ -1,3 +1,4 @@
+
 import React from "react";
 import MetricRow from "./MetricRow";
 
@@ -30,9 +31,17 @@ const RoomsRevenueSection: React.FC<RoomsRevenueSectionProps> = ({
 
       {/* Total Rooms Revenue */}
       <MetricRow
-        label="Total Rooms Revenue"
-        historicalData={historicalYears.map(year => formatCurrency(historicalData.roomsRevenue[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(getForecastRoomsRevenue(year)))}
+        label={<span className="font-bold italic">Total Rooms Revenue</span>}
+        historicalData={historicalYears.map(year => (
+          <span className="font-bold italic">
+            {formatCurrency(historicalData.roomsRevenue[year] || 0)}
+          </span>
+        ))}
+        forecastData={forecastYears.map(year => (
+          <span className="font-bold italic">
+            {formatCurrency(getForecastRoomsRevenue(year))}
+          </span>
+        ))}
       />
     </>
   );

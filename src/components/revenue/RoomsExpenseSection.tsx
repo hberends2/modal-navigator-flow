@@ -71,9 +71,17 @@ const RoomsExpenseSection: React.FC<RoomsExpenseSectionProps> = ({
         isIndented={true}
       />
       <MetricRow
-        label="Total Rooms Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.rooms[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, roomsExpenseInput[year], 'rooms')))}
+        label={<span className="font-bold italic">Total Rooms Expense</span>}
+        historicalData={historicalYears.map(year => (
+          <span className="font-bold italic">
+            {formatCurrency(historicalExpenseData.rooms[year] || 0)}
+          </span>
+        ))}
+        forecastData={forecastYears.map(year => (
+          <span className="font-bold italic">
+            {formatCurrency(calculateExpense(year, roomsExpenseInput[year], 'rooms'))}
+          </span>
+        ))}
         isIndented={true}
       />
     </>
