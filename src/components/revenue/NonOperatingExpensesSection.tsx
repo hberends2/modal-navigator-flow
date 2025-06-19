@@ -218,17 +218,13 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
 
       {/* Total Non-Operating Row */}
       <MetricRow
-        label={<span className="font-bold text-base">Total Non-Operating</span>}
-        historicalData={historicalYears.map(year => (
-          <span className="font-bold text-base">
-            {formatCurrency(calculateTotalNonOperatingExpenses(year))}
-          </span>
-        ))}
-        forecastData={forecastYears.map(year => (
-          <span className="font-bold text-base">
-            {formatCurrency(calculateTotalNonOperatingExpenses(year))}
-          </span>
-        ))}
+        label={<span className="font-medium">Total Non-Operating Expense</span>}
+        historicalData={historicalYears.map(year => 
+          formatCurrency(calculateTotalNonOperatingExpenses(year))
+        )}
+        forecastData={forecastYears.map(year => 
+          formatCurrency(calculateTotalNonOperatingExpenses(year))
+        )}
       />
     </>
   );
