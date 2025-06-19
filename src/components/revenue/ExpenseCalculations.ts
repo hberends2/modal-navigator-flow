@@ -6,7 +6,7 @@ export const createExpenseCalculations = (
 ) => {
   const calculateExpense = (year: number, inputValue: string, expenseType: string) => {
     const input = parseFloat(inputValue || "0");
-    if (expenseForecastMethod === "ADR") {
+    if (expenseForecastMethod === "POR") {
       const occupiedRooms = helpers.getForecastOccupiedRoomsForYear(year);
       return input * occupiedRooms;
     } else {
@@ -19,7 +19,7 @@ export const createExpenseCalculations = (
   const getHistoricalExpenseData = (year: number, expenseType: string): string => {
     const totalExpense = historicalExpenseData[expenseType][year] || 0;
     
-    if (expenseForecastMethod === "ADR") {
+    if (expenseForecastMethod === "POR") {
       const occupiedRooms = helpers.getHistoricalOccupiedRoomsForYear(year);
       const perRoom = occupiedRooms > 0 ? totalExpense / occupiedRooms : 0;
       return Math.round(perRoom).toString();

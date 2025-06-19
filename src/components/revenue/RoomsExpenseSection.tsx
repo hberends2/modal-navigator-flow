@@ -32,7 +32,7 @@ const RoomsExpenseSection: React.FC<RoomsExpenseSectionProps> = ({
   const getHistoricalExpenseData = (year: number): string => {
     const totalExpense = historicalExpenseData.rooms[year] || 0;
     
-    if (expenseForecastMethod === "ADR") {
+    if (expenseForecastMethod === "POR") {
       const occupiedRooms = helpers.getHistoricalOccupiedRoomsForYear(year);
       const perRoom = occupiedRooms > 0 ? totalExpense / occupiedRooms : 0;
       return Math.round(perRoom).toString();

@@ -24,7 +24,7 @@ const ExpenseHeader: React.FC<ExpenseHeaderProps> = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ADR">ADR</SelectItem>
+                  <SelectItem value="POR">POR</SelectItem>
                   <SelectItem value="% of Revenue">% of Revenue</SelectItem>
                 </SelectContent>
               </Select>

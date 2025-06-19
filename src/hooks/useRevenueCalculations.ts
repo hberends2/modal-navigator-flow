@@ -11,7 +11,7 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
   const { data: occupancyData, updateSubjectOccupancy, updateSubjectOccupancyYoY } = useRevenueOccupancyData();
   const [adrGrowthType, setAdrGrowthType] = useState<string>("flat");
   const [occupancyForecastMethod, setOccupancyForecastMethod] = useState<string>("Occupancy");
-  const [expenseForecastMethod, setExpenseForecastMethod] = useState<string>("ADR");
+  const [expenseForecastMethod, setExpenseForecastMethod] = useState<string>("POR");
 
   const flatAdr = useInputHandlers({ [0]: REVENUE_CONFIG.DEFAULT_GROWTH_RATES.ADR });
   const yearlyAdr = useInputHandlers(getInitialForecastData(REVENUE_CONFIG.DEFAULT_GROWTH_RATES.ADR));
@@ -89,8 +89,8 @@ export const useRevenueCalculations = (): RevenueCalculationState => {
     const numValue = parseFloat(cleanValue);
     
     let formattedValue: string;
-    if (expenseForecastMethod === "ADR") {
-      // Integer format for ADR
+    if (expenseForecastMethod === "POR") {
+      // Integer format for POR
       formattedValue = isNaN(numValue) ? "0" : Math.round(numValue).toString();
     } else {
       // Percentage format with 1 decimal place
