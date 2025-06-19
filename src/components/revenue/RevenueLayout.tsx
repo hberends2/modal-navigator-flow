@@ -1,18 +1,20 @@
 
 import React from "react";
-import { ScrollArea } from "../ui/scroll-area";
+import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import RevenueTable from "./RevenueTable";
+import KPICards from "./KPICards";
 import TabbedSummary from "./TabbedSummary";
-import { RevenueCalculationState } from "../../types/revenue";
+import AppSidebar from "../AppSidebar";
+import { formatCurrency, formatPercent } from "../../utils/calculationUtils";
 
 interface RevenueLayoutProps {
-  activeSection: string;
-  handleItemClick: (section: string) => void;
+  activeSection: string | null;
+  handleItemClick: (modalName: string) => void;
   roomsKeys: number;
   historicalYears: number[];
   forecastYears: number[];
   historicalData: any;
-  revenueCalculations: RevenueCalculationState;
+  revenueCalculations: any;
   helpers: any;
 }
 
@@ -27,49 +29,123 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
   helpers
 }) => {
   return (
-    <div className="flex flex-col h-full bg-gray-50 w-full">
-      <div className="flex-1 overflow-hidden">
-        <ScrollArea id="revenue-scroll-area" className="h-full">
-          <div className="p-6 space-y-0.75">
-            <TabbedSummary
-              historicalYears={historicalYears}
-              forecastYears={forecastYears}
-              roomsKeys={roomsKeys}
-              historicalData={historicalData}
-              occupancyForecast={revenueCalculations.occupancyForecast}
-              occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
-              calculateOccupancyFromYoY={helpers.calculateOccupancyFromYoY}
-              getAvailableRooms={helpers.getAvailableRooms}
-              getHistoricalADR={helpers.getHistoricalADR}
-              getForecastADR={helpers.getForecastADR}
-              getForecastRevpar={helpers.getForecastRevpar}
-              getForecastRoomsRevenue={helpers.getForecastRoomsRevenue}
-              fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom}
-              resortFeePerOccupiedRoom={revenueCalculations.resortFeePerOccupiedRoom}
-              otherOperatedPerOccupiedRoom={revenueCalculations.otherOperatedPerOccupiedRoom}
-              miscellaneousPerOccupiedRoom={revenueCalculations.miscellaneousPerOccupiedRoom}
-              allocatedPerOccupiedRoom={revenueCalculations.allocatedPerOccupiedRoom}
-              formatCurrency={helpers.formatCurrency}
-              formatPercent={helpers.formatPercent}
-            />
-            
-            <RevenueTable
-              roomsKeys={roomsKeys}
-              historicalYears={historicalYears}
-              forecastYears={forecastYears}
-              historicalData={historicalData}
-              {...revenueCalculations}
-              getAvailableRooms={helpers.getAvailableRooms}
-              getForecastRevpar={helpers.getForecastRevpar}
-              getForecastRoomsRevenue={helpers.getForecastRoomsRevenue}
-              calculateOccupancyFromYoY={helpers.calculateOccupancyFromYoY}
-              formatCurrency={helpers.formatCurrency}
-              formatPercent={helpers.formatPercent}
-            />
+    <SidebarProvider>
+      <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
+        <AppSidebar onItemClick={handleItemClick} activeSection={activeSection} />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="p-2 border-b bg-white">
+            <SidebarTrigger />
           </div>
-        </ScrollArea>
+          <div className="p-6 flex-1 flex flex-col overflow-hidden">
+            <KPICards />
+
+            <div className="sticky top-0 z-10 bg-gray-50 pb-0">
+              <TabbedSummary
+                roomsKeys={roomsKeys}
+                historicalYears={historicalYears}
+                forecastYears={forecastYears}
+                historicalData={historicalData}
+                occupancyForecast={revenueCalculations.occupancyForecast}
+                occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
+                calculateOccupancyFromYoY={helpers.calculateOccupancyFromYoYForYear}
+                getAvailableRooms={helpers.getAvailableRoomsForYear}
+                getForecastRoomsRevenue={helpers.getForecastRoomsRevenueForYear}
+                getHistoricalADR={helpers.getHistoricalADRForYearCalculated}
+                getForecastADR={helpers.getForecastADRForYear}
+                getForecastRevpar={helpers.getForecastRevparForYear}
+                fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom}
+                resortFeePerOccupiedRoom={revenueCalculations.resortFeePerOccupiedRoom}
+                otherOperatedPerOccupiedRoom={revenueCalculations.otherOperatedPerOccupiedRoom}
+                miscellaneousPerOccupiedRoom={revenueCalculations.miscellaneousPerOccupiedRoom}
+                allocatedPerOccupiedRoom={revenueCalculations.allocatedPerOccupiedRoom}
+                formatCurrency={formatCurrency}
+                formatPercent={formatPercent}
+              />
+            </div>
+
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <RevenueTable 
+                roomsKeys={roomsKeys} 
+                historicalYears={historicalYears} 
+                forecastYears={forecastYears} 
+                historicalData={historicalData} 
+                adrGrowthType={revenueCalculations.adrGrowthType} 
+                setAdrGrowthType={revenueCalculations.setAdrGrowthType} 
+                flatAdrGrowth={revenueCalculations.flatAdrGrowth} 
+                setFlatAdrGrowth={revenueCalculations.setFlatAdrGrowth} 
+                yearlyAdrGrowth={revenueCalculations.yearlyAdrGrowth} 
+                handleYearlyAdrChange={revenueCalculations.handleYearlyAdrChange} 
+                occupancyForecast={revenueCalculations.occupancyForecast} 
+                handleOccupancyChange={revenueCalculations.handleOccupancyChange} 
+                occupancyForecastMethod={revenueCalculations.occupancyForecastMethod} 
+                setOccupancyForecastMethod={revenueCalculations.setOccupancyForecastMethod} 
+                occupancyYoYGrowth={revenueCalculations.occupancyYoYGrowth} 
+                handleOccupancyYoYChange={revenueCalculations.handleOccupancyYoYChange} 
+                calculateOccupancyFromYoY={helpers.calculateOccupancyFromYoYForYear} 
+                getAvailableRooms={helpers.getAvailableRoomsForYear} 
+                getForecastRevpar={helpers.getForecastRevparForYear} 
+                getForecastRoomsRevenue={helpers.getForecastRoomsRevenueForYear} 
+                fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom} 
+                handleFbPerOccupiedRoomChange={revenueCalculations.handleFbPerOccupiedRoomChange} 
+                handleFbPerOccupiedRoomBlur={revenueCalculations.handleFbPerOccupiedRoomBlur}
+                resortFeePerOccupiedRoom={revenueCalculations.resortFeePerOccupiedRoom}
+                handleResortFeePerOccupiedRoomChange={revenueCalculations.handleResortFeePerOccupiedRoomChange}
+                handleResortFeePerOccupiedRoomBlur={revenueCalculations.handleResortFeePerOccupiedRoomBlur}
+                otherOperatedPerOccupiedRoom={revenueCalculations.otherOperatedPerOccupiedRoom}
+                handleOtherOperatedPerOccupiedRoomChange={revenueCalculations.handleOtherOperatedPerOccupiedRoomChange}
+                handleOtherOperatedPerOccupiedRoomBlur={revenueCalculations.handleOtherOperatedPerOccupiedRoomBlur}
+                miscellaneousPerOccupiedRoom={revenueCalculations.miscellaneousPerOccupiedRoom}
+                handleMiscellaneousPerOccupiedRoomChange={revenueCalculations.handleMiscellaneousPerOccupiedRoomChange}
+                handleMiscellaneousPerOccupiedRoomBlur={revenueCalculations.handleMiscellaneousPerOccupiedRoomBlur}
+                allocatedPerOccupiedRoom={revenueCalculations.allocatedPerOccupiedRoom}
+                handleAllocatedPerOccupiedRoomChange={revenueCalculations.handleAllocatedPerOccupiedRoomChange}
+                handleAllocatedPerOccupiedRoomBlur={revenueCalculations.handleAllocatedPerOccupiedRoomBlur}
+                formatCurrency={formatCurrency} 
+                formatPercent={formatPercent}
+                expenseForecastMethod={revenueCalculations.expenseForecastMethod}
+                setExpenseForecastMethod={revenueCalculations.setExpenseForecastMethod}
+                roomsExpenseInput={revenueCalculations.roomsExpenseInput}
+                handleRoomsExpenseChange={revenueCalculations.handleRoomsExpenseChange}
+                handleRoomsExpenseBlur={revenueCalculations.handleRoomsExpenseBlur}
+                fbExpenseInput={revenueCalculations.fbExpenseInput}
+                handleFbExpenseChange={revenueCalculations.handleFbExpenseChange}
+                handleFbExpenseBlur={revenueCalculations.handleFbExpenseBlur}
+                resortFeeExpenseInput={revenueCalculations.resortFeeExpenseInput}
+                handleResortFeeExpenseChange={revenueCalculations.handleResortFeeExpenseChange}
+                handleResortFeeExpenseBlur={revenueCalculations.handleResortFeeExpenseBlur}
+                otherOperatedExpenseInput={revenueCalculations.otherOperatedExpenseInput}
+                handleOtherOperatedExpenseChange={revenueCalculations.handleOtherOperatedExpenseChange}
+                handleOtherOperatedExpenseBlur={revenueCalculations.handleOtherOperatedExpenseBlur}
+                miscellaneousExpenseInput={revenueCalculations.miscellaneousExpenseInput}
+                handleMiscellaneousExpenseChange={revenueCalculations.handleMiscellaneousExpenseChange}
+                handleMiscellaneousExpenseBlur={revenueCalculations.handleMiscellaneousExpenseBlur}
+                allocatedExpenseInput={revenueCalculations.allocatedExpenseInput}
+                handleAllocatedExpenseChange={revenueCalculations.handleAllocatedExpenseChange}
+                handleAllocatedExpenseBlur={revenueCalculations.handleAllocatedExpenseBlur}
+                propertyOperationsExpenseInput={revenueCalculations.propertyOperationsExpenseInput}
+                handlePropertyOperationsExpenseChange={revenueCalculations.handlePropertyOperationsExpenseChange}
+                handlePropertyOperationsExpenseBlur={revenueCalculations.handlePropertyOperationsExpenseBlur}
+                administrativeGeneralExpenseInput={revenueCalculations.administrativeGeneralExpenseInput}
+                handleAdministrativeGeneralExpenseChange={revenueCalculations.handleAdministrativeGeneralExpenseChange}
+                handleAdministrativeGeneralExpenseBlur={revenueCalculations.handleAdministrativeGeneralExpenseBlur}
+                infoTechServicesExpenseInput={revenueCalculations.infoTechServicesExpenseInput}
+                handleInfoTechServicesExpenseChange={revenueCalculations.handleInfoTechServicesExpenseChange}
+                handleInfoTechServicesExpenseBlur={revenueCalculations.handleInfoTechServicesExpenseBlur}
+                salesMarketingExpenseInput={revenueCalculations.salesMarketingExpenseInput}
+                handleSalesMarketingExpenseChange={revenueCalculations.handleSalesMarketingExpenseChange}
+                handleSalesMarketingExpenseBlur={revenueCalculations.handleSalesMarketingExpenseBlur}
+                utilitiesExpenseInput={revenueCalculations.utilitiesExpenseInput}
+                handleUtilitiesExpenseChange={revenueCalculations.handleUtilitiesExpenseChange}
+                handleUtilitiesExpenseBlur={revenueCalculations.handleUtilitiesExpenseBlur}
+                nonOperatingExpenseInput={revenueCalculations.nonOperatingExpenseInput}
+                handleNonOperatingExpenseChange={revenueCalculations.handleNonOperatingExpenseChange}
+                handleNonOperatingExpenseBlur={revenueCalculations.handleNonOperatingExpenseBlur}
+              />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
