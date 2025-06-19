@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import SummaryTable from "./TabbedSummary/SummaryTable";
@@ -15,8 +16,8 @@ const TabbedSummary: React.FC<TabbedSummaryProps> = (props) => {
   console.log('TabbedSummary rendering with activeTab:', activeTab);
   console.log('All years:', allYears);
 
-  // Create metrics for each tab - pass the main helpers instead of creating new ones
-  const keyMetrics = createKeyMetrics(props, allYears, helpers);
+  // Create metrics for each tab - removed mainHelpers parameter from createKeyMetrics
+  const keyMetrics = createKeyMetrics(props, allYears);
   const occupancyMetrics = createOccupancyMetrics(props, allYears);
   const revenueMetrics = createRevenueMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded);
   const expenseMetrics = createExpenseMetrics(props, allYears, isOtherOperatedExpanded, setIsOtherOperatedExpanded, isUndistributedExpanded, setIsUndistributedExpanded);

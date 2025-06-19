@@ -2,7 +2,7 @@
 import React from 'react';
 import { TabbedSummaryProps, MetricRow } from './types';
 
-export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], mainHelpers: any): MetricRow[] => {
+export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]): MetricRow[] => {
   const { 
     historicalYears, 
     forecastYears, 
@@ -16,8 +16,24 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], 
     calculateOccupancyFromYoY,
     getHistoricalADR,
     getForecastADR,
-    getForecastRevpar
+    getForecastRevpar,
+    getForecastRoomsRevenue,
+    fbPerOccupiedRoom,
+    resortFeePerOccupiedRoom,
+    otherOperatedPerOccupiedRoom,
+    miscellaneousPerOccupiedRoom,
+    allocatedPerOccupiedRoom,
+    getAvailableRooms
   } = props;
+
+  // Helper function to calculate occupied rooms for forecast years
+  const getForecastOccupiedRooms = (year: number) => {
+    const occupancyValue = occupancyForecastMethod === "Occupancy" 
+      ? parseFloat(occupancyForecast[year] || "0")
+      : calculateOccupancyFromYoY(year);
+    const availableRooms = getAvailableRooms(year);
+    return (occupancyValue / 100) * availableRooms;
+  };
 
   const metrics: MetricRow[] = [
     // Use existing occupancy data directly
@@ -56,12 +72,12 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], 
         }
       })
     },
-    // Total Revenue - use historical data only, show N/A for forecast years if no direct data available
+    // Total Revenue - calculate from individual components
     {
       label: "Total Revenue",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
-          // Sum historical revenue components if available
+          // Sum historical revenue components
           const roomsRevenue = historicalData.roomsRevenue[year] || 0;
           const fbRevenue = historicalData.fbRevenue[year] || 0;
           const resortFeeRevenue = historicalData.resortFeeRevenue[year] || 0;
@@ -73,8 +89,19 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[], 
                              otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
           return formatCurrency(totalRevenue);
         } else {
-          // For forecast years, show N/A since we can't calculate without doing calculations
-          return "N/A";
+          // Calculate forecast revenue components
+          const roomsRevenue = getForecastRoomsRevenue(year);
+          const occupiedRooms = getForecastOccupiedRooms(year);
+          
+          const fbRevenue = parseFloat(fbPerOccupiedRoom[year] || "0") * occupiedRooms;
+          const resortFeeRevenue = parseFloat(resortFeePerOccupiedRoom[year] || "0") * occupiedRooms;
+          const otherOperatedRevenue = parseFloat(otherOperatedPerOccupiedRoom[year] || "0") * occupiedRooms;
+          const miscellaneousRevenue = parseFloat(miscellaneousPerOccupiedRoom[year] || "0") * occupiedRooms;
+          const allocatedRevenue = parseFloat(allocatedPerOccupiedRoom[year] || "0") * occupiedRooms;
+          
+          const totalRevenue = roomsRevenue + fbRevenue + resortFeeRevenue + 
+                             otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+          return formatCurrency(totalRevenue);
         }
       })
     },
