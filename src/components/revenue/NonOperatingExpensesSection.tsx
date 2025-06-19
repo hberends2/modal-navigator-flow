@@ -95,7 +95,7 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
           formatCurrency(historicalExpenseData.managementFees[year] || 0)
         )}
         forecastData={forecastYears.map(year => 
-          formatCurrency(calculateNonOpExpense(year, managementFeesExpenseInput[year]))
+          formatCurrency(calculateNonOpExpense(year, managementFeesExpenseInput[year] || "0"))
         )}
         isIndented={true}
       />
@@ -120,7 +120,7 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
           formatCurrency(historicalExpenseData.realEstateTaxes[year] || 0)
         )}
         forecastData={forecastYears.map(year => 
-          formatCurrency(calculateNonOpExpense(year, realEstateTaxesExpenseInput[year]))
+          formatCurrency(calculateNonOpExpense(year, realEstateTaxesExpenseInput[year] || "0"))
         )}
         isIndented={true}
       />
@@ -145,7 +145,7 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
           formatCurrency(historicalExpenseData.insurance[year] || 0)
         )}
         forecastData={forecastYears.map(year => 
-          formatCurrency(calculateNonOpExpense(year, insuranceExpenseInput[year]))
+          formatCurrency(calculateNonOpExpense(year, insuranceExpenseInput[year] || "0"))
         )}
         isIndented={true}
       />
@@ -170,7 +170,7 @@ const NonOperatingExpensesSection: React.FC<NonOperatingExpensesSectionProps> = 
           formatCurrency(historicalExpenseData.otherNonOp[year] || 0)
         )}
         forecastData={forecastYears.map(year => 
-          formatCurrency(calculateNonOpExpense(year, otherNonOpExpenseInput[year]))
+          formatCurrency(calculateNonOpExpense(year, otherNonOpExpenseInput[year] || "0"))
         )}
         isIndented={true}
       />
