@@ -140,6 +140,9 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
                 nonOperatingExpenseInput={revenueCalculations.nonOperatingExpenseInput}
                 handleNonOperatingExpenseChange={revenueCalculations.handleNonOperatingExpenseChange}
                 handleNonOperatingExpenseBlur={revenueCalculations.handleNonOperatingExpenseBlur}
+                reserveForReplacementInput={revenueCalculations.reserveForReplacementInput}
+                handleReserveForReplacementChange={revenueCalculations.handleReserveForReplacementChange}
+                handleReserveForReplacementBlur={revenueCalculations.handleReserveForReplacementBlur}
               />
             </div>
           </div>
