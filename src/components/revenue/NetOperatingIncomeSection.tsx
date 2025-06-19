@@ -24,6 +24,11 @@ const NetOperatingIncomeSection: React.FC<NetOperatingIncomeSectionProps> = ({
     if (isHistorical) {
       return 1000; // Historical value
     } else {
+      // Add null safety check
+      if (!reserveForReplacementInput) {
+        console.warn('reserveForReplacementInput is undefined, using default value');
+        return 0;
+      }
       const inputValue = reserveForReplacementInput[year] || "0";
       return parseFloat(inputValue) || 0;
     }

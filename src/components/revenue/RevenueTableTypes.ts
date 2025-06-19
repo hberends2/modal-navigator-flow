@@ -87,6 +87,9 @@ export interface RevenueTableProps {
   nonOperatingExpenseInput: Record<number, string>;
   handleNonOperatingExpenseChange: (year: number, value: string) => void;
   handleNonOperatingExpenseBlur: (year: number, value: string) => void;
+  reserveForReplacementInput: Record<number, string>;
+  handleReserveForReplacementChange: (year: number, value: string) => void;
+  handleReserveForReplacementBlur: (year: number, value: string) => void;
 }
 
 export interface RevenueTableRendererProps extends RevenueTableProps {
