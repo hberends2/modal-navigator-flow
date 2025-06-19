@@ -7,9 +7,6 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
   const { historicalYears, forecastYears, formatCurrency, formatPercent } = props;
   const helpers = createHelpers(props);
 
-  // Get expense calculations from props (passed down from ExpenseCalculationsProvider)
-  const { calculateTotalExpense, calculateGrossOperatingProfit } = props;
-
   const metrics: MetricRow[] = [
     // Standard first three rows (same as Revenue and Expense tabs)
     {
@@ -54,7 +51,7 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
         }
       })
     },
-    // New key metrics rows
+    // Use existing pre-calculated data from Valuation table
     {
       label: "Total Revenue",
       data: allYears.map(year => {
@@ -65,31 +62,25 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
     {
       label: "Total Expense",
       data: allYears.map(year => {
-        if (calculateTotalExpense) {
-          const totalExpense = calculateTotalExpense(year);
-          return formatCurrency(totalExpense);
-        }
+        // TODO: Replace with actual pre-calculated data from Valuation table
+        // For now, use placeholder values until the Valuation table data is accessible
         return formatCurrency(0);
       })
     },
     {
       label: "Gross Operating Profit",
       data: allYears.map(year => {
-        if (calculateGrossOperatingProfit) {
-          const gop = calculateGrossOperatingProfit(year);
-          return formatCurrency(gop);
-        }
+        // TODO: Replace with actual pre-calculated data from Valuation table
+        // For now, use placeholder values until the Valuation table data is accessible
         return formatCurrency(0);
       })
     },
     {
       label: "EBITDA",
       data: allYears.map(year => {
-        // EBITDA = Total Revenue - Total Expense (simplified calculation)
-        const totalRevenue = helpers.calculateTotalRevenue(year);
-        const totalExpense = calculateTotalExpense ? calculateTotalExpense(year) : 0;
-        const ebitda = totalRevenue - totalExpense;
-        return formatCurrency(ebitda);
+        // TODO: Replace with actual pre-calculated data from Valuation table
+        // For now, use placeholder values until the Valuation table data is accessible
+        return formatCurrency(0);
       })
     }
   ];
