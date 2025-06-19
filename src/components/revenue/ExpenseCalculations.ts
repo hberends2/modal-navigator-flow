@@ -40,7 +40,7 @@ export const createExpenseCalculations = (
 
   // New function for historical non-operating expenses (always % of Revenue)
   const getHistoricalNonOpExpenseData = (year: number, expenseType: string): string => {
-    const totalExpense = historicalExpenseData[expenseType][year] || 0;
+    const totalExpense = historicalExpenseData[expenseType]?.[year] || 0;
     const totalRevenue = helpers.calculateTotalRevenue(year, true);
     const percentage = totalRevenue > 0 ? (totalExpense / totalRevenue) * 100 : 0;
     return percentage.toFixed(1);
@@ -83,21 +83,21 @@ export const createExpenseCalculations = (
              (historicalExpenseData.salesMarketing[year] || 0) +
              (historicalExpenseData.utilities[year] || 0);
     } else {
-      const propertyOperationsExpense = calculateExpense(year, expenseInputs.propertyOperationsExpenseInput[year], 'propertyOperations');
-      const administrativeGeneralExpense = calculateExpense(year, expenseInputs.administrativeGeneralExpenseInput[year], 'administrativeGeneral');
-      const infoTechServicesExpense = calculateExpense(year, expenseInputs.infoTechServicesExpenseInput[year], 'infoTechServices');
-      const salesMarketingExpense = calculateExpense(year, expenseInputs.salesMarketingExpenseInput[year], 'salesMarketing');
-      const utilitiesExpense = calculateExpense(year, expenseInputs.utilitiesExpenseInput[year], 'utilities');
+      const propertyOperationsExpense = calculateExpense(year, expenseInputs.propertyOperationsExpenseInput[year] || "0", 'propertyOperations');
+      const administrativeGeneralExpense = calculateExpense(year, expenseInputs.administrativeGeneralExpenseInput[year] || "0", 'administrativeGeneral');
+      const infoTechServicesExpense = calculateExpense(year, expenseInputs.infoTechServicesExpenseInput[year] || "0", 'infoTechServices');
+      const salesMarketingExpense = calculateExpense(year, expenseInputs.salesMarketingExpenseInput[year] || "0", 'salesMarketing');
+      const utilitiesExpense = calculateExpense(year, expenseInputs.utilitiesExpenseInput[year] || "0", 'utilities');
       
       return propertyOperationsExpense + administrativeGeneralExpense + infoTechServicesExpense + salesMarketingExpense + utilitiesExpense;
     }
   };
 
   const calculateTotalNonOperatingExpenses = (year: number, historicalYears: number[], nonOpExpenseInputs: {
-    managementFeesExpenseInput: Record<number, string>;
-    realEstateTaxesExpenseInput: Record<number, string>;
-    insuranceExpenseInput: Record<number, string>;
-    otherNonOpExpenseInput: Record<number, string>;
+    managementFeesExpenseInput?: Record<number, string>;
+    realEstateTaxesExpenseInput?: Record<number, string>;
+    insuranceExpenseInput?: Record<number, string>;
+    otherNonOpExpenseInput?: Record<number, string>;
   }) => {
     if (historicalYears.includes(year)) {
       return (historicalExpenseData.managementFees[year] || 0) +
@@ -105,10 +105,11 @@ export const createExpenseCalculations = (
              (historicalExpenseData.insurance[year] || 0) +
              (historicalExpenseData.otherNonOp[year] || 0);
     } else {
-      const managementFeesExpense = calculateNonOpExpense(year, nonOpExpenseInputs.managementFeesExpenseInput[year]);
-      const realEstateTaxesExpense = calculateNonOpExpense(year, nonOpExpenseInputs.realEstateTaxesExpenseInput[year]);
-      const insuranceExpense = calculateNonOpExpense(year, nonOpExpenseInputs.insuranceExpenseInput[year]);
-      const otherNonOpExpense = calculateNonOpExpense(year, nonOpExpenseInputs.otherNonOpExpenseInput[year]);
+      // Add null checks and fallbacks for all inputs
+      const managementFeesExpense = calculateNonOpExpense(year, nonOpExpenseInputs.managementFeesExpenseInput?.[year] || "0");
+      const realEstateTaxesExpense = calculateNonOpExpense(year, nonOpExpenseInputs.realEstateTaxesExpenseInput?.[year] || "0");
+      const insuranceExpense = calculateNonOpExpense(year, nonOpExpenseInputs.insuranceExpenseInput?.[year] || "0");
+      const otherNonOpExpense = calculateNonOpExpense(year, nonOpExpenseInputs.otherNonOpExpenseInput?.[year] || "0");
       
       return managementFeesExpense + realEstateTaxesExpense + insuranceExpense + otherNonOpExpense;
     }
