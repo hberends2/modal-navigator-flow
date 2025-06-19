@@ -304,16 +304,8 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                               className="mr-2"
                               disabled={isNoneSelected}
                             />
-                            <AccordionTrigger 
-                              onClick={(e) => {
-                                e.preventDefault();
-                                const newIsOpen = !expandedSubCategories.has(subCategory.id);
-                                handleSubCategoryExpand(subCategory.id, newIsOpen);
-                              }}
-                              className={`flex-1 hover:no-underline ${
-                                isNoneSelected ? "opacity-50 pointer-events-none" : ""
-                              }`}
-                            >
+                            {/* For subcategories with no line items, don't render the AccordionTrigger with chevron */}
+                            {subCategory.lineItems.length === 0 ? (
                               <Label
                                 htmlFor={`subcategory-${subCategory.id}`}
                                 className={`font-medium cursor-pointer ${
@@ -322,35 +314,57 @@ const CategorySelectionModal: React.FC<CategorySelectionModalProps> = ({
                               >
                                 {subCategory.name}
                               </Label>
-                            </AccordionTrigger>
+                            ) : (
+                              <AccordionTrigger 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  const newIsOpen = !expandedSubCategories.has(subCategory.id);
+                                  handleSubCategoryExpand(subCategory.id, newIsOpen);
+                                }}
+                                className={`flex-1 hover:no-underline ${
+                                  isNoneSelected ? "opacity-50 pointer-events-none" : ""
+                                }`}
+                              >
+                                <Label
+                                  htmlFor={`subcategory-${subCategory.id}`}
+                                  className={`font-medium cursor-pointer ${
+                                    isNoneSelected ? "text-gray-400" : ""
+                                  }`}
+                                >
+                                  {subCategory.name}
+                                </Label>
+                              </AccordionTrigger>
+                            )}
                           </div>
                           
-                          <AccordionContent className={isNoneSelected ? "opacity-50 pointer-events-none" : ""}>
-                            <div className="mt-1 ml-6 space-y-1">
-                              {/* Line Items */}
-                              {subCategory.lineItems.map((lineItem) => (
-                                <div key={lineItem.id} className="flex items-center py-1 border-l border-gray-200 pl-2">
-                                  <Checkbox
-                                    id={`lineitem-${lineItem.id}`}
-                                    checked={selectedItems.has(lineItem.id)}
-                                    onCheckedChange={(checked) => {
-                                      handleLineItemChange(lineItem.id, [subCategory.id, category.id], !!checked);
-                                    }}
-                                    className="mr-2"
-                                    disabled={isNoneSelected}
-                                  />
-                                  <Label
-                                    htmlFor={`lineitem-${lineItem.id}`}
-                                    className={`cursor-pointer text-sm ${
-                                      isNoneSelected ? "text-gray-400" : ""
-                                    }`}
-                                  >
-                                    {lineItem.name}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                          </AccordionContent>
+                          {subCategory.lineItems.length > 0 && (
+                            <AccordionContent className={isNoneSelected ? "opacity-50 pointer-events-none" : ""}>
+                              <div className="mt-1 ml-6 space-y-1">
+                                {/* Line Items */}
+                                {subCategory.lineItems.map((lineItem) => (
+                                  <div key={lineItem.id} className="flex items-center py-1 border-l border-gray-200 pl-2">
+                                    <Checkbox
+                                      id={`lineitem-${lineItem.id}`}
+                                      checked={selectedItems.has(lineItem.id)}
+                                      onCheckedChange={(checked) => {
+                                        handleLineItemChange(lineItem.id, [subCategory.id, category.id], !!checked);
+                                      }}
+                                      className="mr-2"
+                                      disabled={isNoneSelected}
+                                    />
+                                    <Label
+                                      htmlFor={`lineitem-${lineItem.id}`}
+                                      className={`cursor-pointer text-sm ${
+                                        isNoneSelected ? "text-gray-400" : ""
+                                      }`}
+                                    >
+                                      {lineItem.name}
+                                    </Label>
+                                  </div>
+                                ))}
+                              </div>
+                            </AccordionContent>
+                          )}
                         </AccordionItem>
                       </Accordion>
                     ))}
