@@ -1,3 +1,4 @@
+
 import React from "react";
 import MetricRow from "./MetricRow";
 import ExpenseHeader from "./ExpenseHeader";
@@ -130,6 +131,26 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
            (historicalExpenseData.nonOperating[year] || 0);
   };
 
+  const calculateGrossOperatingProfit = (year: number) => {
+    const isHistorical = historicalYears.includes(year);
+    const totalRevenue = helpers.calculateTotalRevenue(year, isHistorical);
+    const totalOtherOperatedExpense = calculations.calculateTotalOtherOperatedExpense(year, {
+      fbExpenseInput,
+      otherOperatedExpenseInput,
+      miscellaneousExpenseInput,
+      allocatedExpenseInput
+    });
+    const totalUndistributedExpenses = calculations.calculateTotalUndistributedExpenses(year, historicalYears, {
+      propertyOperationsExpenseInput,
+      administrativeGeneralExpenseInput,
+      infoTechServicesExpenseInput,
+      salesMarketingExpenseInput,
+      utilitiesExpenseInput
+    });
+    
+    return totalRevenue - totalOtherOperatedExpense - totalUndistributedExpenses;
+  };
+
   return (
     <>
       {/* Expense Divider Row */}
@@ -215,6 +236,14 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({
         })}
         historicalExpenseData={historicalExpenseData}
         getHistoricalExpenseData={calculations.getHistoricalExpenseData}
+      />
+
+      {/* Gross Operating Profit Row */}
+      <MetricRow
+        label={<span className="font-bold text-gray-900">Gross Operating Profit</span>}
+        historicalData={historicalYears.map(year => formatCurrency(calculateGrossOperatingProfit(year)))}
+        forecastData={forecastYears.map(year => formatCurrency(calculateGrossOperatingProfit(year)))}
+        className="border-t border-gray-200"
       />
 
       {/* Non-Operating Expenses Section */}
