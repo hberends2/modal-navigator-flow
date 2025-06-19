@@ -29,7 +29,7 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
   return (
     <div className="flex flex-col h-full bg-gray-50 w-full">
       <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full">
+        <ScrollArea id="revenue-scroll-area" className="h-full">
           <div className="p-6 space-y-0.75">
             <TabbedSummary
               historicalYears={historicalYears}
