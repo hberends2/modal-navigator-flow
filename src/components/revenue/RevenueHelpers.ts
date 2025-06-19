@@ -5,7 +5,9 @@ import {
   calculateForecastADR, 
   calculateRoomsRevenue, 
   calculateRevpar,
-  calculateHistoricalADR
+  calculateHistoricalADR,
+  formatCurrency,
+  formatPercent
 } from "../../utils/calculationUtils";
 
 export const createRevenueHelpers = (
@@ -45,18 +47,74 @@ export const createRevenueHelpers = (
     return calculateRevpar(roomsRevenue, getAvailableRooms(year));
   };
   
-  const getHistoricalADRForYearCalculated = (year: number) => {
+  const getHistoricalADRForYear = (year: number) => {
     const roomsRevenue = historicalData.roomsRevenue[year] || 0;
     const occupiedRooms = Math.round(getAvailableRooms(year) * (historicalData.occupancy[year] || 0) / 100);
     return calculateHistoricalADR(roomsRevenue, occupiedRooms);
   };
 
+  const getHistoricalOccupiedRoomsForYear = (year: number) => {
+    const availableRooms = getAvailableRooms(year);
+    const occupancyPercent = historicalData.occupancy[year] || 0;
+    const occupancyDecimal = occupancyPercent / 100;
+    return Math.round(availableRooms * occupancyDecimal);
+  };
+
+  const getForecastOccupiedRoomsForYear = (year: number) => {
+    const availableRooms = getAvailableRooms(year);
+    const occupancyValue = revenueCalculations.occupancyForecastMethod === "Occupancy" 
+      ? parseFloat(revenueCalculations.occupancyForecast[year] || "0")
+      : calculateOccupancyFromYoYForYear(year);
+    const occupancyDecimal = occupancyValue / 100;
+    return Math.round(availableRooms * occupancyDecimal);
+  };
+
+  const calculateTotalOtherOperatedRevenue = (year: number, isHistorical: boolean) => {
+    if (isHistorical) {
+      return (historicalData.fbRevenue[year] || 0) +
+             (historicalData.resortFeeRevenue[year] || 0) +
+             (historicalData.otherOperatedRevenue[year] || 0) +
+             (historicalData.miscellaneousRevenue[year] || 0) +
+             (historicalData.allocatedRevenue[year] || 0);
+    } else {
+      const occupiedRooms = getForecastOccupiedRoomsForYear(year);
+      const fbRevenue = (parseFloat(revenueCalculations.fbPerOccupiedRoom[year] || "0")) * occupiedRooms;
+      const resortFeeRevenue = (parseFloat(revenueCalculations.resortFeePerOccupiedRoom[year] || "0")) * occupiedRooms;
+      const otherOperatedRevenue = (parseFloat(revenueCalculations.otherOperatedPerOccupiedRoom[year] || "0")) * occupiedRooms;
+      const miscellaneousRevenue = (parseFloat(revenueCalculations.miscellaneousPerOccupiedRoom[year] || "0")) * occupiedRooms;
+      const allocatedRevenue = (parseFloat(revenueCalculations.allocatedPerOccupiedRoom[year] || "0")) * occupiedRooms;
+      return fbRevenue + resortFeeRevenue + otherOperatedRevenue + miscellaneousRevenue + allocatedRevenue;
+    }
+  };
+
+  const calculateTotalRevenue = (year: number, isHistorical: boolean) => {
+    if (isHistorical) {
+      const roomsRevenue = historicalData.roomsRevenue[year] || 0;
+      const totalOtherOperatedRevenue = calculateTotalOtherOperatedRevenue(year, true);
+      return roomsRevenue + totalOtherOperatedRevenue;
+    } else {
+      const roomsRevenue = getForecastRoomsRevenueForYear(year);
+      const totalOtherOperatedRevenue = calculateTotalOtherOperatedRevenue(year, false);
+      return roomsRevenue + totalOtherOperatedRevenue;
+    }
+  };
+
   return {
-    getAvailableRoomsForYear,
-    calculateOccupancyFromYoYForYear,
+    // TabbedSummary expected functions
+    getAvailableRooms: getAvailableRoomsForYear,
+    getForecastRevpar: getForecastRevparForYear,
+    getForecastRoomsRevenue: getForecastRoomsRevenueForYear,
+    calculateOccupancyFromYoY: calculateOccupancyFromYoYForYear,
+    formatCurrency,
+    formatPercent,
+    getHistoricalADR: getHistoricalADRForYear,
+    getForecastADR: getForecastADRForYear,
+    // CalculationHelpers interface functions
+    getHistoricalOccupiedRoomsForYear,
+    getForecastOccupiedRoomsForYear,
+    getHistoricalADRForYear,
     getForecastADRForYear,
-    getForecastRoomsRevenueForYear,
-    getForecastRevparForYear,
-    getHistoricalADRForYearCalculated
+    calculateTotalOtherOperatedRevenue,
+    calculateTotalRevenue
   };
 };

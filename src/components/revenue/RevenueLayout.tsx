@@ -14,7 +14,7 @@ interface RevenueLayoutProps {
   forecastYears: number[];
   historicalData: any;
   revenueCalculations: RevenueCalculationState;
-  helpers: CalculationHelpers;
+  helpers: any;
 }
 
 const RevenueLayout: React.FC<RevenueLayoutProps> = ({
@@ -31,13 +31,27 @@ const RevenueLayout: React.FC<RevenueLayoutProps> = ({
     <div className="flex flex-col h-full bg-gray-50">
       <div className="flex-1 overflow-hidden">
         <ScrollArea className="h-full">
-          <div className="p-6 space-y-3">
+          <div className="p-6 space-y-1.5">
             <TabbedSummary
               historicalYears={historicalYears}
               forecastYears={forecastYears}
               roomsKeys={roomsKeys}
-              helpers={helpers}
-              revenueCalculations={revenueCalculations}
+              historicalData={historicalData}
+              occupancyForecast={revenueCalculations.occupancyForecast}
+              occupancyForecastMethod={revenueCalculations.occupancyForecastMethod}
+              calculateOccupancyFromYoY={helpers.calculateOccupancyFromYoY}
+              getAvailableRooms={helpers.getAvailableRooms}
+              getHistoricalADR={helpers.getHistoricalADR}
+              getForecastADR={helpers.getForecastADR}
+              getForecastRevpar={helpers.getForecastRevpar}
+              getForecastRoomsRevenue={helpers.getForecastRoomsRevenue}
+              fbPerOccupiedRoom={revenueCalculations.fbPerOccupiedRoom}
+              resortFeePerOccupiedRoom={revenueCalculations.resortFeePerOccupiedRoom}
+              otherOperatedPerOccupiedRoom={revenueCalculations.otherOperatedPerOccupiedRoom}
+              miscellaneousPerOccupiedRoom={revenueCalculations.miscellaneousPerOccupiedRoom}
+              allocatedPerOccupiedRoom={revenueCalculations.allocatedPerOccupiedRoom}
+              formatCurrency={helpers.formatCurrency}
+              formatPercent={helpers.formatPercent}
             />
             
             <RevenueTable
