@@ -110,54 +110,49 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
       </tr>
 
       {/* Capital Expense Header Row */}
-      <MetricRow
-        label={
+      <tr className="border-b border-gray-300">
+        <td className="py-1 px-2 bg-gray-600 sticky left-0 z-10 w-48" colSpan={historicalYears.length + 1}>
           <div className="bg-gray-600 text-white px-2 py-1 text-center font-bold text-sm rounded-sm w-full">
             CAPITAL EXPENSE
           </div>
-        }
-        historicalData={historicalYears.map(() => (
-          <div className="bg-gray-600 h-6 w-full"></div>
+        </td>
+        {forecastYears.map(() => (
+          <td key="forecast-header" className="py-1 px-2 bg-gray-600">
+            <div className="bg-gray-600 h-6 w-full"></div>
+          </td>
         ))}
-        forecastData={forecastYears.map(() => (
-          <div className="bg-gray-600 h-6 w-full"></div>
-        ))}
-        isHeaderRow={true}
-      />
+      </tr>
 
       {/* Capital Expense Rows */}
       {rows.map((row, index) => (
-        <MetricRow
-          key={row.id}
-          label={
+        <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50">
+          <td className="py-2 px-2 bg-white sticky left-0 z-10" colSpan={historicalYears.length + 1}>
             <input
               type="text"
               value={row.description}
               onChange={(e) => handleDescriptionChange(row.id, e.target.value)}
-              className="w-full text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-2 py-1 mr-1"
+              className="w-full text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-2 py-1"
               placeholder="Enter capital expense description"
             />
-          }
-          historicalData={historicalYears.map(() => (
-            <span className="text-sm text-gray-400">-</span>
+          </td>
+          {forecastYears.map(year => (
+            <td key={`${row.id}-${year}`} className="text-center py-2 px-2 min-w-[80px] bg-green-25">
+              <input
+                type="text"
+                value={getRowValue(row, year)}
+                onChange={(e) => handleValueChange(row.id, year, e.target.value)}
+                onBlur={(e) => handleValueBlur(row.id, year, e.target.value)}
+                className="w-full text-center text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
+                placeholder="0"
+              />
+            </td>
           ))}
-          forecastData={forecastYears.map(year => (
-            <input
-              key={`${row.id}-${year}`}
-              type="text"
-              value={getRowValue(row, year)}
-              onChange={(e) => handleValueChange(row.id, year, e.target.value)}
-              onBlur={(e) => handleValueBlur(row.id, year, e.target.value)}
-              className="w-full text-center text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
-              placeholder="0"
-            />
-          ))}
-        />
+        </tr>
       ))}
 
       {/* Add New Item Button Row */}
       <tr>
-        <td className="py-2 px-2">
+        <td className="py-2 px-2" colSpan={historicalYears.length + 1}>
           <Button
             onClick={addNewRow}
             variant="ghost"
@@ -168,9 +163,6 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
             New Item
           </Button>
         </td>
-        {historicalYears.map((_, index) => (
-          <td key={`hist-empty-${index}`} className="py-2"></td>
-        ))}
         {forecastYears.map((_, index) => (
           <td key={`forecast-empty-${index}`} className="py-2"></td>
         ))}
