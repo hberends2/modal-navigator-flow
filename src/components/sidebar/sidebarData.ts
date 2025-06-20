@@ -1,4 +1,3 @@
-
 import { CategoryItem } from "./SidebarCategory";
 
 // Top-level categories for main navigation (reordered to move Summary below Reports)
@@ -82,8 +81,7 @@ export const mainNavCategories: CategoryItem[] = [
   },
   {
     id: "capitalExpense",
-    name: "Capital Expense",
-    path: "/revenue#capital-expense-section"
+    name: "Capital Expense"
   },
   {
     id: "reports",
