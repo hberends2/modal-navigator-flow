@@ -48,6 +48,7 @@ const EBITDASection: React.FC<EBITDASectionProps> = ({
             </span>
           );
         })}
+        className="bg-green-50"
       />
     </>
   );

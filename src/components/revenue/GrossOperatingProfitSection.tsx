@@ -29,7 +29,7 @@ const GrossOperatingProfitSection: React.FC<GrossOperatingProfitSectionProps> = 
           {formatCurrency(calculateGrossOperatingProfit(year))}
         </span>
       ))}
-      className="border-t border-gray-200"
+      className="border-t border-gray-200 bg-green-50"
     />
   );
 };
