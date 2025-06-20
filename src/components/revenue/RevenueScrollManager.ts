@@ -64,7 +64,8 @@ export const useRevenueScrollManager = () => {
       'insurance-section': 'insurance-section',
       'other-non-operating-section': 'other-non-operating-section',
       'non-operating-expenses-section': 'non-operating-expenses-section',
-      'total-expense-section': 'total-expense-section'
+      'total-expense-section': 'total-expense-section',
+      'capital-expense-section': 'capital-expense-section'
     };
     
     if (sectionMappings[modalName]) {
@@ -107,7 +108,8 @@ export const useRevenueScrollManager = () => {
         'insurance-section',
         'other-non-operating-section',
         'non-operating-expenses-section',
-        'total-expense-section'
+        'total-expense-section',
+        'capital-expense-section'
       ];
 
       let currentSection = null;
