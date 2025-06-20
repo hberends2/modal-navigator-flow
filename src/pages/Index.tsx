@@ -63,7 +63,8 @@ const Index = () => {
         {activeModal === "propertyDetails" && (
           <PropertyFormModal 
             onClose={closeModal}
-            onNext={() => {}}
+            onSave={() => {}}
+            property={null}
           />
         )}
 
@@ -125,6 +126,7 @@ const Index = () => {
 
         {activeModal === "capitalExpense" && (
           <CapitalExpenseModal 
+            isOpen={true}
             onClose={closeModal}
           />
         )}
