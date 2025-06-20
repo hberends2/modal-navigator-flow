@@ -1,3 +1,4 @@
+
 import React from "react";
 import MetricRow from "../MetricRow";
 import RoomsExpenseSection from "../RoomsExpenseSection";
@@ -9,6 +10,7 @@ import { CalculationHelpers } from "../RevenueTableHelpers";
 interface ExpenseSectionContainerProps {
   historicalYears: number[];
   forecastYears: number[];
+  historicalData: any;
   expenseForecastMethod: string;
   setExpenseForecastMethod: (value: string) => void;
   roomsExpenseInput: Record<number, string>;
@@ -75,21 +77,21 @@ const ExpenseSectionContainer: React.FC<ExpenseSectionContainerProps> = (props) 
   };
 
   const historicalExpenseData = {
-    rooms: props.historicalData.roomsExpense,
-    fb: props.historicalData.fbExpense,
-    otherOperated: props.historicalData.otherOperatedExpense,
-    miscellaneous: props.historicalData.miscellaneousExpense,
-    allocated: props.historicalData.allocatedExpense,
-    propertyOperations: props.historicalData.propertyOperationsExpense,
-    administrativeGeneral: props.historicalData.administrativeGeneralExpense,
-    infoTechServices: props.historicalData.infoTechServicesExpense,
-    salesMarketing: props.historicalData.salesMarketingExpense,
-    utilities: props.historicalData.utilitiesExpense,
-    managementFees: props.historicalData.managementFeesExpense,
-    realEstateTaxes: props.historicalData.realEstateTaxesExpense,
-    insurance: props.historicalData.insuranceExpense,
-    otherNonOp: props.historicalData.otherNonOperatingExpense,
-    reserveForReplacement: props.historicalData.reserveForReplacement
+    rooms: props.historicalData.roomsExpense || {},
+    fb: props.historicalData.fbExpense || {},
+    otherOperated: props.historicalData.otherOperatedExpense || {},
+    miscellaneous: props.historicalData.miscellaneousExpense || {},
+    allocated: props.historicalData.allocatedExpense || {},
+    propertyOperations: props.historicalData.propertyOperationsExpense || {},
+    administrativeGeneral: props.historicalData.administrativeGeneralExpense || {},
+    infoTechServices: props.historicalData.infoTechServicesExpense || {},
+    salesMarketing: props.historicalData.salesMarketingExpense || {},
+    utilities: props.historicalData.utilitiesExpense || {},
+    managementFees: props.historicalData.managementFeesExpense || {},
+    realEstateTaxes: props.historicalData.realEstateTaxesExpense || {},
+    insurance: props.historicalData.insuranceExpense || {},
+    otherNonOp: props.historicalData.otherNonOperatingExpense || {},
+    reserveForReplacement: props.historicalData.reserveForReplacement || {}
   };
 
   return (
@@ -125,9 +127,18 @@ const ExpenseSectionContainer: React.FC<ExpenseSectionContainerProps> = (props) 
         historicalYears={props.historicalYears}
         forecastYears={props.forecastYears}
         expenseForecastMethod={props.expenseForecastMethod}
+        fbExpenseInput={props.fbExpenseInput}
+        handleFbExpenseChange={props.handleFbExpenseChange}
+        handleFbExpenseBlur={props.handleFbExpenseBlur}
         otherOperatedExpenseInput={props.otherOperatedExpenseInput}
         handleOtherOperatedExpenseChange={props.handleOtherOperatedExpenseChange}
         handleOtherOperatedExpenseBlur={props.handleOtherOperatedExpenseBlur}
+        miscellaneousExpenseInput={props.miscellaneousExpenseInput}
+        handleMiscellaneousExpenseChange={props.handleMiscellaneousExpenseChange}
+        handleMiscellaneousExpenseBlur={props.handleMiscellaneousExpenseBlur}
+        allocatedExpenseInput={props.allocatedExpenseInput}
+        handleAllocatedExpenseChange={props.handleAllocatedExpenseChange}
+        handleAllocatedExpenseBlur={props.handleAllocatedExpenseBlur}
         formatCurrency={props.formatCurrency}
         formatPercent={props.formatPercent}
         calculateExpense={calculateExpense}

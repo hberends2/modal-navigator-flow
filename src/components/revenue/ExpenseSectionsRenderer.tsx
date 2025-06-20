@@ -1,4 +1,5 @@
 
+
 import React from "react";
 import OperatingExpensesSections from "./sections/OperatingExpensesSections";
 import UndistributedExpensesSections from "./sections/UndistributedExpensesSections";
@@ -59,6 +60,38 @@ interface ExpenseSectionsRendererProps {
 }
 
 const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = (props) => {
+  // Create a helper function to calculate expenses
+  const calculateExpense = (year: number, inputValue: string, expenseType: string): number => {
+    let expenseValue: number = parseFloat(inputValue || "0");
+
+    if (props.expenseForecastMethod === "POR") {
+      const occupiedRooms = props.helpers.getForecastOccupiedRoomsForYear(year);
+      return expenseValue * occupiedRooms;
+    } else {
+      const totalRevenue = props.helpers.calculateTotalRevenue(year, false);
+      return (expenseValue / 100) * totalRevenue;
+    }
+  };
+
+  // Create historical expense data structure - using empty objects as fallback
+  const historicalExpenseData = {
+    rooms: {},
+    fb: {},
+    otherOperated: {},
+    miscellaneous: {},
+    allocated: {},
+    propertyOperations: {},
+    administrativeGeneral: {},
+    infoTechServices: {},
+    salesMarketing: {},
+    utilities: {},
+    managementFees: {},
+    realEstateTaxes: {},
+    insurance: {},
+    otherNonOp: {},
+    reserveForReplacement: {}
+  };
+
   return (
     <>
       <OperatingExpensesSections
@@ -105,6 +138,10 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = (props) 
         handleUtilitiesExpenseChange={props.handleUtilitiesExpenseChange}
         handleUtilitiesExpenseBlur={props.handleUtilitiesExpenseBlur}
         formatCurrency={props.formatCurrency}
+        formatPercent={props.formatPercent}
+        calculateExpense={calculateExpense}
+        historicalExpenseData={historicalExpenseData}
+        helpers={props.helpers}
       />
 
       <FinalExpensesSections
@@ -127,6 +164,9 @@ const ExpenseSectionsRenderer: React.FC<ExpenseSectionsRendererProps> = (props) 
         handleReserveForReplacementChange={props.handleReserveForReplacementChange}
         handleReserveForReplacementBlur={props.handleReserveForReplacementBlur}
         formatCurrency={props.formatCurrency}
+        formatPercent={props.formatPercent}
+        calculateExpense={calculateExpense}
+        historicalExpenseData={historicalExpenseData}
         helpers={props.helpers}
       />
     </>

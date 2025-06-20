@@ -1,3 +1,4 @@
+
 import React from "react";
 import { TableBody } from "../ui/table";
 import RevenueMetricsSection from "./sections/RevenueMetricsSection";
@@ -158,6 +159,7 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = (props) => {
       <ExpenseSectionContainer
         historicalYears={props.historicalYears}
         forecastYears={props.forecastYears}
+        historicalData={props.historicalData}
         expenseForecastMethod={props.expenseForecastMethod}
         setExpenseForecastMethod={props.setExpenseForecastMethod}
         roomsExpenseInput={props.roomsExpenseInput}
