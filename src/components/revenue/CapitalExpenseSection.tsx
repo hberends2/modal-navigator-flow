@@ -112,7 +112,7 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
       {/* Capital Expense Header Row */}
       <tr className="border-b border-gray-300">
         <td className="py-1 px-2 bg-gray-600 sticky left-0 z-10 w-48" colSpan={historicalYears.length + 1}>
-          <div className="bg-gray-600 text-white px-2 py-1 text-center font-bold text-sm rounded-sm w-full">
+          <div className="bg-gray-600 text-white px-2 py-1 text-left font-bold text-sm rounded-sm w-full">
             CAPITAL EXPENSE
           </div>
         </td>
