@@ -96,12 +96,8 @@ export const mainNavCategories: CategoryItem[] = [
   // Department & Item Setup removed from sidebar
 ];
 
-// Parking lot categories (reordered with Penetration added, Capital Expense removed)
+// Parking lot categories (removed Penetration)
 export const parkingLotCategories: CategoryItem[] = [
-  {
-    id: "penetration",
-    name: "Penetration"
-  },
   {
     id: "investmentAssumptions",
     name: "Investment Assumptions",
