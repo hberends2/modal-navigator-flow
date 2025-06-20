@@ -12,7 +12,6 @@ import UndistributedExpensesModal from "../components/modals/UndistributedExpens
 import UndistributedExpensesSecondModal from "../components/modals/UndistributedExpensesSecondModal";
 import NonOperatingExpensesModal from "../components/modals/NonOperatingExpensesModal";
 import FFEReserveModal from "../components/modals/FFEReserveModal";
-import CapitalExpenseModal from "../components/modals/CapitalExpenseModal";
 
 const Index = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -123,12 +122,6 @@ const Index = () => {
             onNext={() => {}}
           />
         )}
-
-        {/* CapitalExpenseModal - Uses Dialog, so uses open prop */}
-        <CapitalExpenseModal 
-          open={activeModal === "capitalExpense"}
-          onClose={closeModal}
-        />
       </div>
     </SidebarProvider>
   );
