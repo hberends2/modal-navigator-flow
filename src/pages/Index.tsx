@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
@@ -51,68 +52,79 @@ const Index = () => {
           </div>
         </main>
 
-        {/* Modals */}
-        <CategorySelectionModal 
-          open={showCategorySelection}
-          onClose={() => setShowCategorySelection(false)}
-          onSave={() => setShowCategorySelection(false)}
-        />
+        {/* Modals - Using conditional rendering for ModalWrapper-based modals */}
+        {showCategorySelection && (
+          <CategorySelectionModal 
+            onClose={() => setShowCategorySelection(false)}
+            onSave={() => setShowCategorySelection(false)}
+          />
+        )}
         
-        <PropertyFormModal 
-          open={activeModal === "propertyDetails"}
-          onClose={closeModal}
-          onSave={() => {}}
-          property={null}
-        />
+        {activeModal === "propertyDetails" && (
+          <PropertyFormModal 
+            onClose={closeModal}
+            onSave={() => {}}
+            property={null}
+          />
+        )}
 
+        {/* PropertyDetailsModal - Uses Dialog, so uses open prop */}
         <PropertyDetailsModal 
           open={activeModal === "propertyDetailsModal"}
           onClose={closeModal}
           onNext={() => {}}
         />
 
-        <OccupancyForecastModal 
-          open={activeModal === "occupancyForecast"}
-          onClose={closeModal}
-          onNext={() => {}}
-        />
+        {activeModal === "occupancyForecast" && (
+          <OccupancyForecastModal 
+            onClose={closeModal}
+            onNext={() => {}}
+          />
+        )}
 
-        <OperatingRevenueModal 
-          open={activeModal === "operatingRevenue"}
-          onClose={closeModal}
-          onNext={() => {}}
-        />
+        {activeModal === "operatingRevenue" && (
+          <OperatingRevenueModal 
+            onClose={closeModal}
+            onNext={() => {}}
+          />
+        )}
 
-        <DepartmentalExpensesModal 
-          open={activeModal === "departmentalExpenses"}
-          onClose={closeModal}
-          onNext={() => {}}
-        />
+        {activeModal === "departmentalExpenses" && (
+          <DepartmentalExpensesModal 
+            onClose={closeModal}
+            onNext={() => {}}
+          />
+        )}
 
-        <UndistributedExpensesModal 
-          open={activeModal === "undistributedExpenses"}
-          onClose={closeModal}
-          onNext={() => {}}
-        />
+        {activeModal === "undistributedExpenses" && (
+          <UndistributedExpensesModal 
+            onClose={closeModal}
+            onNext={() => {}}
+          />
+        )}
 
-        <UndistributedExpensesSecondModal 
-          open={activeModal === "undistributedExpensesSecond"}
-          onClose={closeModal}
-          onNext={() => {}}
-        />
+        {activeModal === "undistributedExpensesSecond" && (
+          <UndistributedExpensesSecondModal 
+            onClose={closeModal}
+            onNext={() => {}}
+          />
+        )}
 
-        <NonOperatingExpensesModal 
-          open={activeModal === "nonOperatingExpenses"}
-          onClose={closeModal}
-          onNext={() => {}}
-        />
+        {activeModal === "nonOperatingExpenses" && (
+          <NonOperatingExpensesModal 
+            onClose={closeModal}
+            onNext={() => {}}
+          />
+        )}
 
-        <FFEReserveModal 
-          open={activeModal === "ffeReserve"}
-          onClose={closeModal}
-          onNext={() => {}}
-        />
+        {activeModal === "ffeReserve" && (
+          <FFEReserveModal 
+            onClose={closeModal}
+            onNext={() => {}}
+          />
+        )}
 
+        {/* CapitalExpenseModal - Uses Dialog, so uses open prop */}
         <CapitalExpenseModal 
           open={activeModal === "capitalExpense"}
           onClose={closeModal}

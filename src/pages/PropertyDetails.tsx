@@ -65,18 +65,21 @@ const PropertyDetails = () => {
         </div>
       </main>
       
+      {/* PropertyDetailsModal - Uses Dialog, so uses open prop */}
       <PropertyDetailsModal 
         open={showPropertyModal}
         onClose={handlePropertyModalClose} 
         onNext={handlePropertyModalNext} 
       />
       
-      <CategorySelectionModal
-        open={showCategoryModal}
-        onClose={handleCategoryModalClose}
-        onSave={handleCategoryModalSave}
-        initialSelections={categorySelections}
-      />
+      {/* CategorySelectionModal - Uses ModalWrapper, so uses conditional rendering */}
+      {showCategoryModal && (
+        <CategorySelectionModal
+          onClose={handleCategoryModalClose}
+          onSave={handleCategoryModalSave}
+          initialSelections={categorySelections}
+        />
+      )}
     </div>
   );
 };
