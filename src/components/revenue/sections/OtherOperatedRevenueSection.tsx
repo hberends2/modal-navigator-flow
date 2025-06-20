@@ -61,6 +61,7 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
+        isMajorSectionHeader={true}
       />
 
       <tr id="food-beverage-section" className="scroll-mt-4">
