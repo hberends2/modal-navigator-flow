@@ -33,7 +33,7 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
       ? capitalExpenseRows 
       : [{
           id: '1',
-          description: 'Capital Expense Item',
+          description: '',
           year2025: '0',
           year2026: '0',
           year2027: '0',
@@ -81,7 +81,7 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
     const newId = (Math.max(...rows.map(r => parseInt(r.id))) + 1).toString();
     const newRow: CapitalExpenseRow = {
       id: newId,
-      description: 'Capital Expense Item',
+      description: '',
       year2025: '0',
       year2026: '0',
       year2027: '0',
@@ -112,15 +112,15 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
       {/* Capital Expense Header Row */}
       <MetricRow
         label={
-          <div className="bg-gray-600 text-white px-2 py-1 text-center font-bold text-sm rounded-sm">
+          <div className="bg-gray-600 text-white px-2 py-1 text-center font-bold text-sm rounded-sm w-full">
             CAPITAL EXPENSE
           </div>
         }
         historicalData={historicalYears.map(() => (
-          <div className="bg-gray-600 h-6"></div>
+          <div className="bg-gray-600 h-6 w-full"></div>
         ))}
         forecastData={forecastYears.map(() => (
-          <div className="bg-gray-600 h-6"></div>
+          <div className="bg-gray-600 h-6 w-full"></div>
         ))}
         isHeaderRow={true}
       />
@@ -134,8 +134,8 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
               type="text"
               value={row.description}
               onChange={(e) => handleDescriptionChange(row.id, e.target.value)}
-              className="w-full text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-2 py-1"
-              placeholder="Enter description"
+              className="w-full text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-2 py-1 mr-4"
+              placeholder="Enter capital expense description"
             />
           }
           historicalData={historicalYears.map(() => (
@@ -165,7 +165,7 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
             className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 font-normal"
           >
             <Plus className="h-4 w-4 mr-1" />
-            Add Item
+            New Item
           </Button>
         </td>
         {historicalYears.map((_, index) => (
