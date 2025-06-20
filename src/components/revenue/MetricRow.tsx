@@ -64,8 +64,33 @@ const MetricRow: React.FC<MetricRowProps> = ({
   const baseCellClass = isHeaderRow ? "py-1 px-2" : "py-2 px-2";
   
   // Determine if the label cell should use the row background or white
-  const shouldUseLabelBackground = className.includes("bg-green-50");
+  const shouldUseLabelBackground = className.includes("bg-green-50") || isSectionHeader;
   const labelCellBg = shouldUseLabelBackground ? "" : "bg-white";
+
+  // Section header styling
+  if (isSectionHeader) {
+    return (
+      <TableRow className="border-b border-gray-100 bg-gray-100" id={id}>
+        <TableCell className="font-bold text-left py-2 px-2 bg-gray-100 sticky left-0 z-10 w-48">
+          {label}
+        </TableCell>
+        {historicalData.map((_, index) => (
+          <TableCell 
+            key={`hist-${index}`} 
+            className="text-center py-2 px-2 min-w-[80px] bg-gray-100"
+          >
+          </TableCell>
+        ))}
+        {forecastData.map((_, index) => (
+          <TableCell 
+            key={`forecast-${index}`} 
+            className="text-center py-2 px-2 min-w-[80px] bg-gray-100"
+          >
+          </TableCell>
+        ))}
+      </TableRow>
+    );
+  }
 
   // Handle two-row metrics (like ADR Growth Controls)
   if (isTwoRowMetric) {
