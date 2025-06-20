@@ -1,9 +1,12 @@
+
 import React from "react";
 import { TableBody } from "../ui/table";
 import RevenueMetricsSection from "./sections/RevenueMetricsSection";
 import OtherOperatedRevenueSection from "./sections/OtherOperatedRevenueSection";
 import TotalRevenueSection from "./sections/TotalRevenueSection";
 import ExpenseSectionContainer from "./sections/ExpenseSectionContainer";
+import NetOperatingIncomeSection from "./NetOperatingIncomeSection";
+import CapitalExpenseSection from "./CapitalExpenseSection";
 import { CalculationHelpers } from "./RevenueTableHelpers";
 
 interface RevenueTableSectionsProps {
@@ -207,6 +210,20 @@ const RevenueTableSections: React.FC<RevenueTableSectionsProps> = (props) => {
         formatCurrency={props.formatCurrency}
         formatPercent={props.formatPercent}
         helpers={props.helpers}
+      />
+
+      <NetOperatingIncomeSection
+        historicalYears={props.historicalYears}
+        forecastYears={props.forecastYears}
+        reserveForReplacementInput={props.reserveForReplacementInput}
+        formatCurrency={props.formatCurrency}
+        helpers={props.helpers}
+      />
+
+      <CapitalExpenseSection
+        historicalYears={props.historicalYears}
+        forecastYears={props.forecastYears}
+        formatCurrency={props.formatCurrency}
       />
     </TableBody>
   );

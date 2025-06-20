@@ -82,7 +82,8 @@ export const mainNavCategories: CategoryItem[] = [
   },
   {
     id: "capitalExpense",
-    name: "Capital Expense"
+    name: "Capital Expense",
+    path: "/revenue#capital-expense-section"
   },
   {
     id: "reports",
