@@ -1,5 +1,7 @@
 
-import React from "react";
+import React, { useState } from "react";
+import { Plus } from "lucide-react";
+import { Button } from "../ui/button";
 import MetricRow from "./MetricRow";
 
 interface CapitalExpenseRow {
@@ -25,38 +27,79 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
   formatCurrency,
   capitalExpenseRows = []
 }) => {
-  const formatNumber = (value: string): number => {
-    // Remove all non-digit characters and convert to number
+  // Initialize with one default row if none provided
+  const [rows, setRows] = useState<CapitalExpenseRow[]>(
+    capitalExpenseRows.length > 0 
+      ? capitalExpenseRows 
+      : [{
+          id: '1',
+          description: 'Capital Expense Item',
+          year2025: '0',
+          year2026: '0',
+          year2027: '0',
+          year2028: '0',
+          year2029: '0'
+        }]
+  );
+
+  const formatNumberInput = (value: string): string => {
+    // Remove all non-digit characters
     const numericValue = value.replace(/\D/g, "");
+    // Convert to number and add commas
+    const number = parseInt(numericValue) || 0;
+    return number.toLocaleString();
+  };
+
+  const parseNumberFromInput = (value: string): number => {
+    // Remove commas and convert to number
+    const numericValue = value.replace(/,/g, "");
     return parseInt(numericValue) || 0;
   };
 
-  const getCapitalExpenseValue = (year: number, rowIndex: number = 0) => {
-    if (capitalExpenseRows.length === 0) return 0;
-    
-    const row = capitalExpenseRows[rowIndex];
-    if (!row) return 0;
-
-    switch (year) {
-      case 2025:
-        return formatNumber(row.year2025);
-      case 2026:
-        return formatNumber(row.year2026);
-      case 2027:
-        return formatNumber(row.year2027);
-      case 2028:
-        return formatNumber(row.year2028);
-      case 2029:
-        return formatNumber(row.year2029);
-      default:
-        return 0;
-    }
+  const handleDescriptionChange = (rowId: string, value: string) => {
+    setRows(prev => prev.map(row => 
+      row.id === rowId ? { ...row, description: value } : row
+    ));
   };
 
-  const getCapitalExpenseDescription = (rowIndex: number = 0) => {
-    if (capitalExpenseRows.length === 0) return "";
-    const row = capitalExpenseRows[rowIndex];
-    return row ? row.description : "";
+  const handleValueChange = (rowId: string, year: number, value: string) => {
+    const yearKey = `year${year}` as keyof CapitalExpenseRow;
+    setRows(prev => prev.map(row => 
+      row.id === rowId ? { ...row, [yearKey]: value } : row
+    ));
+  };
+
+  const handleValueBlur = (rowId: string, year: number, value: string) => {
+    const formattedValue = formatNumberInput(value);
+    const yearKey = `year${year}` as keyof CapitalExpenseRow;
+    setRows(prev => prev.map(row => 
+      row.id === rowId ? { ...row, [yearKey]: formattedValue } : row
+    ));
+  };
+
+  const addNewRow = () => {
+    const newId = (Math.max(...rows.map(r => parseInt(r.id))) + 1).toString();
+    const newRow: CapitalExpenseRow = {
+      id: newId,
+      description: 'Capital Expense Item',
+      year2025: '0',
+      year2026: '0',
+      year2027: '0',
+      year2028: '0',
+      year2029: '0'
+    };
+    setRows(prev => [...prev, newRow]);
+  };
+
+  const getRowValue = (row: CapitalExpenseRow, year: number): string => {
+    switch (year) {
+      case 2025: return row.year2025;
+      case 2026: return row.year2026;
+      case 2027: return row.year2027;
+      case 2028: return row.year2028;
+      case 2029: return row.year2029;
+      default: return '0';
+    }
   };
 
   return (
@@ -82,22 +125,56 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
         isHeaderRow={true}
       />
 
-      {/* First Capital Expense Row */}
-      <MetricRow
-        label={
-          <span className="text-sm">
-            {getCapitalExpenseDescription(0) || "Capital Expense Item"}
-          </span>
-        }
-        historicalData={historicalYears.map(() => (
-          <span className="text-sm text-gray-400">-</span>
+      {/* Capital Expense Rows */}
+      {rows.map((row, index) => (
+        <MetricRow
+          key={row.id}
+          label={
+            <input
+              type="text"
+              value={row.description}
+              onChange={(e) => handleDescriptionChange(row.id, e.target.value)}
+              className="w-full text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-2 py-1"
+              placeholder="Enter description"
+            />
+          }
+          historicalData={historicalYears.map(() => (
+            <span className="text-sm text-gray-400">-</span>
+          ))}
+          forecastData={forecastYears.map(year => (
+            <input
+              key={`${row.id}-${year}`}
+              type="text"
+              value={getRowValue(row, year)}
+              onChange={(e) => handleValueChange(row.id, year, e.target.value)}
+              onBlur={(e) => handleValueBlur(row.id, year, e.target.value)}
+              className="w-full text-center text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
+              placeholder="0"
+            />
+          ))}
+        />
+      ))}
+
+      {/* Add New Item Button Row */}
+      <tr>
+        <td className="py-2 px-2">
+          <Button
+            onClick={addNewRow}
+            variant="ghost"
+            size="sm"
+            className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 font-normal"
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            Add Item
+          </Button>
+        </td>
+        {historicalYears.map((_, index) => (
+          <td key={`hist-empty-${index}`} className="py-2"></td>
         ))}
-        forecastData={forecastYears.map(year => (
-          <span className="text-sm">
-            {formatCurrency(getCapitalExpenseValue(year, 0))}
-          </span>
+        {forecastYears.map((_, index) => (
+          <td key={`forecast-empty-${index}`} className="py-2"></td>
         ))}
-      />
+      </tr>
     </>
   );
 };
