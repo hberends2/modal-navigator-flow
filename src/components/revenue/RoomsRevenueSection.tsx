@@ -27,6 +27,7 @@ const RoomsRevenueSection: React.FC<RoomsRevenueSectionProps> = ({
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
+        isMajorSectionHeader={true}
       />
 
       {/* Total Rooms Revenue */}

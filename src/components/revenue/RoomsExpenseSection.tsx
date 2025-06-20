@@ -55,6 +55,7 @@ const RoomsExpenseSection: React.FC<RoomsExpenseSectionProps> = ({
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(() => "")}
         isSectionHeader={true}
+        isMajorSectionHeader={true}
       />
 
       <MetricRow

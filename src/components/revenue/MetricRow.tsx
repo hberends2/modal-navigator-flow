@@ -11,6 +11,7 @@ interface MetricRowProps {
   className?: string;
   // Section header props
   isSectionHeader?: boolean;
+  isMajorSectionHeader?: boolean;
   // Two-row metric props
   isTwoRowMetric?: boolean;
   metricText?: string;
@@ -42,6 +43,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
   isHeaderRow = false,
   className = "",
   isSectionHeader = false,
+  isMajorSectionHeader = false,
   isTwoRowMetric = false,
   metricText,
   controls,
@@ -69,22 +71,25 @@ const MetricRow: React.FC<MetricRowProps> = ({
 
   // Section header styling
   if (isSectionHeader) {
+    const sectionBg = isMajorSectionHeader ? "bg-gray-200" : "bg-gray-100";
+    const sectionRowBg = isMajorSectionHeader ? "border-b border-gray-100 bg-gray-200" : "border-b border-gray-100 bg-gray-100";
+    
     return (
-      <TableRow className="border-b border-gray-100 bg-gray-100" id={id}>
-        <TableCell className="font-bold text-left py-2 px-2 bg-gray-100 sticky left-0 z-10 w-48">
+      <TableRow className={sectionRowBg} id={id}>
+        <TableCell className={`font-bold text-left py-2 px-2 ${sectionBg} sticky left-0 z-10 w-48`}>
           {label}
         </TableCell>
         {historicalData.map((_, index) => (
           <TableCell 
             key={`hist-${index}`} 
-            className="text-center py-2 px-2 min-w-[80px] bg-gray-100"
+            className={`text-center py-2 px-2 min-w-[80px] ${sectionBg}`}
           >
           </TableCell>
         ))}
         {forecastData.map((_, index) => (
           <TableCell 
             key={`forecast-${index}`} 
-            className="text-center py-2 px-2 min-w-[80px] bg-gray-100"
+            className={`text-center py-2 px-2 min-w-[80px] ${sectionBg}`}
           >
           </TableCell>
         ))}
