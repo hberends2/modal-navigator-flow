@@ -103,39 +103,6 @@ export const categories: PrimaryCategory[] = [
     ]
   },
   {
-    id: "allocated",
-    name: "Allocated",
-    subCategories: [
-      {
-        id: "property-operations",
-        name: "Property Operations & Maintenance",
-        lineItems: [
-          { id: "maintenance-repairs", name: "Maintenance & Repairs" },
-          { id: "housekeeping", name: "Housekeeping" },
-          { id: "grounds-maintenance", name: "Grounds Maintenance" }
-        ]
-      },
-      {
-        id: "administrative-general",
-        name: "Administrative & General",
-        lineItems: [
-          { id: "front-office", name: "Front Office" },
-          { id: "accounting", name: "Accounting" },
-          { id: "human-resources", name: "Human Resources" }
-        ]
-      },
-      {
-        id: "sales-marketing",
-        name: "Sales & Marketing",
-        lineItems: [
-          { id: "advertising", name: "Advertising" },
-          { id: "promotions", name: "Promotions" },
-          { id: "sales-team", name: "Sales Team" }
-        ]
-      }
-    ]
-  },
-  {
     id: "none",
     name: "None",
     subCategories: []
