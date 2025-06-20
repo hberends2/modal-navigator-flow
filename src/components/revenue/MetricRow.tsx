@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import { TableRow, TableCell } from "../ui/table";
 
 interface MetricRowProps {
+  id?: string;
   label: ReactNode;
   historicalData: ReactNode[];
   forecastData: ReactNode[];
@@ -34,6 +35,7 @@ interface MetricRowProps {
 }
 
 const MetricRow: React.FC<MetricRowProps> = ({
+  id,
   label,
   historicalData,
   forecastData,
@@ -65,7 +67,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
   if (isTwoRowMetric) {
     return (
       <>
-        <TableRow className="border-b border-gray-100">
+        <TableRow className="border-b border-gray-100" id={id}>
           <TableCell className="font-medium text-left py-2 px-2 bg-white sticky left-0 z-10 w-48">
             <div className="flex items-center justify-between">
               <span>{metricText}</span>
@@ -124,7 +126,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
   }
 
   return (
-    <TableRow className={`${baseRowClass} ${className}`}>
+    <TableRow className={`${baseRowClass} ${className}`} id={id}>
       <TableCell className={`font-medium text-left ${baseCellClass} bg-white sticky left-0 z-10 w-48`}>
         {label}
       </TableCell>

@@ -57,7 +57,7 @@ const FinalExpensesSections: React.FC<FinalExpensesSectionsProps> = ({
     calculations, 
     calculateTotalExpense, 
     getTotalHistoricalExpense 
-  }= useExpenseCalculations();
+  } = useExpenseCalculations();
 
   return (
     <>
@@ -114,6 +114,8 @@ const FinalExpensesSections: React.FC<FinalExpensesSectionsProps> = ({
         reserveForReplacementInput={reserveForReplacementInput}
         formatCurrency={formatCurrency}
         helpers={helpers}
+        calculateTotalExpense={calculateTotalExpense}
+        getTotalHistoricalExpense={getTotalHistoricalExpense}
       />
     </>
   );

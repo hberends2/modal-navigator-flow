@@ -1,7 +1,6 @@
 
 import React from "react";
 import MetricRow from "./MetricRow";
-import { useExpenseCalculations } from "./ExpenseCalculationsProvider";
 
 interface NetOperatingIncomeSectionProps {
   historicalYears: number[];
@@ -9,6 +8,8 @@ interface NetOperatingIncomeSectionProps {
   reserveForReplacementInput: Record<number, string>;
   formatCurrency: (value: number) => string;
   helpers: any;
+  calculateTotalExpense: (year: number) => number;
+  getTotalHistoricalExpense: (year: number) => number;
 }
 
 const NetOperatingIncomeSection: React.FC<NetOperatingIncomeSectionProps> = ({
@@ -16,10 +17,10 @@ const NetOperatingIncomeSection: React.FC<NetOperatingIncomeSectionProps> = ({
   forecastYears,
   reserveForReplacementInput,
   formatCurrency,
-  helpers
+  helpers,
+  calculateTotalExpense,
+  getTotalHistoricalExpense
 }) => {
-  const { calculateTotalExpense, getTotalHistoricalExpense } = useExpenseCalculations();
-
   const getReserveForReplacement = (year: number, isHistorical: boolean) => {
     if (isHistorical) {
       return 1000; // Historical value
