@@ -1,3 +1,4 @@
+
 import { CategoryItem } from "./SidebarCategory";
 
 // Top-level categories for main navigation (reordered to move Summary below Reports)
@@ -80,6 +81,10 @@ export const mainNavCategories: CategoryItem[] = [
     ],
   },
   {
+    id: "capitalExpense",
+    name: "Capital Expense"
+  },
+  {
     id: "reports",
     name: "Reports",
     subCategories: [
@@ -94,18 +99,11 @@ export const mainNavCategories: CategoryItem[] = [
   // Department & Item Setup removed from sidebar
 ];
 
-// Parking lot categories (reordered with Penetration added)
+// Parking lot categories (reordered with Penetration added, Capital Expense removed)
 export const parkingLotCategories: CategoryItem[] = [
   {
     id: "penetration",
     name: "Penetration"
-  },
-  {
-    id: "caps",
-    name: "Capital Expense",
-    subCategories: [
-      { id: "caps", name: "Capital Expense" }
-    ]
   },
   {
     id: "investmentAssumptions",
