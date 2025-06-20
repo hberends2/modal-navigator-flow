@@ -134,7 +134,7 @@ const CapitalExpenseSection: React.FC<CapitalExpenseSectionProps> = ({
               type="text"
               value={row.description}
               onChange={(e) => handleDescriptionChange(row.id, e.target.value)}
-              className="w-full text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-2 py-1 mr-4"
+              className="w-full text-sm bg-yellow-50 text-blue-600 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-2 py-1 mr-1"
               placeholder="Enter capital expense description"
             />
           }
