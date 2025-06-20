@@ -94,6 +94,31 @@ const ExpenseSectionContainer: React.FC<ExpenseSectionContainerProps> = (props) 
     reserveForReplacement: props.historicalData.reserveForReplacement || {}
   };
 
+  const calculateTotalOtherOperatedExpense = (year: number): number => {
+    // Check if this is a historical year - if so, use historical data directly
+    if (historicalExpenseData.fb[year] !== undefined) {
+      return (historicalExpenseData.fb[year] || 0) +
+             (historicalExpenseData.otherOperated[year] || 0) +
+             (historicalExpenseData.miscellaneous[year] || 0) +
+             (historicalExpenseData.allocated[year] || 0);
+    } else {
+      // For forecast years, calculate from inputs
+      const fbExpense = calculateExpense(year, props.fbExpenseInput[year], 'fb');
+      const otherOperatedExpense = calculateExpense(year, props.otherOperatedExpenseInput[year], 'otherOperated');
+      const miscellaneousExpense = calculateExpense(year, props.miscellaneousExpenseInput[year], 'miscellaneous');
+      const allocatedExpense = calculateExpense(year, props.allocatedExpenseInput[year], 'allocated');
+      
+      return fbExpense + otherOperatedExpense + miscellaneousExpense + allocatedExpense;
+    }
+  };
+
+  const getTotalHistoricalOtherOperatedExpense = (year: number): number => {
+    return (historicalExpenseData.fb[year] || 0) +
+           (historicalExpenseData.otherOperated[year] || 0) +
+           (historicalExpenseData.miscellaneous[year] || 0) +
+           (historicalExpenseData.allocated[year] || 0);
+  };
+
   return (
     <>
       <RoomsExpenseSection
@@ -142,6 +167,8 @@ const ExpenseSectionContainer: React.FC<ExpenseSectionContainerProps> = (props) 
         formatCurrency={props.formatCurrency}
         formatPercent={props.formatPercent}
         calculateExpense={calculateExpense}
+        calculateTotalOtherOperatedExpense={calculateTotalOtherOperatedExpense}
+        getTotalHistoricalOtherOperatedExpense={getTotalHistoricalOtherOperatedExpense}
         historicalExpenseData={historicalExpenseData}
         helpers={props.helpers}
       />
