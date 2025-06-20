@@ -27,19 +27,27 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
 }) => {
   const modalContent = (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-50 z-50"
+      className="fixed bg-black bg-opacity-50 z-50"
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem'
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+        padding: 0
       }}
     >
       <div 
-        className={`bg-white rounded-lg w-full ${maxWidth} max-h-[90vh] overflow-auto shadow-2xl`}
+        className="bg-white rounded-lg shadow-2xl overflow-auto"
         style={{
-          maxWidth: maxWidth === "max-w-3xl" ? "48rem" : 
-                   maxWidth === "max-w-6xl" ? "72rem" : "48rem"
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '90vw',
+          maxWidth: maxWidth === "max-w-6xl" ? "72rem" : "48rem",
+          maxHeight: '90vh',
+          margin: 0
         }}
       >
         <div className="sticky top-0 bg-white p-4 border-b border-gray-200 flex justify-between items-center">
