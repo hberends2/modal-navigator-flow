@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
@@ -53,83 +52,71 @@ const Index = () => {
         </main>
 
         {/* Modals */}
-        {showCategorySelection && (
-          <CategorySelectionModal 
-            onClose={() => setShowCategorySelection(false)}
-            onSave={() => setShowCategorySelection(false)}
-          />
-        )}
+        <CategorySelectionModal 
+          open={showCategorySelection}
+          onClose={() => setShowCategorySelection(false)}
+          onSave={() => setShowCategorySelection(false)}
+        />
         
-        {activeModal === "propertyDetails" && (
-          <PropertyFormModal 
-            onClose={closeModal}
-            onSave={() => {}}
-            property={null}
-          />
-        )}
+        <PropertyFormModal 
+          open={activeModal === "propertyDetails"}
+          onClose={closeModal}
+          onSave={() => {}}
+          property={null}
+        />
 
-        {activeModal === "propertyDetailsModal" && (
-          <PropertyDetailsModal 
-            onClose={closeModal}
-            onNext={() => {}}
-          />
-        )}
+        <PropertyDetailsModal 
+          open={activeModal === "propertyDetailsModal"}
+          onClose={closeModal}
+          onNext={() => {}}
+        />
 
-        {activeModal === "occupancyForecast" && (
-          <OccupancyForecastModal 
-            onClose={closeModal}
-            onNext={() => {}}
-          />
-        )}
+        <OccupancyForecastModal 
+          open={activeModal === "occupancyForecast"}
+          onClose={closeModal}
+          onNext={() => {}}
+        />
 
-        {activeModal === "operatingRevenue" && (
-          <OperatingRevenueModal 
-            onClose={closeModal}
-            onNext={() => {}}
-          />
-        )}
+        <OperatingRevenueModal 
+          open={activeModal === "operatingRevenue"}
+          onClose={closeModal}
+          onNext={() => {}}
+        />
 
-        {activeModal === "departmentalExpenses" && (
-          <DepartmentalExpensesModal 
-            onClose={closeModal}
-            onNext={() => {}}
-          />
-        )}
+        <DepartmentalExpensesModal 
+          open={activeModal === "departmentalExpenses"}
+          onClose={closeModal}
+          onNext={() => {}}
+        />
 
-        {activeModal === "undistributedExpenses" && (
-          <UndistributedExpensesModal 
-            onClose={closeModal}
-            onNext={() => {}}
-          />
-        )}
+        <UndistributedExpensesModal 
+          open={activeModal === "undistributedExpenses"}
+          onClose={closeModal}
+          onNext={() => {}}
+        />
 
-        {activeModal === "undistributedExpensesSecond" && (
-          <UndistributedExpensesSecondModal 
-            onClose={closeModal}
-            onNext={() => {}}
-          />
-        )}
+        <UndistributedExpensesSecondModal 
+          open={activeModal === "undistributedExpensesSecond"}
+          onClose={closeModal}
+          onNext={() => {}}
+        />
 
-        {activeModal === "nonOperatingExpenses" && (
-          <NonOperatingExpensesModal 
-            onClose={closeModal}
-            onNext={() => {}}
-          />
-        )}
+        <NonOperatingExpensesModal 
+          open={activeModal === "nonOperatingExpenses"}
+          onClose={closeModal}
+          onNext={() => {}}
+        />
 
-        {activeModal === "ffeReserve" && (
-          <FFEReserveModal 
-            onClose={closeModal}
-            onNext={() => {}}
-          />
-        )}
+        <FFEReserveModal 
+          open={activeModal === "ffeReserve"}
+          onClose={closeModal}
+          onNext={() => {}}
+        />
 
-        {activeModal === "capitalExpense" && (
-          <CapitalExpenseModal 
-            isOpen={true}
-            onClose={closeModal}
-          />
-        )}
+        <CapitalExpenseModal 
+          open={activeModal === "capitalExpense"}
+          onClose={closeModal}
+        />
       </div>
     </SidebarProvider>
   );

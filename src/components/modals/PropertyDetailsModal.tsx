@@ -1,16 +1,18 @@
 
 import React, { useState } from "react";
-import ModalWrapper from "../ui/ModalWrapper";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog";
+import { Button } from "../ui/button";
 import FormField from "../ui/FormField";
 import Dropdown from "../ui/Dropdown";
 import ThumbnailUpload from "../ui/ThumbnailUpload";
 
 interface PropertyDetailsModalProps {
+  open: boolean;
   onClose: () => void;
   onNext: () => void;
 }
 
-const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, onNext }) => {
+const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ open, onClose, onNext }) => {
   const [formData, setFormData] = useState({
     propertyName: "",
     censusId: "",
@@ -98,129 +100,138 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ onClose, on
   };
 
   return (
-    <ModalWrapper 
-      title="Property Details" 
-      onClose={onClose} 
-      onSave={handleSave} 
-      onNext={onNext}
-      showSave={false}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          id="propertyName"
-          label="Property Name"
-          type="text"
-          value={formData.propertyName}
-          onChange={(value) => handleInputChange("propertyName", value)}
-          required
-        />
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-auto">
+        <DialogHeader>
+          <DialogTitle>Property Details</DialogTitle>
+        </DialogHeader>
         
-        <FormField
-          id="censusId"
-          label="Census ID"
-          type="integer"
-          value={formData.censusId}
-          onChange={(value) => handleInputChange("censusId", value)}
-        />
-        
-        <FormField
-          id="propertyAddress"
-          label="Property Address"
-          type="text"
-          value={formData.propertyAddress}
-          onChange={(value) => handleInputChange("propertyAddress", value)}
-          required
-        />
-        
-        <FormField
-          id="city"
-          label="City"
-          type="text"
-          value={formData.city}
-          onChange={(value) => handleInputChange("city", value)}
-          required
-        />
-        
-        <div className="flex gap-4">
-          <div className="w-1/2">
-            <Dropdown
-              id="state"
-              label="State"
-              value={formData.state}
-              onChange={(value) => handleInputChange("state", value)}
-              options={stateOptions}
-              required
-            />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
+          <FormField
+            id="propertyName"
+            label="Property Name"
+            type="text"
+            value={formData.propertyName}
+            onChange={(value) => handleInputChange("propertyName", value)}
+            required
+          />
+          
+          <FormField
+            id="censusId"
+            label="Census ID"
+            type="integer"
+            value={formData.censusId}
+            onChange={(value) => handleInputChange("censusId", value)}
+          />
+          
+          <FormField
+            id="propertyAddress"
+            label="Property Address"
+            type="text"
+            value={formData.propertyAddress}
+            onChange={(value) => handleInputChange("propertyAddress", value)}
+            required
+          />
+          
+          <FormField
+            id="city"
+            label="City"
+            type="text"
+            value={formData.city}
+            onChange={(value) => handleInputChange("city", value)}
+            required
+          />
+          
+          <div className="flex gap-4">
+            <div className="w-1/2">
+              <Dropdown
+                id="state"
+                label="State"
+                value={formData.state}
+                onChange={(value) => handleInputChange("state", value)}
+                options={stateOptions}
+                required
+              />
+            </div>
+            <div className="w-1/2">
+              <FormField
+                id="zipCode"
+                label="Zip Code"
+                type="integer"
+                value={formData.zipCode}
+                onChange={(value) => handleInputChange("zipCode", value)}
+                required
+              />
+            </div>
           </div>
-          <div className="w-1/2">
-            <FormField
-              id="zipCode"
-              label="Zip Code"
-              type="integer"
-              value={formData.zipCode}
-              onChange={(value) => handleInputChange("zipCode", value)}
-              required
-            />
-          </div>
+          
+          <FormField
+            id="numberOfRooms"
+            label="Rooms / Keys"
+            type="integer"
+            value={formData.numberOfRooms}
+            onChange={(value) => handleInputChange("numberOfRooms", value)}
+            required
+          />
+          
+          <Dropdown
+            id="propertyType"
+            label="Property Type"
+            value={propertyTypeOption}
+            onChange={setPropertyTypeOption}
+            options={propertyTypeOptions}
+            required
+          />
+          
+          <Dropdown
+            id="status"
+            label="Status"
+            value={statusOption}
+            onChange={setStatusOption}
+            options={statusOptions}
+            required
+          />
+
+          <FormField
+            id="brand"
+            label="Brand"
+            type="text"
+            value={formData.brand}
+            onChange={(value) => handleInputChange("brand", value)}
+          />
+          
+          <FormField
+            id="management"
+            label="Management"
+            type="text"
+            value={formData.management}
+            onChange={(value) => handleInputChange("management", value)}
+          />
+          
+          <FormField
+            id="versionName"
+            label="Version Name"
+            type="text"
+            value={formData.versionName}
+            onChange={(value) => handleInputChange("versionName", value)}
+          />
+
+          <ThumbnailUpload
+            onFileSelect={handleThumbnailChange}
+            value={thumbnailFile}
+          />
         </div>
-        
-        <FormField
-          id="numberOfRooms"
-          label="Rooms / Keys"
-          type="integer"
-          value={formData.numberOfRooms}
-          onChange={(value) => handleInputChange("numberOfRooms", value)}
-          required
-        />
-        
-        <Dropdown
-          id="propertyType"
-          label="Property Type"
-          value={propertyTypeOption}
-          onChange={setPropertyTypeOption}
-          options={propertyTypeOptions}
-          required
-        />
-        
-        <Dropdown
-          id="status"
-          label="Status"
-          value={statusOption}
-          onChange={setStatusOption}
-          options={statusOptions}
-          required
-        />
 
-        <FormField
-          id="brand"
-          label="Brand"
-          type="text"
-          value={formData.brand}
-          onChange={(value) => handleInputChange("brand", value)}
-        />
-        
-        <FormField
-          id="management"
-          label="Management"
-          type="text"
-          value={formData.management}
-          onChange={(value) => handleInputChange("management", value)}
-        />
-        
-        <FormField
-          id="versionName"
-          label="Version Name"
-          type="text"
-          value={formData.versionName}
-          onChange={(value) => handleInputChange("versionName", value)}
-        />
-
-        <ThumbnailUpload
-          onFileSelect={handleThumbnailChange}
-          value={thumbnailFile}
-        />
-      </div>
-    </ModalWrapper>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={onNext} className="bg-green-500 hover:bg-green-600">
+            Next
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

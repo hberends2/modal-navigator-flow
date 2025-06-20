@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
@@ -64,20 +65,18 @@ const PropertyDetails = () => {
         </div>
       </main>
       
-      {showPropertyModal && (
-        <PropertyDetailsModal 
-          onClose={handlePropertyModalClose} 
-          onNext={handlePropertyModalNext} 
-        />
-      )}
+      <PropertyDetailsModal 
+        open={showPropertyModal}
+        onClose={handlePropertyModalClose} 
+        onNext={handlePropertyModalNext} 
+      />
       
-      {showCategoryModal && (
-        <CategorySelectionModal
-          onClose={handleCategoryModalClose}
-          onSave={handleCategoryModalSave}
-          initialSelections={categorySelections}
-        />
-      )}
+      <CategorySelectionModal
+        open={showCategoryModal}
+        onClose={handleCategoryModalClose}
+        onSave={handleCategoryModalSave}
+        initialSelections={categorySelections}
+      />
     </div>
   );
 };
