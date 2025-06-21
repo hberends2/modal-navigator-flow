@@ -10,12 +10,12 @@ export const mainNavCategories: CategoryItem[] = [
   },
   {
     id: "market",
-    name: "Market Analysis",
+    name: "Market Comps",
     path: "/market"
   },
   {
     id: "valuation",
-    name: "Valuation",
+    name: "Pro-forma",
     path: "/revenue",
     subCategories: [
       { id: "occupancy-section", name: "Occupancy" },
@@ -110,5 +110,9 @@ export const parkingLotCategories: CategoryItem[] = [
   {
     id: "waterfall",
     name: "Waterfall"
+  },
+  {
+    id: "thirdPartyMarketData",
+    name: "3rd-Party Market Data"
   }
 ];
