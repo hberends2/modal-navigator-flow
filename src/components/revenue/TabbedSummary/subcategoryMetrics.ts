@@ -6,8 +6,7 @@ import { createHelpers } from './helpers';
 const historicalExpenseData = {
   fb: { 2021: 1200000, 2022: 1280000, 2023: 1350000, 2024: 1400000 },
   otherOperated: { 2021: 800000, 2022: 850000, 2023: 900000, 2024: 920000 },
-  miscellaneous: { 2021: 100000, 2022: 105000, 2023: 110000, 2024: 115000 },
-  allocated: { 2021: 600000, 2022: 630000, 2023: 660000, 2024: 680000 }
+  miscellaneous: { 2021: 100000, 2022: 105000, 2023: 110000, 2024: 115000 }
 };
 
 const calculateForecastExpense = (year: number, expenseType: string) => {
@@ -55,17 +54,6 @@ export const createSubcategoryMetrics = (
         }
       }),
       isSubcategory: true
-    },
-    {
-      label: "Allocated Revenue",
-      data: allYears.map(year => {
-        if (historicalYears.includes(year)) {
-          return formatCurrency(props.historicalData.allocatedRevenue[year] || 0);
-        } else {
-          return formatCurrency(helpers.calculateForecastRevenue(year, props.allocatedPerOccupiedRoom));
-        }
-      }),
-      isSubcategory: true
     }
   ];
 };
@@ -103,20 +91,9 @@ export const createExpenseSubcategoryMetrics = (
       label: "Miscellaneous Expense",
       data: allYears.map(year => {
         if (historicalYears.includes(year)) {
-          return formatCurrency(historicalExpenseData.miscellaneous[year] ||         0);
+          return formatCurrency(historicalExpenseData.miscellaneous[year] || 0);
         } else {
           return formatCurrency(calculateForecastExpense(year, 'miscellaneous'));
-        }
-      }),
-      isSubcategory: true
-    },
-    {
-      label: "Allocated Expense",
-      data: allYears.map(year => {
-        if (historicalYears.includes(year)) {
-          return formatCurrency(historicalExpenseData.allocated[year] || 0);
-        } else {
-          return formatCurrency(calculateForecastExpense(year, 'allocated'));
         }
       }),
       isSubcategory: true

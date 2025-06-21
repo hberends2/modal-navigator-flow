@@ -39,9 +39,6 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
   miscellaneousExpenseInput,
   handleMiscellaneousExpenseChange,
   handleMiscellaneousExpenseBlur,
-  allocatedExpenseInput,
-  handleAllocatedExpenseChange,
-  handleAllocatedExpenseBlur,
   formatCurrency,
   formatPercent,
   calculateExpense,
@@ -172,38 +169,6 @@ const OtherOperatedExpenseSection: React.FC<OtherOperatedExpenseSectionProps> = 
         label="Total Miscellaneous Expense"
         historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.miscellaneous[year] || 0))}
         forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, miscellaneousExpenseInput[year], 'miscellaneous')))}
-        isIndented={true}
-      />
-
-      {/* Allocated Expense */}
-      <tr id="allocated-expense-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-
-      <MetricRow
-        label={<span className="font-bold text-gray-900">Allocated Expense</span>}
-        historicalData={historicalYears.map(() => "")}
-        forecastData={forecastYears.map(() => "")}
-        isSectionHeader={true}
-      />
-
-      <MetricRow
-        label={`Allocated Expense (${expenseForecastMethod})`}
-        historicalData={historicalYears.map(year => getHistoricalExpenseData(year, 'allocated'))}
-        forecastData={forecastYears.map(() => "")}
-        isEditable={true}
-        editableData={allocatedExpenseInput}
-        onEditableChange={handleAllocatedExpenseChange}
-        onEditableBlur={handleAllocatedExpenseBlur}
-        forecastYears={forecastYears}
-        isYoYRow={expenseForecastMethod === "% of Revenue"}
-        isUserInputRow={true}
-        isIndented={true}
-      />
-      <MetricRow
-        label="Total Allocated Expense"
-        historicalData={historicalYears.map(year => formatCurrency(historicalExpenseData.allocated[year] || 0))}
-        forecastData={forecastYears.map(year => formatCurrency(calculateExpense(year, allocatedExpenseInput[year], 'allocated')))}
         isIndented={true}
       />
 

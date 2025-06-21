@@ -33,7 +33,6 @@ export const mainNavCategories: CategoryItem[] = [
               { id: "food-beverage-section", name: "Food & Beverage" },
               { id: "other-operated-section", name: "Other Operated" },
               { id: "miscellaneous-section", name: "Miscellaneous" },
-              { id: "allocated-section", name: "Allocated" },
             ],
           },
           { id: "total-revenue-section", name: "Total Revenue" },
@@ -51,7 +50,6 @@ export const mainNavCategories: CategoryItem[] = [
               { id: "food-beverage-expense-section", name: "Food & Beverage" },
               { id: "other-operated-expense-section", name: "Other Operated" },
               { id: "miscellaneous-expense-section", name: "Miscellaneous" },
-              { id: "allocated-expense-section", name: "Allocated" },
             ],
           },
           {
@@ -96,7 +94,7 @@ export const mainNavCategories: CategoryItem[] = [
   // Department & Item Setup removed from sidebar
 ];
 
-// Parking lot categories (removed Penetration)
+// Parking lot categories (changed "3rd-Party Market Data" to "Market Analysis")
 export const parkingLotCategories: CategoryItem[] = [
   {
     id: "investmentAssumptions",
@@ -112,7 +110,7 @@ export const parkingLotCategories: CategoryItem[] = [
     name: "Waterfall"
   },
   {
-    id: "thirdPartyMarketData",
-    name: "3rd-Party Market Data"
+    id: "marketAnalysis",
+    name: "Market Analysis"
   }
 ];

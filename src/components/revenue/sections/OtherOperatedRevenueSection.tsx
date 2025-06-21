@@ -1,9 +1,9 @@
+
 import React from "react";
 import MetricRow from "../MetricRow";
 import FoodBeverageSection from "../FoodBeverageSection";
 import OtherOperatedSection from "../OtherOperatedSection";
 import MiscellaneousSection from "../MiscellaneousSection";
-import AllocatedSection from "../AllocatedSection";
 import { CalculationHelpers } from "../RevenueTableHelpers";
 
 interface OtherOperatedRevenueSectionProps {
@@ -44,9 +44,6 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
   miscellaneousPerOccupiedRoom,
   handleMiscellaneousPerOccupiedRoomChange,
   handleMiscellaneousPerOccupiedRoomBlur,
-  allocatedPerOccupiedRoom,
-  handleAllocatedPerOccupiedRoomChange,
-  handleAllocatedPerOccupiedRoomBlur,
   formatCurrency,
   helpers
 }) => {
@@ -107,22 +104,6 @@ const OtherOperatedRevenueSection: React.FC<OtherOperatedRevenueSectionProps> = 
         miscellaneousPerOccupiedRoom={miscellaneousPerOccupiedRoom}
         handleMiscellaneousPerOccupiedRoomChange={handleMiscellaneousPerOccupiedRoomChange}
         handleMiscellaneousPerOccupiedRoomBlur={handleMiscellaneousPerOccupiedRoomBlur}
-        getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
-        formatCurrency={formatCurrency}
-        isIndented={true}
-      />
-
-      <tr id="allocated-section" className="scroll-mt-4">
-        <td colSpan={10} className="h-0 p-0"></td>
-      </tr>
-      <AllocatedSection
-        roomsKeys={roomsKeys}
-        historicalYears={historicalYears}
-        forecastYears={forecastYears}
-        historicalData={historicalData}
-        allocatedPerOccupiedRoom={allocatedPerOccupiedRoom}
-        handleAllocatedPerOccupiedRoomChange={handleAllocatedPerOccupiedRoomChange}
-        handleAllocatedPerOccupiedRoomBlur={handleAllocatedPerOccupiedRoomBlur}
         getForecastOccupiedRooms={helpers.getForecastOccupiedRoomsForYear}
         formatCurrency={formatCurrency}
         isIndented={true}
