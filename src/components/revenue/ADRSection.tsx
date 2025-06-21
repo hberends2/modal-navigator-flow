@@ -113,6 +113,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
 
       {/* Subject Property ADR YoY Growth - Controls Row */}
       <MetricRow
+        label={<span></span>}
         isTwoRowMetric={true}
         metricText=""
         controls={
