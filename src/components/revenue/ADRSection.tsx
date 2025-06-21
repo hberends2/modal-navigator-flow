@@ -1,3 +1,4 @@
+
 import React from "react";
 import MetricRow from "./MetricRow";
 import ADRGrowthControls from "./ADRGrowthControls";
@@ -96,7 +97,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
 
       {/* Subject Property ADR YoY Growth - Title Row */}
       <MetricRow
-        label={<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</span>}
+        label={<div className="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</div>}
         historicalData={historicalYears.map((year, index) => 
           index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index, historicalYears, getHistoricalADR))
         )}
@@ -113,10 +114,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
 
       {/* Subject Property ADR YoY Growth - Controls Row */}
       <MetricRow
-        label={<span></span>}
-        isTwoRowMetric={true}
-        metricText=""
-        controls={
+        label={<div className="w-full text-left">
           <ADRGrowthControls
             adrGrowthType={adrGrowthType}
             setAdrGrowthType={setAdrGrowthType}
@@ -127,7 +125,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
             handleYearlyAdrChange={handleYearlyAdrChange}
             forecastYears={forecastYears}
           />
-        }
+        </div>}
         historicalData={historicalYears.map(() => "")}
         forecastData={forecastYears.map(year => {
           if (adrGrowthType === "yearly") {
@@ -144,11 +142,6 @@ const ADRSection: React.FC<ADRSectionProps> = ({
             return "";
           }
         })}
-        isEditable={adrGrowthType === "yearly"}
-        editableData={yearlyAdrGrowth}
-        onEditableChange={handleYearlyAdrChange}
-        onEditableBlur={handleYearlyAdrBlur}
-        forecastYears={forecastYears}
         isUserInputRow={true}
         className="bg-yellow-50"
       />
