@@ -1,3 +1,4 @@
+
 import React from "react";
 import MetricRow from "./MetricRow";
 import ADRGrowthControls from "./ADRGrowthControls";
@@ -114,9 +115,18 @@ const ADRSection: React.FC<ADRSectionProps> = ({
         historicalData={historicalYears.map((year, index) => 
           index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index, historicalYears, getHistoricalADR))
         )}
-        forecastData={forecastYears.map(year => 
-          adrGrowthType === "yearly" ? "" : `${parseFloat(flatAdrGrowth).toFixed(1)}%`
-        )}
+        forecastData={forecastYears.map(year => {
+          if (adrGrowthType === "yearly") {
+            const yoyValue = parseFloat(yearlyAdrGrowth[year] || "0");
+            return (
+              <span className={yoyValue >= 0 ? "text-green-600" : "text-red-600"}>
+                {`${yoyValue.toFixed(1)}%`}
+              </span>
+            );
+          } else {
+            return `${parseFloat(flatAdrGrowth).toFixed(1)}%`;
+          }
+        })}
         isGrowthRow={true}
         adrGrowthType={adrGrowthType}
         yearlyAdrGrowth={yearlyAdrGrowth}
@@ -124,6 +134,10 @@ const ADRSection: React.FC<ADRSectionProps> = ({
         handleYearlyAdrBlur={handleYearlyAdrBlur}
         forecastYears={forecastYears}
         isUserInputRow={true}
+        isEditable={adrGrowthType === "yearly"}
+        editableData={yearlyAdrGrowth}
+        onEditableChange={handleYearlyAdrChange}
+        onEditableBlur={handleYearlyAdrBlur}
       />
 
       {/* Index Calculations */}
