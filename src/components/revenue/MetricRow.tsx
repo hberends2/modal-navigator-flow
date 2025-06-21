@@ -65,9 +65,13 @@ const MetricRow: React.FC<MetricRowProps> = ({
   const baseRowClass = isHeaderRow ? "border-b border-gray-300" : "border-b border-gray-100 hover:bg-gray-50";
   const baseCellClass = isHeaderRow ? "py-1 px-2" : "py-2 px-2";
   
+  // Apply pale yellow background for user input rows
+  const userInputRowClass = isUserInputRow ? "bg-yellow-50" : "";
+  const rowClasses = `${baseRowClass} ${className} ${userInputRowClass}`;
+  
   // Determine if the label cell should use the row background or white
-  const shouldUseLabelBackground = className.includes("bg-green-50") || isSectionHeader;
-  const labelCellBg = shouldUseLabelBackground ? "" : "bg-white";
+  const shouldUseLabelBackground = className.includes("bg-green-50") || isSectionHeader || isUserInputRow;
+  const labelCellBg = shouldUseLabelBackground ? (isUserInputRow ? "bg-yellow-50" : "") : "bg-white";
 
   // Section header styling
   if (isSectionHeader) {
@@ -149,7 +153,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
                   value={yearlyAdrGrowth[year] || ""}
                   onChange={(e) => handleYearlyAdrChange?.(year, e.target.value)}
                   onBlur={(e) => handleYearlyAdrBlur?.(year, e.target.value)}
-                  className="w-full text-center border-none bg-transparent focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
+                  className="w-full text-center border-none bg-white text-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
                 />
               </TableCell>
             ))}
@@ -160,14 +164,14 @@ const MetricRow: React.FC<MetricRowProps> = ({
   }
 
   return (
-    <TableRow className={`${baseRowClass} ${className}`} id={id}>
+    <TableRow className={rowClasses} id={id}>
       <TableCell className={`font-medium text-left ${baseCellClass} ${labelCellBg} sticky left-0 z-10 w-48`}>
         {label}
       </TableCell>
       {historicalData.map((data, index) => (
         <TableCell 
           key={`hist-${index}`} 
-          className={`text-center ${baseCellClass} min-w-[80px] ${isHeaderRow ? 'bg-gray-600' : 'bg-blue-25'}`}
+          className={`text-center ${baseCellClass} min-w-[80px] ${isHeaderRow ? 'bg-gray-600' : isUserInputRow ? 'bg-yellow-50' : 'bg-blue-25'}`}
         >
           {data}
         </TableCell>
@@ -179,7 +183,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
         return (
           <TableCell 
             key={`forecast-${index}`} 
-            className={`text-center ${baseCellClass} min-w-[80px] ${isHeaderRow ? 'bg-gray-600' : 'bg-green-25'}`}
+            className={`text-center ${baseCellClass} min-w-[80px] ${isHeaderRow ? 'bg-gray-600' : isUserInputRow ? 'bg-yellow-50' : 'bg-green-25'}`}
           >
             {isEditableCell ? (
               <input
@@ -187,7 +191,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
                 value={editableData[year] || ""}
                 onChange={(e) => onEditableChange?.(year, e.target.value)}
                 onBlur={(e) => onEditableBlur?.(year, e.target.value)}
-                className="w-full text-center border-none bg-transparent focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
+                className="w-full text-center border-none bg-white text-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
               />
             ) : (
               data
