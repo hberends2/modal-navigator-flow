@@ -1,4 +1,5 @@
 
+
 import React from "react";
 import MetricRow from "./MetricRow";
 import ADRGrowthControls from "./ADRGrowthControls";
@@ -97,7 +98,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
 
       {/* Subject Property ADR YoY Growth - Title Row */}
       <MetricRow
-        label={<div className="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</div>}
+        label={<span className="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</span>}
         historicalData={historicalYears.map((year, index) => 
           index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index, historicalYears, getHistoricalADR))
         )}
@@ -184,3 +185,4 @@ const ADRSection: React.FC<ADRSectionProps> = ({
 };
 
 export default ADRSection;
+
