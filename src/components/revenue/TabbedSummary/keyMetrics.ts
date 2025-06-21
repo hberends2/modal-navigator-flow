@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { TabbedSummaryProps, MetricRow } from './types';
 
@@ -108,18 +109,6 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
         return formatCurrency(totalRevenue);
       })
     },
-    // Total Expense - only use the prop function if available
-    {
-      label: "Total Expense",
-      data: allYears.map(year => {
-        if (calculateTotalExpense) {
-          const totalExpense = calculateTotalExpense(year);
-          return formatCurrency(totalExpense);
-        } else {
-          return "N/A";
-        }
-      })
-    },
     // Gross Operating Profit - only use the prop function if available
     {
       label: "Gross Operating Profit",
@@ -127,6 +116,20 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
         if (calculateGrossOperatingProfit) {
           const gop = calculateGrossOperatingProfit(year);
           return formatCurrency(gop);
+        } else {
+          return "N/A";
+        }
+      })
+    },
+    // GOP % of Revenue - new metric
+    {
+      label: "GOP % of Revenue",
+      data: allYears.map(year => {
+        if (calculateGrossOperatingProfit) {
+          const gop = calculateGrossOperatingProfit(year);
+          const totalRevenue = calculateTotalRevenueForYear(year);
+          const gopPercent = totalRevenue > 0 ? (gop / totalRevenue) * 100 : 0;
+          return formatPercent(gopPercent, 1);
         } else {
           return "N/A";
         }
@@ -141,6 +144,21 @@ export const createKeyMetrics = (props: TabbedSummaryProps, allYears: number[]):
           const totalExpense = calculateTotalExpense(year);
           const ebitda = totalRevenue - totalExpense;
           return formatCurrency(ebitda);
+        } else {
+          return "N/A";
+        }
+      })
+    },
+    // EBITDA % of Revenue - new metric
+    {
+      label: "EBITDA % of Revenue",
+      data: allYears.map(year => {
+        if (calculateTotalExpense) {
+          const totalRevenue = calculateTotalRevenueForYear(year);
+          const totalExpense = calculateTotalExpense(year);
+          const ebitda = totalRevenue - totalExpense;
+          const ebitdaPercent = totalRevenue > 0 ? (ebitda / totalRevenue) * 100 : 0;
+          return formatPercent(ebitdaPercent, 1);
         } else {
           return "N/A";
         }
