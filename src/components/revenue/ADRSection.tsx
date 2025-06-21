@@ -95,23 +95,23 @@ const ADRSection: React.FC<ADRSectionProps> = ({
         forecastData={forecastYears.map(year => `$${getForecastADR(year).toFixed(2)}`)}
       />
 
-      {/* Subject Property ADR YoY Growth with Two Row Layout */}
+      {/* Subject Property ADR YoY Growth */}
       <MetricRow
-        isTwoRowMetric={true}
-        metricText="Subject Property ADR YoY Growth"
-        controls={
-          <ADRGrowthControls
-            adrGrowthType={adrGrowthType}
-            setAdrGrowthType={setAdrGrowthType}
-            flatAdrGrowth={flatAdrGrowth}
-            setFlatAdrGrowth={setFlatAdrGrowth}
-            handleFlatAdrBlur={handleFlatAdrBlur}
-            yearlyAdrGrowth={yearlyAdrGrowth}
-            handleYearlyAdrChange={handleYearlyAdrChange}
-            forecastYears={forecastYears}
-          />
+        label={
+          <div className="flex items-center justify-between w-full">
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</span>
+            <ADRGrowthControls
+              adrGrowthType={adrGrowthType}
+              setAdrGrowthType={setAdrGrowthType}
+              flatAdrGrowth={flatAdrGrowth}
+              setFlatAdrGrowth={setFlatAdrGrowth}
+              handleFlatAdrBlur={handleFlatAdrBlur}
+              yearlyAdrGrowth={yearlyAdrGrowth}
+              handleYearlyAdrChange={handleYearlyAdrChange}
+              forecastYears={forecastYears}
+            />
+          </div>
         }
-        label=""
         historicalData={historicalYears.map((year, index) => 
           index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index, historicalYears, getHistoricalADR))
         )}
@@ -119,25 +119,21 @@ const ADRSection: React.FC<ADRSectionProps> = ({
           if (adrGrowthType === "yearly") {
             const yoyValue = parseFloat(yearlyAdrGrowth[year] || "0");
             return (
-              <span className={yoyValue >= 0 ? "text-green-600" : "text-red-600"}>
-                {`${yoyValue.toFixed(1)}%`}
-              </span>
+              <input
+                type="text"
+                value={yearlyAdrGrowth[year] || ""}
+                onChange={(e) => handleYearlyAdrChange(year, e.target.value)}
+                onBlur={(e) => handleYearlyAdrBlur(year, e.target.value)}
+                className="w-full text-center border-none bg-white text-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
+              />
             );
           } else {
+            // For flat growth, display the static value
             return `${parseFloat(flatAdrGrowth).toFixed(1)}%`;
           }
         })}
-        isGrowthRow={true}
-        adrGrowthType={adrGrowthType}
-        yearlyAdrGrowth={yearlyAdrGrowth}
-        handleYearlyAdrChange={handleYearlyAdrChange}
-        handleYearlyAdrBlur={handleYearlyAdrBlur}
-        forecastYears={forecastYears}
         isUserInputRow={true}
-        isEditable={adrGrowthType === "yearly"}
-        editableData={yearlyAdrGrowth}
-        onEditableChange={handleYearlyAdrChange}
-        onEditableBlur={handleYearlyAdrBlur}
+        className="bg-yellow-50"
       />
 
       {/* Index Calculations */}

@@ -28,7 +28,7 @@ interface MetricRowProps {
   isUserInputRow?: boolean;
   isFbInputRow?: boolean;
   isGrowthRow?: boolean;
-  // ADR specific props
+  // ADR specific props (deprecated - no longer used)
   adrGrowthType?: string;
   yearlyAdrGrowth?: Record<number, string>;
   handleYearlyAdrChange?: (year: number, value: string) => void;
@@ -56,11 +56,7 @@ const MetricRow: React.FC<MetricRowProps> = ({
   isYoYRow = false,
   isUserInputRow = false,
   isFbInputRow = false,
-  isGrowthRow = false,
-  adrGrowthType,
-  yearlyAdrGrowth = {},
-  handleYearlyAdrChange,
-  handleYearlyAdrBlur
+  isGrowthRow = false
 }) => {
   const baseRowClass = isHeaderRow ? "border-b border-gray-300" : "border-b border-gray-100 hover:bg-gray-50";
   const baseCellClass = isHeaderRow ? "py-1 px-2" : "py-2 px-2";
@@ -101,80 +97,48 @@ const MetricRow: React.FC<MetricRowProps> = ({
     );
   }
 
-  // Handle two-row metrics (like ADR Growth Controls)
+  // Handle two-row metrics (like occupancy controls)
   if (isTwoRowMetric) {
     return (
-      <>
-        <TableRow className={rowClasses} id={id}>
-          <TableCell className={`font-medium text-left py-2 px-2 ${labelCellBg} sticky left-0 z-10 w-48`}>
-            <div className="flex items-center justify-between">
-              <span>{metricText}</span>
-              {controls}
-            </div>
+      <TableRow className={rowClasses} id={id}>
+        <TableCell className={`font-medium text-left py-2 px-2 ${labelCellBg} sticky left-0 z-10 w-48`}>
+          <div className="flex items-center justify-between">
+            <span>{metricText}</span>
+            {controls}
+          </div>
+        </TableCell>
+        {historicalData.map((data, index) => (
+          <TableCell 
+            key={`hist-${index}`} 
+            className={`text-center py-2 px-2 min-w-[80px] ${isUserInputRow ? 'bg-yellow-50' : 'bg-blue-25'}`}
+          >
+            {data}
           </TableCell>
-          {historicalData.map((data, index) => (
+        ))}
+        {forecastData.map((data, index) => {
+          const year = forecastYears[index];
+          const isEditableCell = isEditable && year;
+          
+          return (
             <TableCell 
-              key={`hist-${index}`} 
-              className={`text-center py-2 px-2 min-w-[80px] ${isUserInputRow ? 'bg-yellow-50' : 'bg-blue-25'}`}
+              key={`forecast-${index}`} 
+              className={`text-center py-2 px-2 min-w-[80px] ${isUserInputRow ? 'bg-yellow-50' : 'bg-green-25'}`}
             >
-              {data}
-            </TableCell>
-          ))}
-          {forecastData.map((data, index) => {
-            const year = forecastYears[index];
-            const isEditableCell = isEditable && year;
-            
-            return (
-              <TableCell 
-                key={`forecast-${index}`} 
-                className={`text-center py-2 px-2 min-w-[80px] ${isUserInputRow ? 'bg-yellow-50' : 'bg-green-25'}`}
-              >
-                {isEditableCell ? (
-                  <input
-                    type="text"
-                    value={editableData[year] || ""}
-                    onChange={(e) => onEditableChange?.(year, e.target.value)}
-                    onBlur={(e) => onEditableBlur?.(year, e.target.value)}
-                    className="w-full text-center border-none bg-white text-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
-                  />
-                ) : (
-                  data
-                )}
-              </TableCell>
-            );
-          })}
-        </TableRow>
-        {/* Render additional rows for yearly growth inputs if needed */}
-        {isGrowthRow && adrGrowthType === "yearly" && (
-          <TableRow className={`border-b border-gray-100 ${userInputRowClass}`}>
-            <TableCell className={`font-medium text-left py-2 px-2 ${labelCellBg} sticky left-0 z-10 w-48`}>
-              {/* Empty label cell for yearly inputs */}
-            </TableCell>
-            {historicalData.map((_, index) => (
-              <TableCell 
-                key={`hist-yearly-${index}`} 
-                className={`text-center py-2 px-2 min-w-[80px] ${isUserInputRow ? 'bg-yellow-50' : 'bg-blue-25'}`}
-              >
-                {/* Empty historical cells */}
-              </TableCell>
-            ))}
-            {forecastYears.map((year, index) => (
-              <TableCell 
-                key={`forecast-yearly-${index}`} 
-                className={`text-center py-2 px-2 min-w-[80px] ${isUserInputRow ? 'bg-yellow-50' : 'bg-green-25'}`}
-              >
+              {isEditableCell ? (
                 <input
                   type="text"
-                  value={yearlyAdrGrowth[year] || ""}
-                  onChange={(e) => handleYearlyAdrChange?.(year, e.target.value)}
-                  onBlur={(e) => handleYearlyAdrBlur?.(year, e.target.value)}
+                  value={editableData[year] || ""}
+                  onChange={(e) => onEditableChange?.(year, e.target.value)}
+                  onBlur={(e) => onEditableBlur?.(year, e.target.value)}
                   className="w-full text-center border-none bg-white text-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
                 />
-              </TableCell>
-            ))}
-          </TableRow>
-        )}
-      </>
+              ) : (
+                data
+              )}
+            </TableCell>
+          );
+        })}
+      </TableRow>
     );
   }
 
