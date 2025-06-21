@@ -18,13 +18,19 @@ export const mainNavCategories: CategoryItem[] = [
     name: "Pro Forma",
     path: "/revenue",
     subCategories: [
-      { id: "occupancy-section", name: "Occupancy" },
+      {
+        id: "penetration-analysis-group",
+        name: "Penetration Analysis",
+        subCategories: [
+          { id: "occupancy-section", name: "Occupancy" },
+          { id: "adr-section", name: "ADR" },
+          { id: "revpar-section", name: "RevPAR" },
+        ],
+      },
       {
         id: "revenue-group",
         name: "Revenue",
         subCategories: [
-          { id: "adr-section", name: "ADR" },
-          { id: "revpar-section", name: "RevPAR" },
           { id: "rooms-revenue-section", name: "Rooms Revenue" },
           {
             id: "other-revenue-group",
