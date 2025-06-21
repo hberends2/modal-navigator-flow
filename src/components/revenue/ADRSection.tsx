@@ -98,7 +98,7 @@ const ADRSection: React.FC<ADRSectionProps> = ({
 
       {/* Subject Property ADR YoY Growth - Title Row */}
       <MetricRow
-        label={<span className="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</span>}
+        label={<span className="text-left">&nbsp;&nbsp;&nbsp;Subject Property ADR YoY Growth</span>}
         historicalData={historicalYears.map((year, index) => 
           index === 0 ? "-" : formatYoYWithColor(getHistoricalADRYoY(year, index, historicalYears, getHistoricalADR))
         )}
