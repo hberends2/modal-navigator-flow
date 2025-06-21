@@ -1,4 +1,3 @@
-
 import { CategoryItem } from "./SidebarCategory";
 
 // Top-level categories for main navigation (reordered to move Summary below Reports)
@@ -32,15 +31,9 @@ export const mainNavCategories: CategoryItem[] = [
         name: "Revenue",
         subCategories: [
           { id: "rooms-revenue-section", name: "Rooms Revenue" },
-          {
-            id: "other-revenue-group",
-            name: "Other Revenue",
-            subCategories: [
-              { id: "food-beverage-section", name: "Food & Beverage" },
-              { id: "other-operated-section", name: "Other Operated" },
-              { id: "miscellaneous-section", name: "Miscellaneous" },
-            ],
-          },
+          { id: "food-beverage-section", name: "Food & Beverage" },
+          { id: "other-operated-section", name: "Other Operated" },
+          { id: "miscellaneous-section", name: "Miscellaneous" },
           { id: "total-revenue-section", name: "Total Revenue" },
         ],
       },
@@ -49,15 +42,9 @@ export const mainNavCategories: CategoryItem[] = [
         name: "Expense",
         subCategories: [
           { id: "rooms-expense-section", name: "Rooms Expense" },
-          {
-            id: "other-expense-group",
-            name: "Other Expense",
-            subCategories: [
-              { id: "food-beverage-expense-section", name: "Food & Beverage" },
-              { id: "other-operated-expense-section", name: "Other Operated" },
-              { id: "miscellaneous-expense-section", name: "Miscellaneous" },
-            ],
-          },
+          { id: "food-beverage-expense-section", name: "Food & Beverage" },
+          { id: "other-operated-expense-section", name: "Other Operated" },
+          { id: "miscellaneous-expense-section", name: "Miscellaneous" },
           {
             id: "undistributed-expense-group",
             name: "Undistributed Expense",
