@@ -15,7 +15,7 @@ export const mainNavCategories: CategoryItem[] = [
   },
   {
     id: "valuation",
-    name: "Pro-forma",
+    name: "Pro Forma",
     path: "/revenue",
     subCategories: [
       { id: "occupancy-section", name: "Occupancy" },
